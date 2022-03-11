@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileReader {
+public class ReadFileTool {
 	public static List<File> getFileList(String rootPath) throws IOException {
 		List<File> lf = new ArrayList<>();
 		// 取得標案的根目錄

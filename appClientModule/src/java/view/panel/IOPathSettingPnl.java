@@ -1,45 +1,47 @@
 package src.java.view.panel;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
-import src.java.listener.ReaderListener;
+import src.java.element.IOPathSettingElement;
+import src.java.listener.IOPathSettingListener;
 
-public class IOPathSettingPnl extends JPanel{
+public class IOPathSettingPnl extends JPanel {
 
 	/**
-	 * 
+	 * 設定產入籍產出的設定
 	 */
 	private static final long serialVersionUID = 1L;
 	// 事件監聽器
-	ReaderListener lr;
-	// 物件
-	JFileChooser fcip,fcop;
-	JButton btnSub;
-	JTextField tfip,tfop;
+	IOPathSettingListener lr;
+
 	public IOPathSettingPnl() {
 		init();
-		setLayout(new GridLayout(3,1));
+		setLayout(new GridLayout(3, 2));
 	}
+
 	private void init() {
-		fcip = new JFileChooser();
-		fcop = new JFileChooser();
-		tfip = new JTextField(50);
-		tfop = new JTextField(50);
-		lr = new ReaderListener();
-		btnSub = new JButton("確認");
+		// 物件宣告
+		IOPathSettingElement.init();
 
-		btnSub.addActionListener(lr);
+		// 排版
+		Dimension dLbl = new Dimension(20, 10);
+		IOPathSettingElement.lblIp.setPreferredSize(dLbl);
+		IOPathSettingElement.lblIp.setPreferredSize(dLbl);
 
-		add(new JLabel("來源路徑:"));
-		add(tfip);
-		add(new JLabel("產檔路徑:"));
-		add(tfop);
-		add(btnSub);
+		// 事件
+		lr = new IOPathSettingListener();
+		IOPathSettingElement.btnSub.addActionListener(lr);
+
+		// 設置
+		add(IOPathSettingElement.lblIp);
+		add(IOPathSettingElement.tfIp);
+		//add(IOPathSettingElement.btnIp);
+		add(IOPathSettingElement.lblOp);
+		add(IOPathSettingElement.tfOp);
+		//add(IOPathSettingElement.btnOp);
+		add(IOPathSettingElement.btnSub);
 	}
 }
