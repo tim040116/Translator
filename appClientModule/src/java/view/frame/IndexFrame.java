@@ -9,6 +9,7 @@ import javax.swing.JTabbedPane;
 import src.java.element.BasicElement;
 import src.java.view.panel.FileListSelectPnl;
 import src.java.view.panel.IOPathSettingPnl;
+import src.java.view.panel.WriteFilePnl;
 
 public class IndexFrame extends JFrame{
 	/**
@@ -41,7 +42,8 @@ public class IndexFrame extends JFrame{
 		BasicElement.setJTabbedPane(tp);
 		pl2 = new JPanel();
 		tp.addTab("檔案路徑設定", new IOPathSettingPnl());
-		tp.addTab("t2", new FileListSelectPnl());
+		tp.addTab("查詢目錄下檔案", new FileListSelectPnl());
+		tp.addTab("產製檔案", new WriteFilePnl());
 		add(tp);
 	}
 }

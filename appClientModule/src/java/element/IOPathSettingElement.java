@@ -20,8 +20,8 @@ public class IOPathSettingElement {
 	public static void init() {
 		fcIp = new JFileChooser();
 		fcOp = new JFileChooser();
-		tfIp = new JTextField(50);
-		tfOp = new JTextField(50);
+		tfIp = new JTextField("D:\\站存\\DD\\T1");
+		tfOp = new JTextField("D:\\站存\\DD\\T2");
 		btnIp = new JButton("路徑");
 		btnOp = new JButton("路徑");
 		btnSub = new JButton("確認");

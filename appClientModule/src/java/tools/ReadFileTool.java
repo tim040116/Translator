@@ -20,6 +20,7 @@ public class ReadFileTool {
 		File bidDoc[] = p.listFiles();
 		for (int i = 0; i < bidDoc.length; i++) {
 			String fileName = bidDoc[i].getName();
+			System.out.println("讀取檔案： " + fileName);
 			if (fileName.lastIndexOf(".meta") > 0) {
 				continue;
 			}else if (fileName.lastIndexOf(".nfs") > 0) {
