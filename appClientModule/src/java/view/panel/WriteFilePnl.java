@@ -2,8 +2,8 @@ package src.java.view.panel;
 
 import java.awt.GridLayout;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import src.java.element.WriteFileElement;
 import src.java.listener.WriteFileListener;
@@ -18,12 +18,14 @@ public class WriteFilePnl  extends JPanel {
 	
 	public WriteFilePnl() {
 		init();
-		setLayout(new GridLayout(2,2));
+		setLayout(new GridLayout(3,1));
 	}
 	private void init() {
 		WriteFileElement.init();
 		WriteFileListener lr = new WriteFileListener();
 		WriteFileElement.btnStart.addActionListener(lr);
 		add(WriteFileElement.btnStart);
+		add(new JScrollPane(WriteFileElement.tsLog));
+		add(WriteFileElement.pbWriteFile);
 	}
 }
