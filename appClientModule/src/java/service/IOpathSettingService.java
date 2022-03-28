@@ -9,7 +9,7 @@ public class IOpathSettingService {
 		BasicModel.setOutputPath(fix(output));
 	}
 	private static String fix(String s) {
-		String r = s;
+		String r = s.trim();
 		//
 		if(!"\\".equals(s.substring(s.length() - 1))) {
 			r=r+"\\";

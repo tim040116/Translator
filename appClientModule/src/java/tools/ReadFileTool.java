@@ -84,9 +84,9 @@ public class ReadFileTool {
 				continue;
 			} else if (fileName.lastIndexOf(".nfs") > 0) {
 				continue;
-			} else if (".git".contentEquals(fileName)) {
+			} else if (fileName.contentEquals(".git")) {
 				continue;
-			} else if (".gitattributes".contentEquals(fileName)) {
+			} else if (fileName.contentEquals(".gitattributes")) {
 				continue;
 			} else if (fileName.equals("_structure")) {
 				continue;

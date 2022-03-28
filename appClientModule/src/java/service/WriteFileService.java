@@ -20,15 +20,11 @@ public class WriteFileService {
 		int i=0;
 		for (File f : lf) {
 			i++;
-			String filePath = f.getPath();
 			// 讀檔案
-			String content = ReadFileTool.readFile(f);
+			FileTransduceService.run(f);
 			//置換
-			content = FileTransduceService.run(f);
 			// 寫檔案
-			String newFilePath = filePath.replace(rootPath, targetPath);
-			ReadFileTool.createFile(newFilePath, content);
-			WriteFileElement.setLog("產製檔案：" + newFilePath);
+			WriteFileElement.setLog("產製檔案：" + f.getPath());
 			WriteFileElement.setProgressBar(i*100/cntf);
 		}
 		WriteFileElement.setLog("產生完成");
