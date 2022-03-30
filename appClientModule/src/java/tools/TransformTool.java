@@ -104,6 +104,9 @@ public class TransformTool {
 			String newgb = "group by ";
 			for(String strid : argb) {
 				int id = Integer.parseInt(strid);
+				if(arColum[id-1].matches("'\\w*'")) {
+					continue;
+				}
 				if(!newgb.equals("group by ")) {
 					newgb +=",";
 				}
