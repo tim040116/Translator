@@ -4,11 +4,10 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +30,12 @@ public class ReadFileTool {
 		BufferedReader br;
 		StringBuffer sb;
 		fis = new FileInputStream(f);
-		isr = new InputStreamReader(fis, "UTF-8");
+		isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
 		br = new BufferedReader(isr);
 		sb = new StringBuffer();
 		while (br.ready()) {
-			sb.append(br.readLine() + "\r\n");
+			String line = br.readLine();
+			sb.append(line + "\r\n");
 		}
 		content = sb.toString();
 		br.close();

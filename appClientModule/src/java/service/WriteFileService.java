@@ -6,7 +6,6 @@ import java.util.List;
 
 import src.java.element.WriteFileElement;
 import src.java.model.BasicModel;
-import src.java.tools.ReadFileTool;
 
 public class WriteFileService {
 	public static void writeFile() throws IOException {

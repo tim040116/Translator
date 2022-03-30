@@ -18,12 +18,20 @@ public class ExportTransformer {
 	private static String createSQLFile(String fn, String fc) throws IOException {
 		System.out.println("buildExportSQLFile");
 		String result = "Success";
-		String file = TransformTool.getTargetFileNm(fn);
+		//語法轉換
 		List<String> lstSql = TransformTool.getRegexTarget("[Ss][Ee][Ll][Ee][Cc][Tt][^;]*;", fc);
 		String content = "\r\nSET NOCOUNT ON;\r\n\r\n";
 		for(String sql:lstSql) {
-			content += sql + "\r\n\r\n";
+			String txt = TransformTool.changeGroupBy(sql);
+			txt = TransformTool.arrangeSQL(txt);
+			content += txt + "\r\n\r\n";
 		}
+		//產檔
+		String file = BasicModel.getTargetFileNm(fn);
+		String[] arfn = file.split("\\\\");
+		String frn = arfn[arfn.length-1];
+		String fnn = "exp_" + frn.replace(".pl", ".sql");
+		file = file.replace(frn, fnn);
 		ReadFileTool.createFile(file,content);
 		return result;
 	}

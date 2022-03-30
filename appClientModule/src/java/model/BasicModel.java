@@ -1,6 +1,8 @@
 package src.java.model;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class BasicModel {
@@ -18,13 +20,31 @@ public class BasicModel {
 		return inputPath;
 	}
 	public static void setInputPath(String inputPath) {
-		BasicModel.inputPath = inputPath;
+		String r = inputPath.trim();
+		//
+		if(!"\\".equals(r.substring(r.length() - 1))) {
+			r=r+"\\";
+		}
+		BasicModel.inputPath = r;
 	}
 	public static String getOutputPath() {
 		return outputPath;
 	}
 	public static void setOutputPath(String outputPath) {
-		BasicModel.outputPath = outputPath;
+		String r = outputPath.trim();
+		//
+		if(!"\\".equals(r.substring(r.length() - 1))) {
+			r=r+"\\";
+		}
+		Date now = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+		BasicModel.outputPath = r+sdf.format(now)+"\\";
+	}
+	//取得out put檔案路徑
+	public static String getTargetFileNm(String fileName) {
+		String ip = getInputPath();
+		String op = getOutputPath();
+		return fileName.replace(ip, op);
 	}
 	
 }
