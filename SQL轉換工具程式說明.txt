@@ -1,0 +1,31 @@
+鼎鼎程式Teradata轉Azure
+
+程式架構說明
+	1. application: 進入點，通常不用動
+	2. element: 畫面的物件，包刮button,input欄位...等
+	3. enums: 列舉
+	4. listener: 控管事件，處理onclick等觸發事件
+	5. model: 物件
+	6. params: 參數
+	7. service: 處理listener會觸發的邏輯
+	8. tools: 工具，通用的程式
+	9. view: 顯示畫面
+
+維護說明:
+	1.增加檔案類別:
+		- FileTransduceService: 區分檔案的類別為fastload,transform,export並執行對應的Transducer
+		- FileTypeEnum: 檔案類別的列舉
+		- service.transducer: 新增該類別的Transducer，建議加上run(String fn,String fc)以方便維護
+	2.修改轉換邏輯
+		- service.transducer: 分別對應檔案的類別進行轉換，
+			每個class都會有一個run(String fn,String fc)，
+			只要把程式加到run裡面就會被執行
+
+tool說明:
+	ReadFileTool: 讀檔與產檔
+	TransformTool: 語法轉換的相關工具
+	
+params說明:
+	String inputPath: 來源路徑
+	String outputPath: 產檔路徑
+	List<File> listFile: 會轉換的檔案
