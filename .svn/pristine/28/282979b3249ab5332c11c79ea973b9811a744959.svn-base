@@ -1,0 +1,14 @@
+package src.java.service.transducer;
+
+import java.io.IOException;
+
+import src.java.service.CreateListService;
+
+public class FastloadTransducer {
+	public static String run(String fn,String fc) throws IOException {
+		String result = "Success";
+		CreateListService.createFastloadLst(fn,fc);
+		return result;
+	}
+	
+}

@@ -7,6 +7,13 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
+
+/*
+ * 檔案清單的畫面物件
+ * 
+ * 已廢棄，暫無功能
+ * 
+ * */
 public class FileListSelectElement {
 	// 物件
 	public static JButton btnSelect,btnNext;

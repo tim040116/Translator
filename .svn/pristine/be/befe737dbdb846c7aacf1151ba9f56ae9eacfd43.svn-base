@@ -1,0 +1,55 @@
+
+依照檔案內容分成三類，並依種類進行置換。
+
+1. fastload：
+	特徵：BEGIN LOADING
+	轉換：
+		lst： 
+			1. lst_fastload
+				條件：所有fastload類檔案
+				邏輯：檔案路徑  #1  #2
+					#1：SET RECORD的後面
+						如果是 UNFORMATTED 則 UNFORMATTED
+						如果是 VARTEXT 則 VARTEXT 跟 DISPLAY_ERRORS NOSTOP 中間的值
+					#2：INSERT INTO 的後面
+		src： 無
+		
+2. export：
+	特徵：OUTPUT_FILE
+	轉換：
+		lst： 
+			1. lst_export
+				條件：所有export類檔案
+				邏輯：檔案路徑  #1
+					#1：my $OUTPUT_FILE  = 的後面
+		src：
+			檔名：exp_原檔名.sql
+			內容：
+				1. SET NOCOUNT ON;
+				2. 轉換後的select語句
+				
+3. transform：
+	特徵：不屬於前面兩種
+	轉換：
+		lst： 
+			1. lst_transform_createSelect
+				條件：所有 Create Select 語法的檔案
+				邏輯：檔案路徑
+			2. lst_transform_index
+				條件：所有 INDEX 語法
+				邏輯：檔案路徑 #1 #2
+					#1：有設定 INDEX 的 table_name
+					#2：設定 INDEX 的內容
+		src：
+			檔名：原檔名.sql
+			內容：
+				1. SET NOCOUNT ON;
+				2. 轉換後的sql語句
+				3. 刪除項目：
+					.logon ${USERID}, ${PASSWD};
+					.IF ERRORCODE <> 0 THEN
+					.GOTO ERRORSFOUND
+				4. drop table 加上判斷，範例：
+					IF OBJECT_ID(N'DP_MCIF.TP1_HGP_TXN_DETALL') IS NOT NULL
+					DROP TABLE [DP_MCIF].[TP1_HGP_TXN_DETALL];
+				5. CHARACTER SET 暫時先保留

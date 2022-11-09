@@ -1,0 +1,103 @@
+package src.java.service;
+
+import java.io.IOException;
+import java.util.List;
+
+import src.java.params.BasicParams;
+import src.java.tools.ReadFileTool;
+import src.java.tools.RegexTool;
+
+public class CreateListService {
+	// FAST LOAD
+	public static String createFastloadLst(String fn, String fc) throws IOException {
+		System.out.println("fastload");
+		String result = "";
+		String file = BasicParams.getOutputPath() + "lst\\lst_fastload.txt";
+		String txt = "";
+		boolean flag = false;
+		for (String line : fc.split("\r\n")) {
+			line = line.replaceAll("\\s+", " ");
+			if (line.contains("SET RECORD")) {
+				flag = true;
+				String rec = line;
+				if (!line.contains("UNFORMATTED")) {
+					rec = rec.replace("VARTEXT", "").replace("DISPLAY_ERRORS NOSTOP", "");
+				}
+				rec = rec.replace("SET RECORD", "").replace(" ", "").replace(";", "");
+				txt = fn + " " + rec;
+			}
+			if (flag) {
+				if (line.contains("INSERT INTO")) {
+					String ins = line.replace("INSERT INTO", "").replace("(", "");
+					txt = txt + ins;
+					ReadFileTool.addFile(file, txt);
+				}
+			}
+		}
+		return result;
+	}
+
+	// 產檔export_lst
+	public static String createExportLst(String fn, String fc) throws IOException {
+		System.out.println("buildExportListFile");
+		String result = "Success";
+		String file = BasicParams.getOutputPath() + "lst\\lst_export.txt";
+		List<String> lstTrg = RegexTool.getRegexTarget("my \\$OUTPUT_FILE[^;]*;", fc);
+		if (!lstTrg.isEmpty()) {
+			String target = lstTrg.get(0).replaceAll("my|\\s|\\$OUTPUT_FILE|=|\"|;", "");
+			ReadFileTool.addFile(file, fn + "\t" + target);
+		}
+		return result;
+	}
+	//With data
+	public static String createWithData(String fn, String fc) {
+		String result = "Success";
+		String lstFileName = BasicParams.getOutputPath() + "lst\\lst_CTE.txt";
+		//修改分號
+		String content = fc.replaceAll(";(?!\\s)","<encodingCode_semicolon>");
+		//尋找create table
+		List<String> lstCreate = RegexTool.getRegexTarget("Create Table [^;]+;",content);
+		for (String sql : lstCreate) {
+			if(!RegexTool.getRegexTarget("With Data",sql).isEmpty()) {
+				String tableNm = RegexTool.getRegexTarget("(?<=[Cc][Rr][Ee][Aa][Tt][Ee] {0,10}[Tt][Aa][Bb][Ll][Ee] {0,10})\\S+",sql).get(0);
+				try {
+					ReadFileTool.addFile(lstFileName, fn + "\t" + tableNm);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
+	}
+	//Qualify Rank
+	public static String createQualifyRank(String fn, String fc) {
+		String result = "Success";
+		String lstFileName = BasicParams.getOutputPath() + "lst\\lst_Qualify.txt";
+		List<String> lstQualify = RegexTool.getRegexTarget(
+				"[Qq][Uu][Aa][Ll][Ii][Ff][Yy] +[Rr][Aa][Nn][Kk]\\(\\) [Oo][Vv][Ee][Rr] \\([Oo][Rr][Dd][Ee][Rr] +[Bb][Yy] +[^\\)]+\\) *\\= *\\d+",
+				fc);
+		for (String qualify : lstQualify) {
+			try {
+				ReadFileTool.addFile(lstFileName, fn + "\t" + qualify);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	//ODBC
+	public static String createODBC(String fn, String fc) {
+		String result = "Success";
+		String lstFileName = BasicParams.getOutputPath() + "lst\\lst_odbc.txt";
+		List<String> lstODBC = RegexTool
+				.getRegexTarget("(?<=[Mm][Yy] {0,10}\\$[Dd][Ss][Nn] {0,10}= {0,10}\\\")[^\\\"]+", fc);
+		for (String qualify : lstODBC) {
+			try {
+				ReadFileTool.addFile(lstFileName, fn + "\t" + qualify);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+}

@@ -11,6 +11,9 @@ import src.java.listener.FileListSelectNextPageListener;
 
 public class FileListSelectPnl  extends JPanel {
 	/**
+	 * 檔案清單畫面
+	 * 
+	 * 已廢棄
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;

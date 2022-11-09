@@ -4,10 +4,11 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class ReadFileTool {
 		// 取得標案的根目錄
 		File rp = new File(rootPath);
 		if (rp == null || !rp.isDirectory())
-			throw new IOException("系統搜尋不到標案文件的根目錄");
+			throw new IOException("系統搜尋不到文件的根目錄");
 		// 取得所有檔案資料
 		return getInsideFileList(lf, rp);
 	}
@@ -30,7 +31,8 @@ public class ReadFileTool {
 		BufferedReader br;
 		StringBuffer sb;
 		fis = new FileInputStream(f);
-		isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+		isr = new InputStreamReader(fis
+				);
 		br = new BufferedReader(isr);
 		sb = new StringBuffer();
 		while (br.ready()) {
@@ -49,12 +51,14 @@ public class ReadFileTool {
 		File newFile = new File(filePath);
 		newFile.getParentFile().mkdirs();
 		newFile.createNewFile();
-		FileWriter fw = new FileWriter(newFile);
-		BufferedWriter bw = new BufferedWriter(fw);
+//		FileWriter fw = new FileWriter(newFile);
+//		BufferedWriter bw = new BufferedWriter(fw);
+		FileOutputStream writerStream = new FileOutputStream(filePath);    
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(writerStream, "UTF-8")); 
 		bw.write(content);
-		fw.flush();
+//		fw.flush();
 		bw.close();
-		fw.close();
+//		fw.close();
 		return true;
 	}
 	//產檔案
