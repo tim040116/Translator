@@ -21,7 +21,7 @@ public class ReadFileTool {
 			throw new IOException("系統搜尋不到文件的根目錄");
 		// 取得所有檔案資料
 		return getInsideFileList(lf, rp);
-	}
+	} 
 	//讀取檔案
 	public static String readFile(File f) throws IOException {
 		System.out.println("讀取檔案：" + f.getPath());
@@ -31,8 +31,7 @@ public class ReadFileTool {
 		BufferedReader br;
 		StringBuffer sb;
 		fis = new FileInputStream(f);
-		isr = new InputStreamReader(fis
-				);
+		isr = new InputStreamReader(fis);
 		br = new BufferedReader(isr);
 		sb = new StringBuffer();
 		while (br.ready()) {
