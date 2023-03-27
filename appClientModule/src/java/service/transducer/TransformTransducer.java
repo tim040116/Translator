@@ -43,7 +43,6 @@ public class TransformTransducer {
 				"    ERROR_STATE() AS ErrorState,\r\n" + 
 				"    ERROR_SEVERITY() AS ErrorSeverity,\r\n" + 
 				"    ERROR_PROCEDURE() AS ErrorProcedure,\r\n" + 
-				"    --ERROR_LINE() AS ErrorLine,\r\n" + 
 				"    ERROR_MESSAGE() AS ErrorMessage;\r\n" + 
 				"	 RETURN ERROR_STATE();\r\n" + 
 				"END CATCH;";
@@ -130,7 +129,7 @@ public class TransformTransducer {
 			//drop table
 			if(sql.matches("[^;]*"+RegexTool.getReg("drop table")+"[^;]*;")) {
 				//lst
-				CreateListService.createLstDropTable(fn, sql);
+				//CreateListService.createLstDropTable(fn, sql);
 				//drop table
 				int sqlindex=sql.replaceAll("[Dd][Rr][Oo][Pp]","drop").indexOf("drop");
 				String BFsql="";
@@ -244,7 +243,7 @@ public class TransformTransducer {
 				for(int i = 0 ; i <= lstSelect.size();i++) {
 					if(!lstSelect.isEmpty()) {
 						strCre = TransduceTool.transduceSelectSQL(strCre);
-						CreateListService.createCreateSelectLst(fn,sql);
+//						CreateListService.createCreateSelectLst(fn,sql);
 					}
 				}
 				strCre = strCre.replaceAll("[Ww][Ii][Tt][Hh] +[Dd][Aa][Tt][Aa]", "");

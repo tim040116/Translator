@@ -9,7 +9,7 @@ import src.java.tools.ReadFileTool;
 public class FastloadTransducer {
 	public static String run(String fn,String fc) throws IOException {
 		String result = "Success";
-		CreateListService.createFastloadLst(fn,fc);
+//		CreateListService.createFastloadLst(fn,fc);
 		
 		//整理SQL匯出檔案
 		createSQLFile(fn, fc);
@@ -31,7 +31,6 @@ public class FastloadTransducer {
 				"    ERROR_STATE() AS ErrorState,\r\n" + 
 				"    ERROR_SEVERITY() AS ErrorSeverity,\r\n" + 
 				"    ERROR_PROCEDURE() AS ErrorProcedure,\r\n" + 
-				"    --ERROR_LINE() AS ErrorLine,\r\n" + 
 				"    ERROR_MESSAGE() AS ErrorMessage;\r\n" + 
 				"	 RETURN ERROR_STATE();\r\n" + 
 				"END CATCH;";

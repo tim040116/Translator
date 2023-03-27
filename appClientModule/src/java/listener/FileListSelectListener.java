@@ -21,7 +21,6 @@ public class FileListSelectListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		DefaultListModel<File> dlm = null;
 		try {
-
 			//查清單
 			dlm = FileListSelectService.getFileList();
 		} catch (IOException e1) {

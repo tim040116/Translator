@@ -1,7 +1,5 @@
 package src.java.service.transducer;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import src.java.params.BasicParams;

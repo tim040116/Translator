@@ -5,6 +5,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import src.java.application.Params;
+
 /*
  * 路徑設定的畫面物件
  * */
@@ -23,8 +25,8 @@ public class IOPathSettingElement {
 	public static void init() {
 		fcIp = new JFileChooser();
 		fcOp = new JFileChooser();
-		tfIp = new JTextField("C:\\Users\\User\\Desktop\\DD\\T1");
-		tfOp = new JTextField("C:\\Users\\User\\Desktop\\DD\\T2");
+		tfIp = new JTextField(Params.INIT_INPUT_PATH);
+		tfOp = new JTextField(Params.INIT_OUTPUT_PATH);
 		btnIp = new JButton("路徑");
 		btnOp = new JButton("路徑");
 		btnSub = new JButton("確認");

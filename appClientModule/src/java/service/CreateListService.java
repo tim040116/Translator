@@ -11,7 +11,7 @@ public class CreateListService {
 	// create table
 	public static String createCreateTable(String fn, String fc) {
 		String result = "Success";
-		String lstFileName = BasicParams.getOutputPath() + "lst\\lst_create_table.txt";
+//		String lstFileName = BasicParams.getOutputPath() + "lst\\lst_create_table.txt";
 		String lstFileName2 = BasicParams.getOutputPath() + "lst\\lst_create_table_withfilenm.txt";
 
 		// 尋找create table
@@ -19,7 +19,7 @@ public class CreateListService {
 				.getRegexTarget("(?<=[Cc][Rr][Ee][Aa][Tt][Ee]\\s{0,10}[Tt][Aa][Bb][Ll][Ee]\\s{0,10})\\S+", fc);
 		for (String sql : lstCreate) {
 			try {
-				ReadFileTool.addFile(lstFileName,sql);
+//				ReadFileTool.addFile(lstFileName,sql);
 				ReadFileTool.addFile(lstFileName2,fn+"\t"+sql);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -163,7 +163,7 @@ public class CreateListService {
 	public static String createGroupBy(String fn, String fc) {
 		String result = "Success";
 		String lstFileName = BasicParams.getOutputPath() + "lst\\lst_GroupBy.txt";
-		List<String> lstGroupby = RegexTool.getRegexTarget("[Gg][Rr][Oo][Uu][Pp] +[Bb][Yy]\\s+\\S+(\\s*,\\s*[0-9A-Za-z_\\.]+)+", fc);
+		List<String> lstGroupby = RegexTool.getRegexTarget("[Gg][Rr][Oo][Uu][Pp] +[Bb][Yy][ 0-9,]+", fc);
 		for (String data : lstGroupby) {
 			if(data.matches("[^0-9]*")) {
 				continue;
@@ -196,12 +196,12 @@ public class CreateListService {
 		System.out.println("createLstRenameTable");
 		String result = "Success";
 		String file = BasicParams.getOutputPath() + "lst\\lst_rename_table.txt";
-		String file2 = BasicParams.getOutputPath() + "lst\\lst_rename_table_input.txt";
+//		String file2 = BasicParams.getOutputPath() + "lst\\lst_rename_table_input.txt";
 		String strAll = fc.replaceAll(";","").replaceAll(RegexTool.getReg("rename table"), "");
 		String[] arAll = strAll.split(" +[Tt][Oo] +");
 		String[] arOld = arAll[0].trim().split("\\.");
 		String[] arNew = arAll[1].trim().split("\\.");
-		ReadFileTool.addFile(file2,fn+"\t"+arOld[0]+"\t"+arOld[1]+"\t"+arNew[0]+"\t"+arNew[1]);
+//		ReadFileTool.addFile(file2,fn+"\t"+arOld[0]+"\t"+arOld[1]+"\t"+arNew[0]+"\t"+arNew[1]);
 		ReadFileTool.addFile(file,fn+"\t"+arOld[0]+"."+arOld[1]+"\tto\t"+arNew[0]+"."+arNew[1]);
 		return result;
 	}
