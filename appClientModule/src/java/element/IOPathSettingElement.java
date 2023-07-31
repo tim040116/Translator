@@ -5,7 +5,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import src.java.application.Params;
+import st.etec.params.Params;
 
 /*
  * 路徑設定的畫面物件

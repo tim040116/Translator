@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import etec.common.enums.RunStatusEnum;
 import src.java.element.WriteFileElement;
-import src.java.enums.RunStatusEnum;
 import src.java.params.BasicParams;
 
 public class WriteFileService {
@@ -27,7 +27,7 @@ public class WriteFileService {
 				// 置換
 				FileTransduceService.run(f);
 				// 寫檔案
-				WriteFileElement.setLog("產製檔案：" + f.getPath());
+				WriteFileElement.setLog("產製檔案：" + BasicParams.getTargetFileNm(f.getPath()));
 				WriteFileElement.setProgressBar(i * 100 / cntf);
 			}
 			WriteFileElement.setLog("產生完成");

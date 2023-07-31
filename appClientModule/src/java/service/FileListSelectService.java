@@ -6,14 +6,14 @@ import java.util.List;
 
 import javax.swing.DefaultListModel;
 
+import etec.common.utils.FileTool;
 import src.java.params.BasicParams;
-import src.java.tools.ReadFileTool;
 
 public class FileListSelectService {
 	//取得檔案清單
 	public static DefaultListModel<File> getFileList() throws IOException{
 		DefaultListModel<File> dlm = new DefaultListModel<File>();
-		List<File> lf = ReadFileTool.getFileList(BasicParams.getInputPath());
+		List<File> lf = FileTool.getFileList(BasicParams.getInputPath());
 		BasicParams.setListFile(lf);
 		for (File f : lf) {
 			dlm.addElement(f);

@@ -1,8 +1,10 @@
 package st.etec.controller;
 
-import etec.common.annotation.Controller;
-
-@Controller
-public class InputFilePathController {
+public class InputFilePathController extends BaseController{
+	
+	public static InputFilePathController run() {
+		return new InputFilePathController();
+	}
+	
 	
 }

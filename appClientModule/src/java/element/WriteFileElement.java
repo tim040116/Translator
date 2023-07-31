@@ -8,7 +8,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
 
-import src.java.enums.RunStatusEnum;
+import etec.common.enums.RunStatusEnum;
 /*
  * 轉換時的畫面呈現
  * */

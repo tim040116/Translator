@@ -3,9 +3,9 @@ package src.java.service;
 import java.io.IOException;
 import java.util.List;
 
+import etec.common.utils.FileTool;
+import etec.common.utils.RegexTool;
 import src.java.params.BasicParams;
-import src.java.tools.ReadFileTool;
-import src.java.tools.RegexTool;
 
 public class CreateListService {
 	// create table
@@ -20,7 +20,7 @@ public class CreateListService {
 		for (String sql : lstCreate) {
 			try {
 //				ReadFileTool.addFile(lstFileName,sql);
-				ReadFileTool.addFile(lstFileName2,fn+"\t"+sql);
+				FileTool.addFile(lstFileName2,fn+"\t"+sql);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -55,7 +55,7 @@ public class CreateListService {
 					String ins = line.replace("INSERT INTO", "").replace("(", "");
 					txt = txt + "\t" + ins;
 					if (txt.contains("UNFORMATTED")) {
-						ReadFileTool.addFile(file, txt);
+						FileTool.addFile(file, txt);
 					}
 				}
 			}
@@ -70,7 +70,7 @@ public class CreateListService {
 		List<String> lstTrg = RegexTool.getRegexTarget("my \\$OUTPUT_FILE[^;]*;", fc);
 		if (!lstTrg.isEmpty()) {
 			String target = lstTrg.get(0).replaceAll("my|\\s|\\$OUTPUT_FILE|=|\"|;", "");
-			ReadFileTool.addFile(file, fn + "\t" + target);
+			FileTool.addFile(file, fn + "\t" + target);
 		}
 		return result;
 	}
@@ -90,7 +90,7 @@ public class CreateListService {
 			if(!RegexTool.getRegexTarget(RegexTool.getReg("With Data"),sql).isEmpty()) {
 				String tableNm = RegexTool.getRegexTarget("(?<=[Cc][Rr][Ee][Aa][Tt][Ee] {0,10}[Tt][Aa][Bb][Ll][Ee] {0,10})\\S+",sql).get(0);
 				try {
-					ReadFileTool.addFile(lstFileName, fn2 + "\t" + tableNm);
+					FileTool.addFile(lstFileName, fn2 + "\t" + tableNm);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -106,7 +106,7 @@ public class CreateListService {
 			return result;
 		}
 		String file = BasicParams.getOutputPath() + "lst\\lst_index.txt";
-		ReadFileTool.addFile(file,fn + "\t" + tblNm + "\t" + target);
+		FileTool.addFile(file,fn + "\t" + tblNm + "\t" + target);
 		return result;
 	}
 	//產檔create select
@@ -124,7 +124,7 @@ public class CreateListService {
 		if(!lstselect.isEmpty()) {
 			select = lstselect.get(0).trim();
 		}
-		ReadFileTool.addFile(file,fn+"\tcreate "+create+"\tselect "+select);
+		FileTool.addFile(file,fn+"\tcreate "+create+"\tselect "+select);
 		return result;
 	}
 	//Qualify Rank
@@ -136,7 +136,7 @@ public class CreateListService {
 				fc);
 		for (String qualify : lstQualify) {
 			try {
-				ReadFileTool.addFile(lstFileName, fn + "\t" + qualify);
+				FileTool.addFile(lstFileName, fn + "\t" + qualify);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -151,7 +151,7 @@ public class CreateListService {
 				.getRegexTarget("(?<=[Mm][Yy] {0,10}\\$[Dd][Ss][Nn] {0,10}= {0,10}\\\")[^\\\"]+", fc);
 		for (String qualify : lstODBC) {
 			try {
-				ReadFileTool.addFile(lstFileName, fn + "\t" + qualify);
+				FileTool.addFile(lstFileName, fn + "\t" + qualify);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -169,7 +169,7 @@ public class CreateListService {
 				continue;
 			}
 			try {
-				ReadFileTool.addFile(lstFileName, fn + "\t" + data.replaceAll("[\r\n]", " "));
+				FileTool.addFile(lstFileName, fn + "\t" + data.replaceAll("[\r\n]", " "));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -184,7 +184,7 @@ public class CreateListService {
 		List<String> lstChar10 = RegexTool.getRegexTarget2("[Cc][Aa][Ss][Tt] *\\( *[\\w\\.]+ +[Aa][Ss] +([Vv][Aa][Rr])?[Cc][Hh][Aa][Rr] *\\( *10 *\\) *\\)", fc);
 		for (String data : lstChar10) {
 			try {
-				ReadFileTool.addFile(lstFileName, fn + "\t" + data);
+				FileTool.addFile(lstFileName, fn + "\t" + data);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -201,8 +201,8 @@ public class CreateListService {
 		String[] arAll = strAll.split(" +[Tt][Oo] +");
 		String[] arOld = arAll[0].trim().split("\\.");
 		String[] arNew = arAll[1].trim().split("\\.");
-//		ReadFileTool.addFile(file2,fn+"\t"+arOld[0]+"\t"+arOld[1]+"\t"+arNew[0]+"\t"+arNew[1]);
-		ReadFileTool.addFile(file,fn+"\t"+arOld[0]+"."+arOld[1]+"\tto\t"+arNew[0]+"."+arNew[1]);
+//		FileTool.addFile(file2,fn+"\t"+arOld[0]+"\t"+arOld[1]+"\t"+arNew[0]+"\t"+arNew[1]);
+		FileTool.addFile(file,fn+"\t"+arOld[0]+"."+arOld[1]+"\tto\t"+arNew[0]+"."+arNew[1]);
 		return result;
 	}
 	// 產檔lst drop Table 
@@ -212,7 +212,7 @@ public class CreateListService {
 		String file = BasicParams.getOutputPath() + "lst\\lst_drop_table.txt";
 		String strAll = fc.replaceAll(";","").replaceAll(RegexTool.getReg("drop table"), "");
 		String[] arAll = strAll.trim().split("\\.");
-		ReadFileTool.addFile(file,fn+"\t"+arAll[0]+"\t"+arAll[1]);
+		FileTool.addFile(file,fn+"\t"+arAll[0]+"\t"+arAll[1]);
 		return result;
 	}
 }

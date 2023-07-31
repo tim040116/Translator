@@ -1,0 +1,34 @@
+2023/04/19 Tim:
+	待做事項:
+		- 1.2
+			- 轉換邏輯已讀設定檔的形式進行轉換
+			- alter table 跟drop table不用加catch
+			- DDL跟POC的Trancducer合併成一個
+			- 開發POCTrancducer
+				- (完成)註解
+				- (完成)delete table
+				- (完成)create table
+				- (完成)CTAS
+			- 成功轉換程式
+				- (完成)Table Schema Script
+				- 會員促銷_ETL_Script
+				- 基本情報_ETL_Script
+				- Query_Script
+		- 2.0
+			- 完成打包Create table語法
+			- 將1.0的程式轉移到2.0的架構
+				- (完成)application
+				- element
+				- listener
+				- params
+				- service
+				- transducer
+				- frame
+				- (完成)utils
+				- panel
+			- 開發UI介面的框架
+			- (完成)研究讀取resource的技術
+			- 說明文件修改
+		
+		
+		
