@@ -8,8 +8,8 @@ package st.etec.params;
  * */
 public class Params {
 	
-	public static final String INIT_INPUT_PATH  = "D:\\站存\\全家\\T1\\";
+	public static ConfigParams config = null;
 	
-	public static final String INIT_OUTPUT_PATH = "D:\\站存\\全家\\T2\\";
+	public static LogParams log = null;
 	
 }

@@ -1,9 +1,9 @@
 package etec.common.utils;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
+import st.etec.params.Params;
 
 /**
  * @author Tim
@@ -13,59 +13,36 @@ import java.util.List;
  * 	
  * */
 public class Log {
-
-	private static SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
-
-	private static String LOG_LEVEL = "DEBUG";
 	
-	public static boolean IS_COLOR = false;
-	
-	private static List<String> arlv = new ArrayList<String>();
-	static {
-		switch (LOG_LEVEL) {
-			case "DEBUG":
-				arlv.add("DEBUG");
-			case "INFO":
-				arlv.add("INFO");
-			case "WARN":
-				arlv.add("WARN");
-			case "ERROR":
-				arlv.add("ERROR");
-			default:
-				break;
-		}
-	}
-
 	public static void info(Object content) {
-		send("INFO", content);
+		send(Params.log.COLOR_INFO,"INFO", content);
 	}
-
+	public static void abs(Object content) {
+		SimpleDateFormat sfabs = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+		System.out.println(sfabs.format(new Date()) + " [\033[37;4m    \033[0m] : " + content);
+	}
 	public static void warn(Object content) {
-		send("33","WARN", content);
+		send(Params.log.COLOR_WARN,"WARN", content); 
 	}
 
 	public static void error(Object content) {
-		send("31","ERROR", content);
+		send(Params.log.COLOR_ERROR,"ERROR", content);
 	}
 
 	public static void debug(Object content) {
-		send("DEBUG",content);
+		send(Params.log.COLOR_DEBUG,"DEBUG",content);
 	}
 	public static void line() {
 		System.out.println("------------------------------------------------------------------------------------------------");
 	}
-	// 固定格式LOG
-	private static void send(String level, Object content) {
-		if (arlv.contains(level)) {
-			System.out.println(sdFormat.format(new Date()) + " [" + level + "] : " + content);
-		}
-	}
 	private static void send(String color,String level, Object content) {
-		if(!IS_COLOR) {
-			send(level,content);
-		}
-		else if (arlv.contains(level)) {
-			System.out.println(sdFormat.format(new Date()) + " [\033["+color+";4m" + level + "\033[0m] : " + content);
+		if (Params.log.levelContains(level)) {
+			if(!Params.log.IS_COLOR) {
+				System.out.println(Params.log.sf.format(new Date()) + " [" + level + "] : " + content);
+			}
+			else {
+				System.out.println(Params.log.sf.format(new Date()) + " [\033["+color+";4m" + level + "\033[0m] : " + content);
+			}
 		}
 	}
 }

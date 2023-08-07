@@ -25,8 +25,8 @@ public class IOPathSettingElement {
 	public static void init() {
 		fcIp = new JFileChooser();
 		fcOp = new JFileChooser();
-		tfIp = new JTextField(Params.INIT_INPUT_PATH);
-		tfOp = new JTextField(Params.INIT_OUTPUT_PATH);
+		tfIp = new JTextField(Params.config.INIT_INPUT_PATH);
+		tfOp = new JTextField(Params.config.INIT_OUTPUT_PATH);
 		btnIp = new JButton("路徑");
 		btnOp = new JButton("路徑");
 		btnSub = new JButton("確認");
