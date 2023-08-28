@@ -1,12 +1,14 @@
 package st.etec.main;
-import st.etec.application.OldApplication;
-import st.etec.application.UIApplication;
-import st.etec.params.ParamsFactory;
+import st.etec.src.application.OldApplication;
+import st.etec.src.application.SearchFunctionApplication;
+import st.etec.src.application.UIApplication;
+import st.etec.src.params.ParamsFactory;
 
 public class Main {
 	public static void main(String[] args) {
 		ParamsFactory.init();
-		OldApplication.run();
+//		OldApplication.run();
+		SearchFunctionApplication.run();
 //		UIApplication.run();
 //		OldApplication.run();
 	}

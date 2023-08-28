@@ -7,9 +7,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import src.java.element.BasicElement;
-import src.java.view.panel.FileListSelectPnl;
-import src.java.view.panel.IOPathSettingPnl;
-import src.java.view.panel.WriteFilePnl;
+import st.etec.view.panel.FileListSelectPnl;
+import st.etec.view.panel.IOPathSettingPnl;
+import st.etec.view.panel.WriteFilePnl;
 
 public class IndexFrame extends JFrame{
 	/**

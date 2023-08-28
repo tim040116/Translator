@@ -6,7 +6,7 @@ import java.util.List;
 import etec.common.utils.FileTool;
 import etec.common.utils.RegexTool;
 import src.java.params.BasicParams;
-import src.java.service.CreateListService;
+import st.etec.src.service.CreateListService;
 
 public class TransformTransducer {
 	private static int cntarea = 1;

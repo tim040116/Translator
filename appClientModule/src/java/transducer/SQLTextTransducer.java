@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import etec.common.utils.FileTool;
 import src.java.params.BasicParams;
-import src.java.service.CreateListService;
+import st.etec.src.service.CreateListService;
 
 /*
  * 因此種類已經使用MS SQL語法，
