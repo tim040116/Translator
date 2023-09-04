@@ -1,6 +1,6 @@
 package st.etec.src.controller;
 
-public class InputFilePathController extends BaseController{
+public class InputFilePathController{
 	
 	public static InputFilePathController run() {
 		return new InputFilePathController();

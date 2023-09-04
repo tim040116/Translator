@@ -13,8 +13,8 @@ import java.util.Map;
 public class ParamsFactory {
 	
 	//設定檔路徑
-//	public static final String ROOT_CONFIG_PATH = "C:\\Users\\User\\Desktop\\Trans\\search_function\\config\\";
-	public static final String ROOT_CONFIG_PATH = "config\\";
+	public static final String ROOT_CONFIG_PATH = "C:\\Users\\User\\Desktop\\Trans\\config\\";
+//	public static final String ROOT_CONFIG_PATH = "config\\";
 
 	//要讀取的設定檔
 	public static final String[] CONFIG_FILE_LIST  = {

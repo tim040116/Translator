@@ -46,7 +46,7 @@ public class SearchFunctionPnl  extends JPanel {
 	public SearchFunctionPnl() {
 		init();
 		setLayout(new GridLayout(4, 2));
-		setPreferredSize(new Dimension(1000, 600));
+		setPreferredSize(new Dimension(1300, 600));
 	}
 
 	private void init() {
@@ -119,7 +119,12 @@ public class SearchFunctionPnl  extends JPanel {
 	public static void setLog(String level,String content) {
 		tsLog.append(sfabs.format(new Date())+ " ["+level.toUpperCase()+"] " + content + "\r\n");
 	}
-
+	public static void setL(String level,String content) {
+		tsLog.append(sfabs.format(new Date())+ " ["+level.toUpperCase()+"] " + content);
+	}
+	public static void setLo(String content) {
+		tsLog.append(content);
+	}
 	public static void clearLog() {
 		tsLog.setText("");
 	}
