@@ -14,7 +14,7 @@ public class TableColumnModel {
 	
 	private String columnType;
 	
-	private String setting;
+	private CreateColumnSettingModel setting;
 
 	public String getColumnName() {
 		return columnName;
@@ -32,12 +32,12 @@ public class TableColumnModel {
 		this.columnType = columnType;
 	}
 
-	public String getSetting() {
+	public CreateColumnSettingModel getSetting() {
 		return setting;
 	}
 
 	public void setSetting(String setting) {
-		this.setting = setting;
+		this.setting = new CreateColumnSettingModel(setting);
 	}
 	
 }

@@ -6,17 +6,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import etec.common.model.sql.CreateTableModel;
 import etec.common.model.sql.TableColumnModel;
 import etec.common.utils.EasyFileTool;
 import etec.common.utils.FileTool;
 import etec.common.utils.RegexTool;
-import src.java.transducer.SQLTransducer;
-import st.etec.sql.wrapper.SqlModelWrapper;
-import st.etec.sql.wrapper.impl.TeradataSqlModelWrapper;
+import etec.sql.wrapper.impl.TeradataSqlModelWrapper;
+import etec.src.transducer.SQLTransducer;
 
 
 /**
@@ -40,7 +37,7 @@ public class GetList {
 			String path = "C:\\Users\\User\\Desktop\\全家\\T0\\20230324_資料提供\\Table Schema Script";
 			String txt = "C:\\Users\\User\\Desktop\\SQL.txt";
 			EasyFileTool eft = new EasyFileTool();
-			SqlModelWrapper wp = new TeradataSqlModelWrapper();
+			TeradataSqlModelWrapper wp = new TeradataSqlModelWrapper();
 			
 			List<File> lstf = FileTool.readFileList(path);
 			for(File f : lstf) {

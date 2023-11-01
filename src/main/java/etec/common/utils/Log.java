@@ -3,7 +3,7 @@ package etec.common.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import st.etec.src.params.Params;
+import etec.main.Params;
 
 /**
  * @author Tim

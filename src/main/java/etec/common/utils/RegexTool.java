@@ -2,6 +2,7 @@ package etec.common.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,7 +58,7 @@ public class RegexTool {
 		return lstRes;
 	}
 	public static String getRegexTargetFirst(String regex, String content) {
-		String res = null;
+		String res = "";
 		Pattern p = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(content);
 		while (m.find()) {
@@ -110,6 +111,8 @@ public class RegexTool {
 	public static String encodeSQL(String sql) {
 		String res = sql;
 		res = res
+				.replaceAll("\\/\\*", "<encodingCode_Remark_Begin>")
+				.replaceAll("\\*\\/", "<encodingCode_Remark_End>")
 				.replaceAll("\\$", "<encodingCode_Money>")
 				.replaceAll("\\.", "<encodingCode_Node>")
 				.replaceAll("\\?", "<encodingCode_QuestionMark>")
@@ -135,7 +138,10 @@ public class RegexTool {
 
 	public static String decodeSQL(String sql) {
 		String res = sql;
-		res = res.replaceAll("<encodingCode_Money>", "\\$")
+		res = res
+				.replaceAll("<encodingCode_Remark_Begin>","\\/\\*")
+				.replaceAll("<encodingCode_Remark_End>","\\*\\/")
+				.replaceAll("<encodingCode_Money>", "\\$")
 				.replaceAll("<encodingCode_Node>", ".")
 				.replaceAll("<encodingCode_QuestionMark>", "?")
 				.replaceAll("<encodingCode_Star>", "*")
@@ -183,5 +189,17 @@ public class RegexTool {
 	public static String decodeCommaInBracket(String context) {
 		String res = context.replaceAll("<encodingCode_Comma>", ",");
 		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年10月26日
+	 * 在特殊符號都加空格的情境下執行
+	 * */
+	public static String spaceRun(String content,Function<String, String> function) {
+		String text = content;
+		text = text.replaceAll("([\\(\\)\\+\\=\\,\\'])"," $1 ");
+		text = function.apply(text);
+		text = text.replaceAll(" ([\\(\\)\\+\\=\\,\\']) ","$1");
+		return text;
 	}
 }

@@ -8,10 +8,21 @@ public class CreateIndexModel {
 	
 	private String[] column;
 
+	private String str;
+	
 	public boolean isPrimary() {
 		return isPrimary;
 	}
 
+	public void setStr(String s) {
+		this.str = s;
+	}
+	
+	public String toString() {
+		return str;
+		
+	}
+	
 	public void setPrimary(boolean isPrimary) {
 		this.isPrimary = isPrimary;
 	}

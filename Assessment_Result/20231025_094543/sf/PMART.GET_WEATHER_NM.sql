@@ -1,0 +1,23 @@
+REPLACE FUNCTION PMART.GET_WEATHER_NM(W1 INTEGER)
+RETURNS VARCHAR(20)
+LANGUAGE SQL 
+DETERMINISTIC 
+CONTAINS SQL 
+CALLED ON NULL INPUT
+SQL SECURITY DEFINER
+COLLATION INVOKER
+INLINE TYPE 1 
+RETURN
+CASE 
+    WHEN (W1 IS NULL ) THEN  NULL
+    WHEN (W1 = 0 ) THEN      NULL
+    WHEN (W1 = 1 ) THEN      ' '
+    WHEN (W1 = 2 ) THEN      '    '
+    WHEN (W1 = 3 ) THEN      '    '
+    WHEN (W1 = 4 ) THEN      '   '
+    WHEN (W1 = 5 ) THEN      '    '
+    WHEN (W1 = 6 ) THEN      '  '
+    WHEN (W1 = 7 ) THEN      '    '
+    WHEN (W1 = 8 ) THEN      '     '
+    WHEN (W1 = 9 ) THEN      '  '
+END;

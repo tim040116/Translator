@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import etec.common.utils.ResourceTool;
-import st.etec.sql.transformer.impl.TeradataToAzureSynapseSqlTransformer;
+import etec.sql.transformer.impl.TeradataToAzureSynapseSqlTransformer;
 
 public class TestTeradataToAzureSynapseSqlTransformer {
 	

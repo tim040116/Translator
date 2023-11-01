@@ -5,7 +5,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
+import etec.common.enums.SQLTypeEnum;
+import etec.src.service.CreateListService;
+import etec.src.transducer.DDLTransducer;
+import etec.src.transducer.DQLTransducer;
+
 public class TransduceTool {
+	/**
+	 * @author	Tim
+	 * @since	2023年10月27日
+	 * 
+	 * 轉換Cursor跟 label語法
+	 * 1.EXECUTE  後面的字拿掉
+		ex: EXECUTE IMMEDIATE -> EXECUTE
+		2.FETCH 改成 FETCH NEXT FROM
+		3.CLOSE (\S) 改成 CLOSE $1 \r\nDEALLOCATE $1
+	 * */
+	public static String transduceCursor(String script) {
+		String txt = script.toUpperCase();
+		script = script
+				.replaceAll("\bEXECUTE\\s+IMMEDIATE\b", "bEXECUTE")
+				.replaceAll("\bFETCH\b", "FETCH NEXT FROM")
+				.replaceAll("\\bCLOSE\\s+([^\\s;]+)\\s*;", "CLOSE $1;\r\nDEALLOCATE $1;")
+				;
+		return txt;
+	}
 	//select語句轉換
 	public static String transduceSelectSQL(String sql) {
 		String txt = sql;
@@ -59,34 +83,37 @@ public class TransduceTool {
 		return res;
 	}
 	//select單純的置換
-		public static String easyReplaceCreate(String sql) {	
-			String res = sql;
-			res = res
-					//compress
-					.replaceAll("COMPRESS[^\\r\\n]*", "")
-					.replaceAll(RegexTool.getReg(",? NO FALLBACK ,?")+"[^\\r\\n]*\\r\\n", "")
-					.replaceAll(RegexTool.getReg(",? NO BEFORE JOURNAL ,?")+"[^\\r\\n]*\\r\\n", "")
-					.replaceAll(RegexTool.getReg(",? NO AFTER JOURNAL ,?")+"[^\\r\\n]*\\r\\n", "")
-					.replaceAll(RegexTool.getReg(",? CHECKSUM = DEFAULT ,?")+"[^\\(]*\\r\\n", "")
-					//CHARACTER SET
-					.replaceAll(RegexTool.getReg("CHARACTER SET ")+"\\w+", "")
-					//區分大小寫
-					.replaceAll(RegexTool.getReg(" NOT CASESPECIFIC"), "")
-					.replaceAll(RegexTool.getReg(" CASESPECIFIC"), " Collate Chinese_Taiwan_Stroke_CI_AS")
-					//title
-					.replaceAll(RegexTool.getReg("Title ")+"[^\\r\\n]*", "")
-					//PARTITION BY RANGE_N
-					.replaceAll(RegexTool.getReg("PARTITION BY RANGE_N\\([^\\)]*\\)"),"")
-					//rank over
-					.replaceAll("(?<!_|[A-Za-z0-9])[Rr][Aa][Nn][Kk]\\((?! |\\))", " RANK ( ) OVER ( order by ")//all
-					//extract
-					.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Dd][Aa][Yy] *[Ff][Rr][Oo][Mm]", "DatePart(day ,")//all
-					.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Mm][Oo][Nn][Tt][Hh] *[Ff][Rr][Oo][Mm]", "DatePart(month ,")//all
-					.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Yy][Ee][Aa][Rr] *[Ff][Rr][Oo][Mm]", "DatePart(year ,")//all
-					;
-			
-			return res;
-		}
+	public static String easyReplaceCreate(String sql) {	
+		String res = sql;
+		res = res
+				//compress
+				.replaceAll("COMPRESS[^\\r\\n]*", "")
+				.replaceAll(",?\\s*NO FALLBACK", "")
+				.replaceAll(",?\\s*NO JOURNAL", "")
+				.replaceAll(",?\\s*NO LOG", "")
+				.replaceAll(",?\\s*DEFAULT MERGEBLOCKRATIO", "")
+				.replaceAll(",?\\s*NO BEFORE JOURNAL", "")
+				.replaceAll(",?\\s*NO AFTER JOURNAL", "")
+				.replaceAll(",?\\s*CHECKSUM = DEFAULT", "")
+				//CHARACTER SET
+				.replaceAll(RegexTool.getReg("CHARACTER SET ")+"\\w+", "")
+				//區分大小寫
+				.replaceAll(RegexTool.getReg(" NOT CASESPECIFIC"), "")
+				.replaceAll(RegexTool.getReg(" CASESPECIFIC"), " Collate Chinese_Taiwan_Stroke_CI_AS")
+				//title
+				.replaceAll(RegexTool.getReg("Title ")+"[^\\r\\n]*", "")
+				//PARTITION BY RANGE_N
+				.replaceAll(RegexTool.getReg("PARTITION BY RANGE_N\\([^\\)]*\\)"),"")
+				//rank over
+				.replaceAll("(?<!_|[A-Za-z0-9])[Rr][Aa][Nn][Kk]\\((?! |\\))", " RANK ( ) OVER ( order by ")//all
+				//extract
+				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Dd][Aa][Yy] *[Ff][Rr][Oo][Mm]", "DatePart(day ,")//all
+				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Mm][Oo][Nn][Tt][Hh] *[Ff][Rr][Oo][Mm]", "DatePart(month ,")//all
+				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Yy][Ee][Aa][Rr] *[Ff][Rr][Oo][Mm]", "DatePart(year ,")//all
+				;
+		
+		return res;
+	}
 	// 置換 group by 語法
 	// 考慮到無法解決子查詢的轉換，暫時廢棄
 	public static String changeGroupBy(String sql) {
@@ -271,6 +298,7 @@ public class TransduceTool {
 	}
 	//整理SQL
 	//效果不好，已廢棄
+	@Deprecated
 	public static String arrangeSQL(String sql) {
 		String res = "";
 		String space = "";
@@ -369,7 +397,11 @@ public class TransduceTool {
 		return res;
 	}
 	
-	//將perl的參數置換到sql語句中
+	/**
+	 * @author	Tim
+	 * @since	2023年10月4日
+	 *   將perl的參數置換到sql語句中
+	 * */
 	public static String replaceParams(String fc) {
 		String result = RegexTool.encodeSQL(fc);
 		//列出參數清單
@@ -387,6 +419,118 @@ public class TransduceTool {
 			result = result.replaceAll(entry.getKey(), entry.getValue());
 		}
 		return RegexTool.decodeSQL(result);
+	}
+	public static final String SPLIT_CHAR_RED =  "🀄";
+	public static final String SPLIT_CHAR_WHITE =  "🀆";
+	public static final String SPLIT_CHAR_GREEN =  "🀅";
+	public static final String SPLIT_CHAR_BLACK =  "🀫";
+	/**
+	 * @author	Tim
+	 * @since	2023年10月4日
+	 * 
+	 * 清除註解
+	 * */
+	public static String cleanRemark(String sql) {
+		String res = sql.replaceAll("\\/\\*", "🀄")
+				.replaceAll("\\*\\/", "🀄")
+				.replaceAll("🀄[^🀄]*🀄", "")
+				.replaceAll("\\-\\-.*", "")
+				.replaceAll("\\/\\/.*", "")
+				.replaceAll("(\r\n)+", "\r\n")
+				.trim();
+		return res;
+	}
+	
+	/**
+	 * @author	Tim
+	 * @since	2023年10月4日
+	 * 分辨SQL的類型
+	 * 
+	 * */
+	public static SQLTypeEnum getSQLType(String sql) {
+		sql = cleanRemark(sql).toUpperCase().trim();
+		SQLTypeEnum res = SQLTypeEnum.OTHER;
+		
+		if(sql.matches("\\s*;?\\s*")) {
+			res = SQLTypeEnum.EMPTY;
+		}
+		else if (sql.matches("CREATE\\s*(MULTISET|SET)?(\\s+VOLATILE)?\\s+TABLE\\s+[\\S\\s]+")) {
+			res = sql.matches("[\\S\\s]*\\s+SELECT\\s+[\\S\\s]*")?SQLTypeEnum.CREATE_INSERT:SQLTypeEnum.CREATE_TABLE;
+		}
+		else if(sql.matches("RENAME\\s+TABLE\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.RENAME_TABLE;
+		}
+		else if (sql.matches("DROP\\s+TABLE\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.DROP_TABLE;
+		}
+		
+		
+		else if(sql.matches("LOCK\\s+TABLE\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.LOCKING;
+		}
+		else if(sql.matches("TRUNCATE\\s+TABLE\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.TRUNCATE_TABLE;
+		}
+		else if (sql.matches("MERGE\\s+INTO\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.MERGE_INTO;
+		}
+		else if (sql.matches("UPDATE\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.UPDATE_TABLE;
+		}
+		else if (sql.matches("SELECT\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.SELECT_TABLE;
+		}
+		else if (sql.matches("DELETE\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.DELETE_TABLE;
+		}
+		else if(sql.matches("REPLACE\\s+VIEW\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.REPLACE_VIEW; 	
+		}
+		else if(sql.matches("COLLECT\\s+STATISTICS\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.COLLECT_STATISTICS;
+		}
+		else if(sql.matches("COMMENT\\s+ON\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.COMMENT_ON;
+		}
+		else if(sql.matches("INSERT\\s+INTO\\s+[\\S\\s]+")) {
+			res = sql.matches("[\\S\\s]*\\s+SELECT\\s+[\\S\\s]*")?SQLTypeEnum.INSERT_SELECT:SQLTypeEnum.INSERT_TABLE;
+		}
+		else if(sql.matches("DROP\\s+VIEW\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.DROP_VIEW;
+		}
+		else if(sql.matches("DATABASE\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.DATABASE;
+		}
+		else if(sql.matches("LOCKING\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.LOCKING;
+		}
+		else if(sql.matches("CALL\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.CALL;
+		}
+		else if(sql.matches("COMMIT\\s*;")) {
+			res = SQLTypeEnum.COMMIT;
+		}
+		else if(sql.matches("BT\\s*;")) {
+			res = SQLTypeEnum.BT;
+		}
+		else if(sql.matches("ET\\s*;")) {
+			res = SQLTypeEnum.ET;
+		}
+		else if(sql.matches("EXIT\\s*;")) {
+			res = SQLTypeEnum.EXIT;
+		}
+		else if(sql.matches("WITH\\s+\\S+\\s+AS\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.WITH;
+		}
+		else {
+			res = SQLTypeEnum.OTHER;
+		}
+		if(res.equals(SQLTypeEnum.OTHER)) {
+			Log.warn("出現無法處理的SQL語句");
+			System.out.println(sql+"\r\n");
+		}
+		return res;
+		
 	}
 	
 }

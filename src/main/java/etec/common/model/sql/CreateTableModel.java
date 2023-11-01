@@ -20,7 +20,7 @@ public class CreateTableModel {
 	
 	private String tableName;
 	
-	private MultiSetEnum multiSet;
+	private MultiSetEnum multiSet = MultiSetEnum.MULTI_SET;
 	
 	private String[] tableSetting;
 	
@@ -42,8 +42,8 @@ public class CreateTableModel {
 		this.tableName = tableName;
 	}
 
-	public MultiSetEnum getMultiSet() {
-		return multiSet;
+	public String getMultiSet() {
+		return this.multiSet.equals(MultiSetEnum.SET)?"SET":"MULTISET";
 	}
 
 	public void setMultiSet(MultiSetEnum multiSet) {

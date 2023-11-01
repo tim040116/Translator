@@ -10,10 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +41,12 @@ public class FileTool {
 		//return readFile(f,detectCharset(f.getPath()));
 		return readFile(f,Charset.defaultCharset());
 	}
+	public static String readFile(String fileName) throws IOException {
+		//return readFile(f,detectCharset(f.getPath()));
+		return readFile(new File(fileName),Charset.defaultCharset());
+	}
 	public static String readFile(File f,Charset encoding) throws IOException {
-		System.out.println("讀取檔案：" + f.getPath());
+		Log.info("讀取檔案：" + f.getPath());
 		String content;
 		FileInputStream fis;
 		InputStreamReader isr;
@@ -69,8 +69,12 @@ public class FileTool {
 	}
 	//產檔案
 	public static boolean createFile(String filePath,String content) throws IOException {
-		System.out.println("產生檔案：" + filePath);
+		Log.info("產生檔案：" + filePath);
 		File newFile = new File(filePath);
+		newFile.getParentFile().mkdirs();
+		if (!newFile.exists()) {
+			newFile.createNewFile();
+        }
 		newFile.getParentFile().mkdirs();
 		newFile.createNewFile();
 //		FileWriter fw = new FileWriter(newFile);
@@ -84,8 +88,24 @@ public class FileTool {
 		return true;
 	}
 	//產檔案
+	public static boolean createFile(String filePath,String content,Charset charset) throws IOException {
+		Log.info("產生檔案：" + filePath);
+		File newFile = new File(filePath);
+		newFile.getParentFile().mkdirs();
+		newFile.createNewFile();
+//			FileWriter fw = new FileWriter(newFile);
+//			BufferedWriter bw = new BufferedWriter(fw);
+		FileOutputStream writerStream = new FileOutputStream(filePath);    
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(writerStream,charset)); 
+		bw.write(content);
+//			fw.flush();
+		bw.close();
+//			fw.close();
+		return true;
+	}
+	//產檔案
 	public static boolean addFile(String file,String content) throws IOException {
-		System.out.println("新增資料到檔案：" + file);
+		Log.info("新增資料到檔案：" + file);
 		File newFile = new File(file);
 		newFile.getParentFile().mkdirs();
 		if (!newFile.exists()) {
