@@ -23,12 +23,12 @@ public class Main {
 			FamilyMartApplication.run();
 			break;
 		case "SEARCH_FUNCTION"://分析程式後列出清單
-			SearchFunctionApplication.run();
+			SearchFunctionApplication.run("方法統計");
 			break;
-		case "SD_MAKER"://分析CREATE TABLE與法治做成資料表清單
-			SearchFunctionApplication.run();
+		case "SD_MAKER"://3.2分析CREATE TABLE與法治做成資料表清單
+			SearchFunctionApplication.run("SD製作工具");
 			break; 
-		case "SF_SP"://轉換sf 跟sp
+		case "SF_SP"://3.3轉換sf 跟sp
 			TranslateStoreFunctionApplication.run();
 			break;
 		default:

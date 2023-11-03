@@ -1,5 +1,10 @@
 package etec.src.transducer;
 
+import java.util.List;
+
+import etec.common.utils.RegexTool;
+import etec.main.Params;
+
 /**
  * @author	Tim
  * @since	2023年11月1日
@@ -11,6 +16,26 @@ package etec.src.transducer;
  * */
 public class SFTransducer {
 
+	/**
+	 * @author	Tim
+	 * @since	2023年10月27日
+	 * 
+	 * -   轉換Cursor跟 label語法
+	 * 1.EXECUTE  後面的字拿掉
+		ex: EXECUTE IMMEDIATE -> EXECUTE
+		2.FETCH 改成 FETCH NEXT FROM
+		3.CLOSE (\S) 改成 CLOSE $1 \r\nDEALLOCATE $1
+	 * */
+	public static String transduceCursor(String script) {
+		String txt = script.toUpperCase();
+		txt = txt
+				.replaceAll("\\bEXECUTE\\s+IMMEDIATE", "EXECUTE")
+				.replaceAll("\\bFETCH\\b", "FETCH NEXT FROM")
+				.replaceAll("\\bCLOSE\\s+([^\\s;]+)\\s*;", "CLOSE $1;\r\nDEALLOCATE $1;")
+				;
+		return txt;
+	}
+	
 	/**
 	 * @author	Tim
 	 * @since	2023年11月1日
@@ -25,12 +50,31 @@ public class SFTransducer {
 				.replaceAll("(\\s+)ELSE(\\s+)\\b([^中]+)\\b中", "$2END$1ELSE$2BEGIN$2$3$2END\r\n")
 				.replaceAll("中","END IF;")
 				;
-				//if else if end if
+		//if else if end if
 		res = res
 				.replaceAll("\\bEND\\s+IF\\s*;","END")
 				.replaceAll("\\bIF\\s+(.*)\\sTHEN","IF $1 BEGIN")
 				.replaceAll("\\bELSEIF\\s+(.*)THEN","END\r\nELSE IF $1 BEGIN")
 				;
+		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年11月1日
+	 * 參數轉換
+	 * */
+	public static String transduceDECLARE(List<String> lstParams,String script) {
+		String res = script;
+		//參數置換
+		if(Params.sfsp.TRANS_PARAMS) {
+			//置換
+			res = RegexTool.spaceRun(res, (String t) -> {
+				for(String p: lstParams) {
+					t = t.replaceAll("\\b"+p+"\\b", "@"+p);
+				}
+				return t;
+			});
+		}
 		return res;
 	}
 }

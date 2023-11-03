@@ -19,6 +19,7 @@ import etec.common.utils.Log;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
 import etec.main.Params;
+import etec.src.transducer.SFTransducer;
 
 /**
  * @author	Tim
@@ -33,7 +34,6 @@ public class TranslateStoreFunctionService {
 	 * @author	Tim
 	 * @since	2023年10月17日
 	 * 
-	 
 	 * */
 	public static String run(File f) throws IOException {
 		Log.info("TranslateStoreFunctionService");
@@ -102,12 +102,15 @@ public class TranslateStoreFunctionService {
 				step=1;
 			}
 			if(step==0) {
-				txtHeader+=line+"\r\n";
+				txtHeader+=(line+"\r\n")
+						.replaceAll("OUT\\s+(\\S+)", "$1")
+						.replaceAll("IN\\s+(\\S+)", "$1");
 			}else if(step==1){
 				txtContext+=line+"\r\n";
 			}
 			
 		}
+		//
 		//取得檔名
 		String spName = RegexTool.getRegexTargetFirst("^\\s*\\S+\\s+PROCEDURE\\s+[^\\(]+", sp)
 				.replaceAll("^\\s*\\S+\\s+PROCEDURE\\s+", "");
@@ -118,27 +121,22 @@ public class TranslateStoreFunctionService {
 		List<String> lstParams = new ArrayList<String>();
 		txtHeader = txtHeader
 				.replaceAll(",", " ,")
-				.replaceAll("IN\\s+(\\S+)", "$1")
-				.replaceAll("IN\\s+(\\S+)", "$1");
-		String headerParams = txtHeader
 				.replaceAll("^[^\\(]+\\(","")
-				.replaceAll("\\)\\s*SQL SECURITY INVOKER","")
-				.replaceAll("\\([^\\)]+\\)", "")
-				.replaceAll("([^,\\s]+)\\s+([^,\\s]+)", "$1")
+				.replaceAll("SP:","")
+				.replaceAll("\\)\\s*$","")
+				;
+		String headerParams = txtHeader;
+		headerParams = headerParams.replaceAll("--.*", "");
+//		headerParams = headerParams.replaceAll("^[^\\(]+\\(","");
+		headerParams = headerParams.replaceAll("\\)\\s*SQL SECURITY INVOKER","");
+		headerParams = headerParams.replaceAll("\\([^\\)]+\\)", "");
+		headerParams = headerParams.replaceAll("([^,\\s]+)\\s+([^,\\s]+)", "$1");
 				;
 		lstParams.addAll(Arrays.asList(headerParams.split(",")));
 		//DECLARE的參數
 		lstParams.addAll(RegexTool.getRegexTarget("(?<=DECLARE )\\S+", txtContext));
 		//參數置換
-		if(Params.sfsp.TRANS_PARAMS) {
-			//置換
-			script = RegexTool.spaceRun(script, (String t) -> {
-				for(String p: lstParams) {
-					t = t.replaceAll("\\b"+p+"\\b", "@"+p);
-				}
-				return t;
-			});
-		}
+		script = SFTransducer.transduceDECLARE(lstParams, script);
 		//包裝
 		script = script.replaceAll("\n[\\t \r\n]+\n", "\r\n").trim();
 		res.setName(spName);
@@ -189,15 +187,7 @@ public class TranslateStoreFunctionService {
 		//DECLARE的參數
 		lstParams.addAll(RegexTool.getRegexTarget("(?<=DECLARE )\\S+", txtSQL));
 		//參數置換
-		if(Params.sfsp.TRANS_PARAMS) {
-			//置換
-			script = RegexTool.spaceRun(script, (String t) -> {
-				for(String p: lstParams) {
-					t = t.replaceAll("\\b"+p+"\\b", "@"+p);
-				}
-				return t;
-			});
-		}
+		script = SFTransducer.transduceDECLARE(lstParams, script);
 		//整理語法
 		script = script.replaceAll("\n[\\t \r\n]+\n", "\r\n");
 		res.setHeader(txtHeader);
@@ -226,7 +216,20 @@ public class TranslateStoreFunctionService {
 		txtSQL = TransduceTool.changeCharindex(txtSQL);
 		txtSQL = TransduceTool.changeIndex(txtSQL);
 		txtSQL = TransduceTool.easyReplaceCreate(txtSQL);
+		txtSQL = SFTransducer.transduceCursor(txtSQL);
+		txtSQL = SFTransducer.transduceIF(txtSQL);
+		//CURSOR
+		txtSQL = txtSQL
+				.replaceAll("PREPARE\\s(\\S+)\\sFROM\\s+(\\S+)\\s*;"
+						, "set @SqlCur = N'DECLARE $1 CURSOR FOR ' + $2 ;\r\n\tEXECUTE sp_executesql @SqlCur")
+				;
+		//IF SQLSTATE <> '00000' THEN LEAVE L1; end if;
+		txtSQL = txtSQL
+				.replaceAll("\\bIF\\s+(\\w+)\\s+<\\s*>\\s+\\w+\\s+THEN\\s+LEAVE\\s+(\\w+)\\s*;\\s*END\\s+IF\\s*;"
+						, "WHILE (@@FETCH_STATUS = 0)")
+				;
 		return txtSQL;
 //		return FamilyMartFileTransduceService.transduceSQLScript(sql);
 	}
+	
 }

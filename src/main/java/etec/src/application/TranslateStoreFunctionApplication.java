@@ -13,6 +13,6 @@ import etec.view.frame.SearchFunctionFrame;
  * */
 public class TranslateStoreFunctionApplication {
 	public static void run() {
-		new SearchFunctionFrame(new TranslateStoreFunctionController());
+		new SearchFunctionFrame("SP SF 轉換",new TranslateStoreFunctionController());
 	}
 }

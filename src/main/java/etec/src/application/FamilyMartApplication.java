@@ -5,6 +5,6 @@ import etec.view.frame.SearchFunctionFrame;
 
 public class FamilyMartApplication {
 	public static void run() {
-		new SearchFunctionFrame(new FamilyMartController());
+		new SearchFunctionFrame("全家轉換",new FamilyMartController());
 	}
 }

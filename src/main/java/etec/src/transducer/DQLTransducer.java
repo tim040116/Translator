@@ -22,6 +22,7 @@ public class DQLTransducer {
 		txt = changeZeroifnull(txt);
 		txt = changeCharindex(txt);
 		txt = changeIndex(txt);
+		txt = txt.replaceAll("\\bINTO\bb", "=");
 		return txt.trim();
 	}
 

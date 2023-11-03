@@ -5,7 +5,7 @@ import etec.view.frame.SearchFunctionFrame;
 
 public class SearchFunctionApplication {
 
-	public static void run() {
-		new SearchFunctionFrame(new SearchFunctionController());
+	public static void run(String title) {
+		new SearchFunctionFrame(title,new SearchFunctionController());
 	}
 }

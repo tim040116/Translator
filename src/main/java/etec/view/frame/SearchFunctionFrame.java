@@ -19,7 +19,8 @@ public class SearchFunctionFrame extends JFrame{
 	JPanel pl;
 	private String title = "";
 
-	public SearchFunctionFrame(Controller con) {
+	public SearchFunctionFrame(String title,Controller con) {
+		this.title = title;
 		init(con);
 		basicSetting();	
 	}

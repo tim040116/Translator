@@ -2,6 +2,7 @@ package etec.src.controller;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -13,9 +14,11 @@ import etec.common.model.BasicParams;
 import etec.common.utils.FileTool;
 import etec.common.utils.Log;
 import etec.common.utils.RegexTool;
+import etec.common.utils.TransduceTool;
 import etec.main.Params;
 import etec.src.interfaces.Controller;
 import etec.src.service.CreateListService;
+import etec.src.service.FamilyMartFileTransduceService;
 import etec.src.service.IOpathSettingService;
 import etec.src.service.SearchFunctionService;
 import etec.view.panel.SearchFunctionPnl;
@@ -78,9 +81,22 @@ public class SearchFunctionController implements Controller{
 			String content = FileTool.readFile(f,Charset.forName("utf-8"));
 			content = SearchFunctionService.getSqlContent(content);
 			
+			List<String> lstFile = new ArrayList<String>();
 			
 			//SD
 			if("SD_MAKER".equals(Params.config.APPLICATION_TYPE)) {
+				//src轉換
+				String newContent = content.replaceAll("\"[^\"]+\"\\s+", "");
+				newContent = FamilyMartFileTransduceService.transduceSQLScript(newContent);
+				String srcFileName = RegexTool.getRegexTargetFirst("\\bP\\w+\\.\\w+",RegexTool.getRegexTargetFirst("^.*",newContent));
+				if(lstFile.contains(srcFileName)) {
+					Log.error(srcFileName);
+				} else {
+					lstFile.add(srcFileName);
+				}
+				String srcFilePath = BasicParams.getOutputPath()+"\\src\\"+srcFileName+".sql";
+				FileTool.addFile(srcFilePath, newContent);
+				//SD List
 				String tp1 = CreateListService.createSD(content);
 				if("Success".equals(tp1)) {
 					i++;
@@ -88,7 +104,7 @@ public class SearchFunctionController implements Controller{
 					continue;
 				}
 			}
-			
+			//轉換語法
 			
 			//搜尋DDL
 			Map<String,String> mapDDL = new HashMap<String,String>();

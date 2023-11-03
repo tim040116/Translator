@@ -6,30 +6,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 
 import etec.common.enums.SQLTypeEnum;
-import etec.src.service.CreateListService;
-import etec.src.transducer.DDLTransducer;
-import etec.src.transducer.DQLTransducer;
 
 public class TransduceTool {
-	/**
-	 * @author	Tim
-	 * @since	2023年10月27日
-	 * 
-	 * 轉換Cursor跟 label語法
-	 * 1.EXECUTE  後面的字拿掉
-		ex: EXECUTE IMMEDIATE -> EXECUTE
-		2.FETCH 改成 FETCH NEXT FROM
-		3.CLOSE (\S) 改成 CLOSE $1 \r\nDEALLOCATE $1
-	 * */
-	public static String transduceCursor(String script) {
-		String txt = script.toUpperCase();
-		script = script
-				.replaceAll("\bEXECUTE\\s+IMMEDIATE\b", "bEXECUTE")
-				.replaceAll("\bFETCH\b", "FETCH NEXT FROM")
-				.replaceAll("\\bCLOSE\\s+([^\\s;]+)\\s*;", "CLOSE $1;\r\nDEALLOCATE $1;")
-				;
-		return txt;
-	}
+	
 	//select語句轉換
 	public static String transduceSelectSQL(String sql) {
 		String txt = sql;
