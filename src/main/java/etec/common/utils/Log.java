@@ -1,5 +1,6 @@
 package etec.common.utils;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -37,11 +38,16 @@ public class Log {
 	}
 	private static void send(String color,String level, Object content) {
 		if (Params.log.levelContains(level)) {
-			if(!Params.log.IS_COLOR) {
-				System.out.println(Params.log.sf.format(new Date()) + " [" + level + "] : " + content);
-			}
-			else {
-				System.out.println(Params.log.sf.format(new Date()) + " [\033["+color+";4m" + level + "\033[0m] : " + content);
+			String log = Params.log.sf.format(new Date()) 
+					+ (Params.log.IS_COLOR?" [\033["+color+";4m" + level + "\033[0m] : ":" [" + level + "] : ") 
+					+ content;
+			System.out.println(log);
+			if(Params.log.IS_WRITE_FILE) {
+				try {
+					FileTool.addFile(Params.log.LOG_FILE_NAME, log);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

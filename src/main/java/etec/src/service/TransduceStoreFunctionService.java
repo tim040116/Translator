@@ -3,13 +3,9 @@ package etec.src.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import etec.common.exception.UnknowSQLTypeException;
 import etec.common.model.BasicParams;
@@ -18,7 +14,6 @@ import etec.common.utils.FileTool;
 import etec.common.utils.Log;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
-import etec.main.Params;
 import etec.src.transducer.SFTransducer;
 
 /**
@@ -28,7 +23,7 @@ import etec.src.transducer.SFTransducer;
  * 
  * 應Jason要求轉換store function
  * */
-public class TranslateStoreFunctionService {
+public class TransduceStoreFunctionService {
 
 	/**
 	 * @author	Tim
@@ -219,10 +214,7 @@ public class TranslateStoreFunctionService {
 		txtSQL = SFTransducer.transduceCursor(txtSQL);
 		txtSQL = SFTransducer.transduceIF(txtSQL);
 		//CURSOR
-		txtSQL = txtSQL
-				.replaceAll("PREPARE\\s(\\S+)\\sFROM\\s+(\\S+)\\s*;"
-						, "set @SqlCur = N'DECLARE $1 CURSOR FOR ' + $2 ;\r\n\tEXECUTE sp_executesql @SqlCur")
-				;
+		
 		//IF SQLSTATE <> '00000' THEN LEAVE L1; end if;
 		txtSQL = txtSQL
 				.replaceAll("\\bIF\\s+(\\w+)\\s+<\\s*>\\s+\\w+\\s+THEN\\s+LEAVE\\s+(\\w+)\\s*;\\s*END\\s+IF\\s*;"

@@ -33,6 +33,14 @@ public class SFTransducer {
 				.replaceAll("\\bFETCH\\b", "FETCH NEXT FROM")
 				.replaceAll("\\bCLOSE\\s+([^\\s;]+)\\s*;", "CLOSE $1;\r\nDEALLOCATE $1;")
 				;
+		/**
+		 * 2023-11-06 Tim : 經測試，Cursor語法僅支援MS SQL 不支援Azure，因此廢棄
+		 * 
+		 * */
+//		txt = txt
+//				.replaceAll("PREPARE\\s(\\S+)\\sFROM\\s+(\\S+)\\s*;"
+//						, "set @SqlCur = N'DECLARE $1 CURSOR FOR ' + $2 ;\r\n\tEXECUTE sp_executesql @SqlCur")
+//				;
 		return txt;
 	}
 	

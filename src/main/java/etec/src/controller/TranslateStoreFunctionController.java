@@ -13,7 +13,7 @@ import etec.common.utils.FileTool;
 import etec.main.Params;
 import etec.src.interfaces.Controller;
 import etec.src.service.IOpathSettingService;
-import etec.src.service.TranslateStoreFunctionService;
+import etec.src.service.TransduceStoreFunctionService;
 import etec.view.panel.SearchFunctionPnl;
 
 /**
@@ -64,7 +64,7 @@ public class TranslateStoreFunctionController implements Controller {
 			SearchFunctionPnl.setProgressBar(0);
 			for(String sql : arrSF) {
 				i++;
-				lstm.add(TranslateStoreFunctionService.transformSF(sql));
+				lstm.add(TransduceStoreFunctionService.transformSF(sql));
 				SearchFunctionPnl.setProgressBar(i * 100 / cntf);
 			}
 		}
@@ -98,7 +98,7 @@ public class TranslateStoreFunctionController implements Controller {
 		//轉換
 		for(File f : lf) {
 			i++;
-			lstm.add(TranslateStoreFunctionService.transformSP(f));
+			lstm.add(TransduceStoreFunctionService.transformSP(f));
 //			mapSF.putAll(TranslateStoreFunctionService.transformSP(f));
 			SearchFunctionPnl.setProgressBar(i * 100 / cntf);
 		}

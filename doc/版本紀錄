@@ -1,6 +1,7 @@
-3.4.0.0: 2023/10/25	Tim	只轉換SQL的工具
+3.4.0.0: 2023/10/25	Tim	FastTransduce只轉換SQL的工具
 	- 即時轉換工具
 	- 不透過讀檔產檔
+	- 新介面
 3.3.1.1: 2023/10/25 Tim 新增替換參數的功能
 	- SP SF 的DECLARE跟PARAMS替換成@
 	- IF ELSE IF 功能轉換

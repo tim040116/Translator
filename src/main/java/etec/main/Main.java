@@ -1,6 +1,7 @@
 package etec.main;
 import etec.common.utils.Log;
 import etec.src.application.FamilyMartApplication;
+import etec.src.application.FastTransduceApplication;
 import etec.src.application.OldApplication;
 import etec.src.application.SearchFunctionApplication;
 import etec.src.application.TranslateStoreFunctionApplication;
@@ -30,6 +31,9 @@ public class Main {
 			break; 
 		case "SF_SP"://3.3轉換sf 跟sp
 			TranslateStoreFunctionApplication.run();
+			break;
+		case "FAST_TRANSDUCE"://3.4 即時轉換
+			FastTransduceApplication.run();
 			break;
 		default:
 			break;

@@ -3,18 +3,20 @@ package etec.main.params;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import etec.common.utils.ParamsTool;
+import etec.main.ParamsFactory;
 
 public class LogParams {
 
 	// log的等級
-	public final String LEVEL;
-	
+	public final String PRINT_LEVEL;
 	private final List<String> arrlv = new ArrayList<String>();
-
+	public final boolean IS_WRITE_FILE;
+	public final String LOG_FILE_NAME;
 	// 時間的格式
 	public SimpleDateFormat sf = new SimpleDateFormat("YYYY/MM/dd HH:mm:ss");
 
@@ -28,7 +30,9 @@ public class LogParams {
 
 	public LogParams(File f) {
 		Map<String, String> map = ParamsTool.readParam("=", f);
-		this.LEVEL = map.get("LEVEL").toUpperCase();
+		this.PRINT_LEVEL = map.get("PRINT_LEVEL").toUpperCase();
+		this.IS_WRITE_FILE = map.get("IS_WRITE_FILE").toUpperCase().equals("TRUE");
+		LOG_FILE_NAME = ParamsFactory.LOG_FILE_PATH+(new SimpleDateFormat("YYYY-MM-DD")).format(new Date())+".log";
 		sf = new SimpleDateFormat(map.get("TIME_FORMAT"));
 		this.IS_COLOR = "true".equals(map.get("IS_COLOR").toLowerCase());
 		this.COLOR_DEBUG = map.get("COLOR_DEBUG");
@@ -36,7 +40,7 @@ public class LogParams {
 		this.COLOR_INFO = map.get("COLOR_INFO");
 		this.COLOR_WARN = map.get("COLOR_WARN");
 		
-		switch (LEVEL) {
+		switch (PRINT_LEVEL) {
 			case "DEBUG":
 				arrlv.add("DEBUG");
 			case "INFO":
@@ -54,4 +58,5 @@ public class LogParams {
 	public boolean levelContains(String str) {
 		return arrlv.contains(str);
 	}
+	
 }
