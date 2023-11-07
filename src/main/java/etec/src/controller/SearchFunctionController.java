@@ -14,7 +14,6 @@ import etec.common.model.BasicParams;
 import etec.common.utils.FileTool;
 import etec.common.utils.Log;
 import etec.common.utils.RegexTool;
-import etec.common.utils.TransduceTool;
 import etec.main.Params;
 import etec.src.interfaces.Controller;
 import etec.src.service.CreateListService;
@@ -28,21 +27,21 @@ public class SearchFunctionController implements Controller{
 	@Override
 	public void run() throws Exception {
 		// 儲存參數
-		SearchFunctionPnl.clearLog();
-		SearchFunctionPnl.setStatus(RunStatusEnum.WORKING);
+		SearchFunctionPnl.tsLog.clearLog();
+		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.WORKING);
 		/**
 		 * 2023/08/25 Tim
 		 * 應jason要求，取消輸入產出路徑的功能
 		 * */
 		//IOpathSettingService.setPath(SearchFunctionPnl.tfIp.getText(), SearchFunctionPnl.tfOp.getText());
 		IOpathSettingService.setPath(SearchFunctionPnl.tfIp.getText(),Params.config.INIT_OUTPUT_PATH);
-		SearchFunctionPnl.setLog("資訊", "取得資料目錄 : " + BasicParams.getInputPath());
-		SearchFunctionPnl.setLog("資訊", "取得產檔目錄 : " + BasicParams.getOutputPath());
+		SearchFunctionPnl.tsLog.setLog("資訊", "取得資料目錄 : " + BasicParams.getInputPath());
+		SearchFunctionPnl.tsLog.setLog("資訊", "取得產檔目錄 : " + BasicParams.getOutputPath());
 		// 取得檔案清單
 		List<File> lf = null;
 		lf = FileTool.getFileList(BasicParams.getInputPath());
 		BasicParams.setListFile(lf);
-		SearchFunctionPnl.setLog("資訊", "取得檔案清單");
+		SearchFunctionPnl.tsLog.setLog("資訊", "取得檔案清單");
 		//建立清單檔
 		String fileListNm = BasicParams.getOutputPath()+Params.searchFunction.FILE_LIST_NAME;//列出所有檔案
 		String funcListNm = BasicParams.getOutputPath()+Params.searchFunction.FUNC_LIST_NAME;//列出所有方法
@@ -57,12 +56,13 @@ public class SearchFunctionController implements Controller{
 		Map<String,Integer> mapFunc = new HashMap<String,Integer>();
 		List<String> lstSkip = Arrays.asList(Params.searchFunction.SKIP_LIST);
 		// 讀取檔案
-		SearchFunctionPnl.setLog("資訊", "開始讀取檔案");
-		int cntf = lf.size();
+		SearchFunctionPnl.tsLog.setLog("資訊", "開始讀取檔案");
+		SearchFunctionPnl.progressBar.reset();
+		SearchFunctionPnl.progressBar.setUnit(lf.size());
 		int i = 0;
 		// 讀取每一份檔案
 		for (File f : lf) {
-			SearchFunctionPnl.setLog("資訊","讀取檔案：" + f.getPath());
+			SearchFunctionPnl.tsLog.setLog("資訊","讀取檔案：" + f.getPath());
 			// 寫入檔案清單
 			String category = "\\" + f.getPath()
 					.replace(BasicParams.getInputPath(), "")
@@ -100,7 +100,7 @@ public class SearchFunctionController implements Controller{
 				String tp1 = CreateListService.createSD(content);
 				if("Success".equals(tp1)) {
 					i++;
-					SearchFunctionPnl.setProgressBar(i * 100 / cntf);
+					SearchFunctionPnl.progressBar.plusOne();
 					continue;
 				}
 			}
@@ -114,9 +114,9 @@ public class SearchFunctionController implements Controller{
 			mapDDL.put("UPDATE", "UPDATE");
 			mapDDL.put("DELETE", "DELETE\\s+FROM");
 			mapDDL.put("MERGE", "MERGE\\s+INTO");
-			SearchFunctionPnl.setL("資訊", "搜尋項目: ");
+			SearchFunctionPnl.tsLog.setL("資訊", "搜尋項目: ");
 			for (Entry<String, String> entry : mapDDL.entrySet()) {
-				SearchFunctionPnl.setLo(" >"+entry.getKey());
+				SearchFunctionPnl.tsLog.setOg(" >"+entry.getKey());
 				List<String> lstMergeInto = RegexTool.getRegexTarget("(^|\\s)"+entry.getValue()+"\\s+\\S+", content);
 				for(String tblNm : lstMergeInto) {
 					tblNm = tblNm.trim().replaceAll(entry.getValue()+"\\s+", "");
@@ -131,10 +131,10 @@ public class SearchFunctionController implements Controller{
 						+"\"");
 				}
 			}
-			SearchFunctionPnl.setLo("\r\n");
+			SearchFunctionPnl.tsLog.setOg("\r\n");
 			//搜尋DQL
 			List<String> lstDQLTable = SearchFunctionService.searchDQL(content);
-			SearchFunctionPnl.setLog("資訊", "建立清單");
+			SearchFunctionPnl.tsLog.setLog("資訊", "建立清單");
 			for(String tblNm : lstDQLTable) {
 				FileTool.addFile(ddlListNm,																
 						  "\""   +category 
@@ -211,23 +211,22 @@ public class SearchFunctionController implements Controller{
 				j++;
 			}
 			i++;
-			SearchFunctionPnl.setProgressBar(i * 100 / cntf);
+			SearchFunctionPnl.progressBar.plusOne();
 		}
 		// 寫函式檔
-		SearchFunctionPnl.setLog("資訊","產生函式檔");
+		SearchFunctionPnl.tsLog.setLog("資訊","產生函式檔");
 //		SearchFunctionPnl.setProgressBar(0);
-		cntf = mapFunc.size();
-		int k = 0;
+		SearchFunctionPnl.progressBar.reset();
+		SearchFunctionPnl.progressBar.setUnit(mapFunc.size());
 		for(Entry<String, Integer> entry : mapFunc.entrySet()) {
 			FileTool.addFile(funcListNm,
 					    "\""+entry.getKey()
 					+"\",\"" + entry.getValue()
 					+"\"");
-			k++;
-			SearchFunctionPnl.setProgressBar(k * 100 / cntf);
+			SearchFunctionPnl.progressBar.plusOne();
 		}
-		SearchFunctionPnl.setStatus(RunStatusEnum.SUCCESS);
-		SearchFunctionPnl.setLog("資訊","產生完成，共 "+i+" 個檔案");
+		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.SUCCESS);
+		SearchFunctionPnl.tsLog.setLog("資訊","產生完成，共 "+i+" 個檔案");
 		Log.info("完成，共 "+i+" 個檔案");
 	}
 

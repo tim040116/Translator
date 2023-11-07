@@ -35,7 +35,7 @@ public class WriteFilePnl extends JPanel {
 		WriteFileElement.btnStart.addActionListener(listener);
 		add(WriteFileElement.btnStart);
 		add(new JScrollPane(WriteFileElement.tsLog));
-		add(WriteFileElement.pbWriteFile);
+		add(WriteFileElement.progressBar);
 		add(WriteFileElement.lblStatus);
 	}
 }

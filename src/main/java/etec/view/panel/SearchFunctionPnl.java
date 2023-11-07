@@ -1,22 +1,21 @@
 package etec.view.panel;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.text.DefaultCaret;
 
 import etec.common.enums.RunStatusEnum;
+import etec.common.factory.UIPanelFactory;
+import etec.common.view.panel.LogTextArea;
+import etec.common.view.panel.ProgressBar;
+import etec.common.view.panel.StatusBar;
 import etec.main.Params;
 import etec.src.interfaces.Controller;
 import etec.src.listener.SearchFunctionListener;
@@ -38,9 +37,9 @@ public class SearchFunctionPnl  extends JPanel {
 	public static JTextField tfOp;
 	public static JLabel lblIp;
 	public static JLabel lblOp;
-	public static JTextArea tsLog;
-	public static JProgressBar pbWriteFile;
-	public static JLabel lblStatus;
+	public static LogTextArea tsLog;
+	public static ProgressBar progressBar;
+	public static StatusBar lblStatus;
 	// 事件監聽器
 	SearchFunctionListener lr;
 
@@ -62,17 +61,11 @@ public class SearchFunctionPnl  extends JPanel {
 		btnSub = new JButton("確認");
 		lblIp = new JLabel("來源路徑:");
 		lblOp = new JLabel("產檔路徑:");
-		tsLog = new JTextArea();
-		pbWriteFile = new JProgressBar();
-		pbWriteFile.setStringPainted(true);
-		lblStatus = new JLabel();
-		lblStatus.setOpaque(true);
-		setStatus(RunStatusEnum.START);
-		tsLog.setEditable(false);
-		tsLog.setLineWrap(true);
-		tsLog.setWrapStyleWord(true);
-		DefaultCaret caret = (DefaultCaret)tsLog.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		tsLog = UIPanelFactory.addLogTextArea();
+		progressBar = UIPanelFactory.addProgressBar();
+		
+		lblStatus = UIPanelFactory.addStatusBar();
+		lblStatus.setStatus(RunStatusEnum.START);
 		// 排版
 		Dimension dLbl = new Dimension(20, 10);
 		lblIp.setPreferredSize(dLbl);
@@ -92,46 +85,8 @@ public class SearchFunctionPnl  extends JPanel {
 //		add(lblOp);
 //		add(tfOp);
 		add(btnSub);
-		add(pbWriteFile);
+		add(progressBar);
 		add(lblStatus);
 		add(new JScrollPane(tsLog));
-
-	}
-	
-	public static void setStatus(RunStatusEnum status) {
-		switch (status) {
-		case START:
-			lblStatus.setBackground(new Color(255,255,255));
-			lblStatus.setText("就緒");
-			break;
-		case WORKING:
-			lblStatus.setBackground(new Color(255,125,0));
-			lblStatus.setText("執行中...");
-			break;
-		case SUCCESS:
-			lblStatus.setBackground(new Color(0,255,0));
-			lblStatus.setText("成功");
-			break;
-		case FAIL:
-			lblStatus.setBackground(new Color(255,0,0));
-			lblStatus.setText("失敗");
-			break;
-		}
-	}
-	public static void setLog(String level,String content) {
-		tsLog.append(sfabs.format(new Date())+ " ["+level.toUpperCase()+"] " + content + "\r\n");
-	}
-	public static void setL(String level,String content) {
-		tsLog.append(sfabs.format(new Date())+ " ["+level.toUpperCase()+"] " + content);
-	}
-	public static void setLo(String content) {
-		tsLog.append(content);
-	}
-	public static void clearLog() {
-		tsLog.setText("");
-	}
-
-	public static void setProgressBar(int i) {
-		pbWriteFile.setValue(i);
 	}
 }

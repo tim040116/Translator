@@ -31,17 +31,17 @@ public class TranslateStoreFunctionController implements Controller {
 	public void run() throws Exception {
 
 		// 儲存參數
-		SearchFunctionPnl.clearLog();
-		SearchFunctionPnl.setStatus(RunStatusEnum.WORKING);
+		SearchFunctionPnl.tsLog.clearLog();
+		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.WORKING);
 		IOpathSettingService.setPath(SearchFunctionPnl.tfIp.getText(),Params.config.INIT_OUTPUT_PATH);
-		SearchFunctionPnl.setLog("資訊", "取得資料目錄 : " + BasicParams.getInputPath());
-		SearchFunctionPnl.setLog("資訊", "取得產檔目錄 : " + BasicParams.getOutputPath());
-		SearchFunctionPnl.setLog("資訊", "取得檔案清單");
+		SearchFunctionPnl.tsLog.setLog("資訊", "取得資料目錄 : " + BasicParams.getInputPath());
+		SearchFunctionPnl.tsLog.setLog("資訊", "取得產檔目錄 : " + BasicParams.getOutputPath());
+		SearchFunctionPnl.tsLog.setLog("資訊", "取得檔案清單");
 		// 置換
 		runSF();
 		runSP();
-		SearchFunctionPnl.setLog("資訊", "產生完成");
-		SearchFunctionPnl.setStatus(RunStatusEnum.SUCCESS);
+		SearchFunctionPnl.tsLog.setLog("資訊", "產生完成");
+		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.SUCCESS);
 	}
 	/**
 	 * @author	Tim
@@ -49,7 +49,7 @@ public class TranslateStoreFunctionController implements Controller {
 	 * store function處理
 	 * */
 	public void runSF() throws IOException, UnknowSQLTypeException {
-		SearchFunctionPnl.setLog("資訊", "轉換Store Function");
+		SearchFunctionPnl.tsLog.setLog("資訊", "轉換Store Function");
 		List<File> lf = null;
 //		Map<String, String> mapSF = new HashMap<String, String>();
 		List<SFSPModel> lstm = new ArrayList<SFSPModel>();
@@ -59,25 +59,22 @@ public class TranslateStoreFunctionController implements Controller {
 		for(File f : lf) {
 			String content = FileTool.readFile(f);
 			String[] arrSF = content.toUpperCase().split("\"\\s*\"");
-			int cntf = arrSF.length;
-			int i = 0;
-			SearchFunctionPnl.setProgressBar(0);
+			SearchFunctionPnl.progressBar.reset();
+			SearchFunctionPnl.progressBar.setUnit(arrSF.length);
 			for(String sql : arrSF) {
-				i++;
 				lstm.add(TransduceStoreFunctionService.transformSF(sql));
-				SearchFunctionPnl.setProgressBar(i * 100 / cntf);
+				SearchFunctionPnl.progressBar.plusOne();
 			}
 		}
-		SearchFunctionPnl.setLog("資訊", "轉換完成，開始產檔...");
+		SearchFunctionPnl.tsLog.setLog("資訊", "轉換完成，開始產檔...");
 		//產檔
-		int cntf2 = lstm.size();
-		int i2 = 0;
+		SearchFunctionPnl.progressBar.reset();
+		SearchFunctionPnl.progressBar.setUnit(lstm.size());
 		for (SFSPModel m : lstm) {
-			i2++;
 			FileTool.createFile(BasicParams.getOutputPath()+"sf\\"+m.getName()+".sql",m.getScript());
-			SearchFunctionPnl.setProgressBar(i2 * 100 / cntf2);
-			}
-		SearchFunctionPnl.setLog("資訊", "產檔完成，共 "+i2+" 個檔案");
+			SearchFunctionPnl.progressBar.plusOne();
+		}
+		SearchFunctionPnl.tsLog.setLog("資訊", "產檔完成，共 "+SearchFunctionPnl.progressBar.getProgress()+" 個檔案");
 
 	}
 	/**
@@ -86,31 +83,28 @@ public class TranslateStoreFunctionController implements Controller {
 	 * store function處理
 	 * */
 	public void runSP() throws IOException, UnknowSQLTypeException {
-		SearchFunctionPnl.setLog("資訊", "轉換Store Porsidure");
+		SearchFunctionPnl.tsLog.setLog("資訊", "轉換Store Porsidure");
 		List<File> lf = null;
 //		Map<String, String> mapSF = new HashMap<String, String>();
 		List<SFSPModel> lstm = new ArrayList<SFSPModel>();
 		//取得檔案內容
 		lf = FileTool.getFileList(BasicParams.getInputPath()+"sp\\");
-		int cntf = lf.size();
-		int i = 0;
-		SearchFunctionPnl.setProgressBar(0);
+		SearchFunctionPnl.progressBar.setUnit(lf.size());
+		SearchFunctionPnl.progressBar.reset();
 		//轉換
 		for(File f : lf) {
-			i++;
 			lstm.add(TransduceStoreFunctionService.transformSP(f));
 //			mapSF.putAll(TranslateStoreFunctionService.transformSP(f));
-			SearchFunctionPnl.setProgressBar(i * 100 / cntf);
+			SearchFunctionPnl.progressBar.plusOne();
 		}
-		SearchFunctionPnl.setLog("資訊", "轉換完成，開始產檔...");
-		cntf = lstm.size();
-		i = 0;
+		SearchFunctionPnl.tsLog.setLog("資訊", "轉換完成，開始產檔...");
+		SearchFunctionPnl.progressBar.setUnit(lstm.size());
+		SearchFunctionPnl.progressBar.reset();
 		//產檔
 		for (SFSPModel m : lstm) {
-			i++;
 			FileTool.createFile(BasicParams.getOutputPath()+"sp\\"+m.getName()+".sql",m.getScript());
-			SearchFunctionPnl.setProgressBar(i * 100 / cntf);
+			SearchFunctionPnl.progressBar.plusOne();
 		}
-		SearchFunctionPnl.setLog("資訊", "產檔完成，共 "+i+" 個檔案");
+		SearchFunctionPnl.tsLog.setLog("資訊", "產檔完成，共 "+SearchFunctionPnl.progressBar.getProgress()+" 個檔案");
 	}
 }

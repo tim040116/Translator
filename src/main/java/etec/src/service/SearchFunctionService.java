@@ -2,15 +2,8 @@ package etec.src.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import etec.common.model.BasicParams;
-import etec.common.utils.FileTool;
-import etec.common.utils.RegexTool;
-import etec.main.Params;
 import etec.view.panel.SearchFunctionPnl;
 
 public class SearchFunctionService {
@@ -27,7 +20,7 @@ public class SearchFunctionService {
 	}
 	
 	public static List<String> searchDQL(String content){
-		SearchFunctionPnl.setLog("資訊", "整理查詢使用的資料表");
+		SearchFunctionPnl.tsLog.setLog("資訊", "整理查詢使用的資料表");
 		List<String> lstDQLTable = new ArrayList<String>();
 		String dqlcontent = content
 				.replaceAll("DELETE\\s+FROM", "")

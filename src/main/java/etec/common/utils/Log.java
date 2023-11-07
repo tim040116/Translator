@@ -1,5 +1,8 @@
 package etec.common.utils;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,14 +40,24 @@ public class Log {
 		System.out.println("------------------------------------------------------------------------------------------------");
 	}
 	private static void send(String color,String level, Object content) {
+		String log = Params.log.sf.format(new Date()) 
+				+ (Params.log.IS_COLOR?" [\033["+color+";4m" + level + "\033[0m] : ":" [" + level + "] : ") 
+				+ content;
+		System.out.println(log);
 		if (Params.log.levelContains(level)) {
-			String log = Params.log.sf.format(new Date()) 
-					+ (Params.log.IS_COLOR?" [\033["+color+";4m" + level + "\033[0m] : ":" [" + level + "] : ") 
-					+ content;
-			System.out.println(log);
+			//寫檔
 			if(Params.log.IS_WRITE_FILE) {
-				try {
-					FileTool.addFile(Params.log.LOG_FILE_NAME, log);
+				File newFile = new File(Params.log.LOG_FILE_NAME);
+				newFile.getParentFile().mkdirs();
+				try (
+						FileWriter fw = new FileWriter(newFile, true);
+						BufferedWriter bw = new BufferedWriter(fw);
+					){
+					if (!newFile.exists()) {
+						newFile.createNewFile();
+			        }
+					bw.write(log+"\r\n");
+					fw.flush();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
