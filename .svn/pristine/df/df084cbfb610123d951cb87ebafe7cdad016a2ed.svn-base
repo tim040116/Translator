@@ -1,8 +1,0 @@
-package src.java.enums;
-
-public enum RunStatusEnum {
-	START,//準備
-	WORKING,//執行中
-	SUCCESS,//成功
-	FAIL//失敗
-}
