@@ -19,11 +19,13 @@ public class Main {
 			ParamsFactory.init();
 			String now = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
 			//讀檔
-			String text = "PREPARE Store_Sql FROM SqlStr;";
-			text = text
-					.replaceAll("PREPARE\\s(\\S+)\\sFROM\\s+(\\S+)\\s*;"
-							, "set @SqlCur = N'DECLARE $1 CURSOR FOR ' + @$2 ;\r\n\tEXECUTE sp_executesql @SqlCur")
-					;
+			String text = " ,coalesce(zeroifnull(sum(case when Dim_Data_D='01' then Mea_Txn_Point else 0 END)),\"\") as P01\r\n" + 
+					" \r\n" + 
+					" ,zeroifnull(sum(case when Dim_Data_D='02' then Mea_Txn_Point else 0 END)) as P02 \r\n" + 
+					" \r\n" + 
+					"  ,zeroifnull(asasasas) as P02 ";
+			text = text.replaceAll("(?i)EXTRACT\\s*\\(\\s*(DAY|MONTH|YEAR)\\s+FROM", "DatePart($1 ,");
+
 					
 			System.out.println(text);
 			//每一個sf的

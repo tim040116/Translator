@@ -39,4 +39,5 @@ public enum SQLTypeEnum {
 	,ET
 	,EXIT
 	,OTHER
+	,SET_EXECUTE
 }

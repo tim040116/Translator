@@ -21,6 +21,16 @@ public class DDLTransducer {
 		create = drop + create+with+"\r\n;";
 		return create;
 	}
+	public static String easyReplace(String sql) throws IOException {
+		String res = sql;
+		res = runDropTable(res);
+		res = runRenameTable(res);
+		res = runStatistics(res);
+		res = runReplaceView(res);
+		res = replaceCreateTitle(res);
+		res = replaceTDsql(res);
+		return res;
+	}
 	// CTAS
 	public static String runCTAS(String sql) throws IOException {
 		String res = "";
@@ -71,10 +81,8 @@ public class DDLTransducer {
 	 * 
 	 * */
 	public static String runDropTable(String sql) throws IOException {
-		String res = "";
-		String tableNm = sql.replaceAll("\\s*;\\s*", "").replaceAll("DROP\\s+\\S+\\s+", "");
-		tableNm = tableNm.replace("#", "tempdb..#");
-		res = "IF OBJECT_ID(N'"+tableNm+"') IS NOT NULL\r\n"+sql;
+		String res = sql
+				.replaceAll("(?i)DROP\\s+TABLE\\s+([^;]+)", "IF OBJECT_ID(N'$1') IS NOT NULL\r\nDROP TABLE $1");
 		return res;
 	}
 	/**
@@ -86,10 +94,7 @@ public class DDLTransducer {
 	 * */
 	public static String runRenameTable(String sql) throws IOException {
 		String result = sql;
-		String[] arrtableNm = result.replaceAll("RENAME\\s+TABLE\\s+","").replaceAll(";","").split("\\s+TO\\s+");
-		String oldName = arrtableNm[0];
-		String newName = arrtableNm[1];
-		result = "RENAME OBJECT "+oldName+" TO "+(newName.split("\\."))[1]+" ;";
+		result = result.replaceAll("(?i)RENAME\\s+TABLE\\s+(\\S+)\\s+TO\\s+([^;]+)", "RENAME OBJECT $1 TO $2");
 		return result;
 	}
 	/**
@@ -99,22 +104,24 @@ public class DDLTransducer {
 	 * COLLECT STATISTICS ON 改成 UPDATE STATISTICS
 	 * */
 	public static String runStatistics(String sql) throws IOException {
-		String result = sql.replaceAll(RegexTool.getReg("COLLECT STATISTICS ON"), "UPDATE STATISTICS");
+		String result = sql.replaceAll("(?i)\\bCOLLECT\\s+STATISTICS\\s+ON", "UPDATE STATISTICS");
 		return result;
 	}
 	// ReplaceView
 	public static String runReplaceView(String sql) throws IOException {
 		String res = "";
-		res = sql.replaceAll("REPLACE\\s+VIEW", "ALTER VIEW")+ "\r\n;";
+		res = sql.replaceAll("(?i)REPLACE\\s+VIEW", "ALTER VIEW")+ "\r\n;";
 		return res;
 	}
 	// 轉換create table
 	private static String replaceCreateTitle(String sql) {
-		String result = sql.replaceAll("\\s*,\\s*NO\\s*FALLBACK\\s*", " ")
-				.replaceAll("\\s*,\\s*NO\\s*[A-Za-z]+\\s*JOURNAL\\s*", " ")
-				.replaceAll("\\s*,\\s*CHECKSUM\\s*=\\s*[A-Za-z]+\\s*", " ")
-				.replaceAll("\\s*,\\s*DEFAULT\\s*MERGEBLOCKRATIO\\s*", " ").replaceAll("CHARACTER SET \\S+", " ")
-				.replaceAll("(NOT\\s+)?CASESPECIFIC", " ").replaceAll("TITLE\\s+'[^']+'", " ");
+		String result = sql.replaceAll("(?i)\\s*,\\s*NO\\s*FALLBACK\\s*", " ")
+				.replaceAll("(?i)\\s*,\\s*NO\\s*[A-Za-z]+\\s*JOURNAL\\s*", " ")
+				.replaceAll("(?i)\\s*,\\s*CHECKSUM\\s*=\\s*[A-Za-z]+\\s*", " ")
+				.replaceAll("(?i)\\s*,\\s*DEFAULT\\s*MERGEBLOCKRATIO\\s*", " ")
+				.replaceAll("(?i)CHARACTER\\s+SET\\s+\\S+", " ")
+				.replaceAll("(?i)(NOT\\s+)?CASESPECIFIC", " ")
+				.replaceAll("(?i)TITLE\\s+'[^']+'", " ");
 		return result;
 	}
 	// 轉換 index with
@@ -122,13 +129,13 @@ public class DDLTransducer {
 		String result = "\r\nWITH (" + "\r\n\tCLUSTERED COLUMNSTORE INDEX,";
 		String temp = sql.toUpperCase();
 		// 取得欄位
-		List<String> lstPrimaryIndex = RegexTool.getRegexTarget("UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", temp);
-		temp = temp.replaceAll("UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", "");
-		List<String> lstIndex = RegexTool.getRegexTarget("PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", temp);
+		List<String> lstPrimaryIndex = RegexTool.getRegexTarget("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", temp);
+		temp = temp.replaceAll("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", "");
+		List<String> lstIndex = RegexTool.getRegexTarget("(?i)PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", temp);
 		// 添加欄位
 		String column = "";
 		if (!lstPrimaryIndex.isEmpty()) {
-			String indexCol = lstPrimaryIndex.get(0).replaceAll("UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\(", "")
+			String indexCol = lstPrimaryIndex.get(0).replaceAll("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\(", "")
 					.replaceAll("\\)", "").replaceAll("\\s", "").trim();
 			column += indexCol;
 		}
@@ -136,7 +143,7 @@ public class DDLTransducer {
 			if (!lstPrimaryIndex.isEmpty()) {
 				column += ",";
 			}
-			String indexCol = lstIndex.get(0).replaceAll("PRIMARY\\s+INDEX\\s+\\(", "").replaceAll("\\)", "")
+			String indexCol = lstIndex.get(0).replaceAll("(?i)PRIMARY\\s+INDEX\\s+\\(", "").replaceAll("\\)", "")
 					.replaceAll("\\s", "").trim();
 			column += indexCol;
 		}
@@ -146,20 +153,23 @@ public class DDLTransducer {
 	}
 	// 清除TD特有的語法
 	private static String replaceTDsql(String sql) {
-		String result = sql.replaceAll(RegexTool.getReg("CREATE MULTISET TABLE"), "CREATE TABLE")// MULTISET
-				.replaceAll(RegexTool.getReg("CREATE SET TABLE"), "CREATE TABLE")// SET TABLE
-				.replaceAll("(UNIQUE\\s+)?(PRIMARY\\s+)?INDEX\\s+\\([^\\)]+\\)", " ")// UNIQUE PRIMARY INDEX
-				.replaceAll(RegexTool.getReg("NO PRIMARY INDEX"), "")
-				.replaceAll(RegexTool.getReg("RANGE_N") + "\\s*\\([^\\)]+\\)", " ")// PARTITION BY
-				.replaceAll(RegexTool.getReg("PARTITION BY") + "(\\s*\\([^\\)]*\\))?", " ")// PARTITION BY
+		String result = sql.replaceAll("(?i)CREATE\\s+MULTISET\\s+TABLE", "CREATE TABLE")// MULTISET
+				.replaceAll("(?i)CREATE\\s+SET\\s+TABLE", "CREATE TABLE")// SET TABLE
+				.replaceAll("(?i)(UNIQUE\\s+)?(PRIMARY\\s+)?INDEX\\s+\\([^\\)]+\\)", " ")// UNIQUE PRIMARY INDEX
+				.replaceAll("(?i)NO\\s+PRIMARY\\s+INDEX", "")
+				.replaceAll("(?i)RANGE_N" + "\\s*\\([^\\)]+\\)", " ")// PARTITION BY
+				.replaceAll("(?i)PARTITION\\s+BY\\s*(\\s*\\([^\\)]*\\))?", " ")// PARTITION BY
 		;
 		return result;
 	}
 	// 清除欄位的多餘設定
 	private static String replaceColumn(String sql) {
-		String result = sql.replaceAll("CHARACTER SET \\S+", " ").replaceAll("NOT CASESPECIFIC", " ")
-				.replaceAll("TITLE\\s+'[^']+'", " ").replaceAll("\\s*FORMAT\\s+'[^']+'\\s*", " ")
-				.replaceAll("TIMESTAMP\\s*\\(\\s*[0-9]+\\s*\\)", "DATETIME").replaceAll("VARBYTE", "VARBINARY")
+		String result = sql.replaceAll("(?i)CHARACTER\\s+SET\\s+\\S+", " ")
+				.replaceAll("(?i)NOT\\s+CASESPECIFIC", " ")
+				.replaceAll("(?i)TITLE\\s+'[^']+'", " ")
+				.replaceAll("(?i)\\s*FORMAT\\s+'[^']+'\\s*", " ")
+				.replaceAll("(?i)TIMESTAMP\\s*\\(\\s*[0-9]+\\s*\\)", "DATETIME")
+				.replaceAll("(?i)VARBYTE", "VARBINARY")
 				.replaceAll(" +,", ",");
 		return result;
 	}

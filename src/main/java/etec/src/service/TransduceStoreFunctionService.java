@@ -14,7 +14,9 @@ import etec.common.utils.FileTool;
 import etec.common.utils.Log;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
-import etec.src.transducer.SFTransducer;
+import etec.src.transducer.DDLTransducer;
+import etec.src.transducer.DQLTransducer;
+import etec.src.transducer.OtherTransducer;
 
 /**
  * @author	Tim
@@ -51,12 +53,12 @@ public class TransduceStoreFunctionService {
 			//取得sql
 			String txtSQL = RegexTool.getRegexTargetFirst("\\sRETURN\\s+[^;]+;", sf).replaceAll("\\s*RETURN\\s+", "").trim();
 			//轉換sql
-			txtSQL = TransduceTool.easyReplaceSelect(txtSQL);
-			txtSQL = TransduceTool.changeAddMonth(txtSQL);
+			txtSQL = DQLTransducer.easyReplaceSelect(txtSQL);
+			txtSQL = DQLTransducer.changeAddMonth(txtSQL);
 			txtSQL = TransduceTool.changeSample(txtSQL);
-			txtSQL = TransduceTool.changeZeroifnull(txtSQL);
+			txtSQL = DQLTransducer.changeZeroifnull(txtSQL);
 			txtSQL = TransduceTool.changeCharindex(txtSQL);
-			txtSQL = TransduceTool.changeIndex(txtSQL);
+			txtSQL = OtherTransducer.changeIndex(txtSQL);
 			txtSQL = TransduceTool.easyReplaceCreate(txtSQL);
 			//產檔
 			String txt = txtFront+txtSQL;
@@ -134,7 +136,7 @@ public class TransduceStoreFunctionService {
 		//DECLARE的參數
 		lstParams.addAll(RegexTool.getRegexTarget("(?<=DECLARE )\\S+", txtContext));
 		//參數置換
-		script = SFTransducer.transduceDECLARE(lstParams, script);
+		script = OtherTransducer.transduceDECLARE(lstParams, script);
 		//包裝
 		script = script.replaceAll("\n[\\t \r\n]+\n", "\r\n").trim();
 		res.setName(spName);
@@ -188,7 +190,7 @@ public class TransduceStoreFunctionService {
 		//DECLARE的參數
 		lstParams.addAll(RegexTool.getRegexTarget("(?<=DECLARE )\\S+", txtSQL));
 		//參數置換
-		script = SFTransducer.transduceDECLARE(lstParams, script);
+		script = OtherTransducer.transduceDECLARE(lstParams, script);
 		//整理語法
 		script = script.replaceAll("\n[\\t \r\n]+\n", "\r\n");
 		res.setHeader(txtHeader);
@@ -210,17 +212,18 @@ public class TransduceStoreFunctionService {
 	 * */
 	public static String transformSQL(String txtSQL) throws UnknowSQLTypeException, IOException {
 		//轉換sql
-		txtSQL = TransduceTool.easyReplaceSelect(txtSQL);
-		txtSQL = TransduceTool.changeAddMonth(txtSQL);
+		txtSQL = DQLTransducer.easyReplaceSelect(txtSQL);
+		txtSQL = DQLTransducer.changeAddMonth(txtSQL);
 		txtSQL = TransduceTool.changeSample(txtSQL);
-		txtSQL = TransduceTool.changeZeroifnull(txtSQL);
 		txtSQL = TransduceTool.changeCharindex(txtSQL);
-		txtSQL = TransduceTool.changeIndex(txtSQL);
+		txtSQL = OtherTransducer.changeIndex(txtSQL);
 		txtSQL = TransduceTool.easyReplaceCreate(txtSQL);
-		txtSQL = SFTransducer.transduceCursor(txtSQL);
-		txtSQL = SFTransducer.transduceIF(txtSQL);
+		txtSQL = OtherTransducer.transduceCursor(txtSQL);
+		txtSQL = OtherTransducer.transduceIF(txtSQL);
+		txtSQL = OtherTransducer.transduceCall(txtSQL);
+		txtSQL = DDLTransducer.easyReplace(txtSQL);
+		txtSQL = DQLTransducer.changeZeroifnull(txtSQL);
 		//CURSOR
-		
 		//IF SQLSTATE <> '00000' THEN LEAVE L1; end if;
 		txtSQL = txtSQL
 				.replaceAll("\\bIF\\s+(\\w+)\\s+<\\s*>\\s+\\w+\\s+THEN\\s+LEAVE\\s+(\\w+)\\s*;\\s*END\\s+IF\\s*;"

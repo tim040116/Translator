@@ -6,62 +6,22 @@ import java.util.Map;
 import java.util.regex.Matcher;
 
 import etec.common.enums.SQLTypeEnum;
+import etec.src.transducer.DQLTransducer;
+import etec.src.transducer.OtherTransducer;
 
+/**
+ * @author	Tim
+ * @since	2023年11月13日
+ * 
+ * 轉換SQL的邏輯 * 應盡速搬遷至Transducer層
+ * 
+ * */
 public class TransduceTool {
 	
-	//select語句轉換
-	public static String transduceSelectSQL(String sql) {
-		String txt = sql;
-		//轉換
-		//txt = changeGroupBy(txt);
-		txt = easyReplaceSelect(txt);
-		//整理 如果有註解會被Mark
-		//txt = arrangeSQL(txt);
-		//txt = changeGroupBy(txt);
-		txt = changeAddMonth(txt);
-		txt = changeSample(txt);
-		txt = changeZeroifnull(txt);
-		txt = changeCharindex(txt);
-		txt = changeIndex(txt);
-		return txt + "\r\n\r\n";
-	}
-	//create語句轉換
-	public static String transduceCreateSQL(String sql) {
-		String txt = sql;
-		//轉換
-		txt = easyReplaceCreate(txt);
-		//txt = changeGroupBy(txt);
-		txt = changeAddMonth(txt);
-		//整理
-		//txt = arrangeSQL(txt);
-		return txt + "\r\n\r\n";
-	}
 
+	
 	//select單純的置換
-	public static String easyReplaceSelect(String sql) {	
-		String res = sql;
-		res = res
-				// ||
-				.replaceAll("\\|\\|", "+")
-				// SUBSTR
-				.replaceAll(RegexTool.getReg("SUBSTR \\("), "SUBSTRING(")
-				// CAST(SUBSTR('${LAST01TX4YMB}',1,4)||'-01-01' AS DATE FORMAT 'YYYY-MM-DD')
-				//.replaceAll("[Cc][Aa][Ss][Tt] *\\(|[Aa][Ss] *[Dd][Aa][Tt][Ee] *[Ff][Oo][Rr][Mm][Aa][Tt] *'[YyMmDdHhSs-]*'\\)","")
-				//oreplace
-				.replaceAll(RegexTool.getReg("oreplace\\("), "Replace(")
-				//strtok
-				.replaceAll(RegexTool.getReg("strtok \\("), "STRING_SPLIT (")
-				//rank over
-				.replaceAll("(?<!_|[A-Za-z0-9])[Rr][Aa][Nn][Kk]\\((?! |\\))", " RANK ( ) OVER ( order by ")//all
-				//extract
-				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Dd][Aa][Yy] *[Ff][Rr][Oo][Mm]", "DatePart(day ,")//all
-				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Mm][Oo][Nn][Tt][Hh] *[Ff][Rr][Oo][Mm]", "DatePart(month ,")//all
-				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Yy][Ee][Aa][Rr] *[Ff][Rr][Oo][Mm]", "DatePart(year ,")//all
-				;
-		
-		return res;
-	}
-	//select單純的置換
+	@Deprecated
 	public static String easyReplaceCreate(String sql) {	
 		String res = sql;
 		res = res
@@ -95,6 +55,7 @@ public class TransduceTool {
 	}
 	// 置換 group by 語法
 	// 考慮到無法解決子查詢的轉換，暫時廢棄
+	@Deprecated
 	public static String changeGroupBy(String sql) {
 		String res = "";
 		// 沒有group by 就直接跳過
@@ -183,30 +144,9 @@ public class TransduceTool {
 		}
 		return res;
 	}
-	//AddMonth修改
-	public static String changeAddMonth(String sql) {
-		if(!sql.matches("[\\S\\s]*[Aa][Dd]{2}_[Mm][Oo][Nn][Tt][Hh][Ss]\\([^\\)]*\\)[\\S\\s]*")) {
-			return sql;
-		}
-		/*20220613  去除分行符號? */
-		//20220613 String res = sql.replaceAll("\\s+", " ");
-		String res = sql.trim();
-		
-		//20220613 List<String> lst = RegexTool.getRegexTarget2("[Aa][Dd]{2}_[Mm][Oo][Nn][Tt][Hh][Ss]\\([^\\)]*\\) *,(-?[0-9]*) *\\)",res);
-		List<String> lst = RegexTool.getRegexTarget2("[Aa][Dd][Dd]_[Mm][Oo][Nn][Tt][Hh][Ss]\\([^\\)]*\\)?,(-?[0-9]*) *\\)",res);
-		for(String str : lst) {
-			String[] param =str.replaceAll(RegexTool.getReg("add_Months\\(|\\)$"), "").split(",");
-			res = RegexTool.encodeSQL(res);
-			String oldstr = RegexTool.encodeSQL(str);
- 			String newstr = RegexTool.encodeSQL("DateAdd(MONTH,"+param[1].trim()+","+param[0].trim()+")");
-			res = res.replaceAll(oldstr,newstr);
-			res = RegexTool.decodeSQL(res);
-		}
-		
-		//20220613 return arrangeSQL(res);
-		return res;
-	}
+	
 	// sample
+	@Deprecated
 	public static String changeSample(String selectSQL) {
 		String result = selectSQL;
 		//取得sample
@@ -222,6 +162,7 @@ public class TransduceTool {
 		return result;
 	}
 	// char index
+	@Deprecated
 	public static String changeCharindex(String selectSQL) {
 		String result = RegexTool.encodeSQL(selectSQL);
 		//取得sample
@@ -235,99 +176,7 @@ public class TransduceTool {
 		}
 		return RegexTool.decodeSQL(result);
 	}
-	// zeroifnull
-	public static String changeZeroifnull(String selectSQL) {
-		String result = selectSQL;
-		//取得sample
-		result = result.replaceAll("(?<=zeroifnull\\(.{0,100})\\) +as ",",0) as ");
-		result = result.replaceAll(RegexTool.getReg("zeroifnull \\("),"ISNULL(");
-		return result;
-	}
-	// index
-	public static String changeIndex(String sql) {
-		String result = sql;
-		//取得sample
-		List<String> lstIndex = RegexTool.getRegexTarget("(?<=[, ])[Ii][Nn][Dd][Ee][Xx][^\\)]+",result);
-		//是否存在sample
-		if(lstIndex.isEmpty()) {
-			return sql;
-		}
-		for(String data : lstIndex) {
-			String upper = data.toUpperCase();
-			if(upper.contains("COLLECT STATISTICS ON")
-					||upper.contains("PRIMARY")
-					||upper.contains("UNIQUE")) {
-				continue;
-			}
-			List<String>lstP = RegexTool.getRegexTarget("(?<=[Ii][Nn][Dd][Ee][Xx]\\s{0,10}\\()[^\\)]+",data);
-			if(lstP.isEmpty()) {
-				continue;
-			}
-			String params = lstP.get(0);
-			String[] arp = params.split(",");
-			if(arp.length!=2) {
-				continue;
-			}
-			String index = " CHARINDEX("+arp[1]+","+arp[0];
-			String reg = RegexTool.encodeSQL(data);
-			result = RegexTool.encodeSQL(result).replaceAll(reg,RegexTool.encodeSQL(index));
-		}
-		result = RegexTool.decodeSQL(result);
-		return result;
-	}
-	//整理SQL
-	//效果不好，已廢棄
-	@Deprecated
-	public static String arrangeSQL(String sql) {
-		String res = "";
-		String space = "";
-		String spaceItem = "    ";
-		List<String> lst = RegexTool.getSingleWord(sql);
-		for(int i=0;i<lst.size();i++) {
-			String str = lst.get(i);
-			if(str.matches(RegexTool.getReg("select"))) {
-				String tmp = "\r\n" + space + "select";
-				i++;
-				while(!lst.get(i).matches(RegexTool.getReg("from"))) {
-					if(lst.get(i).substring(0,1).equals(",")) {
-						tmp += "\r\n" + space + spaceItem + lst.get(i);
-					}else{
-						tmp += " "+lst.get(i);
-					}
-					i++;
-					if(i>=lst.size()) {
-						break;
-					}
-				}
-				res += tmp + "\r\n" + space + "from";
-			}else if(str.matches(RegexTool.getReg("where|and|on|group|order|union|sample"))) {
-				res += "\r\n"+space+str;
-			}else if(str.equals("(")){
-				res += " (";
-				space += spaceItem;
-			}else if(str.equals(")")){
-				space = space.replaceFirst(spaceItem,"");
-				res += "\r\n"+space+")";
-			}else {
-				res += " " + str;
-			}
-			if(i<lst.size()-1) {
-				if(lst.get(i+1).matches(RegexTool.getReg("join"))){
-					if(str.matches(RegexTool.getReg("inner|left|right|full|cross|outer"))) {
-						res += "\r\n" + space + str;
-					}else {
-						res += " " + str + "\r\n"; 
-					}
-				}
-			}
-		}
-		res = res
-				.replaceAll(" (?=#)", "\r\n")
-				.replaceAll(";", ";\r\n")
-				.replaceAll("# ", "#\r\n")
-				;
-		return res;
-	}
+	
 	//去除註解
 	public static String cleanSql(String fc) {
 		String res = fc;
@@ -433,73 +282,76 @@ public class TransduceTool {
 		if(sql.matches("\\s*;?\\s*")) {
 			res = SQLTypeEnum.EMPTY;
 		}
-		else if (sql.matches("CREATE\\s*(MULTISET|SET)?(\\s+VOLATILE)?\\s+TABLE\\s+[\\S\\s]+")) {
+		else if (sql.matches("(?i)CREATE\\s*(MULTISET|SET)?(\\s+VOLATILE)?\\s+TABLE\\s+[\\S\\s]+")) {
 			res = sql.matches("[\\S\\s]*\\s+SELECT\\s+[\\S\\s]*")?SQLTypeEnum.CREATE_INSERT:SQLTypeEnum.CREATE_TABLE;
 		}
-		else if(sql.matches("RENAME\\s+TABLE\\s+[\\S\\s]+")) {
+		else if(sql.matches("(?i)RENAME\\s+TABLE\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.RENAME_TABLE;
 		}
-		else if (sql.matches("DROP\\s+TABLE\\s+[\\S\\s]+")) {
+		else if (sql.matches("(?i)DROP\\s+TABLE\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.DROP_TABLE;
 		}
 		
 		
-		else if(sql.matches("LOCK\\s+TABLE\\s+[\\S\\s]+")) {
+		else if(sql.matches("(?i)LOCK\\s+TABLE\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.LOCKING;
 		}
-		else if(sql.matches("TRUNCATE\\s+TABLE\\s+[\\S\\s]+")) {
+		else if(sql.matches("(?i)TRUNCATE\\s+TABLE\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.TRUNCATE_TABLE;
 		}
-		else if (sql.matches("MERGE\\s+INTO\\s+[\\S\\s]+")) {
+		else if (sql.matches("(?i)MERGE\\s+INTO\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.MERGE_INTO;
 		}
-		else if (sql.matches("UPDATE\\s+[\\S\\s]+")) {
+		else if (sql.matches("(?i)UPDATE\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.UPDATE_TABLE;
 		}
-		else if (sql.matches("SELECT\\s+[\\S\\s]+")) {
+		else if (sql.matches("(?i)SELECT\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.SELECT_TABLE;
 		}
-		else if (sql.matches("DELETE\\s+[\\S\\s]+")) {
+		else if (sql.matches("(?i)DELETE\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.DELETE_TABLE;
 		}
-		else if(sql.matches("REPLACE\\s+VIEW\\s+[\\S\\s]+")) {
+		else if(sql.matches("(?i)REPLACE\\s+VIEW\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.REPLACE_VIEW; 	
 		}
-		else if(sql.matches("COLLECT\\s+STATISTICS\\s+[\\S\\s]+")) {
+		else if(sql.matches("(?i)COLLECT\\s+STATISTICS\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.COLLECT_STATISTICS;
 		}
-		else if(sql.matches("COMMENT\\s+ON\\s+[\\S\\s]+")) {
+		else if(sql.matches("(?i)COMMENT\\s+ON\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.COMMENT_ON;
 		}
-		else if(sql.matches("INSERT\\s+INTO\\s+[\\S\\s]+")) {
-			res = sql.matches("[\\S\\s]*\\s+SELECT\\s+[\\S\\s]*")?SQLTypeEnum.INSERT_SELECT:SQLTypeEnum.INSERT_TABLE;
+		else if(sql.matches("(?i)INSERT\\s+INTO\\s+[\\S\\s]+")) {
+			res = sql.matches("(?i)[\\S\\s]*\\s+SELECT\\s+[\\S\\s]*")?SQLTypeEnum.INSERT_SELECT:SQLTypeEnum.INSERT_TABLE;
 		}
-		else if(sql.matches("DROP\\s+VIEW\\s+[\\S\\s]+")) {
+		else if(sql.matches("(?i)DROP\\s+VIEW\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.DROP_VIEW;
 		}
-		else if(sql.matches("DATABASE\\s+[\\S\\s]+")) {
+		else if(sql.matches("(?i)DATABASE\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.DATABASE;
 		}
-		else if(sql.matches("LOCKING\\s+[\\S\\s]+")) {
+		else if(sql.matches("(?i)LOCKING\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.LOCKING;
 		}
-		else if(sql.matches("CALL\\s+[\\S\\s]+")) {
+		else if(sql.matches("(?i)CALL\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.CALL;
 		}
-		else if(sql.matches("COMMIT\\s*;")) {
+		else if(sql.matches("(?i)COMMIT\\s*;")) {
 			res = SQLTypeEnum.COMMIT;
 		}
-		else if(sql.matches("BT\\s*;")) {
+		else if(sql.matches("(?i)BT\\s*;")) {
 			res = SQLTypeEnum.BT;
 		}
-		else if(sql.matches("ET\\s*;")) {
+		else if(sql.matches("(?i)ET\\s*;")) {
 			res = SQLTypeEnum.ET;
 		}
-		else if(sql.matches("EXIT\\s*;")) {
+		else if(sql.matches("(?i)EXIT\\s*;")) {
 			res = SQLTypeEnum.EXIT;
 		}
-		else if(sql.matches("WITH\\s+\\S+\\s+AS\\s+[\\S\\s]+")) {
+		else if(sql.matches("(?i)WITH\\s+\\S+\\s+AS\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.WITH;
+		}
+		else if(sql.matches("(?i)SET\\s+@\\S+\\s*=\\s*'[\\S\\s]+")) {
+			res = SQLTypeEnum.SET_EXECUTE;
 		}
 		else {
 			res = SQLTypeEnum.OTHER;

@@ -16,6 +16,7 @@ import etec.main.Params;
 import etec.src.transducer.DDLTransducer;
 import etec.src.transducer.DMLTransducer;
 import etec.src.transducer.DQLTransducer;
+import etec.src.transducer.OtherTransducer;
 
 /**
  * @author	Tim
@@ -235,7 +236,7 @@ public class FamilyMartFileTransduceService {
 		//區分類型
 		
 		SQLTypeEnum sqlType = TransduceTool.getSQLType(cleanSQL);
-		Log.info(sqlType);
+		Log.info("語法類別："+sqlType);
 		switch(sqlType) {
 			case TRUNCATE_TABLE:
 				break;
@@ -286,6 +287,7 @@ public class FamilyMartFileTransduceService {
 			case LOCKING:
 				break;
 			case CALL:
+				result = OtherTransducer.transduceCall(result);
 				break;
 			case COMMENT_ON:
 				break;
@@ -296,6 +298,9 @@ public class FamilyMartFileTransduceService {
 			case ET:
 				break;
 			case EXIT:
+				break;
+			case SET_EXECUTE:
+				result = OtherTransducer.transduceSetExcute(result);
 				break;
 			case OTHER:
 				throw new UnknowSQLTypeException(result,sqlType);

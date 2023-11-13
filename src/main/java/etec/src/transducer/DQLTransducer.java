@@ -26,7 +26,28 @@ public class DQLTransducer {
 		return txt.trim();
 	}
 
-	
+	//select單純的置換
+	public static String easyReplaceSelect(String sql) {	
+		String res = sql;
+		res = res
+				// ||
+				.replaceAll("\\|\\|", "+")
+				// SUBSTR
+				.replaceAll("(?i)\\bSUBSTR\\s*\\(", "SUBSTRING(")
+				// CAST(SUBSTR('${LAST01TX4YMB}',1,4)||'-01-01' AS DATE FORMAT 'YYYY-MM-DD')
+				//.replaceAll("[Cc][Aa][Ss][Tt] *\\(|[Aa][Ss] *[Dd][Aa][Tt][Ee] *[Ff][Oo][Rr][Mm][Aa][Tt] *'[YyMmDdHhSs-]*'\\)","")
+				//oreplace
+				.replaceAll("(?i)\\boreplace\\s*\\(", "Replace(")
+				//strtok
+				.replaceAll("(?i)\\bstrtok\\s*\\(", "STRING_SPLIT(")
+				//rank over
+				.replaceAll("(?<!_|[A-Za-z0-9])[Rr][Aa][Nn][Kk]\\((?! |\\))", " RANK ( ) OVER ( order by ")//all
+				//extract
+				.replaceAll("(?i)EXTRACT\\s*\\(\\s*(DAY|MONTH|YEAR)\\s+FROM", "DatePart($1 ,")//all
+				;
+		
+		return res;
+	}
 
 	// AddMonth修改
 	public static String changeAddMonth(String sql) {
@@ -74,11 +95,11 @@ public class DQLTransducer {
 	public static String changeZeroifnull(String selectSQL) {
 		String result = selectSQL;
 		// 取得sample
-		result = result.replaceAll("(?<=zeroifnull\\(.{0,100})\\) +as ", ",0) as ");
-		result = result.replaceAll(RegexTool.getReg("zeroifnull \\("), "ISNULL(");
+//		result = result.replaceAll("(?<=zeroifnull\\(.{0,100})\\) +as ", ",0) as ");
+//		result = result.replaceAll(RegexTool.getReg("zeroifnull \\("), "ISNULL(");
+		result = result.replaceAll("(?i)zeroifnull\\s*\\(\\s*([^\\(\\)]+\\([^\\)]+\\))?\\)", "ISNULL($1,0)");
 		return result;
 	}
-
 	// char index
 	public static String changeCharindex(String selectSQL) {
 		String result = RegexTool.encodeSQL(selectSQL);
