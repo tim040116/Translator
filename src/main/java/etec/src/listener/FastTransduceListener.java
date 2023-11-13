@@ -32,6 +32,9 @@ public class FastTransduceListener implements ActionListener {
 			}
 		}.start();
 	}
+	
+	public FastTransduceListener(Controller controller) {
+		this.con = controller;
 	}
 	
 }
