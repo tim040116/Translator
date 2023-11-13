@@ -22,7 +22,7 @@ public class Log {
 		send(Params.log.COLOR_INFO,"INFO", content);
 	}
 	public static void abs(Object content) {
-		SimpleDateFormat sfabs = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+		SimpleDateFormat sfabs = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		System.out.println(sfabs.format(new Date()) + " [\033[37;4m    \033[0m] : " + content);
 	}
 	public static void warn(Object content) {
@@ -32,7 +32,9 @@ public class Log {
 	public static void error(Object content) {
 		send(Params.log.COLOR_ERROR,"ERROR", content);
 	}
-
+	public static void error(Exception e) {
+		send(Params.log.COLOR_ERROR,"ERROR", e.getMessage());
+	}
 	public static void debug(Object content) {
 		send(Params.log.COLOR_DEBUG,"DEBUG",content);
 	}

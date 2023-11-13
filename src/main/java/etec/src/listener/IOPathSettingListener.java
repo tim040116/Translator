@@ -8,11 +8,10 @@ import java.io.IOException;
 import javax.swing.DefaultListModel;
 
 import etec.common.model.BasicParams;
+import etec.common.model.element.FileListSelectElement;
+import etec.common.model.element.IOPathSettingElement;
 import etec.src.service.FileListSelectService;
 import etec.src.service.IOpathSettingService;
-import etec.view.frame.IndexFrame;
-import src.java.element.FileListSelectElement;
-import src.java.element.IOPathSettingElement;
 
 public class IOPathSettingListener implements ActionListener {
 

@@ -1,8 +1,8 @@
 package main;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
-import etec.common.utils.*;
+import java.util.Date;
+
 import etec.main.ParamsFactory;
 /**
  * @author	Tim

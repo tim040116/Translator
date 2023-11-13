@@ -7,8 +7,8 @@ import java.io.IOException;
 
 import javax.swing.DefaultListModel;
 
+import etec.common.model.element.FileListSelectElement;
 import etec.src.service.FileListSelectService;
-import src.java.element.FileListSelectElement;
 
 public class FileListSelectListener implements ActionListener {
 

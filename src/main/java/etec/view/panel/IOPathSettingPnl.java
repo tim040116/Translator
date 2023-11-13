@@ -5,8 +5,8 @@ import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 
+import etec.common.model.element.IOPathSettingElement;
 import etec.src.listener.IOPathSettingListener;
-import src.java.element.IOPathSettingElement;
 
 public class IOPathSettingPnl extends JPanel {
 

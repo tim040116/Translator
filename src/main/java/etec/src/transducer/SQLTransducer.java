@@ -72,6 +72,8 @@ public class SQLTransducer {
 	public static String easyReplaceSelect(String sql) {
 		String res = sql;
 		res = res
+				// SEL
+				.replaceAll("\\bSEL\\vb", "SELECT")
 				// ||
 				.replaceAll("\\|\\|", "+")
 				// SUBSTR

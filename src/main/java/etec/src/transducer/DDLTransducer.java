@@ -28,12 +28,11 @@ public class DDLTransducer {
 		String select = "";
 		String with = "";
 		// create
-		try {
-			create = RegexTool.getRegexTarget("CREATE(\\s+MULTISET)?(\\s+VOLATILE)?\\s+TABLE\\s+\\S+", sql).get(0).replaceAll("\\s+VOLATILE\\s+", " ");
-
-		}catch(Exception e) {
-			System.out.println("");
-		}
+		create = RegexTool.getRegexTarget("CREATE(\\s+SET\\b)?(\\s+MULTISET\\b)?(\\s+VOLATILE\\b)?\\s+TABLE\\s+\\S+", sql).get(0)
+				.replaceAll("\\s+VOLATILE\\s+", " ")
+				.replaceAll("CREATE\\s+MULTISET\\s+TABLE", "CREATE TABLE")
+				.replaceAll("CREATE\\s+SET\\s+TABLE", "CREATE TABLE")
+				;
 		// with
 		List<String> lstPrimaryIndex = RegexTool.getRegexTarget("UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", sql);
 		List<String> lstIndex = RegexTool.getRegexTarget("PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", sql);
@@ -60,6 +59,7 @@ public class DDLTransducer {
 				.replaceAll("TtEeSsTt", "%;%").trim();
 		select = DQLTransducer.transduceSelectSQL(oldselect);
 		res = create.trim() + "\r\n" + with.trim() + "\r\nAS\r\n" + select.trim()+"\r\n;";
+		res = res.replaceAll(";\\s*;", ";");
 		return res;
 	}
 	/**

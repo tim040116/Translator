@@ -1,6 +1,6 @@
 package etec.src.application;
 
-import etec.src.controller.TranslateStoreFunctionController;
+import etec.src.controller.FastTransduceController;
 import etec.view.frame.FastTransduceFrame;
 /**
  * @version	3.3.4.0
@@ -13,6 +13,6 @@ import etec.view.frame.FastTransduceFrame;
  * */
 public class FastTransduceApplication {
 	public static void run() {
-		new FastTransduceFrame("即時轉換",new TranslateStoreFunctionController());
+		new FastTransduceFrame("即時轉換",new FastTransduceController());
 	}
 }

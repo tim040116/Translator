@@ -12,7 +12,6 @@ import etec.common.utils.FileTool;
 import etec.common.utils.RegexTool;
 import etec.main.Params;
 import etec.sql.wrapper.impl.TeradataSqlModelWrapper;
-import etec.view.panel.SearchFunctionPnl;
 
 /**
  * 儲存所有建立清單的功能

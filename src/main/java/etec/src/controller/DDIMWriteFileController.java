@@ -6,9 +6,9 @@ import java.util.List;
 
 import etec.common.enums.RunStatusEnum;
 import etec.common.model.BasicParams;
+import etec.common.model.element.WriteFileElement;
 import etec.src.interfaces.Controller;
 import etec.src.service.DDIMFileTransduceService;
-import src.java.element.WriteFileElement;
 
 public class DDIMWriteFileController implements Controller {
 	public void run() throws IOException {
@@ -26,7 +26,6 @@ public class DDIMWriteFileController implements Controller {
 			WriteFileElement.tsLog.setLog("INFO","讀取檔案：" + f.getPath());
 			// 置換
 			DDIMFileTransduceService.run(f);
-			
 			// 寫檔案
 			WriteFileElement.tsLog.setLog("INFO","產製檔案：" + BasicParams.getTargetFileNm(f.getPath()));
 			WriteFileElement.progressBar.plusOne();

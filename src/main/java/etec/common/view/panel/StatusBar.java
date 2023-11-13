@@ -13,8 +13,9 @@ public class StatusBar extends JLabel {
 	private static final long serialVersionUID = 1L;
 	public StatusBar() {
 		setOpaque(true);
-		//初始化
 		setVisible(true);
+		setBackground(new Color(255,255,255));
+		setText("就緒");
 	}
 	public void setStatus(RunStatusEnum status) {
 		switch (status) {

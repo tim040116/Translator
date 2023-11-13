@@ -45,7 +45,6 @@ public class SearchFunctionPnl  extends JPanel {
 
 	public SearchFunctionPnl(Controller con) {
 		init(con);
-		
 	}
 
 	private void init(Controller con) {
@@ -69,8 +68,7 @@ public class SearchFunctionPnl  extends JPanel {
 		// 排版
 		Dimension dLbl = new Dimension(20, 10);
 		lblIp.setPreferredSize(dLbl);
-		lblIp.setPreferredSize(dLbl);
-
+		lblOp.setPreferredSize(dLbl);
 		// 事件
 		lr = new SearchFunctionListener(con);
 		btnSub.addActionListener(lr);

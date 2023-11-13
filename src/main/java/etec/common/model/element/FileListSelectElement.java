@@ -1,4 +1,4 @@
-package src.java.element;
+package etec.common.model.element;
 
 import java.io.File;
 

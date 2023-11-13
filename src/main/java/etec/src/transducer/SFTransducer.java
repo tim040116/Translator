@@ -78,7 +78,10 @@ public class SFTransducer {
 			//置換
 			res = RegexTool.spaceRun(res, (String t) -> {
 				for(String p: lstParams) {
-					t = t.replaceAll("\\b"+p+"\\b", "@"+p);
+					if(p.matches("\\s*")) {
+						continue;
+					}
+					t = t.replaceAll("\\b"+p.trim()+"\\b", "@"+p.trim());
 				}
 				return t;
 			});

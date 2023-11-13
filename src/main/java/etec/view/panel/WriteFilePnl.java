@@ -7,8 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import etec.src.listener.WriteFileListener;
-import src.java.element.WriteFileElement;
+import etec.common.model.element.WriteFileElement;
 
 
 public class WriteFilePnl extends JPanel {

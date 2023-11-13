@@ -5,9 +5,9 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import etec.common.model.element.FileListSelectElement;
 import etec.src.listener.FileListSelectListener;
 import etec.src.listener.FileListSelectNextPageListener;
-import src.java.element.FileListSelectElement;
 
 public class FileListSelectPnl  extends JPanel {
 	/**

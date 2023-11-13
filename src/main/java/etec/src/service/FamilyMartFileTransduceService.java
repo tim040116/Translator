@@ -229,11 +229,13 @@ public class FamilyMartFileTransduceService {
 	 * */
 	public static String transduceSQLScript(String content)throws UnknowSQLTypeException , IOException {
 		String result = "";
-		result = content.toUpperCase().trim();
+		result = content.toUpperCase().trim().replaceAll("\\bSEL\\b", "SELECT");
 		//清除註解
 		String cleanSQL = TransduceTool.cleanRemark(result);
 		//區分類型
+		
 		SQLTypeEnum sqlType = TransduceTool.getSQLType(cleanSQL);
+		Log.info(sqlType);
 		switch(sqlType) {
 			case TRUNCATE_TABLE:
 				break;

@@ -15,20 +15,21 @@ public class FastTransduceFrame extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	//
-	JTabbedPane tp;
-	JPanel pl;
 	private String title = "";
 
+	public static FastTransducePnl pnl;
+	
 	public FastTransduceFrame(String title,Controller con) {
 		this.title = title;
-		init(con);
+		pnl = new FastTransducePnl(con);
+		add(pnl);
 		basicSetting();	
 	}
 
 	void basicSetting() {
 		setTitle(title);
 		setIconImage(getToolkit().getImage("test.jpg"));
-		setSize(1330, 540);// 設定視窗大小(長,寬)
+		setSize(1330, 730);// 設定視窗大小(長,寬)
 		setLocation(0,0); // --> 設定視窗開啟時左上角的座標，也可帶入Point物件
         setLocationRelativeTo(null); // --> 設定開啟的位置和某個物件相同，帶入null則會在畫面中間開啟
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,7 +38,4 @@ public class FastTransduceFrame extends JFrame{
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 	}
 
-	void init(Controller con) {
-		add(new FastTransducePnl(con));
-	}
 }

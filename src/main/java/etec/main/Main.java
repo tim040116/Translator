@@ -7,7 +7,6 @@ import etec.src.application.SearchFunctionApplication;
 import etec.src.application.TranslateStoreFunctionApplication;
 import etec.src.application.UIApplication;
 import etec.src.controller.DDIMWriteFileController;
-import etec.src.controller.FamilyMartController;
 
 public class Main {
 	public static void main(String[] args) {

@@ -115,6 +115,9 @@ public class TransduceStoreFunctionService {
 		//header的參數
 		List<String> lstParams = new ArrayList<String>();
 		txtHeader = txtHeader
+				.replaceAll("\\bCASESPECIFIC\\b", "")
+				.replaceAll("CHARACTER(\\s+SET)?\\s+\\w+", "")
+				.replaceAll("SQL\\s+SECURITY\\s+INVOKER", "")
 				.replaceAll(",", " ,")
 				.replaceAll("^[^\\(]+\\(","")
 				.replaceAll("SP:","")
@@ -127,7 +130,7 @@ public class TransduceStoreFunctionService {
 		headerParams = headerParams.replaceAll("\\([^\\)]+\\)", "");
 		headerParams = headerParams.replaceAll("([^,\\s]+)\\s+([^,\\s]+)", "$1");
 				;
-		lstParams.addAll(Arrays.asList(headerParams.split(",")));
+		lstParams.addAll(Arrays.asList(headerParams.split("\\s*,\\s*")));
 		//DECLARE的參數
 		lstParams.addAll(RegexTool.getRegexTarget("(?<=DECLARE )\\S+", txtContext));
 		//參數置換
@@ -172,13 +175,16 @@ public class TransduceStoreFunctionService {
 		//header的參數
 		List<String> lstParams = new ArrayList<String>();
 		String headerParams = txtHeader
+				.replaceAll("\\bCASESPECIFIC\\b", "")
+				.replaceAll("CHARACTER(\\s+SET)?\\s+\\w+", "")
+				.replaceAll("SQL\\s+SECURITY\\s+INVOKER", "")
 				.replaceAll("^[^\\(]+\\(","")
 				.replaceAll("\\)\\s*RETURNS",TransduceTool.SPLIT_CHAR_RED)
 				.replaceAll(TransduceTool.SPLIT_CHAR_RED+"[\\S\\s]+", "")
 				.replaceAll("\\([^\\)]+\\)", "")
 				.replaceAll("([^,\\s]+)\\s+([^,\\s]+)", "$1")
 				;
-		lstParams.addAll(Arrays.asList(headerParams.split(",")));
+		lstParams.addAll(Arrays.asList(headerParams.split("\\s*,\\s*")));
 		//DECLARE的參數
 		lstParams.addAll(RegexTool.getRegexTarget("(?<=DECLARE )\\S+", txtSQL));
 		//參數置換

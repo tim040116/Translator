@@ -1,12 +1,6 @@
-package src.java.element;
-
-import java.awt.Color;
+package etec.common.model.element;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextArea;
-import javax.swing.text.DefaultCaret;
 
 import etec.common.enums.RunStatusEnum;
 import etec.common.factory.UIPanelFactory;

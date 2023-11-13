@@ -2,27 +2,25 @@ package etec.view.panel;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.text.DefaultCaret;
 
-import etec.common.enums.RunStatusEnum;
-import etec.common.factory.UIPanelFactory;
-import etec.common.view.panel.LogTextArea;
-import etec.common.view.panel.ProgressBar;
 import etec.common.view.panel.StatusBar;
-import etec.main.Params;
 import etec.src.interfaces.Controller;
-import etec.src.listener.SearchFunctionListener;
+import etec.src.listener.FastTransduceListener;
 
+/**
+ * @author	Tim
+ * @since	2023年11月8日
+ * @version	3.4.0.1
+ * 
+ * 快速轉換的UI介面
+ * 
+ * */
 public class FastTransducePnl  extends JPanel {
 
 	/**
@@ -31,20 +29,13 @@ public class FastTransducePnl  extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	//物件
-	public static JFileChooser fcIp;
-	public static JFileChooser fcOp;
-	public static JButton btnIp;
-	public static JButton btnOp;
-	public static JButton btnSub;
-	public static JTextField tfIp;
-	public static JTextField tfOp;
-	public static JLabel lblIp;
-	public static JLabel lblOp;
-	public static LogTextArea tsLog;
-	public static ProgressBar progressBar;
-	public static StatusBar lblStatus;
+	public JTextArea	txtOldScript;//輸入欄位
+	public JTextArea	txtNewScript;//輸出欄位
+	public JPanel		pnlInfo;//狀態區
+	public JButton		btnRun;//執行按鍵
+	public StatusBar	statusBar;//狀態列
 	// 事件監聽器
-	SearchFunctionListener lr;
+	FastTransduceListener lr;
 
 	public FastTransducePnl(Controller con) {
 		init(con);
@@ -52,46 +43,45 @@ public class FastTransducePnl  extends JPanel {
 	}
 
 	private void init(Controller con) {
-		setLayout(new GridLayout(4, 2));
-		setPreferredSize(new Dimension(1300, 600));
-		// 初始化
-		fcIp = new JFileChooser();
-		fcOp = new JFileChooser();
-		tfIp = new JTextField(Params.config.INIT_INPUT_PATH);
-		tfOp = new JTextField(Params.config.INIT_OUTPUT_PATH);
-		btnIp = new JButton("路徑");
-		btnOp = new JButton("路徑");
-		btnSub = new JButton("確認");
-		lblIp = new JLabel("來源路徑:");
-		lblOp = new JLabel("產檔路徑:");
-		tsLog = UIPanelFactory.addLogTextArea();
-		progressBar = UIPanelFactory.addProgressBar();
-		lblStatus = UIPanelFactory.addStatusBar();
-		lblStatus.setStatus(RunStatusEnum.START);
-		DefaultCaret caret = (DefaultCaret)tsLog.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		// 排版
-		Dimension dLbl = new Dimension(20, 10);
-		lblIp.setPreferredSize(dLbl);
-		lblIp.setPreferredSize(dLbl);
-
+		setLayout(new GridLayout(1,3));
+		setPreferredSize(new Dimension(1300, 675));
 		// 事件
-		lr = new SearchFunctionListener(con);
-		btnSub.addActionListener(lr);
-
+		lr = new FastTransduceListener(con);
+		// 建置物件
+		txtOldScript = new JTextArea() {//輸入區
+			{
+				setEditable(true);
+				setLineWrap(true);
+				setWrapStyleWord(true);
+				((DefaultCaret)getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+			}
+		};
+		txtNewScript = new JTextArea() {//輸出區
+			{
+				setEditable(false);
+				setLineWrap(true);
+				setWrapStyleWord(true);
+				((DefaultCaret)getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+			}
+		};
+		btnRun = new JButton("執行") {
+			{
+				addActionListener(lr);
+			}
+		};
+		statusBar = new StatusBar();
+		pnlInfo = new JPanel() {
+			{
+				setLayout(new GridLayout(2,1));
+				setPreferredSize(new Dimension(1300, 600));
+				add(btnRun);
+				add(statusBar);
+			}
+		};
+		
 		// 設置
-		add(lblIp);
-		add(tfIp);
-		/**
-		 * 2023/08/25 Tim
-		 * 應jason要求，取消輸入產出路徑的功能
-		 * */
-//		add(lblOp);
-//		add(tfOp);
-		add(btnSub);
-		add(progressBar);
-		add(lblStatus);
-		add(new JScrollPane(tsLog));
-
+		add(new JScrollPane(txtOldScript));
+		add(pnlInfo);
+		add(new JScrollPane(txtNewScript));
 	}
 }
