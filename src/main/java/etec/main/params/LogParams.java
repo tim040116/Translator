@@ -32,7 +32,7 @@ public class LogParams {
 		Map<String, String> map = ParamsTool.readParam("=", f);
 		this.PRINT_LEVEL = map.get("PRINT_LEVEL").toUpperCase();
 		this.IS_WRITE_FILE = map.get("IS_WRITE_FILE").toUpperCase().equals("TRUE");
-		LOG_FILE_NAME = ParamsFactory.LOG_FILE_PATH+(new SimpleDateFormat("YYYY-MM-DD")).format(new Date())+".log";
+		LOG_FILE_NAME = ParamsFactory.LOG_FILE_PATH+(new SimpleDateFormat("YYYY-MM-dd")).format(new Date())+".log";
 		sf = new SimpleDateFormat(map.get("TIME_FORMAT"));
 		this.IS_COLOR = "true".equals(map.get("IS_COLOR").toLowerCase());
 		this.COLOR_DEBUG = map.get("COLOR_DEBUG");
