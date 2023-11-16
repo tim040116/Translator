@@ -105,11 +105,12 @@ public class SQLTransducer {
 				.replaceAll(RegexTool.getReg("length \\("), "LEN(")//all
 				.replaceAll(RegexTool.getReg("Character \\("), "LEN(")//all
 				.replaceAll(RegexTool.getReg(" MINUS "), " EXCEPT ")//all
+				.replaceAll("(?i)INSTR\\s*\\(([@A-Za-z0-9_'\\(\\)]+),('[^']+'+)(,[0-9]+)?\\)", "CHARINDEX($2,$1 $3)")
 		;
 		res = convertDecode(res);
 		return res;
 	}
-	/**
+	/**	
 	 * 轉換decode語法
 	 * 
 	 * azure 不支援decode語法

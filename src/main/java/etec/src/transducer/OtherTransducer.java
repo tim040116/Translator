@@ -141,10 +141,12 @@ public class OtherTransducer {
 	 * @throws IOException 
 	 * @throws UnknowSQLTypeException 
 	 * @since	2023年11月13日
+	 * @param	boolean	isEncode	true會回傳SET 字串語法 false回傳SQL語句
 	 * 
 	 * */
-	public static String transduceSetExcute(String sql) throws UnknowSQLTypeException, IOException {
+	public static String transduceSetExcute(String sql,boolean isEncode) throws UnknowSQLTypeException, IOException {
 		String res = sql;
+		//將字串轉為SQL
 		String paramNm = sql.replaceAll("(?i)SET\\s+([^=\\s]+)\\s*=[\\S\\s]+","$1");
 		String script = sql
 				.replaceAll("(?i)SET\\s+[^=\\s]+\\s*=\\s*'", "")
@@ -152,12 +154,15 @@ public class OtherTransducer {
 				.replaceAll("'\\s*\\+\\s*'","\t\r\n\t")
 				;
 		script = FamilyMartFileTransduceService.transduceSQLScript(script);
-		script = script
-				.replaceAll("\r\n", " '\r\n\t+ ' ")
-				.replaceAll("\\s*'\\s*\n", " '\r\n")
-				.replaceAll("\\s+;", ";';")
-				;
-		res = "SET "+paramNm+" = '"+script;
+		//將SQL轉為字串
+		if(isEncode) {
+			script = "SET " + paramNm + " = '" + script
+					.replaceAll("\r\n", " '\r\n\t+ ' ")
+					.replaceAll("\\s*'\\s*\n", " '\r\n")
+					.replaceAll("\\s+;", ";';")
+					;
+		}
+		res = script;
 		return res;
 	}
 }

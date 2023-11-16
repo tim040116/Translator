@@ -72,7 +72,7 @@ public class FastTransducePnl  extends JPanel {
 		statusBar = new StatusBar();
 		pnlInfo = new JPanel() {
 			{
-				setLayout(new GridLayout(2,1));
+				setLayout(new GridLayout(3,1));
 				setPreferredSize(new Dimension(1300, 600));
 				add(btnRun);
 				add(statusBar);

@@ -9,6 +9,7 @@ import etec.common.model.sql.CreateIndexModel;
 import etec.common.model.sql.CreateTableModel;
 import etec.common.model.sql.TableColumnModel;
 import etec.common.utils.FileTool;
+import etec.common.utils.Log;
 import etec.common.utils.RegexTool;
 import etec.main.Params;
 import etec.sql.wrapper.impl.TeradataSqlModelWrapper;
@@ -135,7 +136,7 @@ public class CreateListService {
 
 	// FAST LOAD
 	public static String createFastloadLst(String fn, String fc) throws IOException {
-		System.out.println("fastload");
+		Log.info("fastload");
 		String result = "";
 		String file = BasicParams.getOutputPath() + "lst\\lst_fastload.txt";
 		String txt = "";
@@ -169,7 +170,7 @@ public class CreateListService {
 	}
 	// 產檔export_lst
 	public static String createExportLst(String fn, String fc) throws IOException {
-		System.out.println("buildExportListFile");
+		Log.info("buildExportListFile");
 		String result = "Success";
 		String file = BasicParams.getOutputPath() + "lst\\lst_export.txt";
 		List<String> lstTrg = RegexTool.getRegexTarget("my \\$OUTPUT_FILE[^;]*;", fc);
@@ -205,7 +206,7 @@ public class CreateListService {
 	}
 	//產檔index
 	public static String createIndexLst(String tblNm, String target, String fn) throws IOException {
-		System.out.println("buildIndexListFile");
+		Log.info("buildIndexListFile");
 		String result = "Success";
 		if(!target.matches(".*[Ii][Nn][Dd][Ee][Xx].*")) {
 			return result;
@@ -216,7 +217,7 @@ public class CreateListService {
 	}
 	//產檔create select
 	public static String createCreateSelectLst(String fn,String data) throws IOException {
-		System.out.println("buildCreateSelectListFile");
+		Log.info("buildCreateSelectListFile");
 		String result = "Success";
 		String file = BasicParams.getOutputPath() + "lst\\lst_create_select.txt";
 		String create = "";
@@ -298,7 +299,7 @@ public class CreateListService {
 	}
 	// 產檔lst Rename Table 
 	public static String createLstRenameTable(String fn, String fc) throws IOException {
-		System.out.println("createLstRenameTable");
+		Log.info("createLstRenameTable");
 		String result = "Success";
 		String file = BasicParams.getOutputPath() + "lst\\lst_rename_table.txt";
 //		String file2 = BasicParams.getOutputPath() + "lst\\lst_rename_table_input.txt";
@@ -312,12 +313,27 @@ public class CreateListService {
 	}
 	// 產檔lst drop Table 
 	public static String createLstDropTable(String fn, String fc) throws IOException {
-		System.out.println("createLstDropTable");
+		Log.info("createLstDropTable");
 		String result = "Success";
 		String file = BasicParams.getOutputPath() + "lst\\lst_drop_table.txt";
 		String strAll = fc.replaceAll(";","").replaceAll(RegexTool.getReg("drop table"), "");
 		String[] arAll = strAll.trim().split("\\.");
 		FileTool.addFile(file,fn+"\t"+arAll[0]+"\t"+arAll[1]);
 		return result;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年11月14日
+	 * 
+	 * 3.3.
+	 * FamilyMart_step02
+	 * 列出
+	 * 
+	 * */
+	public static String createLstSPParams() {
+		Log.info("createLstSPParams"); 
+		String res = "Success";
+		
+		return res;
 	}
 }

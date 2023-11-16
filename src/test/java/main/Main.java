@@ -19,12 +19,13 @@ public class Main {
 			ParamsFactory.init();
 			String now = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
 			//讀檔
-			String text = " ,coalesce(zeroifnull(sum(case when Dim_Data_D='01' then Mea_Txn_Point else 0 END)),\"\") as P01\r\n" + 
-					" \r\n" + 
-					" ,zeroifnull(sum(case when Dim_Data_D='02' then Mea_Txn_Point else 0 END)) as P02 \r\n" + 
-					" \r\n" + 
-					"  ,zeroifnull(asasasas) as P02 ";
-			text = text.replaceAll("(?i)EXTRACT\\s*\\(\\s*(DAY|MONTH|YEAR)\\s+FROM", "DatePart($1 ,");
+			String text = "	WHEN ( CAST( INSTR(@P_ITEM_LIST,',',1)  AS INTEGER )>0\r\n" + 
+					"   AND CAST(INSTR(LOWER(@P_ITEM_LIST),'SELECT')  AS INTEGER)=0 ) \r\n" + 
+					"\r\n" + 
+					"	WHEN ( CAST( INSTR(@P_ITEM_LIST,',',1)  AS INTEGER )=0  \r\n" + 
+					"AND CAST(INSTR(LOWER(@P_ITEM_LIST),'SELECT')  AS INTEGER)=0 ) ";
+			text = text.replaceAll("(?i)INSTR\\s*\\(([@A-Za-z0-9_'\\(\\)]+),('[^']+'+)(,[0-9]+)?\\)"
+					, "CHARINDEX($2,$1 $3)");
 
 					
 			System.out.println(text);

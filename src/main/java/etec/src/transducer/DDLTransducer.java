@@ -38,17 +38,17 @@ public class DDLTransducer {
 		String select = "";
 		String with = "";
 		// create
-		create = RegexTool.getRegexTarget("CREATE(\\s+SET\\b)?(\\s+MULTISET\\b)?(\\s+VOLATILE\\b)?\\s+TABLE\\s+\\S+", sql).get(0)
-				.replaceAll("\\s+VOLATILE\\s+", " ")
-				.replaceAll("CREATE\\s+MULTISET\\s+TABLE", "CREATE TABLE")
-				.replaceAll("CREATE\\s+SET\\s+TABLE", "CREATE TABLE")
+		create = RegexTool.getRegexTarget("(?i)CREATE(\\s+SET\\b)?(\\s+MULTISET\\b)?(\\s+VOLATILE\\b)?\\s+TABLE\\s+\\S+", sql).get(0)
+				.replaceAll("(?i)\\s+VOLATILE\\s+", " ")
+				.replaceAll("(?i)CREATE\\s+MULTISET\\s+TABLE", "CREATE TABLE")
+				.replaceAll("(?i)CREATE\\s+SET\\s+TABLE", "CREATE TABLE")
 				;
 		// with
-		List<String> lstPrimaryIndex = RegexTool.getRegexTarget("UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", sql);
-		List<String> lstIndex = RegexTool.getRegexTarget("PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", sql);
+		List<String> lstPrimaryIndex = RegexTool.getRegexTarget("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", sql);
+		List<String> lstIndex = RegexTool.getRegexTarget("(?i)PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", sql);
 		String column = "";
 		if (!lstPrimaryIndex.isEmpty()) {
-			String indexCol = lstPrimaryIndex.get(0).replaceAll("UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\(", "")
+			String indexCol = lstPrimaryIndex.get(0).replaceAll("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\(", "")
 					.replaceAll("\\)", "").replaceAll("\\s", "").trim();
 			column += indexCol;
 		}
@@ -56,7 +56,7 @@ public class DDLTransducer {
 			if (!lstPrimaryIndex.isEmpty()) {
 				column += ",";
 			}
-			String indexCol = lstIndex.get(0).replaceAll("PRIMARY\\s+INDEX\\s+\\(", "").replaceAll("\\)", "")
+			String indexCol = lstIndex.get(0).replaceAll("(?i)PRIMARY\\s+INDEX\\s+\\(", "").replaceAll("\\)", "")
 					.replaceAll("\\s", "").trim();
 			column += indexCol;
 		}
@@ -64,8 +64,8 @@ public class DDLTransducer {
 		with = "WITH (" + "\r\n\tCLUSTERED COLUMNSTORE INDEX," + "\r\n\t" + hash + "\r\n)";
 		// select
 		String oldselect = sql
-				.replaceAll("CREATE(\\s+VOLATILE)?\\s+TABLE\\s+\\S+\\s+AS\\s*\\(", "")
-				.replaceAll("\\)\\s*WITH\\s+DATA\\s*[^;]+", "")
+				.replaceAll("(?i)CREATE(\\s+\\S+)+\\s+TABLE\\s+\\S+\\s+AS\\s*\\(", "")
+				.replaceAll("(?i)\\)\\s*WITH\\s+DATA\\s*[^;]+", "")
 				.replaceAll("TtEeSsTt", "%;%").trim();
 		select = DQLTransducer.transduceSelectSQL(oldselect);
 		res = create.trim() + "\r\n" + with.trim() + "\r\nAS\r\n" + select.trim()+"\r\n;";

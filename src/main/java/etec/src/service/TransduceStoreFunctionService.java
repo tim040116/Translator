@@ -138,7 +138,13 @@ public class TransduceStoreFunctionService {
 		//參數置換
 		script = OtherTransducer.transduceDECLARE(lstParams, script);
 		//包裝
-		script = script.replaceAll("\n[\\t \r\n]+\n", "\r\n").trim();
+		script = script
+				.replaceAll("(?i)SQL\\s+SECURITY\\s+INVOKER", "")
+				.replaceAll("(?i)\\bSP\\s*:\\s*BEGIN", "AS BEGIN")
+				.replaceAll("(?i)\\bEND\\s+SP\\b", "END")
+				.replaceAll("\n[\\t \r\n]+\n", "\r\n")
+				
+				.trim();
 		res.setName(spName);
 		res.setHeader(txtHeader);
 		res.setContext(txtContext);
@@ -192,7 +198,12 @@ public class TransduceStoreFunctionService {
 		//參數置換
 		script = OtherTransducer.transduceDECLARE(lstParams, script);
 		//整理語法
-		script = script.replaceAll("\n[\\t \r\n]+\n", "\r\n");
+		script = script
+				.replaceAll("(?i)SQL\\s+SECURITY\\s+INVOKER", "")
+				.replaceAll("(?i)\\bSP\\s*:\\s*BEGIN", "AS BEGIN")
+				.replaceAll("(?i)\\bEND\\s+SP\\b", "END")
+				.replaceAll("\n[\\t \r\n]+\n", "\r\n")
+				;
 		res.setHeader(txtHeader);
 		res.setContext(txtSQL);
 		res.setScript(script);
@@ -228,6 +239,7 @@ public class TransduceStoreFunctionService {
 		txtSQL = txtSQL
 				.replaceAll("\\bIF\\s+(\\w+)\\s+<\\s*>\\s+\\w+\\s+THEN\\s+LEAVE\\s+(\\w+)\\s*;\\s*END\\s+IF\\s*;"
 						, "WHILE (@@FETCH_STATUS = 0)")
+				.replaceAll("(?i)\\bEXEC(UTE)?\\s+([^;\\s]+)\\s*;", "EXECUTE sp_executesql $2;")
 				;
 		return txtSQL;
 //		return FamilyMartFileTransduceService.transduceSQLScript(sql);
