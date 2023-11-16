@@ -52,7 +52,6 @@ public class LogParams {
 			default:
 				break;
 		}
-		System.out.println();
 	}
 	
 	public boolean levelContains(String str) {
