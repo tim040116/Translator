@@ -3,8 +3,11 @@ package etec.view.panel;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
@@ -34,6 +37,11 @@ public class FastTransducePnl  extends JPanel {
 	public JPanel		pnlInfo;//狀態區
 	public JButton		btnRun;//執行按鍵
 	public StatusBar	statusBar;//狀態列
+	public JPanel		pnlCtrl;//選項區
+	public JCheckBox 	chbIsSetToVarchar;//是否轉換成字串
+	public JRadioButton rdoAZ;
+	public JRadioButton rdoMS;
+	public ButtonGroup	grpSQLType;
 	// 事件監聽器
 	FastTransduceListener lr;
 
@@ -48,37 +56,49 @@ public class FastTransducePnl  extends JPanel {
 		// 事件
 		lr = new FastTransduceListener(con);
 		// 建置物件
-		txtOldScript = new JTextArea() {//輸入區
-			{
-				setEditable(true);
-				setLineWrap(true);
-				setWrapStyleWord(true);
-				((DefaultCaret)getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-			}
-		};
-		txtNewScript = new JTextArea() {//輸出區
-			{
-				setEditable(false);
-				setLineWrap(true);
-				setWrapStyleWord(true);
-				((DefaultCaret)getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-			}
-		};
-		btnRun = new JButton("執行") {
-			{
-				addActionListener(lr);
-			}
-		};
+		//輸入區
+		txtOldScript = new JTextArea();
+		txtOldScript.setEditable(true);
+		txtOldScript.setLineWrap(true);
+		txtOldScript.setWrapStyleWord(true);
+		((DefaultCaret)txtOldScript.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		//輸出區
+		txtNewScript = new JTextArea();
+		txtNewScript.setEditable(false);
+		txtNewScript.setLineWrap(true);
+		txtNewScript.setWrapStyleWord(true);
+		((DefaultCaret)txtNewScript.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		//執行鍵
+		btnRun = new JButton("執行");
+		btnRun.addActionListener(lr);
+		//狀態欄
 		statusBar = new StatusBar();
-		pnlInfo = new JPanel() {
-			{
-				setLayout(new GridLayout(3,1));
-				setPreferredSize(new Dimension(1300, 600));
-				add(btnRun);
-				add(statusBar);
-			}
-		};
-		
+		//是否轉換成字串
+		chbIsSetToVarchar = new JCheckBox("是否轉換成字串");
+		chbIsSetToVarchar.setSelected(true);
+		//要轉換成CTAS還是select into
+		rdoAZ = new JRadioButton("Azure Synapse");
+		rdoAZ.setActionCommand("az");
+		rdoAZ.setSelected(true);
+		rdoMS = new JRadioButton("MS SQL");
+		rdoMS.setActionCommand("ms");
+		grpSQLType = new ButtonGroup();
+		grpSQLType.add(rdoAZ);
+		grpSQLType.add(rdoMS);
+		//選項區
+		pnlCtrl= new JPanel();
+		pnlCtrl.setLayout(new GridLayout(1,1));
+		pnlCtrl.setPreferredSize(new Dimension(1300, 600));
+		pnlCtrl.add(chbIsSetToVarchar);
+		pnlCtrl.add(rdoAZ);
+		pnlCtrl.add(rdoMS);
+		//狀態區
+		pnlInfo = new JPanel();
+		pnlInfo.setLayout(new GridLayout(3,1));
+		pnlInfo.setPreferredSize(new Dimension(1300, 600));
+		pnlInfo.add(btnRun);
+		pnlInfo.add(statusBar);
+		pnlInfo.add(pnlCtrl);
 		// 設置
 		add(new JScrollPane(txtOldScript));
 		add(pnlInfo);

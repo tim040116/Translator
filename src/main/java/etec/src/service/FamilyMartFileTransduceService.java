@@ -299,9 +299,6 @@ public class FamilyMartFileTransduceService {
 				break;
 			case EXIT:
 				break;
-			case SET_EXECUTE:
-				result = OtherTransducer.transduceSetExcute(result,true);
-				break;
 			case OTHER:
 				throw new UnknowSQLTypeException(result,sqlType);
 			default:

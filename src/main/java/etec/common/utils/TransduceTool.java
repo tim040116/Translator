@@ -350,9 +350,6 @@ public class TransduceTool {
 		else if(sql.matches("(?i)WITH\\s+\\S+\\s+AS\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.WITH;
 		}
-		else if(sql.matches("(?i)SET\\s+@\\S+\\s*=\\s*'[\\S\\s]+")) {
-			res = SQLTypeEnum.SET_EXECUTE;
-		}
 		else {
 			res = SQLTypeEnum.OTHER;
 		}

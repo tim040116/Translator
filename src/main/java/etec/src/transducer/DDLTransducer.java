@@ -64,8 +64,8 @@ public class DDLTransducer {
 		with = "WITH (" + "\r\n\tCLUSTERED COLUMNSTORE INDEX," + "\r\n\t" + hash + "\r\n)";
 		// select
 		String oldselect = sql
-				.replaceAll("(?i)CREATE(\\s+\\S+)+\\s+TABLE\\s+\\S+\\s+AS\\s*\\(", "")
-				.replaceAll("(?i)\\)\\s*WITH\\s+DATA\\s*[^;]+", "")
+				.replaceAll("(?i)CREATE(\\s+\\S+)*\\s+TABLE\\s+\\S+\\s+AS\\s*\\(", "")
+				.replaceAll("(?i)\\)\\s*WITH\\s+DATA\\s*[^;]+", ")")
 				.replaceAll("TtEeSsTt", "%;%").trim();
 		select = DQLTransducer.transduceSelectSQL(oldselect);
 		res = create.trim() + "\r\n" + with.trim() + "\r\nAS\r\n" + select.trim()+"\r\n;";
@@ -172,5 +172,24 @@ public class DDLTransducer {
 				.replaceAll("(?i)VARBYTE", "VARBINARY")
 				.replaceAll(" +,", ",");
 		return result;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年11月17日
+	 * 
+	 * 解決ms sql 不支援CTAS語法問題，將CTAS轉為select into語法
+	 * */
+	public static String runCTASToSelectInto(String sql) {
+		String res = "";
+		String tableNm = sql.replaceAll("(?i)\\s*CREATE\\s+TABLE\\s+(\\S+)\\s+[\\S\\s]+", "$1");
+		String selectSrc = sql.replaceAll("(?i)[\\S\\s]+\\s+AS\\s+SELECT", "SELECT");
+		String[] arrFrom = selectSrc.split("(?i)FROM");
+		for(String str: arrFrom) {
+			res+="".equals(res)?(str+"\r\nINTO "+tableNm+"\r\n"):("FROM"+str);
+		}
+		res = res.trim()
+//				.replaceAll(regex, replacement)
+				;
+		return res;
 	}
 }
