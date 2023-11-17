@@ -5,6 +5,7 @@ import java.util.List;
 
 import etec.common.exception.UnknowSQLTypeException;
 import etec.common.utils.RegexTool;
+import etec.common.utils.TransduceTool;
 import etec.main.Params;
 import etec.src.service.FamilyMartFileTransduceService;
 
@@ -56,11 +57,30 @@ public class OtherTransducer {
 	public static String transduceIF(String script) {
 		String res = script.toUpperCase();
 		//先處理else 因為會跟case的搞混
-		res = res
-				.replaceAll("(?i)END\\s+IF\\s*;","中")
-				.replaceAll("(?i)(\\s+)ELSE(\\s+)\\b([^中]+)\\b中", "$2END$1ELSE$2BEGIN$2$3$2END\r\n")
-				.replaceAll("中","END IF;")
-				;
+//		res = res
+//				.replaceAll("(?i)END\\s+IF\\s*;","中")
+//				.replaceAll("(?i)(\\s+)ELSE(\\s+)\\b([^中]+)\\b中", "$2END$1ELSE$2BEGIN$2$3$2END\r\n")
+//				.replaceAll("中","END IF;")
+//				;
+		
+		String tmp = res.replaceAll("\\b", TransduceTool.SPLIT_CHAR_RED);
+		String tmp2 = "";
+		int caseArea = 0;
+		for(String str : tmp.split(TransduceTool.SPLIT_CHAR_RED)) {
+			//計算 case when
+			if("CASE".equals(str.toUpperCase())) {
+				caseArea++;
+			}
+			if(caseArea>0&&"END".equals(str.toUpperCase())) {
+					caseArea--;
+			}
+			//處理else
+			if(caseArea<1&&"ELSE".equals(str.toUpperCase())) {
+				str = "END　ELSE BEGIN";
+			}
+			tmp2+=str;
+		}
+		res = tmp2;
 		//if else if end if
 		res = res
 				.replaceAll("(?i)\\bEND\\s+IF\\s*;","END")

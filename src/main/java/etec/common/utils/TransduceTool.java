@@ -18,7 +18,10 @@ import etec.src.transducer.OtherTransducer;
  * */
 public class TransduceTool {
 	
-
+	public static final String SPLIT_CHAR_RED =  "🀄";
+	public static final String SPLIT_CHAR_WHITE =  "🀆";
+	public static final String SPLIT_CHAR_GREEN =  "🀅";
+	public static final String SPLIT_CHAR_BLACK =  "🀫";
 	
 	//select單純的置換
 	@Deprecated
@@ -248,10 +251,7 @@ public class TransduceTool {
 		}
 		return RegexTool.decodeSQL(result);
 	}
-	public static final String SPLIT_CHAR_RED =  "🀄";
-	public static final String SPLIT_CHAR_WHITE =  "🀆";
-	public static final String SPLIT_CHAR_GREEN =  "🀅";
-	public static final String SPLIT_CHAR_BLACK =  "🀫";
+	
 	/**
 	 * @author	Tim
 	 * @since	2023年10月4日

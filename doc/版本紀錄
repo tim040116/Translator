@@ -1,3 +1,6 @@
+3.3.1.4: 2023/11/17 Tim debug
+	- 修復case when 會有 begin end的問題
+	- 註解要保留
 3.4.1.1: 2023/11/16	Tim	新增需求
 	- 介面增加設定欄位
 		- 選擇CTAS要轉換成az還是ms sql
