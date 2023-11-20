@@ -41,7 +41,13 @@ public class TransduceStoreFunctionService {
 		//每一個sf的
 		int i = 0;
 		for(String sf : arrSF) {
-			sf = TransduceTool.cleanRemark(sf.trim())
+			/**
+			 * @author	Tim
+			 * @since	2023年11月20日
+			 * 
+			 * 應Joyce要求，SQL的註解不應該被去除
+			 * */
+			sf = sf.trim()/*TransduceTool.cleanRemark(sf.trim())*/
 					.replaceAll("^\"", "")
 					.replaceAll("\"\\+$", "");
 			//取得檔名
