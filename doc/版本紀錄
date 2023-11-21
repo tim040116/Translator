@@ -1,6 +1,11 @@
+3.3.1.5: 2023/11/17 Tim 新增邏輯
+	- 最開始的地方增加 USE ${SCHEMA_NAME}\r\nGO\r\n
+	- Schema name拿掉
+	- 轉換DECLARE的DEFAULT語法
 3.3.1.4: 2023/11/17 Tim debug
 	- 修復case when 會有 begin end的問題
-	- 註解要保留
+	- Joyce反映，註解應該要保留
+	- 應Jason要求，新增轉換：TO_NUMBER要改成cast as但是TO_NUMBER裡面有substring的就不要轉
 3.4.1.1: 2023/11/16	Tim	新增需求
 	- 介面增加設定欄位
 		- 選擇CTAS要轉換成az還是ms sql

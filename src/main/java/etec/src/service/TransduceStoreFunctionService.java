@@ -93,18 +93,26 @@ public class TransduceStoreFunctionService {
 						"BEGIN\r\n" + 
 						"END;", "")
 				;
-		String sp = TransduceTool.cleanRemark(text.toUpperCase());
+		/**
+		 * @author	Tim
+		 * @since	2023年11月20日
+		 * 
+		 * 應Joyce要求，SQL的註解不應該被去除
+		 * */
+//		String sp = TransduceTool.cleanRemark(text.toUpperCase());
+		String sp = text.toUpperCase().trim();
 		String txtHeader = "";
 		String txtContext = "";
 		int step = 0;
 		for(String line : sp.split("\r\n")) {
-			if(line.matches("--.*")) {
-				continue;
-			}
 			if(line.matches("\\s*(SP:)?BEGIN\\s*")) {
 				step=1;
 			}
 			if(step==0) {
+				if(line.matches("--.*")) {
+					txtHeader+=line+"\r\n";
+					continue;
+				}
 				txtHeader+=(line+"\r\n")
 						.replaceAll("OUT\\s+(\\S+)", "$1")
 						.replaceAll("IN\\s+(\\S+)", "$1");
@@ -115,14 +123,15 @@ public class TransduceStoreFunctionService {
 		}
 		//
 		//取得檔名
-		String spName = RegexTool.getRegexTargetFirst("^\\s*\\S+\\s+PROCEDURE\\s+[^\\(]+", sp)
+		String spName = RegexTool.getRegexTargetFirst("^\\s*\\S+\\s+PROCEDURE\\s+[^\\(]+", TransduceTool.cleanRemark(sp))
 				.replaceAll("^\\s*\\S+\\s+PROCEDURE\\s+", "");
 		//轉換
 		txtContext = transformSQL(txtContext);
-		String script = txtHeader+txtContext;
+		String script = txtHeader.replaceAll("(?i)(\\S+)\\s+PROCEDURE\\s+([^\\s\\.]+)\\.([^\\s\\.\\(]+)", "USE $2\\r\\nGO\\r\\n$1 PROCEDURE $3 ")
+				+txtContext;
 		//header的參數
 		List<String> lstParams = new ArrayList<String>();
-		txtHeader = txtHeader
+		txtHeader = TransduceTool.cleanRemark(txtHeader)
 				.replaceAll("\\bCASESPECIFIC\\b", "")
 				.replaceAll("CHARACTER(\\s+SET)?\\s+\\w+", "")
 				.replaceAll("SQL\\s+SECURITY\\s+INVOKER", "")
@@ -137,6 +146,7 @@ public class TransduceStoreFunctionService {
 		headerParams = headerParams.replaceAll("\\)\\s*SQL SECURITY INVOKER","");
 		headerParams = headerParams.replaceAll("\\([^\\)]+\\)", "");
 		headerParams = headerParams.replaceAll("([^,\\s]+)\\s+([^,\\s]+)", "$1");
+		headerParams = headerParams.replaceAll("([^,\\s]+)\\s+([^,]+)","$1");
 				;
 		lstParams.addAll(Arrays.asList(headerParams.split("\\s*,\\s*")));
 		//DECLARE的參數

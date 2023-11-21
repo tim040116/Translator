@@ -29,7 +29,7 @@ public class DQLTransducer {
 	//select單純的置換
 	public static String easyReplaceSelect(String sql) {	
 		String res = sql;
-		res = res
+		res = res.replaceAll("\\(\\s*([^\\(\\),\\s]+)\\s*,\\s*([^\\(\\),\\s]+)\\s*\\)", "\\($1,$2\\)")
 				// ||
 				.replaceAll("\\|\\|", "+")
 				// SUBSTR
@@ -41,9 +41,27 @@ public class DQLTransducer {
 				//strtok
 				.replaceAll("(?i)\\bstrtok\\s*\\(", "STRING_SPLIT(")
 				//rank over
-				.replaceAll("(?<!_|[A-Za-z0-9])[Rr][Aa][Nn][Kk]\\((?! |\\))", " RANK ( ) OVER ( order by ")//all
+				.replaceAll("(?<!_|[A-Za-z0-9])[Rr][Aa][Nn][Kk]\\((?! |\\))", " RANK ( ) OVER ( order by ")
 				//extract
-				.replaceAll("(?i)EXTRACT\\s*\\(\\s*(DAY|MONTH|YEAR)\\s+FROM", "DatePart($1 ,")//all
+				.replaceAll("(?i)EXTRACT\\s*\\(\\s*(DAY|MONTH|YEAR)\\s+FROM", "DatePart($1 ,")
+				/**
+				 * @author	Tim
+				 * @since	2023年11月21日
+				 * 
+				 * 3.3.1.4	應Jason要求新增功能
+				 * 		TO_NUMBER要改成cast as但是TO_NUMBER裡面有substring的就不要轉
+				 * 
+				 * */
+				.replaceAll("(?i)TO_NUMBER\\(([^\\(]+)\\)", "CAST\\($1 AS NUMERIC\\)")
+				/**
+				 * @author	Tim
+				 * @since	2023年11月21日
+				 * 
+				 * 3.3.1.5	DECLARE DEFAULT語法分成兩段
+				 * 
+				 * */
+				.replaceAll("(?i)([ \\t]+)DECLARE\\s+(\\S+)\\s+(\\S+)\\s+DEFAULT\\s+([^;]+)\\s*;", "$1DECLARE $2 $3;\\r\\n$1SET $2 = $4;")
+				
 				;
 		
 		return res;

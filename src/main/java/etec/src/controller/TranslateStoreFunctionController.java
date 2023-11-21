@@ -10,6 +10,7 @@ import etec.common.exception.UnknowSQLTypeException;
 import etec.common.model.BasicParams;
 import etec.common.model.SFSPModel;
 import etec.common.utils.FileTool;
+import etec.common.utils.Log;
 import etec.main.Params;
 import etec.src.interfaces.Controller;
 import etec.src.service.IOpathSettingService;
@@ -106,5 +107,6 @@ public class TranslateStoreFunctionController implements Controller {
 			SearchFunctionPnl.progressBar.plusOne();
 		}
 		SearchFunctionPnl.tsLog.setLog("資訊", "產檔完成，共 "+SearchFunctionPnl.progressBar.getProgress()+" 個檔案");
+		Log.info("轉換完成");
 	}
 }

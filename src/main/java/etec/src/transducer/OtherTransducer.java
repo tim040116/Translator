@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import etec.common.exception.UnknowSQLTypeException;
+import etec.common.utils.Log;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
 import etec.main.Params;
@@ -76,7 +77,7 @@ public class OtherTransducer {
 			}
 			//處理else
 			if(caseArea<1&&"ELSE".equals(str.toUpperCase())) {
-				str = "END　ELSE BEGIN";
+				str = "END ELSE BEGIN";
 			}
 			tmp2+=str;
 		}
@@ -101,7 +102,7 @@ public class OtherTransducer {
 			//置換
 			res = RegexTool.spaceRun(res, (String t) -> {
 				for(String p: lstParams) {
-					if(p.matches("\\s*")) {
+					if(p.matches("\\s*")||p.matches("")) {
 						continue;
 					}
 					t = t.replaceAll("\\b"+p.trim()+"\\b", "@"+p.trim());
