@@ -88,6 +88,7 @@ public class TransduceStoreFunctionService {
 		SFSPModel res = new SFSPModel();
 		//初步處理
 		text = text
+				.replaceAll("   ", "\t")
 				.replaceAll("\"RequestText\"", "")
 				.replaceAll("DECLARE EXIT HANDLER FOR SQLEXCEPTION\r\n" + 
 						"BEGIN\r\n" + 
@@ -127,7 +128,8 @@ public class TransduceStoreFunctionService {
 				.replaceAll("^\\s*\\S+\\s+PROCEDURE\\s+", "");
 		//轉換
 		txtContext = transformSQL(txtContext);
-		String script = txtHeader.replaceAll("(?i)(\\S+)\\s+PROCEDURE\\s+([^\\s\\.]+)\\.([^\\s\\.\\(]+)", "USE $2\\r\\nGO\\r\\n$1 PROCEDURE $3 ")
+		String script = txtHeader
+				.replaceAll("(?i)(\\S+)\\s+PROCEDURE\\s+([^\\s\\.]+)\\.([^\\s\\.\\(]+)", "USE $2\\r\\nGO\\r\\n$1 PROCEDURE $3 ")
 				+txtContext;
 		//header的參數
 		List<String> lstParams = new ArrayList<String>();

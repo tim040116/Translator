@@ -1,4 +1,4 @@
-3.3.1.5: 2023/11/17 Tim 新增邏輯
+3.3.1.5: 2023/11/21 Tim 新增邏輯
 	- 最開始的地方增加 USE ${SCHEMA_NAME}\r\nGO\r\n
 	- Schema name拿掉
 	- 轉換DECLARE的DEFAULT語法
