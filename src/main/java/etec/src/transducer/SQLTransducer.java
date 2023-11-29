@@ -1,8 +1,12 @@
 package etec.src.transducer;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import etec.common.exception.SQLFormatException;
 import etec.common.utils.RegexTool;
+import etec.common.utils.TransduceTool;
 
 public class SQLTransducer {
 	// 去除註解
@@ -54,22 +58,15 @@ public class SQLTransducer {
 	}
 
 	/**
-	 * 轉換decode語法
-	 * 
-	 * azure 不支援decode語法
-	 *於是要改成case when
-	 *
-	 * TD語法:
-	 * 	decode(target_col,condition,col,def_col)
-	 * az語法:
-	 * 	CASE WHEN target_col = condition THEN col ELSE def_col END
+	 * 簡單轉換
 	 * 
 	 * @author	Tim
 	 * @since	2023年10月17日
 	 * @param	String	SQL語句
 	 * @return	String	轉換後的SQL語句
+	 * @throws SQLFormatException 
 	 * */
-	public static String easyReplaceSelect(String sql) {
+	public static String easyReplaceSelect(String sql) throws IOException {
 		String res = sql;
 		res = res
 				// SEL
@@ -125,13 +122,61 @@ public class SQLTransducer {
 	 * @since	2022/05/05
 	 * @param	String	SQL語句
 	 * @return	String	轉換後的SQL語句
+	 * @throws SQLFormatException 
 	 * */
-	public static String convertDecode(String sql) {
-		String res = sql.toUpperCase();
-		List<String> lst = RegexTool.getRegexTarget("DECODE\\s*\\([^\\)]+\\)", res);
+	public static String convertDecode(String sql) throws SQLFormatException {
+		String res = "";
+		String[] arr = sql.toUpperCase()
+				.replaceAll("\\)", " "+TransduceTool.SPLIT_CHAR_CH_01+"\\)"+TransduceTool.SPLIT_CHAR_CH_01+" ")
+				.replaceAll(",", " "+TransduceTool.SPLIT_CHAR_CH_01+","+TransduceTool.SPLIT_CHAR_CH_01+" ")
+				.split("\\b");
+		boolean isDecode = false;
+		int cntBrackets = 0;
+		String temp = "";
+		List<String> lstParam = new ArrayList<String>();
+		for(String str : arr) {
+			if("DECODE".equals(str)) {
+				isDecode = true;
+				continue;
+			}else if(TransduceTool.SPLIT_CHAR_CH_01.equals(str)) {
+				continue;
+			}
+			if(!isDecode) {
+				res+=str;
+				continue;
+			}
+			
+			//計算括號
+			cntBrackets+="(".equals(str)?1:")".equals(str)?-1:0;
+			
+			if(cntBrackets==1&&",".equals(str)) {
+				lstParam.add(temp);
+				temp = "";
+			}else {
+				temp+=str;
+			}
+			if(isDecode&&cntBrackets==0) {
+				lstParam.add(temp);
+				temp = "";
+				isDecode = false;
+				if(lstParam.size()!=4) {
+					throw SQLFormatException.wrongParam("DECODE", 4,lstParam.size());
+				}
+				res+=" IIF"+lstParam.get(0)+"="+lstParam.get(1)+","+lstParam.get(2)+","+lstParam.get(3)+" ";
+//				String strDecode = "CASE";
+//				for(int i = 1;i<lstParam.size();i+=2) {
+//					strDecode+=
+//						  " WHEN "+lstParam.get(0)
+//						+ " = "+lstParam.get(i)+" THEN "
+//					;
+//				}
+			}
+		}
+		/*String res = sql.toUpperCase();
+		List<String> lst = RegexTool.getRegexTarget("(?i)DECODE\\s*\\([^\\)]+\\)", res);
 		for(String decode : lst) {
 			String strcase = "CASE";
-			String[] arrcol =  decode.replaceAll("DECODE\\s*\\(", "").replace(")", "").split(",");
+			String[] arrcol =  decode.replaceAll("(?i)DECODE\\s*\\(", "").replace(")", "").split(",");
 			int len = arrcol.length;
 			boolean iswhen = true;
 			String targetCol = arrcol[0];
@@ -143,7 +188,7 @@ public class SQLTransducer {
 			}
 			strcase+=" ELSE "+(len%2==1?"NULL":arrcol[len-1])+" END";
 			res = res.replace(decode,strcase);
-		}
+		}*/
 		return res;
 	}
 	

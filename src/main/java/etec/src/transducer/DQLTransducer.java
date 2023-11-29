@@ -1,5 +1,6 @@
 package etec.src.transducer;
 
+import java.io.IOException;
 import java.util.List;
 
 import etec.common.utils.Log;
@@ -7,9 +8,9 @@ import etec.common.utils.RegexTool;
 
 public class DQLTransducer {
 	// select語句轉換
-	public static String transduceSelectSQL(String sql) {
+	public static String transduceSelectSQL(String sql) throws IOException {
 		Log.debug("transduceSelectSQL");
-		
+
 		String txt = sql;
 		// 轉換
 		// txt = changeGroupBy(txt);
@@ -26,8 +27,8 @@ public class DQLTransducer {
 		return txt.trim();
 	}
 
-	//select單純的置換
-	public static String easyReplaceSelect(String sql) {	
+	// select單純的置換
+	public static String easyReplaceSelect(String sql) {
 		String res = sql;
 		res = res.replaceAll("\\(\\s*([^\\(\\),\\s]+)\\s*,\\s*([^\\(\\),\\s]+)\\s*\\)", "\\($1,$2\\)")
 				// ||
@@ -35,35 +36,36 @@ public class DQLTransducer {
 				// SUBSTR
 				.replaceAll("(?i)\\bSUBSTR\\s*\\(", "SUBSTRING(")
 				// CAST(SUBSTR('${LAST01TX4YMB}',1,4)||'-01-01' AS DATE FORMAT 'YYYY-MM-DD')
-				//.replaceAll("[Cc][Aa][Ss][Tt] *\\(|[Aa][Ss] *[Dd][Aa][Tt][Ee] *[Ff][Oo][Rr][Mm][Aa][Tt] *'[YyMmDdHhSs-]*'\\)","")
-				//oreplace
+				// .replaceAll("[Cc][Aa][Ss][Tt] *\\(|[Aa][Ss] *[Dd][Aa][Tt][Ee]
+				// *[Ff][Oo][Rr][Mm][Aa][Tt] *'[YyMmDdHhSs-]*'\\)","")
+				// oreplace
 				.replaceAll("(?i)\\boreplace\\s*\\(", "Replace(")
-				//strtok
+				// strtok
 				.replaceAll("(?i)\\bstrtok\\s*\\(", "STRING_SPLIT(")
-				//rank over
+				// rank over
 				.replaceAll("(?<!_|[A-Za-z0-9])[Rr][Aa][Nn][Kk]\\((?! |\\))", " RANK ( ) OVER ( order by ")
-				//extract
+				// extract
 				.replaceAll("(?i)EXTRACT\\s*\\(\\s*(DAY|MONTH|YEAR)\\s+FROM", "DatePart($1 ,")
 				/**
-				 * @author	Tim
-				 * @since	2023年11月21日
+				 * @author Tim
+				 * @since 2023年11月21日
 				 * 
-				 * 3.3.1.4	應Jason要求新增功能
-				 * 		TO_NUMBER要改成cast as但是TO_NUMBER裡面有substring的就不要轉
+				 *        3.3.1.4 應Jason要求新增功能 TO_NUMBER要改成cast as但是TO_NUMBER裡面有substring的就不要轉
 				 * 
-				 * */
+				 */
 				.replaceAll("(?i)TO_NUMBER\\(([^\\(]+)\\)", "CAST\\($1 AS NUMERIC\\)")
 				/**
-				 * @author	Tim
-				 * @since	2023年11月21日
+				 * @author Tim
+				 * @since 2023年11月21日
 				 * 
-				 * 3.3.1.5	DECLARE DEFAULT語法分成兩段
+				 *        3.3.1.5 DECLARE DEFAULT語法分成兩段
 				 * 
-				 * */
-				.replaceAll("(?i)([ \\t]+)DECLARE\\s+(\\S+)\\s+(\\S+)\\s+DEFAULT\\s+([^;]+)\\s*;", "$1DECLARE $2 $3;\\r\\n$1SET $2 = $4;")
-				
-				;
-		
+				 */
+				.replaceAll("(?i)([ \\t]+)DECLARE\\s+(\\S+)\\s+(\\S+)\\s+DEFAULT\\s+([^;]+)\\s*;",
+						"$1DECLARE $2 $3;\\r\\n$1SET $2 = $4;")
+
+		;
+
 		return res;
 	}
 
@@ -118,6 +120,7 @@ public class DQLTransducer {
 		result = result.replaceAll("(?i)zeroifnull\\s*\\(\\s*([^\\(\\)]+\\([^\\)]+\\))?\\)", "ISNULL($1,0)");
 		return result;
 	}
+
 	// char index
 	public static String changeCharindex(String selectSQL) {
 		String result = RegexTool.encodeSQL(selectSQL);
@@ -164,25 +167,22 @@ public class DQLTransducer {
 		result = RegexTool.decodeSQL(result);
 		return result;
 	}
+
 	//
 	public static String convertRollup(String content) {
 		String res = "";
 		String sql = replaceMark(content);
-		
+
 		return res;
 	}
-	//註解
+
+	// 註解
 	private static String replaceMark(String content) {
 		String res = content;
-		res = res
-				.replaceAll("--.*", "")
-				.replaceAll("\r", "<encodingCode_r>")
-				.replaceAll("\n", "<encodingCode_n>")
-				.replaceAll("\\/\\*(.*?)\\*\\/", "")
-				.replaceAll("<encodingCode_r>", "\r")
-				.replaceAll("<encodingCode_n>", "\n")
-				;
-				return res;
+		res = res.replaceAll("--.*", "").replaceAll("\r", "<encodingCode_r>").replaceAll("\n", "<encodingCode_n>")
+				.replaceAll("\\/\\*(.*?)\\*\\/", "").replaceAll("<encodingCode_r>", "\r")
+				.replaceAll("<encodingCode_n>", "\n");
+		return res;
 	}
-	
+
 }

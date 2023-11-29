@@ -1,8 +1,17 @@
+4.0.0.0: 2023/11/29	Tim	應Jason要求開發彰化銀行專案要用的轉換器
+	- Teradata 轉換成 green plum
+	- 先準備SQL轉換的部分
+		檔案轉SQL的部分之後在加
+	- 轉換邏輯參考Bill提供的轉換文件
 3.3.1.5: 2023/11/21 Tim 新增邏輯
 	- 最開始的地方增加 USE ${SCHEMA_NAME}\r\nGO\r\n
 	- Schema name拿掉
 	- 轉換DECLARE的DEFAULT語法
 	- 統一縮排
+	- VARCHAR大於8000改成MAX
+	- 修復轉換成字串時註解錯位問題
+	- 新增CREATE TABLE轉換MS SQL
+	- 修復DECODE轉換失敗BUG
 3.3.1.4: 2023/11/17 Tim debug
 	- 修復case when 會有 begin end的問題
 	- Joyce反映，註解應該要保留

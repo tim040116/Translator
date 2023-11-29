@@ -22,7 +22,7 @@ public class TransduceTool {
 	public static final String SPLIT_CHAR_WHITE =  "🀆";
 	public static final String SPLIT_CHAR_GREEN =  "🀅";
 	public static final String SPLIT_CHAR_BLACK =  "🀫";
-	
+	public static final String SPLIT_CHAR_CH_01 =  "蛬";
 	//select單純的置換
 	@Deprecated
 	public static String easyReplaceCreate(String sql) {	
@@ -283,7 +283,15 @@ public class TransduceTool {
 			res = SQLTypeEnum.EMPTY;
 		}
 		else if (sql.matches("(?i)CREATE\\s*(MULTISET|SET)?(\\s+VOLATILE)?\\s+TABLE\\s+[\\S\\s]+")) {
-			res = sql.matches("[\\S\\s]*\\s+SELECT\\s+[\\S\\s]*")?SQLTypeEnum.CREATE_INSERT:SQLTypeEnum.CREATE_TABLE;
+			if(sql.matches("[\\S\\s]*\\s+SELECT\\s+[\\S\\s]*")) {
+				if(sql.matches("(?i)CREATE\\s+TABLE\\s+\\S+\\s+WITH\\s*\\([\\S\\s]+")) {
+					res = SQLTypeEnum.CTAS;
+				}else {
+					res = SQLTypeEnum.CREATE_INSERT;
+				}
+			}else {
+				res = SQLTypeEnum.CREATE_TABLE;
+			}
 		}
 		else if(sql.matches("(?i)RENAME\\s+TABLE\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.RENAME_TABLE;
@@ -306,7 +314,11 @@ public class TransduceTool {
 			res = SQLTypeEnum.UPDATE_TABLE;
 		}
 		else if (sql.matches("(?i)SELECT\\s+[\\S\\s]+")) {
-			res = SQLTypeEnum.SELECT_TABLE;
+			if(sql.matches("(?i)[\\S\\s]+INTO\\s+\\S+\\s+FROM\\s*\\([\\S\\s]+")) {
+				res = SQLTypeEnum.SELECT_INTO;
+			}else {
+				res = SQLTypeEnum.SELECT_TABLE;
+			}
 		}
 		else if (sql.matches("(?i)DELETE\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.DELETE_TABLE;

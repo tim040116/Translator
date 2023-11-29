@@ -9,7 +9,7 @@ public class DDLTransducer {
 	// create table
 	public static String runCreateTable(String sql) throws IOException {
 		// create語法轉換
-		String create = sql;
+		String create = sql.replaceAll(";","");
 		create = replaceCreateTitle(create);
 		create = replaceTDsql(create);
 		create = replaceColumn(create);
@@ -38,10 +38,11 @@ public class DDLTransducer {
 		String select = "";
 		String with = "";
 		// create
-		create = RegexTool.getRegexTarget("(?i)CREATE(\\s+SET\\b)?(\\s+MULTISET\\b)?(\\s+VOLATILE\\b)?\\s+TABLE\\s+\\S+", sql).get(0)
-				.replaceAll("(?i)\\s+VOLATILE\\s+", " ")
-				.replaceAll("(?i)CREATE\\s+MULTISET\\s+TABLE", "CREATE TABLE")
-				.replaceAll("(?i)CREATE\\s+SET\\s+TABLE", "CREATE TABLE")
+		create = RegexTool.getRegexTarget("(?i)CREATE\\s+TABLE\\s+\\S+", 
+					sql.replaceAll("(?i)\\bVOLATILE\\b", " ")
+					.replaceAll("(?i)\\bMULTISET\\b", "")
+					.replaceAll("(?i)\\bSET\\s+TABLE", "TABLE")
+				).get(0)
 				;
 		// with
 		List<String> lstPrimaryIndex = RegexTool.getRegexTarget("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", sql);
@@ -65,7 +66,7 @@ public class DDLTransducer {
 		// select
 		String oldselect = sql
 				.replaceAll("(?i)CREATE(\\s+\\S+)*\\s+TABLE\\s+\\S+\\s+AS\\s*\\(", "")
-				.replaceAll("(?i)\\)\\s*WITH\\s+DATA\\s*[^;]+", ")")
+				.replaceAll("(?i)\\)\\s*WITH\\s+DATA\\s*[^;]+", "")
 				.replaceAll("TtEeSsTt", "%;%").trim();
 		select = DQLTransducer.transduceSelectSQL(oldselect);
 		res = create.trim() + "\r\n" + with.trim() + "\r\nAS\r\n" + select.trim()+"\r\n;";
@@ -153,8 +154,10 @@ public class DDLTransducer {
 	}
 	// 清除TD特有的語法
 	private static String replaceTDsql(String sql) {
-		String result = sql.replaceAll("(?i)CREATE\\s+MULTISET\\s+TABLE", "CREATE TABLE")// MULTISET
-				.replaceAll("(?i)CREATE\\s+SET\\s+TABLE", "CREATE TABLE")// SET TABLE
+		String result = sql
+				.replaceAll("(?i)\\bVOLATILE\\b", "")// VOLATILE
+				.replaceAll("(?i)\\bMULTISET\\b", "")// MULTISET
+				.replaceAll("(?i)SET\\s+TABLE", "TABLE")// SET TABLE
 				.replaceAll("(?i)(UNIQUE\\s+)?(PRIMARY\\s+)?INDEX\\s+\\([^\\)]+\\)", " ")// UNIQUE PRIMARY INDEX
 				.replaceAll("(?i)NO\\s+PRIMARY\\s+INDEX", "")
 				.replaceAll("(?i)RANGE_N" + "\\s*\\([^\\)]+\\)", " ")// PARTITION BY
@@ -185,10 +188,42 @@ public class DDLTransducer {
 		String selectSrc = sql.replaceAll("(?i)[\\S\\s]+\\s+AS\\s+SELECT", "SELECT");
 		String[] arrFrom = selectSrc.split("(?i)FROM");
 		for(String str: arrFrom) {
-			res+="".equals(res)?(str+"\r\nINTO "+tableNm+"\r\n"):("FROM"+str);
+			res+="".equals(res)?(str.trim()+"\r\nINTO "+tableNm+"\r\n"):("FROM"+str);
 		}
 		res = res.trim()
 //				.replaceAll(regex, replacement)
+				;
+		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年11月24日
+	 * 
+	 * 解決ms sql 不支援CTAS語法問題，將CTAS轉為select into語法
+	 * */
+	public static String runSelectIntoToCTAS(String sql) {
+		String res = "";
+		String tableNm = sql.replaceAll("(?i)[\\S\\s]+INTO\\s+(\\S+)\\s+FROM[\\S\\s]+", "$1");
+		String selectSrc = sql.replaceAll("(?i)INTO\\s+(\\S+)\\s+", "");
+		res = "CREATE TABLE " + tableNm + "\r\n"
+				+ "WITH ( \r\n"
+				+ "\tCLUSTERED COLUMNSTORE INDEX,\r\n"
+				+ "\tDISTRIBUTION = REPLICATE\r\n"
+				+ ")\r\nAS\r\n"+selectSrc
+				;
+		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年11月27日
+	 * 
+	 * 去除ms sql 不支援的語法
+	 * */
+	public static String runCreateTableAzToMs(String sql) {
+		String res = "";
+		res = sql
+				.replaceAll("(?i)\\bON\\s+COMMIT.*", "")
+				.replaceAll("(?i)\\bWITH\\s*\\([\\S\\s]+", ";")
 				;
 		return res;
 	}

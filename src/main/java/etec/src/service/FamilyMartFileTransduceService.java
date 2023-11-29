@@ -259,6 +259,11 @@ public class FamilyMartFileTransduceService {
 			case CREATE_INSERT:
 				result = DDLTransducer.runCTAS(result);
 				break;
+			case CTAS:
+				break;
+			case SELECT_INTO:
+				result = DDLTransducer.runSelectIntoToCTAS(result);
+				break;
 			case INSERT_TABLE:
 				result = DMLTransducer.runInsertInto(result);
 				break;

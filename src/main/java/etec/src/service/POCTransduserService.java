@@ -213,7 +213,7 @@ public class POCTransduserService {
 		String result = "";
 		List<String> lstCreate = RegexTool.getRegexTarget("CREATE\\s+TABLE\\s+\\S+", sql.toUpperCase());
 		if (lstCreate.isEmpty()) {
-			throw new SQLFormatException();
+			throw SQLFormatException.missingKeyWord("CREATE TABLE");
 		}
 		String tableNm = lstCreate.get(0).replaceAll("CREATE\\s+TABLE\\s+", "");
 		result = "IF OBJECT_ID(N'" + tableNm + "') IS NOT NULL\r\n" + "DROP TABLE " + tableNm + ";\r\n";

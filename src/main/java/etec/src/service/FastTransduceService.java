@@ -37,23 +37,32 @@ public class FastTransduceService {
 		//將字串轉為SQL
 		String paramNm = sql.replaceAll("(?i)SET\\s+([^=\\s]+)\\s*=[\\S\\s]+","$1");
 		String script = sql
+				.replaceAll("\n", "\r\n")
+				.replaceAll("\r\r", "\r")
 				.replaceAll("(?i)SET\\s+[^=\\s]+\\s*=\\s*'", "")
 				.replaceAll(";\\s*'\\s*;?",";")
-				.replaceAll("'\\s*\\+\\s*'","\t\r\n\t")
+				.replaceAll("'\\s*\\+(\\s*--[^']+)?\\s*'"," $1\t\r\n\t")
 				.replaceAll("'\\s*\\+\\s*","'+")
 				.replaceAll("\\s*\\+\\s*'","+'")
 				;
-		boolean isCTAS = SQLTypeEnum.CREATE_INSERT.equals(TransduceTool.getSQLType(script));
 		script = FamilyMartFileTransduceService.transduceSQLScript(script);
-		if(isCTAS&&"ms".equals(sqlType)) {
-			script = DDLTransducer.runCTASToSelectInto(script);
+		SQLTypeEnum azType = TransduceTool.getSQLType(script);
+		if("ms".equals(sqlType)) {
+			if(SQLTypeEnum.CTAS.equals(azType)) {
+				script = DDLTransducer.runCTASToSelectInto(script);
+			}else if(SQLTypeEnum.CREATE_TABLE.equals(azType)) {
+				script = DDLTransducer.runCreateTableAzToMs(script);
+			}
 		}
 		//將SQL轉為字串
 		if(isEncode) {
 			script = "SET " + paramNm + " = '" + script
-					.replaceAll("\r\n", " '\r\n\t+ ' ")
+					.replaceAll("\r\n", " ' + \r\n\t' ")
 					.replaceAll("\\s*'\\s*\n", " '\r\n")
-					.replaceAll("\\s+;", ";';")
+					.replaceAll("\\s*;\\s*'", ";';")
+					.replaceAll("\\s*\\+\\s*'\\s*'", "")
+					.replaceAll("(--[^']+)'\\s*\\+", "' + $1")//處理註解問題
+					//.replaceAll("'\\s*\\+\\s*--([^']+)'", "' --$1\r\n\\t+ '")//處理註解問題
 					;
 		}
 		res = script;
