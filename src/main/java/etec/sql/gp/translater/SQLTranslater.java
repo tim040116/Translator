@@ -52,6 +52,7 @@ public class SQLTranslater {
 		String res = sql;
 		res = res
 			.replaceAll("(?i)([.\\w]+)\\s*(\\([^\\)]+\\))?\\s*\\(\\s*FORMAT\\s+('[^']+')\\s*\\)", "TO_CHAR\\($1$2, $3\\)")
+			.replaceAll("(?i)CAST\\(\\s*CAST\\(([^\\(]+)\\s+AS\\s+FORMAT\\s+('[^']+')\\)\\s+AS\\s+(VARCHAR\\(\\d\\))\\)", "TO_CHAR\\($1, $2\\)")
 		;
 		return res;
 	}

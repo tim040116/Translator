@@ -45,10 +45,12 @@ public class TestSQLTranslater {
 		System.out.println("CASE 4 : "+a4.equals(GreemPlumTranslater.sql.easyReplase(q4)));
 //		System.out.println("CASE 4 : "+a4);
 //		System.out.println("CASE 4 : "+GreemPlumTranslater.sql.easyReplase(q4));
-//		//CASE5 : ADD_MONTHS
-//		String q5 = "";
-//		String a5 = "";
-//		System.out.println("CASE 5 : "+a5.equals(GreemPlumTranslater.sql.easyReplase(q5)));
+		//CASE5 : ADD_MONTHS
+		String q5 = "A.PLAN_PAY_DATE BETWEEN CAST(CAST(CAST(CAST(CREATE_NO AS DATE) AS FORMAT 'YYYY-MM') AS VARCHAR(7))||'-01' AS DATE) AND CAST(CREATE_NO AS DATE)-91";
+		String a5 = "A.PLAN_PAY_DATE BETWEEN CAST(TO_CHAR(CAST(CREATE_NO AS DATE), 'YYYY-MM')||'-01' AS DATE) AND CAST(CREATE_NO AS DATE)-91";
+		System.out.println("CASE 5 : "+a5.equals(GreemPlumTranslater.sql.easyReplase(q5)));
+		System.out.println("CASE 5 : "+a5);
+		System.out.println("CASE 5 : "+GreemPlumTranslater.sql.easyReplase(q5));
 //		//CASE6 : ADD_MONTHS
 //		String q6 = "";
 //		String a6 = "";
