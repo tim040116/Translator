@@ -1,6 +1,6 @@
 package etec.src.application;
 
-import etec.src.controller.TranslateStoreFunctionController;
+import etec.sql.az.controller.TranslateStoreFunctionController;
 import etec.view.frame.SearchFunctionFrame;
 /**
  * @version	3.3.1.0

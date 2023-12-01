@@ -4,8 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import etec.common.enums.RunStatusEnum;
+import etec.common.interfaces.Controller;
 import etec.common.utils.Log;
-import etec.src.interfaces.Controller;
 import etec.view.frame.FastTransduceFrame;
 import etec.view.panel.SearchFunctionPnl;
 

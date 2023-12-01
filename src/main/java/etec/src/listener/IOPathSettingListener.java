@@ -10,8 +10,8 @@ import javax.swing.DefaultListModel;
 import etec.common.model.BasicParams;
 import etec.common.model.element.FileListSelectElement;
 import etec.common.model.element.IOPathSettingElement;
-import etec.src.service.FileListSelectService;
-import etec.src.service.IOpathSettingService;
+import etec.sql.az.service.FileListSelectService;
+import etec.sql.az.service.IOpathSettingService;
 
 public class IOPathSettingListener implements ActionListener {
 

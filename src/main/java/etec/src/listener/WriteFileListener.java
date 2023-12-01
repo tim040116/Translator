@@ -4,8 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import etec.common.enums.RunStatusEnum;
+import etec.common.interfaces.Controller;
 import etec.common.model.element.WriteFileElement;
-import etec.src.interfaces.Controller;
 
 /*
  * 轉換語法並產生檔案

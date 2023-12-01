@@ -12,8 +12,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
 
+import etec.common.interfaces.Controller;
 import etec.common.view.panel.StatusBar;
-import etec.src.interfaces.Controller;
 import etec.src.listener.FastTransduceListener;
 
 /**

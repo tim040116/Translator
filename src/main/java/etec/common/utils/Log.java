@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import etec.main.Params;
+import etec.src.main.Params;
 
 /**
  * @author Tim

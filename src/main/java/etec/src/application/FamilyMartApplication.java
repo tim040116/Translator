@@ -1,6 +1,6 @@
 package etec.src.application;
 
-import etec.src.controller.FamilyMartController;
+import etec.sql.az.controller.FamilyMartController;
 import etec.view.frame.SearchFunctionFrame;
 
 public class FamilyMartApplication {

@@ -1,6 +1,6 @@
 package etec.src.application;
 
-import etec.src.controller.FastTransduceController;
+import etec.sql.az.controller.FastTransduceController;
 import etec.view.frame.FastTransduceFrame;
 /**
  * @version	3.3.4.0

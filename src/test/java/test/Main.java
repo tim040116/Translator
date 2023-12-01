@@ -1,0 +1,23 @@
+package test;
+
+import test.gp.translater.TestSQLTranslater;
+
+/**
+ * @author	Tim
+ * @since	2023年10月11日
+ * 
+ * 
+ * */
+public class Main {
+	
+	public static void main(String[] args) {
+		try {
+			TestSQLTranslater.run();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+
+}

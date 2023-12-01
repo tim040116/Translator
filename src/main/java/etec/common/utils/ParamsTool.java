@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
-import etec.main.ParamsFactory;
+import etec.src.main.ParamsFactory;
 
 public class ParamsTool {
 	
