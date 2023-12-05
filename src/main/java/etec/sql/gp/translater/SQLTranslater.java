@@ -12,13 +12,27 @@ import etec.common.utils.TransduceTool;
  * 
  * */
 public class SQLTranslater {
-	
+	/**
+	 * @author	Tim
+	 * @since	2023年12月5日
+	 * 
+	 * 
+	 * */
 	public String easyReplase(String script) {
-		String res = script;
+		String res = script
+				.replaceAll("(?i)\\bSEL\\b", "SELECT")//SEL
+				.replaceAll("(?i)\\bOREPLACE\\s*\\(", "REPLACE\\(")//OREPLACE
+				.replaceAll("(?i)\\bSTRTOK\\s*\\(", "SPLIT_PART\\(")//STRTOK
+				;
 		res = TransduceTool.saveTranslateFunction(res, (String t)->{
 			t = changeAddMonths(t);
 			t = changeDateFormat(t);
-			
+			t = changeIndex(t);
+			t = changeZeroIfNull(t);
+			t = changeLikeAny(t);
+			t = changeIndex(t);
+			t = changeNullIfZero(t);
+			t = changeIn(t);
 			return t;
 		});
 		res = changeTypeConversion(res);
@@ -73,6 +87,72 @@ public class SQLTranslater {
 			;
 			return t;
 		});
+		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年12月01日
+	 * 
+	 * like any 語法轉換 
+	 * LIKE ANY('','','') >> LIKE ANY(ARRAY['','',''])
+	 * 
+	 * */
+	public String changeLikeAny(String sql) {
+		String res = sql
+			.replaceAll("(?i)LIKE\\s+ANY\\s*\\(('[^']+'(,'[^']+')+)\\)", "LIKE ANY \\(ARRAY[$1])")//like any
+			;
+		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年12月01日
+	 * 
+	 * INDEX 轉換成 POSITION
+	 * 
+	 * */
+	public String changeIndex(String sql) {
+		String res = sql
+			.replaceAll("(?i)INDEX\\s*\\(([^,]+),([^\\)]+)\\)", "POSITION\\($2 IN $1\\)")//INDEX
+			;
+		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年12月05日
+	 * 
+	 * ZEROIFNULL 轉成 COALESCE
+	 * 
+	 * */
+	public String changeZeroIfNull(String sql) {
+		String res = sql
+			.replaceAll("(?i)ZEROIFNULL\\s*\\(([^\\)]+)\\)", "COALESCE\\($1,0\\)")//ZEROIFNULL
+			;
+		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年12月05日
+	 * 
+	 * IN後面一定要有括號
+	 * 
+	 * */
+	public String changeIn(String sql) {
+		String res = sql
+			.replaceAll("(?i)\\bIN\\s+(?<n1>'[^']+'(,'[^']+')+)", "IN \\(${n1}\\)")//IN
+			;
+		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年12月05日
+	 * 
+	 * NULLIFZERO改成NULLIF
+	 * 
+	 * */
+	public String changeNullIfZero(String sql) {
+		String res = sql
+			.replaceAll("(?i)NULLIFZERO\\s*\\(([^\\)]+)\\)", "NULLIF\\($1,0\\)")//NullIfZero
+			;
 		return res;
 	}
 }
