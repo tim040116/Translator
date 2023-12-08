@@ -47,26 +47,30 @@ public class TestSQLTranslater {
 //		System.out.println("CASE 4 : "+GreemPlumTranslater.sql.easyReplase(q4));
 //CASE5 : ADD_MONTHS
 		String q5 = "A.PLAN_PAY_DATE BETWEEN CAST(CAST(CAST(CAST(CREATE_NO AS DATE) AS FORMAT 'YYYY-MM') AS VARCHAR(7))||'-01' AS DATE) AND CAST(CREATE_NO AS DATE)-91";
-		String a5 = "A.PLAN_PAY_DATE BETWEEN CAST(TO_CHAR(CAST(CREATE_NO AS DATE), 'YYYY-MM')||'-01' AS DATE) AND CAST(CREATE_NO AS DATE)-91";
-		System.out.println("CASE  5 : "+a5.equals(GreemPlumTranslater.sql.easyReplase(q5)));
-//		System.out.println("CASE 5 : "+a5);
-//		System.out.println("CASE 5 : "+GreemPlumTranslater.sql.easyReplase(q5));
+		String a5 = "A.PLAN_PAY_DATE BETWEEN CAST(CAST(TO_CHAR(CAST(CREATE_NO AS DATE), 'YYYY-MM') AS VARCHAR(7))||'-01' AS DATE) AND CAST(CREATE_NO AS DATE)-91\r\n";
+		String r5 = GreemPlumTranslater.sql.easyReplase(q5);
+		System.out.println(r5);
+		System.out.println("CASE  5 : "+a5.equals(r5));
 //CASE6 : ADD_MONTHS
-//		String q6 = "SUBSTR(CAST(CAST CLNDR_DT AS DATE FORMAT 'YYYYMMDD')+1 AS DATE FORMAT 'YYYY-MM-DD'),9,2)=1";
-//		String a6 = "";
-//		System.out.println("CASE  6 : "+a6.equals(GreemPlumTranslater.sql.easyReplase(q6)));
-//CASE7 : ADD_MONTHS
-		String q7 = "";
-		String a7 = "";
-		System.out.println("CASE  7 : "+a7.equals(GreemPlumTranslater.sql.easyReplase(q7)));
+		String q6 = "SUBSTR(CAST(CAST CLNDR_DT AS DATE FORMAT 'YYYYMMDD')+1 AS DATE FORMAT 'YYYY-MM-DD'),9,2)=1";
+		String a6 = "";
+		String r6 = GreemPlumTranslater.sql.easyReplase(q6);
+		System.out.println(r6);
+		System.out.println("CASE  6 : "+a6.equals(r6));
+////CASE7 : ADD_MONTHS
+//		String q7 = "";
+//		String a7 = "";
+//		System.out.println("CASE  7 : "+a7.equals(GreemPlumTranslater.sql.easyReplase(q7)));
 //CASE8 : ADD_MONTHS
 //		String q8 = "";
 //		String a8 = "";
 //		System.out.println("CASE  8 : "+a8.equals(GreemPlumTranslater.sql.easyReplase(q8)));
 //CASE9 : ADD_MONTHS
-//		String q9 = "";
-//		String a9 = "";
-//		System.out.println("CASE  9 : "+a9.equals(GreemPlumTranslater.sql.easyReplase(q9)));
+		String q9 = "CAST(A.AP_PAYM_AMT_ORIG_PAID_DT AS DATE FORMAT 'YYYY-MM-DD')(FORMAT 'YYYY-MM')(CHAR(7))";
+		String a9 = "";
+		String r9 = GreemPlumTranslater.sql.easyReplase(q9);
+		System.out.println(r9);
+		System.out.println("CASE  9 : "+a9.equals(r9));
 //CASE10 : ADD_MONTHS
 //		String q10 = "";
 //		String a10 = "";
@@ -88,9 +92,10 @@ public class TestSQLTranslater {
 //		String a14 = "";
 //		System.out.println("CASE 14 : "+a14.equals(GreemPlumTranslater.sql.easyReplase(q14)));
 //CASE15 : 
-//		String q15 = "";
-//		String a15 = "";
-//		System.out.println("CASE 15 : "+a15.equals(GreemPlumTranslater.sql.easyReplase(q15)));
+		String q15 = ",CAST(CLNDR_MN AS DATE FORMAT 'YYYYMM') AS CLNDR_MN";
+		String a15 = ",TO_CHAR(CLNDR_MN, 'YYYYMM') AS CLNDR_MN";
+//		System.out.println(GreemPlumTranslater.sql.easyReplase(q15));
+		System.out.println("CASE 15 : "+a15.equals(GreemPlumTranslater.sql.easyReplase(q15)));
 //CASE16 : 
 //		String q16 = "";
 //		String a16 = "";
@@ -129,7 +134,7 @@ public class TestSQLTranslater {
 		String r24 = GreemPlumTranslater.sql.easyReplase(q24);
 //		System.out.println(r24);
 		System.out.println("CASE 24 : "+a24.equals(r24));
-//CASE25 : 
+//CASE25 : 不同格式間的比較
 //		String q25 = "";
 //		String a25 = "";
 //		System.out.println("CASE 25 : "+a25.equals(GreemPlumTranslater.sql.easyReplase(q25)));
@@ -137,7 +142,7 @@ public class TestSQLTranslater {
 		String q26 = "ZEROIFNULL (A.PLAN_ETD_QTY) AS X.PLAN_QTY";
 		String a26 = "COALESCE(A.PLAN_ETD_QTY,0) AS X.PLAN_QTY";
 		System.out.println("CASE 26 : "+a26.equals(GreemPlumTranslater.sql.easyReplase(q26)));
-//CASE27 : 
+//CASE27 : 不同格式間的比較
 //		String q27 = "";
 //		String a27 = "";
 //		System.out.println("CASE 27 : "+a27.equals(GreemPlumTranslater.sql.easyReplase(q27)));
@@ -163,9 +168,10 @@ public class TestSQLTranslater {
 //		System.out.println(r29);
 		System.out.println("CASE 29 : "+a29.equals(r29));
 //CASE30 : 
-//		String q30 = "";
-//		String a30 = "";
-//		System.out.println("CASE 30 : "+a30.equals(GreemPlumTranslater.sql.easyReplase(q30)));
+		String q30 = "SUBSTR(CAST(CAST(CLNDR_DT AS DATE FORMAT 'YYYYMMDD')+1 AS DATE FORMAT 'YYYY-MM-DD'),9,2)";
+		String a30 = "";
+		System.out.println(GreemPlumTranslater.sql.easyReplase(q30));
+		System.out.println("CASE 30 : "+a30.equals(GreemPlumTranslater.sql.easyReplase(q30)));
 //CASE31 : 
 //		String q31 = "";
 //		String a31 = "";
@@ -248,29 +254,85 @@ public class TestSQLTranslater {
 //		System.out.println(r46_2);
 		System.out.println("CASE 462: "+a46_2.equals(r46_2));
 //CASE47 : 
-//		String q47 = "";
-//		String a47 = "";
-//		System.out.println("CASE 47 : "+a47.equals(GreemPlumTranslater.sql.easyReplase(q47)));
+		String q47 = "SELECT AAA\r\n" + 
+				"	UNION ALL\r\n" + 
+				"	SELECT BBB\r\n" + 
+				"		MINUS\r\n" + 
+				"		SELECT (\r\n" + 
+				"			SELECT * FROM CCC\r\n" + 
+				"		) XXX\r\n" + 
+				"	UNION ALL\r\n" + 
+				"	SELECT DDD";
+		String a47 = "SELECT AAA\r\n" + 
+				"	UNION ALL\r\n" + 
+				"	SELECT BBB\r\n" + 
+				"		EXCEPT\r\n" + 
+				"		SELECT (\r\n" + 
+				"			SELECT * FROM CCC\r\n" + 
+				"		) XXX\r\n" + 
+				"	UNION ALL\r\n" + 
+				"	SELECT DDD";
+		System.out.println("CASE 47 : "+a47.equals(GreemPlumTranslater.sql.easyReplase(q47)));
 //CASE48 : 
-//		String q48 = "";
-//		String a48 = "";
-//		System.out.println("CASE 48 : "+a48.equals(GreemPlumTranslater.sql.easyReplase(q48)));
+		String q48 = "CREATE VOLATILE TABLE vt_tmp AS aaa";
+		String a48 = "CREATE temp TABLE vt_tmp AS aaa";
+		System.out.println("CASE 48 : "+a48.equals(GreemPlumTranslater.ddl.changeCreateVolaTileTable(q48)));
 //CASE49 : 
-//		String q49 = "";
-//		String a49 = "";
-//		System.out.println("CASE 49 : "+a49.equals(GreemPlumTranslater.sql.easyReplase(q49)));
+		String q49 = "CURR_ROWID	INTEGER GENERATED ALWAYS AS IDENTITY (CYCLE)";
+		String a49 = "CURR_ROWID	SERIAL";
+		System.out.println("CASE 49 : "+a49.equals(GreemPlumTranslater.ddl.changeIntegerGeneratedAlwaysAsIdentity(q49)));
 //CASE50 : 
-//		String q50 = "";
-//		String a50 = "";
-//		System.out.println("CASE 50 : "+a50.equals(GreemPlumTranslater.sql.easyReplase(q50)));
+		String q50 = "DELETE FROM ${TEMP_DB}.LCD6 A\r\n" + 
+				"		   ,${TEMP_DB}.LCD6 B\r\n" + 
+				" WHERE A.LCD_LEVEL > B.LCD_LEVEL";
+		String a50 = "DELETE FROM ${TEMP_DB}.LCD6 A\r\n" + 
+				" USING ${TEMP_DB}.LCD6 B\r\n" + 
+				" WHERE A.LCD_LEVEL > B.LCD_LEVEL";
+		String r50 = GreemPlumTranslater.dml.changeDeleteTableUsing(q50);
+//		System.out.println(r50);
+		System.out.println("CASE 50 : "+a50.equals(r50));
 //CASE51 : 
 //		String q51 = "";
 //		String a51 = "";
 //		System.out.println("CASE 51 : "+a51.equals(GreemPlumTranslater.sql.easyReplase(q51)));
 //CASE52 : 
-//		String q52 = "";
-//		String a52 = "";
-//		System.out.println("CASE 52 : "+a52.equals(GreemPlumTranslater.sql.easyReplase(q52)));
+		String q52 = "DROP TABLE ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1\r\n" + 
+				";\r\n" + 
+				"\r\n" + 
+				"CREATE TABLE ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1(\r\n" + 
+				"	 REVSN_NUM						VARCHAR(20)\r\n" + 
+				"	,BM_CNFM_CD						VARCHAR(6)\r\n" + 
+				"	,CNTR_BU_DEPT_PARTY_ID			VARCHAR(50)\r\n" + 
+				"	,CNTR_BU_DEPT_PARTY_NAME		VARCHAR(50)\r\n" + 
+				"	,DVSN_GRP_DEPT_PARTY_ID			VARCHAR(50)\r\n" + 
+				"	,ORIG_CNTR_BU_DEPT_PARTY_ID		VARCHAR(50) --20180320 一事件新增事業群\r\n" + 
+				"	,ORIG_CNTR_BU_DEPT_PARTY_NAME	VARCHAR(50)\r\n" + 
+				"	,NEW_BU_IND						VARCHAR(50)\r\n" + 
+				"	,EXPN_TYPE_CD					VARCHAR(50)\r\n" + 
+				"	,MFRS_TYPE_CD					VARCHAR(50)\r\n" + 
+				"	,GLBL_CRNCY_AMT					DECIMAL(30,4)\r\n" + 
+				")PRIMARY INDEX(REVSN_NUM,BM_CNFM_CD,CNTR_BU_DEPT_PARTY_ID,CNTR_BU_DEPT_PARTY_NAME,DVSN_GRP_DEPT_PARTY_ID)\r\n" + 
+				";";
+		String a52 = "DROP TABLE IF EXISTS ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1;\r\n" + 
+				"\r\n" + 
+				"CREATE TABLE ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1(\r\n" + 
+				"	 REVSN_NUM						VARCHAR(20)\r\n" + 
+				"	,BM_CNFM_CD						VARCHAR(6)\r\n" + 
+				"	,CNTR_BU_DEPT_PARTY_ID			VARCHAR(50)\r\n" + 
+				"	,CNTR_BU_DEPT_PARTY_NAME		VARCHAR(50)\r\n" + 
+				"	,DVSN_GRP_DEPT_PARTY_ID			VARCHAR(50)\r\n" + 
+				"	,ORIG_CNTR_BU_DEPT_PARTY_ID		VARCHAR(50) --20180320 一事件新增事業群\r\n" + 
+				"	,ORIG_CNTR_BU_DEPT_PARTY_NAME	VARCHAR(50)\r\n" + 
+				"	,NEW_BU_IND						VARCHAR(50)\r\n" + 
+				"	,EXPN_TYPE_CD					VARCHAR(50)\r\n" + 
+				"	,MFRS_TYPE_CD					VARCHAR(50)\r\n" + 
+				"	,GLBL_CRNCY_AMT					DECIMAL(30,4)\r\n" + 
+				")DISTRIBUTED BY (REVSN_NUM,BM_CNFM_CD,CNTR_BU_DEPT_PARTY_ID,CNTR_BU_DEPT_PARTY_NAME,DVSN_GRP_DEPT_PARTY_ID)\r\n" + 
+				";";
+		String r52 = GreemPlumTranslater.ddl.changeDropTableIfExist(q52);
+		r52 = GreemPlumTranslater.ddl.changePrimaryIndex(r52);
+//		System.out.println(r52);
+		System.out.println("CASE 52 : "+a52.equals(r52));
 //CASE53 : 
 //		String q53 = "";
 //		String a53 = "";

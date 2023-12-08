@@ -76,4 +76,43 @@ public class DDLTranslater {
 			;
 		return res;
 	}
+	/**
+	 * @author	Tim
+	 * @since	2023年12月5日
+	 * 
+	 * CREATE VOLATILE TABLE 改成 CREATE temp TABLE
+	 * 
+	 * */
+	public String changeCreateVolaTileTable(String sql) {
+		String res = sql
+			.replaceAll("(?i)\\bVOLATILE\\b", "temp")
+			;
+		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年12月6日
+	 * 
+	 * INTEGER GENERATED ALWAYS AS IDENTITY (CYCLE) 改成 SERIAL
+	 * 
+	 * */
+	public String changeIntegerGeneratedAlwaysAsIdentity(String sql) {
+		String res = sql
+			.replaceAll("(?i)\\bINTEGER\\s+GENERATED\\s+ALWAYS\\s+AS\\s+IDENTITY\\s*\\([^\\)]+\\)", "SERIAL")
+			;
+		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年12月6日
+	 * 
+	 * PRIMARY INDEX 要改成 DISTRIBUTED
+	 * 
+	 * */
+	public String changePrimaryIndex(String sql) {
+		String res = sql
+			.replaceAll("(?i)PRIMARY\\s+INDEX\\s*\\(", "DISTRIBUTED BY \\(")
+			;
+		return res;
+	}
 }

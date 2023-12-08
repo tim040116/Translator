@@ -13,7 +13,7 @@ public class OtherTranslater {
 	 * @author	Tim
 	 * @since	2023年12月5日
 	 * 
-	 * 
+	 * LOCKING TABLE 要註解掉
 	 * 
 	 * */
 	public String changeLockingTable(String sql) {

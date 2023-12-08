@@ -20,6 +20,7 @@ public class SQLTranslater {
 	 * */
 	public String easyReplase(String script) {
 		String res = script
+				.replaceAll("(?i)\\bMINUS\\b", "EXCEPT")//MINUS
 				.replaceAll("(?i)\\bSEL\\b", "SELECT")//SEL
 				.replaceAll("(?i)\\bOREPLACE\\s*\\(", "REPLACE\\(")//OREPLACE
 				.replaceAll("(?i)\\bSTRTOK\\s*\\(", "SPLIT_PART\\(")//STRTOK
@@ -59,14 +60,19 @@ public class SQLTranslater {
 	 * @author	Tim
 	 * @since	2023年11月30日
 	 * 
-	 * format語法改成to_char
+	 * ...(FORMAT 'YYYY-MM-DD') 轉成 TO_CHAR(...,'YYYY-MM-DD')
+	 * CAST( ... AS FORMAT '') 轉成 TO_CHAR
 	 * 
+	 * 
+	 * 20231206	Tim	因涉及邏輯問題暫時廢棄
 	 * */
+	@Deprecated
 	public String changeDateFormat(String sql) {
 		String res = sql;
 		res = res
-			.replaceAll("(?i)([.\\w]+)\\s*(\\([^\\)]+\\))?\\s*\\(\\s*FORMAT\\s+('[^']+')\\s*\\)", "TO_CHAR\\($1$2, $3\\)")
-			.replaceAll("(?i)CAST\\(\\s*CAST\\(([^\\(]+)\\s+AS\\s+FORMAT\\s+('[^']+')\\)\\s+AS\\s+(VARCHAR\\(\\d\\))\\)", "TO_CHAR\\($1, $2\\)")
+			.replaceAll("(?i)([.\\w]+)\\s*(\\([^\\)]+\\))?\\s*\\(\\s*FORMAT\\s+('[^']+')\\s*\\)", "TO_CHAR\\($1$2, $3\\)")//(FORMAT 'YYYY-MM-DD')
+			.replaceAll("(?i)CAST\\(([^\\(]+)\\s+AS(\\s+DATE)?\\s+FORMAT\\s+('[^']+')\\)", "TO_CHAR\\($1, $3\\)")//CAST( ... AS FORMAT '')改成TO_CHAR
+//			.replaceAll("(?i)AS\\s+(DATE\\s+)?FORMAT\\s+'[^']+'\\s*\\)", "AS DATE\\)")//CAST( ... AS DATE FORMAT)
 		;
 		return res;
 	}
