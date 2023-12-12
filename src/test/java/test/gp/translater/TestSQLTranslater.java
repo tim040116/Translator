@@ -36,6 +36,7 @@ public class TestSQLTranslater {
 //CASE3 : DATE_FORMAT
 		String q3 = "CAST((A.AP_PAYM_PLAN_PAID_DT (FORMAT 'YYYY-MM')) as CHAR(7)) AS AP_PAYM_AMT_ORIG_PAID_MN,";
 		String a3 = "CAST((TO_CHAR(A.AP_PAYM_PLAN_PAID_DT, 'YYYY-MM')) as CHAR(7)) AS AP_PAYM_AMT_ORIG_PAID_MN,";
+//		System.out.println(GreemPlumTranslater.sql.easyReplase(q3));
 		System.out.println("CASE  3 : "+a3.equals(GreemPlumTranslater.sql.easyReplase(q3)));
 //		System.out.println("CASE 3 : "+a3);
 //		System.out.println("CASE 3 : "+GreemPlumTranslater.sql.easyReplase(q3));
@@ -47,20 +48,26 @@ public class TestSQLTranslater {
 //		System.out.println("CASE 4 : "+GreemPlumTranslater.sql.easyReplase(q4));
 //CASE5 : ADD_MONTHS
 		String q5 = "A.PLAN_PAY_DATE BETWEEN CAST(CAST(CAST(CAST(CREATE_NO AS DATE) AS FORMAT 'YYYY-MM') AS VARCHAR(7))||'-01' AS DATE) AND CAST(CREATE_NO AS DATE)-91";
-		String a5 = "A.PLAN_PAY_DATE BETWEEN CAST(CAST(TO_CHAR(CAST(CREATE_NO AS DATE), 'YYYY-MM') AS VARCHAR(7))||'-01' AS DATE) AND CAST(CREATE_NO AS DATE)-91\r\n";
+		String a5 = "A.PLAN_PAY_DATE BETWEEN CAST(TO_CHAR(CAST(CREATE_NO AS DATE),'YYYY-MM')||'-01' AS DATE) AND CAST(CREATE_NO AS DATE)-91";
 		String r5 = GreemPlumTranslater.sql.easyReplase(q5);
-		System.out.println(r5);
+//		System.out.println(r5);
 		System.out.println("CASE  5 : "+a5.equals(r5));
 //CASE6 : ADD_MONTHS
-		String q6 = "SUBSTR(CAST(CAST CLNDR_DT AS DATE FORMAT 'YYYYMMDD')+1 AS DATE FORMAT 'YYYY-MM-DD'),9,2)=1";
+		String q6 = "SUBSTR(CAST(CAST(CLNDR_DT AS DATE FORMAT 'YYYYMMDD')+1 AS DATE FORMAT 'YYYY-MM-DD'),9,2)=1";
 		String a6 = "";
 		String r6 = GreemPlumTranslater.sql.easyReplase(q6);
 		System.out.println(r6);
 		System.out.println("CASE  6 : "+a6.equals(r6));
 ////CASE7 : ADD_MONTHS
-//		String q7 = "";
-//		String a7 = "";
-//		System.out.println("CASE  7 : "+a7.equals(GreemPlumTranslater.sql.easyReplase(q7)));
+		String q7 = "SUBSTR(CAST(DATE_ID AS DATE FORMAT 'YYYY-MM-DD'),1,7)\r\n" + 
+				"=\r\n" + 
+				"SUBSTR(ADD_MONTHS(CAST('${TXDATE}' AS DATE FORMAT 'YYYY-MM-DD'),-1),1,4)\r\n" + 
+				"||'-'||\r\n" + 
+				"SUBSTR(ADD_MONTHS(CAST('${TXDATE}' AS DATE FORMAT 'YYYY-MM-DD'),-1),6,2)";
+		String a7 = "";
+		String r7 = GreemPlumTranslater.sql.easyReplase(q7);
+		System.out.println(r7);
+		System.out.println("CASE  7 : "+a7.equals(r7));
 //CASE8 : ADD_MONTHS
 //		String q8 = "";
 //		String a8 = "";

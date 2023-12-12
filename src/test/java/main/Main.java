@@ -19,18 +19,11 @@ public class Main {
 			ParamsFactory.init();
 			String now = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
 			//讀檔
-			String text = 
-					 "	CAST(C.L_WEEK_ID	AS INTEGER) AS L_WEEK_ID, "
-					+" DECODE(NLV(A.UPLOAD_STNUM,0),0,0, PMART.DBO.DIVIDE_BY_ZERO(CAST(A.AMT AS DECIMAL(18,6)) ,A.UPLOAD_STNUM)) AS AMT, "
-					+" DECODE(NLV(A.UPLOAD_STNUM,0),0,0, PMART.DBO.DIVIDE_BY_ZERO(CAST(A.CUST_NUM AS DECIMAL(18,6)) ,A.UPLOAD_STNUM)) AS CUST_NUM, "
-					+ " AS P_AMT, ";
-//			text = text.replaceAll(
-//					 "(?i)INSTR\\s*\\(([@A-Za-z0-9_'\\(\\)]+),('[^']+'+)(,[0-9]+)?\\)"
-//					, "CHARINDEX($2,$1 $3)"
-//				);
-			
-					
-			System.out.println(text);
+			String a = "YYYY-MM-DD";
+			int substr1 = Integer.parseInt("9")-1;
+			int substr2 = substr1+Integer.parseInt("2");
+			a = a.substring(substr1, substr2);
+			System.out.println(a);
 			//每一個sf的
 		} catch (Exception e) {
 			e.printStackTrace();

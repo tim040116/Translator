@@ -45,15 +45,15 @@ public class RegexTool {
 		return res;
 	}
 	// 取得符合正規表達式的字串
-	//盡量不要用(?=)類型的語法
 	public static List<String> getRegexTarget(String regex, String content) {
 		List<String> lstRes = new ArrayList<String>();
 		Pattern p = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(content);
 		while (m.find()) {
-			for (int i = 0; i <= m.groupCount(); i++) {
-				lstRes.add(m.group(i));
-			}
+//			for (int i = 0; i <= m.groupCount(); i++) {
+//				lstRes.add(m.group());
+//			}
+			lstRes.add(m.group(0));
 		}
 		return lstRes;
 	}
