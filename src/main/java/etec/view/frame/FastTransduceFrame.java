@@ -3,8 +3,6 @@ package etec.view.frame;
 import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 import etec.common.interfaces.Controller;
 import etec.view.panel.FastTransducePnl;

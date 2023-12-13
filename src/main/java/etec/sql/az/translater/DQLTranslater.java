@@ -43,7 +43,7 @@ public class DQLTranslater {
 				// strtok
 				.replaceAll("(?i)\\bstrtok\\s*\\(", "STRING_SPLIT(")
 				// rank over
-				.replaceAll("(?<!_|[A-Za-z0-9])[Rr][Aa][Nn][Kk]\\((?! |\\))", " RANK ( ) OVER ( order by ")
+				.replaceAll("(?i)(?<!_|[A-Za-z0-9])RANK\\((?! |\\))", " RANK ( ) OVER ( order by ")
 				// extract
 				.replaceAll("(?i)EXTRACT\\s*\\(\\s*(DAY|MONTH|YEAR)\\s+FROM", "DatePart($1 ,")
 				/**
@@ -82,9 +82,9 @@ public class DQLTranslater {
 		// RegexTool.getRegexTarget2("[Aa][Dd]{2}_[Mm][Oo][Nn][Tt][Hh][Ss]\\([^\\)]*\\)
 		// *,(-?[0-9]*) *\\)",res);
 		List<String> lst = RegexTool
-				.getRegexTarget2("[Aa][Dd][Dd]_[Mm][Oo][Nn][Tt][Hh][Ss]\\([^\\)]*\\)?,(-?[0-9]*) *\\)", res);
+				.getRegexTarget("ADD_MONTHS\\([^\\)]*\\)?,(-?[0-9]*) *\\)", res);
 		for (String str : lst) {
-			String[] param = str.replaceAll(RegexTool.getReg("add_Months\\(|\\)$"), "").split(",");
+			String[] param = str.replaceAll("(?i)add_Months\\(|\\)$", "").split(",");
 			res = RegexTool.encodeSQL(res);
 			String oldstr = RegexTool.encodeSQL(str);
 			String newstr = RegexTool.encodeSQL("DateAdd(MONTH," + param[1].trim() + "," + param[0].trim() + ")");
@@ -100,14 +100,14 @@ public class DQLTranslater {
 	public static String changeSample(String selectSQL) {
 		String result = selectSQL;
 		// 取得sample
-		List<String> lstSample = RegexTool.getRegexTarget("[Ss][Aa][Mm][Pp][Ll][Ee] +\\d+\\s*;", selectSQL);
+		List<String> lstSample = RegexTool.getRegexTarget("(?i)SAMPLE\\s+\\d+\\s*;", selectSQL);
 		// 是否存在sample
 		if (lstSample.isEmpty()) {
 			return selectSQL;
 		}
 		String sample = " SELECT TOP " + RegexTool.getRegexTarget("\\d+", lstSample.get(0)).get(0) + " ";
-		result = result.replaceFirst("[Ss][Ee][Ll][Ee][Cc][Tt]", sample)
-				.replaceAll("[Ss][Aa][Mm][Pp][Ll][Ee] +\\d+\\s*;", ";");
+		result = result.replaceFirst("(?i)SELECT", sample)
+				.replaceAll("(?i)SAMPLE\\s+\\d+\\s*;", ";");
 		return result;
 	}
 

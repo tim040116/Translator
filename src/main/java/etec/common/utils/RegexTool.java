@@ -91,10 +91,17 @@ public class RegexTool {
 		}
 		return lstRes;
 	}
-	// 正則表達式不區分大小寫
+	/**
+	 * @author	Tim
+	 * @since	2023年12月13日
+	 * @deprecated
+	 * 
+	 * 正則表達式不區分大小寫<br>
+	 * 請改用(?i)語法
+	 * */
 	public static String getReg(String str) {
 		String[] ar = str.split("");
-		String res = "";
+		String res = "(?i)";
 		for (String s : ar) {
 			if (s.matches("[A-Za-z]")) {
 				res += "[" + s.toUpperCase() + s.toLowerCase() + "]";
@@ -168,7 +175,17 @@ public class RegexTool {
 		String tmp = epath.replaceAll(eroot, "");
 		return decodeSQL(tmp).replaceAll("<encodingCode_BackSlash>","\\\\");
 	}
-	//把括弧內的逗號置換掉
+	/**
+	 * @author	Tim
+	 * @since	2023年12月13日
+	 * @deprecated
+	 * 
+	 * <h1>把括弧內的逗號置換掉</h1>
+	 * 
+	 * 請統一改用<br>
+	 *  {@link ConvertFunctionsSafely #saveTranslateFunction(String, Function)}
+	 * 
+	 * */
 	public static String encodeCommaInBracket(String context) {
 		String res = "";
 		int cntBracket = 0;
@@ -186,6 +203,17 @@ public class RegexTool {
 		}
 		return res;
 	}
+	/**
+	 * @author	Tim
+	 * @since	2023年12月13日
+	 * @deprecated
+	 * 
+	 * <h1>把括弧內的逗號置換掉</h1>
+	 * 
+	 * 請統一改用<br>
+	 *  {@link ConvertFunctionsSafely #saveTranslateFunction(String, Function)}
+	 * 
+	 * */
 	public static String decodeCommaInBracket(String context) {
 		String res = context.replaceAll("<encodingCode_Comma>", ",");
 		return res;

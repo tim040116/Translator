@@ -7,7 +7,6 @@ import etec.common.enums.RunStatusEnum;
 import etec.common.interfaces.Controller;
 import etec.common.utils.Log;
 import etec.view.frame.FastTransduceFrame;
-import etec.view.panel.SearchFunctionPnl;
 
 public class FastTransduceListener implements ActionListener {
 

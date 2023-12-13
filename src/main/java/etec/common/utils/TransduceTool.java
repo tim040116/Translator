@@ -1,15 +1,9 @@
 package etec.common.utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.regex.Matcher;
-
-import etec.common.enums.SQLTypeEnum;
-import etec.sql.az.translater.DQLTranslater;
-import etec.sql.az.translater.OtherTranslater;
 
 /**
  * @author	Tim
@@ -31,29 +25,30 @@ public class TransduceTool {
 		String res = sql;
 		res = res
 				//compress
-				.replaceAll("COMPRESS[^\\r\\n]*", "")
-				.replaceAll(",?\\s*NO FALLBACK", "")
-				.replaceAll(",?\\s*NO JOURNAL", "")
-				.replaceAll(",?\\s*NO LOG", "")
-				.replaceAll(",?\\s*DEFAULT MERGEBLOCKRATIO", "")
-				.replaceAll(",?\\s*NO BEFORE JOURNAL", "")
-				.replaceAll(",?\\s*NO AFTER JOURNAL", "")
-				.replaceAll(",?\\s*CHECKSUM = DEFAULT", "")
+				.replaceAll("(?i)COMPRESS[^\\r\\n]*", "")
+				.replaceAll("(?i),?\\s*NO FALLBACK", "")
+				.replaceAll("(?i),?\\s*NO JOURNAL", "")
+				.replaceAll("(?i),?\\s*NO LOG", "")
+				.replaceAll("(?i),?\\s*DEFAULT MERGEBLOCKRATIO", "")
+				.replaceAll("(?i),?\\s*NO BEFORE JOURNAL", "")
+				.replaceAll("(?i),?\\s*NO AFTER JOURNAL", "")
+				.replaceAll("(?i),?\\s*CHECKSUM = DEFAULT", "")
 				//CHARACTER SET
-				.replaceAll(RegexTool.getReg("CHARACTER SET ")+"\\w+", "")
+				.replaceAll("(?i)CHARACTER\\s+SET\\s+\\w+", "")
 				//區分大小寫
-				.replaceAll(RegexTool.getReg(" NOT CASESPECIFIC"), "")
-				.replaceAll(RegexTool.getReg(" CASESPECIFIC"), " Collate Chinese_Taiwan_Stroke_CI_AS")
+				.replaceAll("(?i)\\bNOT\\s+CASESPECIFIC", "")
+				.replaceAll("(?i)\\bCASESPECIFIC\\b", " Collate Chinese_Taiwan_Stroke_CI_AS")
 				//title
-				.replaceAll(RegexTool.getReg("Title ")+"[^\\r\\n]*", "")
+				.replaceAll("(?i)Title\\s+[^\\r\\n]*", "")
 				//PARTITION BY RANGE_N
-				.replaceAll(RegexTool.getReg("PARTITION BY RANGE_N\\([^\\)]*\\)"),"")
+				.replaceAll("(?i)PARTITION\\s+BY\\s+RANGE_N\\([^\\)]*\\)","")
 				//rank over
-				.replaceAll("(?<!_|[A-Za-z0-9])[Rr][Aa][Nn][Kk]\\((?! |\\))", " RANK ( ) OVER ( order by ")//all
+				.replaceAll("(?i)(?<!_|[A-Za-z0-9])RANK\\((?! |\\))", " RANK ( ) OVER ( order by ")//all
 				//extract
-				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Dd][Aa][Yy] *[Ff][Rr][Oo][Mm]", "DatePart(day ,")//all
-				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Mm][Oo][Nn][Tt][Hh] *[Ff][Rr][Oo][Mm]", "DatePart(month ,")//all
-				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Yy][Ee][Aa][Rr] *[Ff][Rr][Oo][Mm]", "DatePart(year ,")//all
+				.replaceAll("(?i)EXTRACT\\s*\\(\\s**(YEAR|MONTH|DAY)\\s*FROM", "DatePart($1,")//all
+//				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Dd][Aa][Yy] *[Ff][Rr][Oo][Mm]", "DatePart(day ,")//all
+//				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Mm][Oo][Nn][Tt][Hh] *[Ff][Rr][Oo][Mm]", "DatePart(month ,")//all
+//				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Yy][Ee][Aa][Rr] *[Ff][Rr][Oo][Mm]", "DatePart(year ,")//all
 				;
 		
 		return res;
@@ -270,49 +265,6 @@ public class TransduceTool {
 		return res;
 	}
 	
-	/**
-	 * @author	Tim
-	 * @since	2023年11月30日
-	 * 	
-	 * 會依小括號進行分層
-	 * 避免函式轉換時造成錯位
-	 * */
-	public static String saveTranslateFunction(String script,Function<String, String> function) {
-		String res = "";
-		int cntBracket = 0;
-		int maxCnt = 0;
-		//encode
-		for(String c : script.split("")) {
-			if( "(".equals(c)) {
-				cntBracket++;
-				c = "<saveTranslateFunctionMark_leftquater_"+cntBracket+">";
-				
-			}else if(")".equals(c)) {
-				
-				c = "<saveTranslateFunctionMark_rightquater_"+cntBracket+">";
-				cntBracket--;
-			}else if(",".equals(c)) {
-				c = "<saveTranslateFunctionMark_comma_"+cntBracket+">";
-			}
-			if(cntBracket>maxCnt) {
-				maxCnt = cntBracket;
-			}
-			res+=c;
-		}
-		//decode
-		for(int i = 0;i<=maxCnt+1;i++) {
-			String leftQuaterMark = "<saveTranslateFunctionMark_leftquater_"+i+">";
-			String rightQuaterMark = "<saveTranslateFunctionMark_rightquater_"+i+">";
-			String commaMark = "<saveTranslateFunctionMark_comma_"+i+">";
-			res = function.apply(res);
-			res = res
-					.replaceAll(leftQuaterMark, "(")
-					.replaceAll(rightQuaterMark, ")")
-					.replaceAll(commaMark, ",")
-					;
-			
-		}
-		return res;
-	}
+	
 	
 }

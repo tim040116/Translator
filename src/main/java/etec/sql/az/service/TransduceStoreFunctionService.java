@@ -89,8 +89,8 @@ public class TransduceStoreFunctionService {
 		//初步處理
 		text = text
 				.replaceAll(" {2,3}", "\t")
-				.replaceAll("\"RequestText\"", "")
-				.replaceAll("DECLARE EXIT HANDLER FOR SQLEXCEPTION\r\n" + 
+				.replaceAll("(?i)\"RequestText\"", "")
+				.replaceAll("(?i)DECLARE EXIT HANDLER FOR SQLEXCEPTION\r\n" + 
 						"BEGIN\r\n" + 
 						"END;", "")
 				;
@@ -101,12 +101,14 @@ public class TransduceStoreFunctionService {
 		 * 應Joyce要求，SQL的註解不應該被去除
 		 * */
 //		String sp = TransduceTool.cleanRemark(text.toUpperCase());
-		String sp = text.toUpperCase().trim();
+		String sp = text
+//				.toUpperCase()
+				.trim();
 		String txtHeader = "";
 		String txtContext = "";
 		int step = 0;
 		for(String line : sp.split("\r\n")) {
-			if(line.matches("\\s*(SP:)?BEGIN\\s*")) {
+			if(line.matches("(?i)\\s*(SP:)?BEGIN\\s*")) {
 				step=1;
 			}
 			if(step==0) {
@@ -115,8 +117,9 @@ public class TransduceStoreFunctionService {
 					continue;
 				}
 				txtHeader+=(line+"\r\n")
-						.replaceAll("OUT\\s+(\\S+)", "$1")
-						.replaceAll("IN\\s+(\\S+)", "$1");
+						.replaceAll("(?i)OUT\\s+(\\S+\\s+\\S+)", "$1 OUT ")
+						.replaceAll("(?i), OUT", " OUT ,")
+						.replaceAll("(?i)IN\\s+(\\S+)", "$1");
 			}else if(step==1){
 				txtContext+=line+"\r\n";
 			}
@@ -124,8 +127,8 @@ public class TransduceStoreFunctionService {
 		}
 		//
 		//取得檔名
-		String spName = RegexTool.getRegexTargetFirst("^\\s*\\S+\\s+PROCEDURE\\s+[^\\(]+", TransduceTool.cleanRemark(sp))
-				.replaceAll("^\\s*\\S+\\s+PROCEDURE\\s+", "");
+		String spName = RegexTool.getRegexTargetFirst("(?i)^\\s*\\S+\\s+PROCEDURE\\s+[^\\(]+", TransduceTool.cleanRemark(sp))
+				.replaceAll("(?i)^\\s*\\S+\\s+PROCEDURE\\s+", "");
 		//轉換
 		txtContext = transformSQL(txtContext);
 		String script = txtHeader
@@ -134,25 +137,25 @@ public class TransduceStoreFunctionService {
 		//header的參數
 		List<String> lstParams = new ArrayList<String>();
 		txtHeader = TransduceTool.cleanRemark(txtHeader)
-				.replaceAll("\\bCASESPECIFIC\\b", "")
-				.replaceAll("CHARACTER(\\s+SET)?\\s+\\w+", "")
-				.replaceAll("SQL\\s+SECURITY\\s+INVOKER", "")
+				.replaceAll("(?i)\\bCASESPECIFIC\\b", "")
+				.replaceAll("(?i)CHARACTER(\\s+SET)?\\s+\\w+", "")
+				.replaceAll("(?i)SQL\\s+SECURITY\\s+INVOKER", "")
 				.replaceAll(",", " ,")
 				.replaceAll("^[^\\(]+\\(","")
-				.replaceAll("SP:","")
+				.replaceAll("(?i)SP:","")
 				.replaceAll("\\)\\s*$","")
 				;
 		String headerParams = txtHeader;
 		headerParams = headerParams.replaceAll("--.*", "");
 //		headerParams = headerParams.replaceAll("^[^\\(]+\\(","");
-		headerParams = headerParams.replaceAll("\\)\\s*SQL SECURITY INVOKER","");
+		headerParams = headerParams.replaceAll("(?i)\\)\\s*SQL SECURITY INVOKER","");
 		headerParams = headerParams.replaceAll("\\([^\\)]+\\)", "");
 		headerParams = headerParams.replaceAll("([^,\\s]+)\\s+([^,\\s]+)", "$1");
 		headerParams = headerParams.replaceAll("([^,\\s]+)\\s+([^,]+)","$1");
 				;
 		lstParams.addAll(Arrays.asList(headerParams.split("\\s*,\\s*")));
 		//DECLARE的參數
-		lstParams.addAll(RegexTool.getRegexTarget("(?<=DECLARE )\\S+", txtContext));
+		lstParams.addAll(RegexTool.getRegexTarget("(?i)(?<=DECLARE )\\S+", txtContext));
 		//參數置換
 		script = OtherTranslater.transduceDECLARE(lstParams, script);
 		//包裝
@@ -189,30 +192,30 @@ public class TransduceStoreFunctionService {
 				.replaceAll("^\"", "")
 				.replaceAll("\"\\+$", "");
 		//取得檔名
-		String sfName = RegexTool.getRegexTargetFirst("^\\s*\\S+\\s+FUNCTION\\s+[^\\(]+", sf)
-				.replaceAll("^\\s*\\S+\\s+FUNCTION\\s+", "");
+		String sfName = RegexTool.getRegexTargetFirst("(?i)^\\s*\\S+\\s+FUNCTION\\s+[^\\(]+", sf)
+				.replaceAll("(?i)^\\s*\\S+\\s+FUNCTION\\s+", "");
 		//取得前段
-		String txtHeader = RegexTool.getRegexTargetFirst("^[\\S\\s]+\\s+RETURN\\s+", sf).trim()+"\r\n";
+		String txtHeader = RegexTool.getRegexTargetFirst("(?i)^[\\S\\s]+\\s+RETURN\\s+", sf).trim()+"\r\n";
 		//取得sql
-		String txtSQL = RegexTool.getRegexTargetFirst("\\sRETURN\\s+[^;]+;", sf).replaceAll("\\s*RETURN\\s+", "").trim();
+		String txtSQL = RegexTool.getRegexTargetFirst("(?i)\\sRETURN\\s+[^;]+;", sf).replaceAll("(?i)\\s*RETURN\\s+", "").trim();
 		//轉換
 		txtSQL = transformSQL(txtSQL);
 		String script = txtHeader+txtSQL;
 		//header的參數
 		List<String> lstParams = new ArrayList<String>();
 		String headerParams = txtHeader
-				.replaceAll("\\bCASESPECIFIC\\b", "")
-				.replaceAll("CHARACTER(\\s+SET)?\\s+\\w+", "")
-				.replaceAll("SQL\\s+SECURITY\\s+INVOKER", "")
+				.replaceAll("(?i)\\bCASESPECIFIC\\b", "")
+				.replaceAll("(?i)CHARACTER(\\s+SET)?\\s+\\w+", "")
+				.replaceAll("(?i)SQL\\s+SECURITY\\s+INVOKER", "")
 				.replaceAll("^[^\\(]+\\(","")
-				.replaceAll("\\)\\s*RETURNS",TransduceTool.SPLIT_CHAR_RED)
+				.replaceAll("(?i)\\)\\s*RETURNS",TransduceTool.SPLIT_CHAR_RED)
 				.replaceAll(TransduceTool.SPLIT_CHAR_RED+"[\\S\\s]+", "")
 				.replaceAll("\\([^\\)]+\\)", "")
 				.replaceAll("([^,\\s]+)\\s+([^,\\s]+)", "$1")
 				;
 		lstParams.addAll(Arrays.asList(headerParams.split("\\s*,\\s*")));
 		//DECLARE的參數
-		lstParams.addAll(RegexTool.getRegexTarget("(?<=DECLARE )\\S+", txtSQL));
+		lstParams.addAll(RegexTool.getRegexTarget("(?i)(?<=DECLARE )\\S+", txtSQL));
 		//參數置換
 		script = OtherTranslater.transduceDECLARE(lstParams, script);
 		//整理語法
@@ -255,7 +258,7 @@ public class TransduceStoreFunctionService {
 		//CURSOR
 		//IF SQLSTATE <> '00000' THEN LEAVE L1; end if;
 		txtSQL = txtSQL
-				.replaceAll("\\bIF\\s+(\\w+)\\s+<\\s*>\\s+\\w+\\s+THEN\\s+LEAVE\\s+(\\w+)\\s*;\\s*END\\s+IF\\s*;"
+				.replaceAll("(?i)\\bIF\\s+(\\w+)\\s+<\\s*>\\s+\\w+\\s+THEN\\s+LEAVE\\s+(\\w+)\\s*;\\s*END\\s+IF\\s*;"
 						, "WHILE (@@FETCH_STATUS = 0)")
 				.replaceAll("(?i)\\bEXEC(UTE)?\\s+([^;\\s]+)\\s*;", "EXECUTE sp_executesql $2;")
 				;

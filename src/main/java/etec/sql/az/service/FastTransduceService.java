@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import etec.common.enums.SQLTypeEnum;
 import etec.common.exception.UnknowSQLTypeException;
-import etec.common.utils.TransduceTool;
 import etec.sql.az.translater.DDLTranslater;
 import etec.sql.td.classifier.TeradataClassifier;
 

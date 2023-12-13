@@ -1,13 +1,9 @@
 package etec.sql.az.translater;
 
-import java.io.IOException;
 import java.util.List;
 
-import etec.common.exception.UnknowSQLTypeException;
-import etec.common.utils.Log;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
-import etec.sql.az.service.FamilyMartFileTransduceService;
 import etec.src.main.Params;
 
 /**

@@ -1,6 +1,6 @@
 package etec.sql.gp.translater;
 
-import etec.common.utils.TransduceTool;
+import etec.common.utils.ConvertFunctionsSafely;
 
 public class DDLTranslater {
 	/**
@@ -30,7 +30,8 @@ public class DDLTranslater {
 				.replaceAll("(?i)\\bOREPLACE\\s*\\(", "REPLACE\\(")//OREPLACE
 				.replaceAll("(?i)\\bSTRTOK\\s*\\(", "SPLIT_PART\\(")//STRTOK
 				;
-		res = TransduceTool.saveTranslateFunction(res, (String t)->{
+		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
+		res = cff.saveTranslateFunction(res, (String t)->{
 			t = changeCreateTableIfNotExist(t);
 			return t;
 		});

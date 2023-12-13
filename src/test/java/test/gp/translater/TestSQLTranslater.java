@@ -15,9 +15,6 @@ public class TestSQLTranslater {
 		String res = "";
 		
 		testAddMonths();
-		//CASE3
-		String q3 = "";
-		String a3 = "";
 		
 		return res;
 	}
@@ -46,19 +43,19 @@ public class TestSQLTranslater {
 		System.out.println("CASE  4 : "+a4.equals(GreemPlumTranslater.sql.easyReplase(q4)));
 //		System.out.println("CASE 4 : "+a4);
 //		System.out.println("CASE 4 : "+GreemPlumTranslater.sql.easyReplase(q4));
-//CASE5 : ADD_MONTHS
+//CASE5 : DATE_FORMAT
 		String q5 = "A.PLAN_PAY_DATE BETWEEN CAST(CAST(CAST(CAST(CREATE_NO AS DATE) AS FORMAT 'YYYY-MM') AS VARCHAR(7))||'-01' AS DATE) AND CAST(CREATE_NO AS DATE)-91";
 		String a5 = "A.PLAN_PAY_DATE BETWEEN CAST(TO_CHAR(CAST(CREATE_NO AS DATE),'YYYY-MM')||'-01' AS DATE) AND CAST(CREATE_NO AS DATE)-91";
 		String r5 = GreemPlumTranslater.sql.easyReplase(q5);
 //		System.out.println(r5);
 		System.out.println("CASE  5 : "+a5.equals(r5));
-//CASE6 : ADD_MONTHS
-		String q6 = "SUBSTR(CAST(CAST(CLNDR_DT AS DATE FORMAT 'YYYYMMDD')+1 AS DATE FORMAT 'YYYY-MM-DD'),9,2)=1";
-		String a6 = "";
+//CASE6 : DATE_FORMAT
+		String q6 = "SUBSTR(CAST(CAST(CLNDR_DT AS DATE FORMAT 'YYYYMMDD')+1 AS DATE FORMAT 'YYYY-MM-DD'),9,2)=01";
+		String a6 = "TO_CHAR(CAST(CLNDR_DT AS DATE)+1,'DD')=01";
 		String r6 = GreemPlumTranslater.sql.easyReplase(q6);
-		System.out.println(r6);
-		System.out.println("CASE  6 : "+a6.equals(r6));
-////CASE7 : ADD_MONTHS
+//		System.out.println(r6);
+		System.out.println("CASE  6 : "+a6.equals(r6)); 
+////CASE7 : ADD_MONTHS DATE_FORMAT
 		String q7 = "SUBSTR(CAST(DATE_ID AS DATE FORMAT 'YYYY-MM-DD'),1,7)\r\n" + 
 				"=\r\n" + 
 				"SUBSTR(ADD_MONTHS(CAST('${TXDATE}' AS DATE FORMAT 'YYYY-MM-DD'),-1),1,4)\r\n" + 
@@ -69,7 +66,7 @@ public class TestSQLTranslater {
 		System.out.println(r7);
 		System.out.println("CASE  7 : "+a7.equals(r7));
 //CASE8 : ADD_MONTHS
-//		String q8 = "";
+//		String q8 = "";	
 //		String a8 = "";
 //		System.out.println("CASE  8 : "+a8.equals(GreemPlumTranslater.sql.easyReplase(q8)));
 //CASE9 : ADD_MONTHS
@@ -174,10 +171,12 @@ public class TestSQLTranslater {
 		r29 = GreemPlumTranslater.other.changeLockingTable(r29);
 //		System.out.println(r29);
 		System.out.println("CASE 29 : "+a29.equals(r29));
-//CASE30 : 
-		String q30 = "SUBSTR(CAST(CAST(CLNDR_DT AS DATE FORMAT 'YYYYMMDD')+1 AS DATE FORMAT 'YYYY-MM-DD'),9,2)";
-		String a30 = "";
-		System.out.println(GreemPlumTranslater.sql.easyReplase(q30));
+//CASE30 : CURRENT_DATE
+		String q30 = "AND CLNDR_DT BETWEEN DATE -125 AND DATE"
+				+ "\r\nOR CLNDR_DT =DATE-1";
+		String a30 = "AND CLNDR_DT BETWEEN CURRENT_DATE -125 AND CURRENT_DATE\r\n" + 
+				"OR CLNDR_DT =CURRENT_DATE-1";
+//		System.out.println(GreemPlumTranslater.sql.easyReplase(q30));
 		System.out.println("CASE 30 : "+a30.equals(GreemPlumTranslater.sql.easyReplase(q30)));
 //CASE31 : 
 //		String q31 = "";
