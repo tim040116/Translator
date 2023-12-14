@@ -46,7 +46,7 @@ public class SQLTranslater {
 				.replaceAll("(?i)\\bAS\\s+FORMAT","AS DATE FORMAT")//DATE FORMAT 正規化
 				.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT","AS DATE FORMAT")//DATE FORMAT 正規化
 //				.replaceAll("(?i)(\\(\\s*FORMAT\\s+'[^']+'\\s*\\))\\s*\\((VAR)?CHAR\\s*\\(\\s*\\d+\\s*\\)\\s*\\)", "$1")//FORMAT DATE 語法正規化
-				.replaceAll("(?i)(?<!\\bAS )\\bDATE\\b(\\s*)(?!')", "CURRENT_DATE$1")//DATE 轉成 CURRENT_DATE
+//				.replaceAll("(?i)(?<!AS)\\s+\\bDATE\\s*(?!')", " CURRENT_DATE ")//DATE 轉成 CURRENT_DATE
 //				.replaceAll("(?<!')0\\d+(?!'|\\d)", "'$0'")//0字頭的數字要包在字串裡
 				;
 		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
