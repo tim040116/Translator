@@ -159,7 +159,7 @@ public class SearchFunctionController implements Controller{
 //			String spn = sp.get(0).replaceAll("\\S+\\s+PROCEDURE\\s+", "");
 			
 			for(String sql : lstSql) {
-				List<String> lfc = RegexTool.getRegexTarget2("(QUALIFY +|AS +)?[A-Z0-9_\\$\\{\\}\\.]+\\s*\\(", sql);
+				List<String> lfc = RegexTool.getRegexTarget("(?i)(QUALIFY +|AS +)?[A-Z0-9_\\$\\{\\}\\.]+\\s*\\(", sql);
 				for(String func : lfc) {
 					if(func==null) {
 						continue;

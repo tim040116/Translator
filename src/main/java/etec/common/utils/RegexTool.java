@@ -66,19 +66,27 @@ public class RegexTool {
 		}
 		return res;
 	}
-	// 取得符合正規表達式的字串(原本的語法有時會出錯)
-	//盡量不要用(?=)類型的語法
-	public static List<String> getRegexTarget2(String regex, String content) {
-		List<String> lstRes = new ArrayList<String>();
-		Pattern p = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
-		Matcher m = p.matcher(content);
-		while (m.find()) {
-			for (int i = 0; i < m.groupCount(); i++) {
-				lstRes.add(m.group(i));
-			}
-		}
-		return lstRes;
-	}
+//	/**
+//	 * @author	Tim
+//	 * @deprecated
+//	 * 
+//	 * 取得符合正規表達式的字串(原本的語法有時會出錯)，
+//	//盡量不要用(?=)類型的語法
+//	 * 
+//	 * <br>2023-12-12 Tim 原功能已修復請改用：
+//	 * <br> {@link #getRegexTarget(String, String)}
+//	 * */
+//	public static List<String> getRegexTarget2(String regex, String content) {
+//		List<String> lstRes = new ArrayList<String>();
+//		Pattern p = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
+//		Matcher m = p.matcher(content);
+//		while (m.find()) {
+//			for (int i = 0; i < m.groupCount(); i++) {
+//				lstRes.add(m.group(i));
+//			}
+//		}
+//		return lstRes;
+//	}
 	// 拆分成每個單詞
 	public static List<String> getSingleWord(String content) {
 		List<String> lstRes = new ArrayList<String>();

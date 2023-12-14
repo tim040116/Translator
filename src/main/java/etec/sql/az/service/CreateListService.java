@@ -191,10 +191,10 @@ public class CreateListService {
 		//修改分號
 		String content = fc.replaceAll(";(?!\\s)","<encodingCode_semicolon>");
 		//尋找create table
-		List<String> lstCreate = RegexTool.getRegexTarget(RegexTool.getReg("Create Table [^;]+;"),content);
+		List<String> lstCreate = RegexTool.getRegexTarget("(?i)\\bCreate\\s+Table\\s+[^;]+;",content);
 		for (String sql : lstCreate) {
-			if(!RegexTool.getRegexTarget(RegexTool.getReg("With Data"),sql).isEmpty()) {
-				String tableNm = RegexTool.getRegexTarget("(?<=[Cc][Rr][Ee][Aa][Tt][Ee] {0,10}[Tt][Aa][Bb][Ll][Ee] {0,10})\\S+",sql).get(0);
+			if(!RegexTool.getRegexTarget("(?i)\\bWith\\s+Data\\b",sql).isEmpty()) {
+				String tableNm = RegexTool.getRegexTarget("(?i)(?<=CREATE {0,10}TABLE {0,10})\\S+",sql).get(0);
 				try {
 					FileTool.addFile(lstFileName, fn2 + "\t" + tableNm);
 				} catch (IOException e) {
@@ -208,7 +208,7 @@ public class CreateListService {
 	public static String createIndexLst(String tblNm, String target, String fn) throws IOException {
 		Log.info("buildIndexListFile");
 		String result = "Success";
-		if(!target.matches(".*[Ii][Nn][Dd][Ee][Xx].*")) {
+		if(!target.matches("(?i).*INDEX.*")) {
 			return result;
 		}
 		String file = BasicParams.getOutputPath() + "lst\\lst_index.txt";
@@ -222,11 +222,11 @@ public class CreateListService {
 		String file = BasicParams.getOutputPath() + "lst\\lst_create_select.txt";
 		String create = "";
 		String select = "";
-		List<String> lstcreate = RegexTool.getRegexTarget("(?<=[Cc][Rr][Ee][Aa][Tt][Ee]\\s{0,10}[Tt][Aa][Bb][Ll][Ee])\\s+\\S*",data);
+		List<String> lstcreate = RegexTool.getRegexTarget("(?i)(?<=CREATE\\s{0,10}TABLE)\\s+\\S*",data);
 		if(!lstcreate.isEmpty()) {
 			create = lstcreate.get(0).trim();
 		}
-		List<String> lstselect = RegexTool.getRegexTarget("(?<=[Ff][Rr][Oo][Mm])\\s+\\S+",data);
+		List<String> lstselect = RegexTool.getRegexTarget("(?i)(?<=FROM)\\s+\\S+",data);
 		if(!lstselect.isEmpty()) {
 			select = lstselect.get(0).trim();
 		}
@@ -238,7 +238,7 @@ public class CreateListService {
 		String result = "Success";
 		String lstFileName = BasicParams.getOutputPath() + "lst\\lst_Qualify.txt";
 		List<String> lstQualify = RegexTool.getRegexTarget(
-				"[Qq][Uu][Aa][Ll][Ii][Ff][Yy] +[Rr][Aa][Nn][Kk]\\(\\) [Oo][Vv][Ee][Rr] \\([^\\)]*\\) *\\= *\\d+",
+				"(?i)QUALIFY\\s+RANK\\s*\\(\\)\\s*OVER\\s+\\([^\\)]*\\)\\s*\\=\\s*\\d+",
 				fc);
 		for (String qualify : lstQualify) {
 			try {
@@ -254,7 +254,7 @@ public class CreateListService {
 		String result = "Success";
 		String lstFileName = BasicParams.getOutputPath() + "lst\\lst_odbc.txt";
 		List<String> lstODBC = RegexTool
-				.getRegexTarget("(?<=[Mm][Yy] {0,10}\\$[Dd][Ss][Nn] {0,10}= {0,10}\\\")[^\\\"]+", fc);
+				.getRegexTarget("(?i)(?<=MY\\s{0,10}\\$dsn\\s{0,10}=\\s{0,10}\\\")[^\\\"]+", fc);
 		for (String qualify : lstODBC) {
 			try {
 				FileTool.addFile(lstFileName, fn + "\t" + qualify);
@@ -269,7 +269,7 @@ public class CreateListService {
 	public static String createGroupBy(String fn, String fc) {
 		String result = "Success";
 		String lstFileName = BasicParams.getOutputPath() + "lst\\lst_GroupBy.txt";
-		List<String> lstGroupby = RegexTool.getRegexTarget("[Gg][Rr][Oo][Uu][Pp] +[Bb][Yy][ 0-9,]+", fc);
+		List<String> lstGroupby = RegexTool.getRegexTarget("(?i)GROUP\\s+BY[ 0-9,]+", fc);
 		for (String data : lstGroupby) {
 			if(data.matches("[^0-9]*")) {
 				continue;
@@ -287,7 +287,7 @@ public class CreateListService {
 	public static String createChar10(String fn, String fc) {
 		String result = "Success";
 		String lstFileName = BasicParams.getOutputPath() + "lst\\lst_char10.txt";
-		List<String> lstChar10 = RegexTool.getRegexTarget2("[Cc][Aa][Ss][Tt] *\\( *[\\w\\.]+ +[Aa][Ss] +([Vv][Aa][Rr])?[Cc][Hh][Aa][Rr] *\\( *10 *\\) *\\)", fc);
+		List<String> lstChar10 = RegexTool.getRegexTarget("(?i)CAST\\s*\\(\\s*[\\w\\.]+\\s+AS\\s+(VAR)?CHAR\\s*\\(\\s*10\\s*\\)\\s*\\)", fc);
 		for (String data : lstChar10) {
 			try {
 				FileTool.addFile(lstFileName, fn + "\t" + data);
@@ -303,8 +303,8 @@ public class CreateListService {
 		String result = "Success";
 		String file = BasicParams.getOutputPath() + "lst\\lst_rename_table.txt";
 //		String file2 = BasicParams.getOutputPath() + "lst\\lst_rename_table_input.txt";
-		String strAll = fc.replaceAll(";","").replaceAll(RegexTool.getReg("rename table"), "");
-		String[] arAll = strAll.split(" +[Tt][Oo] +");
+		String strAll = fc.replaceAll(";","").replaceAll("(?i)rename\\s+table", "");
+		String[] arAll = strAll.split("(?i)\\s+TO\\s+");
 		String[] arOld = arAll[0].trim().split("\\.");
 		String[] arNew = arAll[1].trim().split("\\.");
 //		FileTool.addFile(file2,fn+"\t"+arOld[0]+"\t"+arOld[1]+"\t"+arNew[0]+"\t"+arNew[1]);
@@ -316,24 +316,10 @@ public class CreateListService {
 		Log.info("createLstDropTable");
 		String result = "Success";
 		String file = BasicParams.getOutputPath() + "lst\\lst_drop_table.txt";
-		String strAll = fc.replaceAll(";","").replaceAll(RegexTool.getReg("drop table"), "");
+		String strAll = fc.replaceAll(";","").replaceAll("(?i)DROP\\s+TABLE", "");
 		String[] arAll = strAll.trim().split("\\.");
 		FileTool.addFile(file,fn+"\t"+arAll[0]+"\t"+arAll[1]);
 		return result;
 	}
-	/**
-	 * @author	Tim
-	 * @since	2023年11月14日
-	 * 
-	 * 3.3.
-	 * FamilyMart_step02
-	 * 列出
-	 * 
-	 * */
-	public static String createLstSPParams() {
-		Log.info("createLstSPParams"); 
-		String res = "Success";
-		
-		return res;
-	}
+
 }

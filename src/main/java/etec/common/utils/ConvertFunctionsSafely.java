@@ -10,7 +10,6 @@ public class ConvertFunctionsSafely {
 	public static final String SPLIT_CHAR_BLACK =  "🀫";
 	public static final String SPLIT_CHAR_CH_01 =  "蛬";
 	
-	public int runCnt = -1;
 	public int maxCnt = 0;
 	/**
 	 * @author	Tim
@@ -22,7 +21,7 @@ public class ConvertFunctionsSafely {
 	public String saveTranslateFunction(String script,Function<String, String> function) {
 		String res = "";
 		int cntBracket = 0;
-		int maxCnt = 0;
+		maxCnt = 0;
 		//encode
 		for(String c : script.split("")) {
 			if( "(".equals(c)) {

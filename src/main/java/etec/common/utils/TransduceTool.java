@@ -123,12 +123,12 @@ public class TransduceTool {
 		}
 		String[] arColum = strSelect.split(",(?!('\\||(\\w|,)*\\)))");
 		for(int i=0;i<arColum.length;i++) {
-			arColum[i] = arColum[i].replaceAll(" *[Aa][Ss] *[\\w\\s]*", "");
+			arColum[i] = arColum[i].replaceAll("(?i) *AS *[\\w\\s]*", "");
 		}
 		//取得group by
-		List<String> lstGroupBy = RegexTool.getRegexTarget2("[Gg][Rr][Oo][Uu][Pp] *[Bb][Yy] *[0-9]+[0-9, ]*",res);
+		List<String> lstGroupBy = RegexTool.getRegexTarget("(?i)GROUP\\s*BY\\s*[0-9]+[0-9, ]*",res);
 		for(String gb : lstGroupBy) {
-			String[] argb = gb.replaceAll(RegexTool.getReg("group by"),"").replaceAll(" ", "").split(",");
+			String[] argb = gb.replaceAll("(?i)group\\s+by","").replaceAll(" ", "").split(",");
 			String newgb = "group by ";
 			for(String strid : argb) {
 				int id = Integer.parseInt(strid);
@@ -150,15 +150,15 @@ public class TransduceTool {
 	public static String changeSample(String selectSQL) {
 		String result = selectSQL;
 		//取得sample
-		List<String> lstSample = RegexTool.getRegexTarget("[Ss][Aa][Mm][Pp][Ll][Ee] +\\d+\\s*;",selectSQL);
+		List<String> lstSample = RegexTool.getRegexTarget("(?i)SAMPLE\\s+\\d+\\s*;",selectSQL);
 		//是否存在sample
 		if(lstSample.isEmpty()) {
 			return selectSQL;
 		}
 		String sample = " SELECT TOP " + RegexTool.getRegexTarget("\\d+",lstSample.get(0)).get(0) +" ";
 		result = result
-				.replaceFirst("[Ss][Ee][Ll][Ee][Cc][Tt]", sample)
-				.replaceAll("[Ss][Aa][Mm][Pp][Ll][Ee] +\\d+\\s*;", ";");
+				.replaceFirst("(?i)SELECT", sample)
+				.replaceAll("(?i)SAMPLE\\s+\\d+\\s*;", ";");
 		return result;
 	}
 	// char index
@@ -166,10 +166,10 @@ public class TransduceTool {
 	public static String changeCharindex(String selectSQL) {
 		String result = RegexTool.encodeSQL(selectSQL);
 		//取得sample
-		List<String> lstSQL = RegexTool.getRegexTarget("[Ii][Nn][Dd][Ee][Xx]<encodingCode_ParentBracketLeft>[^,]+, *\\'[^\\']+\\'",result);
+		List<String> lstSQL = RegexTool.getRegexTarget("(?i)INDEX<encodingCode_ParentBracketLeft>[^,]+, *\\'[^\\']+\\'",result);
 		for(String data : lstSQL) {
 			String oldData = data;
-			String param = data.replaceAll("[Ii][Nn][Dd][Ee][Xx]<encodingCode_ParentBracketLeft>","");
+			String param = data.replaceAll("(?i)INDEX<encodingCode_ParentBracketLeft>","");
 			String[] ar = param.split(",");
 			String newData = "CHARINDEX<encodingCode_ParentBracketLeft>"+ar[1]+","+ar[0];
 			result = result.replaceAll(oldData, newData);
@@ -232,13 +232,13 @@ public class TransduceTool {
 	public static String replaceParams(String fc) {
 		String result = RegexTool.encodeSQL(fc);
 		//列出參數清單
-		List<String> paramList = RegexTool.getRegexTarget("(?<=my\\s{0,10}\\$)[^=\\s]+\\s*=\\s*\\$ENV[^;]+",fc);
+		List<String> paramList = RegexTool.getRegexTarget("(?i)(?<=my\\s{0,10}\\$)[^=\\s]+\\s*=\\s*\\$ENV[^;]+",fc);
 		Map<String,String> paramMap = new HashMap<String,String>();
 		//把參數加到map
 		for(String param : paramList) {
 			String[] arparam = param.split("=");
 			String paramNm   = "${"+arparam[0].trim()+"}";
-			String paramVal  = arparam[1].replaceAll("(ENV)|\"", "").trim();
+			String paramVal  = arparam[1].replaceAll("(?i)(ENV)|\"", "").trim();
 			paramMap.put(RegexTool.encodeSQL(paramNm), RegexTool.encodeSQL(paramVal));
 		}
 		//置換參數
