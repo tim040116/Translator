@@ -12,6 +12,13 @@ import etec.common.utils.ConvertFunctionsSafely;
  * 
  * td 轉 gp 通用語法轉換
  * 
+ * <h2>常見TD語法</h2>
+ * <br>column_name(CHAR(8))	TD語法支援強制轉換資料型態
+ * 
+ * 
+ * <br><br><h2>常見GP語法</h2>
+ * <br>INTERVAL	時間間隔，為一種資料型態，用於時間運算，並可以藉由後綴詞限制儲存內容
+ * 
  * */
 public class SQLTranslater {
 	
@@ -62,6 +69,7 @@ public class SQLTranslater {
 		});
 		res = cff.saveTranslateFunction(res, (String t)->{
 			t = changeAddMonths(t);
+			t = changeLastDay(t);
 			t = changeDateFormat(t);
 			t = changeTypeConversion(t);
 			return t;
@@ -98,6 +106,26 @@ public class SQLTranslater {
 		;
 		return res;
 	}
+	/**
+	 * @author	Tim
+	 * @since	2023年12月18日
+	 * 
+	 * <h1>LAST_DAY 取該月的最後一天</h1>
+	 * 
+	 * <br> * 此語法目前只提供參數為DATE使用，若為其他格式則須人工轉換資料型態
+	 * <br>
+	 * <br> 先使用DATE_TRUNC 取該月第一天
+	 * <br> 用 INTERVAL 語法 加一個月後減一天
+	 * <br> 由於 INTERVAL 語法運算後會轉成 timestamp 所以要再轉回 DATE
+	 * */
+	public String changeLastDay(String sql) {
+		String res = sql;
+		res = res
+			.replaceAll("(?i)LAST_DAY\\(([^\\)]+)\\)", "CAST\\(DATE_TRUNC\\('Month',$1\\)+INTERVAL'1MONTH'-INTERVAL'1DAY' AS DATE\\)")
+		;
+		return res;
+	}
+	
 	/**
 	 * @author	Tim
 	 * @since	2023年11月30日

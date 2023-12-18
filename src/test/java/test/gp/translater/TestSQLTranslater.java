@@ -123,39 +123,58 @@ public class TestSQLTranslater {
 				"SUBSTR(CAST(CAST('${TXDATE}' AS DATE)- 20 AS FORMAT 'YYYY-MM-DD'),1,7)||'-01' \r\n" + 
 				"AND\r\n" + 
 				"SUBSTR(CAST(LAST_DAY(CAST('${TXDATE}' AS DATE)-1) AS FORMAT 'YYYY-MM-DD'),1,10)";
-		String a12 = "WHERE CLNDR_DT BETWEEN \r\n" + 
-				"CAST(TO_CHAR(CAST('${TXDATE}' AS DATE)- 20, 'YYYY-MM')||'-01' AS DATE) \r\n" + 
-				"AND\r\n" + 
-				"CAST(CAST(TO_CHAR(CAST('${TXDATE}' AS DATE)-1, 'YYYY-MM')||'-01' AS DATE) AS DATE)";
+		String a12 = "WHERE CLNDR_DT BETWEEN \r\n"
+				+ "TO_CHAR(CAST('${TXDATE}' AS DATE)- 20,'YYYY-MM')||'-01' \r\n"
+				+ "AND\r\n"
+				+ "TO_CHAR(DATE_TRUNC('Month',CAST('${TXDATE}' AS DATE)-1)+INTERVAL'1MONTH'-INTERVAL'1DAY','YYYY-MM-DD')";
 		String r12 = GreemPlumTranslater.sql.easyReplase(q12);
 		if(!a12.equals(r12))
 		System.out.println(r12);
 		System.out.println("CASE 12 : "+a12.equals(r12));
-//CASE13 : 
-		String q13 = ",TRIM(A.CLNDR_DT /100+190000) AS CLNDR_MN";
-		String a13 = "TO_CHAR(A.ACLNDR_DT, 'YYYYMM') AS CLNDR_MN";
-		String r13 = GreemPlumTranslater.sql.easyReplase(q13);
-		if(!a13.equals(r13))
-		System.out.println(r13);
-		System.out.println("CASE 13 : "+a13.equals(r13));
-//CASE14 : 
-		String q14 = "A.CLNDR_DT >= CAST(ADD_MONTHS( DATE '${LASTTXDATE}',-1)AS INTERGER)/100*100+1";
-		String a14 = "A.CLNDR_DT >= CAST(TO_CHAR( DATE'${LASTTXDATE}'- INTERVAL'1 MONTH','YYYY-MM')||'-01' AS DATE)";
-		String r14 = GreemPlumTranslater.sql.easyReplase(q14);
-		if(!a14.equals(r14))
-		System.out.println(r14);
-		System.out.println("CASE 14 : "+a14.equals(r14));
-//CASE15 : 
+//CASE13 : (人工)DATE 乘法 
+//		String q13 = ",TRIM(A.CLNDR_DT /100+190000) AS CLNDR_MN";
+//		String a13 = "TO_CHAR(A.ACLNDR_DT, 'YYYYMM') AS CLNDR_MN";
+//		String r13 = GreemPlumTranslater.sql.easyReplase(q13);
+//		if(!a13.equals(r13))
+//		System.out.println(r13);
+//		System.out.println("CASE 13 : "+a13.equals(r13));
+//CASE14 : (人工)DATE 除法
+//		String q14 = "A.CLNDR_DT >= CAST(ADD_MONTHS( DATE '${LASTTXDATE}',-1)AS INTERGER)/100*100+1";
+//		String a14 = "A.CLNDR_DT >= CAST(TO_CHAR( DATE'${LASTTXDATE}'- INTERVAL'1 MONTH','YYYY-MM')||'-01' AS DATE)";
+//		String r14 = GreemPlumTranslater.sql.easyReplase(q14);
+//		if(!a14.equals(r14))
+//		System.out.println(r14);
+//		System.out.println("CASE 14 : "+a14.equals(r14));
+//CASE15 : DATE FORMAT
 		String q15 = ",CAST(CLNDR_MN AS DATE FORMAT 'YYYYMM') AS CLNDR_MN";
 		String a15 = ",TO_DATE(CLNDR_MN ,'YYYYMM') AS CLNDR_MN";
 		String r15 = GreemPlumTranslater.sql.easyReplase(q15);
 		if(!a15.equals(r15))
 		System.out.println(r15);
 		System.out.println("CASE 15 : "+a15.equals(r15));
-//CASE16 : 
-//		String q16 = "";
-//		String a16 = "";
-//		System.out.println("CASE 16 : "+a16.equals(GreemPlumTranslater.sql.easyReplase(q16)));
+
+//CASE16 : Qualify
+		/*
+		SELECT DISTINCT
+			TRIM( LEADING '0' FROM VENDORCODE) AS VENDORCODE ,GROUPCODE,GROUPNAME
+		FROM PSTAGE_CN.DW_VW_VENDORGROUP_EDW
+		QUALIFY ROW_NUMBER()OVER(
+			PARTITION BY NEWVENDORCODE,VENDORCODE,GROUPCODE,GROUPNAME
+			ORDER BY NEWVENDORCODE,VENDORCODE,GROUPCODE
+		)=1
+		*/
+		String q16 = "SELECT DISTINCT\r\n"
+				+ "	TRIM( LEADING '0' FROM VENDORCODE) AS VENDORCODE ,GROUPCODE,GROUPNAME\r\n"
+				+ "FROM PSTAGE_CN.DW_VW_VENDORGROUP_EDW\r\n"
+				+ "QUALIFY ROW_NUMBER()OVER(\r\n"
+				+ "	PARTITION BY NEWVENDORCODE,VENDORCODE,GROUPCODE,GROUPNAME\r\n"
+				+ "	ORDER BY NEWVENDORCODE,VENDORCODE,GROUPCODE\r\n"
+				+ ")=1";
+		String a16 = "";
+		String r16 = GreemPlumTranslater.sql.easyReplase(q16);
+		if(!a16.equals(r16))
+		System.out.println(r16);
+		System.out.println("CASE 16 : "+a16.equals(r16));
 //CASE17 : 
 //		String q17 = "";
 //		String a17 = "";
@@ -198,7 +217,7 @@ public class TestSQLTranslater {
 		String q26 = "ZEROIFNULL (A.PLAN_ETD_QTY) AS X.PLAN_QTY";
 		String a26 = "COALESCE(A.PLAN_ETD_QTY,0) AS X.PLAN_QTY";
 		System.out.println("CASE 26 : "+a26.equals(GreemPlumTranslater.sql.easyReplase(q26)));
-//CASE27 : 不同格式間的比較
+//CASE27 : (人工)不同格式間的比較
 //		String q27 = "";
 //		String a27 = "";
 //		System.out.println("CASE 27 : "+a27.equals(GreemPlumTranslater.sql.easyReplase(q27)));
@@ -231,8 +250,10 @@ public class TestSQLTranslater {
 				+ "\r\nOR CLNDR_DT =DATE-1";
 		String a30 = "AND CLNDR_DT BETWEEN CURRENT_DATE -125 AND CURRENT_DATE\r\n" + 
 				"OR CLNDR_DT =CURRENT_DATE-1";
-//		System.out.println(GreemPlumTranslater.sql.easyReplase(q30));
-		System.out.println("CASE 30 : "+a30.equals(GreemPlumTranslater.sql.easyReplase(q30)));
+		String r30 = GreemPlumTranslater.sql.easyReplase(q30);
+		if(!a30.equals(r30))
+		System.out.println(r30);
+		System.out.println("CASE 30 : "+a30.equals(r30));
 //CASE31 : 
 //		String q31 = "";
 //		String a31 = "";
