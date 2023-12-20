@@ -1,9 +1,14 @@
 package etec.sql.gp.translater;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import etec.common.utils.ConvertFunctionsSafely;
+import etec.common.utils.RegexTool;
+import etec.common.utils.TransduceTool;
 
 /**
  * @author	Tim
@@ -21,6 +26,9 @@ import etec.common.utils.ConvertFunctionsSafely;
  * 
  * */
 public class SQLTranslater {
+	
+	String regDate= "YMDHS:,\\-\\\\\\/ ";//日期格式會用到的字符
+	String regInt = "0-9ZI\\.,\\+\\-\\$\\%\\(\\)";//數字格式會用到的字符
 	
 	/**
 	 * @author	Tim
@@ -50,10 +58,10 @@ public class SQLTranslater {
 				.replaceAll("(?i)\\bSEL\\b", "SELECT")//SEL
 				.replaceAll("(?i)\\bOREPLACE\\s*\\(", "REPLACE\\(")//OREPLACE
 				.replaceAll("(?i)\\bSTRTOK\\s*\\(", "SPLIT_PART\\(")//STRTOK
-				.replaceAll("(?i)\\bAS\\s+FORMAT","AS DATE FORMAT")//DATE FORMAT 正規化
+				.replaceAll("(?i)\\bAS\\s+FORMAT\\s+'(["+regDate+"]+)'","AS DATE FORMAT '$1'")//DATE FORMAT 正規化
 				.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT","AS DATE FORMAT")//DATE FORMAT 正規化
 //				.replaceAll("(?i)(\\(\\s*FORMAT\\s+'[^']+'\\s*\\))\\s*\\((VAR)?CHAR\\s*\\(\\s*\\d+\\s*\\)\\s*\\)", "$1")//FORMAT DATE 語法正規化
-//				.replaceAll("(?i)(?<!AS)\\s+\\bDATE\\s*(?!')", " CURRENT_DATE ")//DATE 轉成 CURRENT_DATE
+//				
 //				.replaceAll("(?<!')0\\d+(?!'|\\d)", "'$0'")//0字頭的數字要包在字串裡
 				;
 		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
@@ -63,7 +71,7 @@ public class SQLTranslater {
 				.replaceAll("(?i)ZEROIFNULL\\s*\\(([^\\)]+)\\)", "COALESCE\\($1,0\\)")//ZEROIFNULL改成COALESCE
 				.replaceAll("(?i)\\bIN\\s+(?<n1>'[^']+'(,'[^']+')+)", "IN \\(${n1}\\)")//IN後面一定要有括號
 				.replaceAll("(?i)NULLIFZERO\\s*\\(([^\\)]+)\\)", "NULLIF\\($1,0\\)")//NullIfZero改成NULLIF
-				.replaceAll("(?i)LIKE\\s+ANY\\s*\\(('[^']+'(,'[^']+')+)\\)", "LIKE ANY \\(ARRAY[$1])")//LIKE ANY('','','') >> LIKE ANY(ARRAY['','',''])	
+				.replaceAll("(?i)LIKE\\s+ANY\\s*\\(\\s*('[^']+'(\\s*\\,\\s*'[^']+')+)\\s*\\)", "LIKE ANY \\(ARRAY[$1])")//LIKE ANY('','','') >> LIKE ANY(ARRAY['','',''])	
 			;
 			return t;
 		});
@@ -72,6 +80,7 @@ public class SQLTranslater {
 			t = changeLastDay(t);
 			t = changeDateFormat(t);
 			t = changeTypeConversion(t);
+			t = changeFormatNumber(t);
 			return t;
 		});
 		//須隔離處裡的項目
@@ -82,8 +91,7 @@ public class SQLTranslater {
 			;
 			return t;
 		});
-
-//		res = changeTypeConversion(res);
+		res = changeCurrentDate(res);
 		return res;
 	}
 	/**
@@ -130,7 +138,7 @@ public class SQLTranslater {
 	 * @author	Tim
 	 * @since	2023年11月30日
 	 * 
-	 * <br>1. 強制轉換
+	 * <br>1. 強制轉換  //2023-12-10 搬遷至changeTypeConversion
 	 * <br>		1-1. (FORMAT 'YYYY-MM-DD')(CHAR(7)) 轉成 TO_CHAR($1,'$2')
 	 * <br>		1-2. $1(FORMAT '$2') 轉成 TO_DATE($1,'$2')
 	 * <br>2. SUBSTR(CAST($1 AS DATE FORMAT $2),$3,$4) 轉成 TO_CHAR($1,'$2')
@@ -209,19 +217,89 @@ public class SQLTranslater {
 	 * <br>$1(FORMAT 'YYYY-MM-DD') >> TO_DATE($1,'YYYY-MM-DD')
 	 * <br>$1(CHAR(7)) >> cast($1 as char(7))
 	 * <br>$1(FORMAT 'YYYY-MM-DD')(CHAR(7)) >> TO_CHAR($1 ,'YYYY-MM-DD')
+	 * <br>DATE'${TX4Y-M}-01' >> CAST('${TX4Y-M}-01' AS DATE)
 	 * */
 	public String changeTypeConversion(String sql) {
+		
 		String res = sql;
 		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
 		res = cff.saveTranslateFunction(sql, (String t)->{
 			t = t
 				//1-1 (FORMAT 'YYYY-MM-DD')(CHAR(7))
-				.replaceAll("(?i)([.\\w]+)\\s*(\\([^\\)]+\\))?\\s*\\(\\s*FORMAT\\s+('[^']+')\\s*\\)\\s*\\(\\s*(VAR)?CHAR\\(\\d+\\)\\s*\\)", "TO_CHAR\\($1$2, $3\\)")
+				.replaceAll("(?i)([.\\w]+)\\s*(\\([^\\)]+\\))?\\s*\\(\\s*FORMAT\\s+('["+regDate+"]+')\\s*\\)\\s*\\(\\s*(VAR)?CHAR\\(\\d+\\)\\s*\\)", "TO_CHAR\\($1$2, $3\\)")
 				//1-2 (FORMAT 'YYYY-MM-DD')
-				.replaceAll("(?i)([.\\w]+)\\s*(\\([^\\)]+\\))?\\s*\\(\\s*FORMAT\\s+('[^']+')\\s*\\)", "TO_DATE\\($1$2, $3\\)")
+				.replaceAll("(?i)([.\\w]+)\\s*(\\([^\\)]+\\))?\\s*\\(\\s*FORMAT\\s+('["+regDate+"]+')\\s*\\)", "TO_DATE\\($1$2, $3\\)")
+				//DATE''
+				.replaceAll("(?i)\\bDATE\\s*('[^']+')", "CAST\\($1 AS DATE\\)")
+			;
+			
+			t= t
 				//CHAR
 				.replaceAll("(?i)([\\w\\.]+)(\\([^\\)]+\\))?\\((CHAR<[^>]+>\\d+<[^>]+>)\\)", "CAST\\($1$2 AS $3\\)")
 			;
+			return t;
+		});
+		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年12月20日
+	 * 
+	 * CURRENT_DATE 轉換
+	 * */
+	public String changeCurrentDate(String sql) {
+		String res = sql;
+		res = res
+			.replaceAll("(?i)AS(\\s+)DATE", TransduceTool.SPLIT_CHAR_BLACK+"$1"+TransduceTool.SPLIT_CHAR_WHITE)
+			.replaceAll("\\bDATE\\b", "CURRENT_DATE")
+			.replaceAll(TransduceTool.SPLIT_CHAR_BLACK, "AS")
+			.replaceAll(TransduceTool.SPLIT_CHAR_WHITE, "DATE")
+		;
+		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年12月20日
+	 * 
+	 * <h1>轉換CAST轉換數字的語法</h1>
+	 * <br>CAST($1 AS FORMAT '9(12)') -> TO_CHAR($1,'000000000000')
+	 * 
+	 * */
+	public String changeFormatNumber(String sql) {
+		String res = sql;
+		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
+		res = cff.saveTranslateFunction(res, (String t)->{
+			Map<String,String> mapIntFormat = new HashMap<String,String>();//需轉換的語法
+			mapIntFormat.put("9", "0");
+			mapIntFormat.put("Z", "9");
+			//先抓出FORMAT語句
+			Matcher m = Pattern.compile("(?i)CAST\\(([^\\(\\)]+)\\s+AS\\s+FORMAT\\s+'([^']+)'\\s*\\)",Pattern.CASE_INSENSITIVE).matcher(t);
+			while (m.find()) {
+				String oldscript = m.group(0);
+				String col = m.group(1);//參數
+				String fmt = ConvertFunctionsSafely.decodeMark(m.group(2));//格式
+				if(!fmt.matches("["+regInt+"]+")) {//確認是否為數字轉換
+					return sql;
+				}
+				//代碼轉換
+				for (Map.Entry<String, String> e : mapIntFormat.entrySet()) {
+					fmt = fmt.replace(e.getKey(),e.getValue());
+				}
+				//()攤開
+				Matcher m2 = Pattern.compile("(?i)(.)\\((\\d+)\\)",Pattern.CASE_INSENSITIVE).matcher(fmt);
+				while (m2.find()) {
+					String oldscript2 = m2.group(0);
+					String c = m2.group(1);//字符
+					int cnt = Integer.parseInt(m2.group(2));//數量
+					String newscript2 = "";
+					for(int i = 0;i<cnt;i++) {
+						newscript2+=c;
+					}
+					fmt = fmt.replace(oldscript2, newscript2);
+				}
+				String newscript = "TO_CHAR("+col+",'"+fmt+"')";
+				t = t.replace(oldscript, newscript);
+			}
 			return t;
 		});
 		return res;

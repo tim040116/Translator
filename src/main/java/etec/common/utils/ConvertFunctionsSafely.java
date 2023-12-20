@@ -59,6 +59,23 @@ public class ConvertFunctionsSafely {
 		return res;
 	}
 	protected static String markName(String type,int i) {
+		return markName(type,Integer.toString(i));
+	}
+	protected static String markName(String type,String i) {
 		return "<saveTranslateFunctionMark_"+type+"_"+i+">";
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年12月20日
+	 * 
+	 * 將字串解編
+	 * */
+	public static String decodeMark(String script) {
+		String res = script
+			.replaceAll(markName("leftquater","\\d+"), "\\(")
+			.replaceAll(markName("rightquater","\\d+"), "\\)")
+			.replaceAll(markName("comma","\\d+"), ",")
+		;
+		return res;
 	}
 }

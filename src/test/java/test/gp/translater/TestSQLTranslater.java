@@ -23,20 +23,24 @@ public class TestSQLTranslater {
 //CASE1 : ADD_MONTHS
 		String q1 = "ADD_MONTHS(a.RPT_DT,-1) = c.RPT_DT";
 		String a1 = "CAST(a.RPT_DT-INTERVAL'1 MONTH' AS DATE) = c.RPT_DT";
+		String r1 = GreemPlumTranslater.sql.easyReplase(q1);
+		if(!a1.equals(r1))
+		System.out.println(r1);
 		System.out.println("CASE  1 : "+a1.equals(GreemPlumTranslater.sql.easyReplase(q1)));
-//		System.out.println("CASE 1 : "+GreemPlumTranslater.sql.easyReplase(q1));
 //CASE2 : ADD_MONTHS
 		String q2 = "PAYMENT_DUE_DATE <=ADD_MONTHS(DATE'${TX4Y-M}-01',4) -1";
-		String a2 = "PAYMENT_DUE_DATE <=CAST(DATE'${TX4Y-M}-01'+INTERVAL'4 MONTH' AS DATE) -1";
+		String a2 = "PAYMENT_DUE_DATE <=CAST('${TX4Y-M}-01' AS DATE)+INTERVAL'4 MONTH' -1";
+		String r2 = GreemPlumTranslater.sql.easyReplase(q2);
+		if(!a2.equals(r2))
+		System.out.println(r2);
 		System.out.println("CASE  2 : "+a2.equals(GreemPlumTranslater.sql.easyReplase(q2)));
-//		System.out.println("CASE 2 : "+GreemPlumTranslater.sql.easyReplase(q2));
 //CASE3 : DATE_FORMAT
 		String q3 = "CAST((A.AP_PAYM_PLAN_PAID_DT (FORMAT 'YYYY-MM')) as CHAR(7)) AS AP_PAYM_AMT_ORIG_PAID_MN,";
 		String a3 = "CAST((TO_DATE(A.AP_PAYM_PLAN_PAID_DT, 'YYYY-MM')) as CHAR(7)) AS AP_PAYM_AMT_ORIG_PAID_MN,";
-//		System.out.println(GreemPlumTranslater.sql.easyReplase(q3));
+		String r3 = GreemPlumTranslater.sql.easyReplase(q3);
+		if(!a3.equals(r3))
+		System.out.println(r3);
 		System.out.println("CASE  3 : "+a3.equals(GreemPlumTranslater.sql.easyReplase(q3)));
-//		System.out.println("CASE 3 : "+a3);
-//		System.out.println("CASE 3 : "+GreemPlumTranslater.sql.easyReplase(q3));
 //CASE4 : DATE_FORMAT
 		String q4 = "PLAN_DATE (FORMAT 'YYYY-MM')(CHAR(7)) >= (SELECT MIN(PLAN_DATE)(FORMAT 'YYYY-MM')(CHAR(7)))";
 		String a4 = "TO_CHAR(PLAN_DATE, 'YYYY-MM') >= (SELECT TO_CHAR(MIN(PLAN_DATE), 'YYYY-MM'))";
@@ -209,7 +213,7 @@ public class TestSQLTranslater {
 		String r24 = GreemPlumTranslater.sql.easyReplase(q24);
 //		System.out.println(r24);
 		System.out.println("CASE 24 : "+a24.equals(r24));
-//CASE25 : 不同格式間的比較
+//CASE25 : (人工) 不同格式間的比較
 //		String q25 = "";
 //		String a25 = "";
 //		System.out.println("CASE 25 : "+a25.equals(GreemPlumTranslater.sql.easyReplase(q25)));
@@ -255,26 +259,60 @@ public class TestSQLTranslater {
 		System.out.println(r30);
 		System.out.println("CASE 30 : "+a30.equals(r30));
 //CASE31 : 
-//		String q31 = "";
-//		String a31 = "";
-//		System.out.println("CASE 31 : "+a31.equals(GreemPlumTranslater.sql.easyReplase(q31)));
+/*
+REPLACE VIEW ${VIEW_NCMO_DB}.RPT_EXP_EXPN_JE_LN_ALC AS
+LOCKING TABLE ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC FOR ACCESS
+SELECT A.*, '比例' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC A
+UNION ALL
+SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
+ */
+		String q31 = "REPLACE VIEW ${VIEW_NCMO_DB}.RPT_EXP_EXPN_JE_LN_ALC AS\r\n" + 
+				"LOCKING TABLE ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC FOR ACCESS\r\n" + 
+				"SELECT A.*, '比例' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC A\r\n" + 
+				"UNION ALL\r\n" + 
+				"SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B";
+		String a31 = "DROP VIEW IF EXISTS ${VIEW_NCMO_DB}.RPT_EXP_EXPN_JE_LN_ALC;\r\n" + 
+				"CREATE VIEW ${VIEW_NCMO_DB}.RPT_EXP_EXPN_JE_LN_ALC AS\r\n" + 
+				"/*LOCKING TABLE ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC FOR ACCESS*/\r\n" + 
+				"SELECT A.*, '比例' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC A\r\n" + 
+				"UNION ALL\r\n" + 
+				"SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B";
+		String r31 = GreemPlumTranslater.sql.easyReplase(q31);
+		r31 = GreemPlumTranslater.other.easyReplase(r31);
+		r31 = GreemPlumTranslater.ddl.changeReplaceView(r31);
+		if(!a31.equals(r31))
+		System.out.println(r31);
+		System.out.println("CASE 31 : "+a31.equals(r31));
 //CASE32 : 
-//		String q32 = "";
-//		String a32 = "";
-//		System.out.println("CASE 32 : "+a32.equals(GreemPlumTranslater.sql.easyReplase(q32)));
+		String q32 = "COLLECT STATISTICS ON ${BIMART_DB}.BI_ACTUAL_IMP_SUM_TW;\r\n" + 
+				"INDEX ( PLANT_LOC_ID,MFG_DT,MFG_SHIFT_ID,MFG_ORD_ID);";
+		String a32 = "ANALYZE ${BIMART_DB}.BI_ACTUAL_IMP_SUM_TW;\r\n" + 
+				"/*INDEX ( PLANT_LOC_ID,MFG_DT,MFG_SHIFT_ID,MFG_ORD_ID);*/";
+		String r32 = GreemPlumTranslater.other.easyReplase(q32);
+		if(!a32.equals(r32))
+		System.out.println(r32);
+		System.out.println("CASE 32 : "+a32.equals(r32));
 //CASE33 : 
 //		String q33 = "";
 //		String a33 = "";
 //		System.out.println("CASE 33 : "+a33.equals(GreemPlumTranslater.sql.easyReplase(q33)));
 //CASE34 : 
-//		String q34 = "";
-//		String a34 = "";
-//		System.out.println("CASE 34 : "+a34.equals(GreemPlumTranslater.sql.easyReplase(q34)));
-//CASE35 : 
-//		String q35 = "";
-//		String a35 = "";
-//		System.out.println("CASE 35 : "+a35.equals(GreemPlumTranslater.sql.easyReplase(q35)));
-//CASE36 : 
+		String q34 = "CAST(CAST(CAST(AP1.PAY_DATE AS INTEGER) AS FORMAT '99') AS VARCHAR(2))";
+		String a34 = "CAST(TO_CHAR(CAST(AP1.PAY_DATE AS INTEGER),'00') AS VARCHAR(2))";
+		String r34 = GreemPlumTranslater.sql.easyReplase(q34);
+		if(!a34.equals(r34))
+		System.out.println(r34);
+		System.out.println("CASE 34 : "+a34.equals(GreemPlumTranslater.sql.easyReplase(q34)));
+//CASE35 : LIKE ANY FORMAT 
+		String q35 = "TRIM(LEADING '0' FROM CAST(CAST(CAST(s.ORD_NUM AS FLOAT) AS FORMAT '9(12)') AS VARCHAR(12)))\r\n" + 
+				"LIKE ANY ('1%' , '7%' , '3%' )";
+		String a35 = "TRIM(LEADING '0' FROM CAST(TO_CHAR(CAST(s.ORD_NUM AS FLOAT),'000000000000') AS VARCHAR(12)))\r\n" + 
+				"LIKE ANY (ARRAY['1%' , '7%' , '3%'])";
+		String r35 = GreemPlumTranslater.sql.easyReplase(q35);
+		if(!a35.equals(r35))
+		System.out.println(r35);
+		System.out.println("CASE 35 : "+a35.equals(GreemPlumTranslater.sql.easyReplase(q35)));
+//CASE36 : (人工)
 //		String q36 = "";
 //		String a36 = "";
 //		System.out.println("CASE 36 : "+a36.equals(GreemPlumTranslater.sql.easyReplase(q36)));
@@ -284,11 +322,11 @@ public class TestSQLTranslater {
 		String r37 = GreemPlumTranslater.sql.easyReplase(q37);
 //		System.out.println(r37);
 		System.out.println("CASE 37 : "+a37.equals(r37));
-//CASE38 : 
+//CASE38 : (人工)
 //		String q38 = "";
 //		String a38 = "";
 //		System.out.println("CASE 38 : "+a38.equals(GreemPlumTranslater.sql.easyReplase(q38)));
-//CASE39 : 
+//CASE39 : (人工)
 //		String q39 = "";
 //		String a39 = "";
 //		System.out.println("CASE 39 : "+a39.equals(GreemPlumTranslater.sql.easyReplase(q39)));
@@ -311,7 +349,7 @@ public class TestSQLTranslater {
 		String q43 = "SUBSTR(STRTOK(STRTOK(OREPLACE(OREPLACE(A.ITEM_ID,'TOD',''),'CELL',''),'_',1),'-',1),1,4)";
 		String a43 = "SUBSTR(SPLIT_PART(SPLIT_PART(REPLACE(REPLACE(A.ITEM_ID,'TOD',''),'CELL',''),'_',1),'-',1),1,4)";
 		System.out.println("CASE 43 : "+a43.equals(GreemPlumTranslater.sql.easyReplase(q43)));
-//CASE44 : 
+//CASE44 : (人工)日期運算
 //		String q44 = "";
 //		String a44 = "";
 //		System.out.println("CASE 44 : "+a44.equals(GreemPlumTranslater.sql.easyReplase(q44)));
@@ -380,7 +418,7 @@ public class TestSQLTranslater {
 //		String q51 = "";
 //		String a51 = "";
 //		System.out.println("CASE 51 : "+a51.equals(GreemPlumTranslater.sql.easyReplase(q51)));
-//CASE52 : 
+//CASE52 : DROP TABLE
 		String q52 = "DROP TABLE ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1\r\n" + 
 				";\r\n" + 
 				"\r\n" + 
