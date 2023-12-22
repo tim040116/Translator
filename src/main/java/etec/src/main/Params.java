@@ -2,9 +2,10 @@ package etec.src.main;
 
 import etec.src.params.ConfigParams;
 import etec.src.params.FamilyMartParams;
+import etec.src.params.GreenPlumParams;
 import etec.src.params.LogParams;
 import etec.src.params.SearchFunctionParams;
-import etec.src.params.sfspParams;
+import etec.src.params.SFSPParams;
 
 /**
  * default 參數，會在2.0被參數檔取代
@@ -22,5 +23,7 @@ public class Params {
 	
 	public static FamilyMartParams familyMart = null;
 
-	public static sfspParams sfsp = null;
+	public static SFSPParams sfsp = null;
+	
+	public static GreenPlumParams gp = null;
 }

@@ -6,9 +6,10 @@ import java.util.Map;
 import etec.common.utils.ParamsTool;
 import etec.src.params.ConfigParams;
 import etec.src.params.FamilyMartParams;
+import etec.src.params.GreenPlumParams;
 import etec.src.params.LogParams;
 import etec.src.params.SearchFunctionParams;
-import etec.src.params.sfspParams;
+import etec.src.params.SFSPParams;
 
 /**
  * 2023/08/01 Tim
@@ -33,7 +34,8 @@ public class ParamsFactory {
 		"log",
 		"familymart",
 		"search_function",
-		"sf_sp"
+		"sf_sp",
+		"greenplum"
 	};
 	
 	private static Map<String,File> mapParams;
@@ -44,6 +46,7 @@ public class ParamsFactory {
 		Params.config = new ConfigParams(mapParams.get("config"));
 		Params.searchFunction = new SearchFunctionParams(mapParams.get("search_function"));
 		Params.familyMart = new FamilyMartParams(mapParams.get("familymart"));
-		Params.sfsp = new sfspParams(mapParams.get("sf_sp"));
+		Params.sfsp = new SFSPParams(mapParams.get("sf_sp"));
+		Params.gp = new GreenPlumParams(mapParams.get("greenplum"));
 	}
 }

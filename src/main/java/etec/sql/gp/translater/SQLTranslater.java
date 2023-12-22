@@ -58,6 +58,7 @@ public class SQLTranslater {
 				.replaceAll("(?i)\\bSEL\\b", "SELECT")//SEL
 				.replaceAll("(?i)\\bOREPLACE\\s*\\(", "REPLACE\\(")//OREPLACE
 				.replaceAll("(?i)\\bSTRTOK\\s*\\(", "SPLIT_PART\\(")//STRTOK
+				.replaceAll("(?i)CHARACTERS\\s*\\(","LENGTH\\(")//CHARACTERS
 				.replaceAll("(?i)\\bAS\\s+FORMAT\\s+'(["+regDate+"]+)'","AS DATE FORMAT '$1'")//DATE FORMAT 正規化
 				.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT","AS DATE FORMAT")//DATE FORMAT 正規化
 //				.replaceAll("(?i)(\\(\\s*FORMAT\\s+'[^']+'\\s*\\))\\s*\\((VAR)?CHAR\\s*\\(\\s*\\d+\\s*\\)\\s*\\)", "$1")//FORMAT DATE 語法正規化

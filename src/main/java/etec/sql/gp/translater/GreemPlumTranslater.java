@@ -24,7 +24,7 @@ public class GreemPlumTranslater {
 	 * <li>日期格式之乘除運算
 	 * <li>DATE_TRUNC語法需確保裡面的參數為日期
 	 * <li>不同型態間的比較有時會出現ERROR，要人工判斷
-	 * <li>
+	 * <li>CHAR($1)若$1為DATE要改成TO_CHAR，若為CHAR則改成LENGTH
 	 * */
 	public static SQLTranslater sql = new SQLTranslater();
 	

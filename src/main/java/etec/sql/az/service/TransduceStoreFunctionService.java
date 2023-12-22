@@ -155,7 +155,7 @@ public class TransduceStoreFunctionService {
 				;
 		lstParams.addAll(Arrays.asList(headerParams.split("\\s*,\\s*")));
 		//DECLARE的參數
-		lstParams.addAll(RegexTool.getRegexTarget("(?i)(?<=DECLARE )\\S+", txtContext));
+		lstParams.addAll(RegexTool.getRegexTarget("(?i)(?<=DECLARE\\s{0,100})\\S+", txtContext));
 		//參數置換
 		script = OtherTranslater.transduceDECLARE(lstParams, script);
 		//包裝

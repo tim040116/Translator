@@ -159,13 +159,13 @@ public class TestSQLTranslater {
 
 //CASE16 : Qualify
 		/*
-		SELECT DISTINCT
-			TRIM( LEADING '0' FROM VENDORCODE) AS VENDORCODE ,GROUPCODE,GROUPNAME
-		FROM PSTAGE_CN.DW_VW_VENDORGROUP_EDW
-		QUALIFY ROW_NUMBER()OVER(
-			PARTITION BY NEWVENDORCODE,VENDORCODE,GROUPCODE,GROUPNAME
-			ORDER BY NEWVENDORCODE,VENDORCODE,GROUPCODE
-		)=1
+SELECT DISTINCT
+	TRIM( LEADING '0' FROM VENDORCODE) AS VENDORCODE ,GROUPCODE,GROUPNAME
+FROM PSTAGE_CN.DW_VW_VENDORGROUP_EDW
+QUALIFY ROW_NUMBER()OVER(
+	PARTITION BY NEWVENDORCODE,VENDORCODE,GROUPCODE,GROUPNAME
+	ORDER BY NEWVENDORCODE,VENDORCODE,GROUPCODE
+)=1
 		*/
 		String q16 = "SELECT DISTINCT\r\n"
 				+ "	TRIM( LEADING '0' FROM VENDORCODE) AS VENDORCODE ,GROUPCODE,GROUPNAME\r\n"
@@ -293,9 +293,12 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 		System.out.println(r32);
 		System.out.println("CASE 32 : "+a32.equals(r32));
 //CASE33 : 
-//		String q33 = "";
-//		String a33 = "";
-//		System.out.println("CASE 33 : "+a33.equals(GreemPlumTranslater.sql.easyReplase(q33)));
+		String q33 = "CASE WHEN CHARACTERS(ORG)>3 THEN SUBSTR(ORG,1,3) ELSE ORG END AS ORG";
+		String a33 = "CASE WHEN LENGTH(ORG)>3 THEN SUBSTR(ORG,1,3) ELSE ORG END AS ORG";
+		String r33 = GreemPlumTranslater.sql.easyReplase(q33);
+		if(!a33.equals(r33))
+		System.out.println(r33);
+		System.out.println("CASE 33 : "+a33.equals(r33));
 //CASE34 : 
 		String q34 = "CAST(CAST(CAST(AP1.PAY_DATE AS INTEGER) AS FORMAT '99') AS VARCHAR(2))";
 		String a34 = "CAST(TO_CHAR(CAST(AP1.PAY_DATE AS INTEGER),'00') AS VARCHAR(2))";
@@ -311,7 +314,7 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 		String r35 = GreemPlumTranslater.sql.easyReplase(q35);
 		if(!a35.equals(r35))
 		System.out.println(r35);
-		System.out.println("CASE 35 : "+a35.equals(GreemPlumTranslater.sql.easyReplase(q35)));
+		System.out.println("CASE 35 : "+a35.equals(r35));
 //CASE36 : (人工)
 //		String q36 = "";
 //		String a36 = "";
@@ -326,11 +329,14 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 //		String q38 = "";
 //		String a38 = "";
 //		System.out.println("CASE 38 : "+a38.equals(GreemPlumTranslater.sql.easyReplase(q38)));
-//CASE39 : (人工)
-//		String q39 = "";
-//		String a39 = "";
-//		System.out.println("CASE 39 : "+a39.equals(GreemPlumTranslater.sql.easyReplase(q39)));
-//CASE40 : 
+//CASE39 : CASECADE
+		String q39 = "DROP TABLE tab_name;";
+		String a39 = "DROP TABLE IF EXISTS tab_name CASCADE;";
+		String r39 = GreemPlumTranslater.ddl.changeDropTableIfExist(q39);
+		if(!a39.equals(r39))
+		System.out.println(r39);
+		System.out.println("CASE 39 : "+a39.equals(r39));
+//CASE40 : (人工)
 //		String q40 = "";
 //		String a40 = "";
 //		System.out.println("CASE 40 : "+a40.equals(GreemPlumTranslater.sql.easyReplase(q40)));
@@ -365,8 +371,11 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 		System.out.println("CASE 45 : "+a45.equals(r45));
 //CASE46_1 : 
 		String q46_1 = "DROP TABLE ${MART_NCMO_DB}.BI_FM_EXPN_NON_OP_DTL\r\n;";
-		String a46_1 = "DROP TABLE IF EXISTS ${MART_NCMO_DB}.BI_FM_EXPN_NON_OP_DTL;";
-		System.out.println("CASE 461: "+a46_1.equals(GreemPlumTranslater.ddl.changeDropTableIfExist(q46_1)));
+		String a46_1 = "DROP TABLE IF EXISTS ${MART_NCMO_DB}.BI_FM_EXPN_NON_OP_DTL CASCADE;";
+		String r46_1 = GreemPlumTranslater.ddl.changeDropTableIfExist(q46_1);
+		if(!a46_1.equals(r46_1))
+		System.out.println(r46_1);
+		System.out.println("CASE 461: "+a46_1.equals(r46_1));
 //CASE46_2 : 
 		String q46_2 = "RENAME TABLE ${MART_NCMO_DB}.BI_FM_EXPN_NON_OP_DTL_NEW\r\n" + 
 				"		  TO ${MART_NCMO_DB}.BI_FM_EXPN_NON_OP_DTL\r\n" + 
@@ -436,7 +445,7 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 				"	,GLBL_CRNCY_AMT					DECIMAL(30,4)\r\n" + 
 				")PRIMARY INDEX(REVSN_NUM,BM_CNFM_CD,CNTR_BU_DEPT_PARTY_ID,CNTR_BU_DEPT_PARTY_NAME,DVSN_GRP_DEPT_PARTY_ID)\r\n" + 
 				";";
-		String a52 = "DROP TABLE IF EXISTS ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1;\r\n" + 
+		String a52 = "DROP TABLE IF EXISTS ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1 CASCADE;\r\n" + 
 				"\r\n" + 
 				"CREATE TABLE ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1(\r\n" + 
 				"	 REVSN_NUM						VARCHAR(20)\r\n" + 
@@ -454,7 +463,8 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 				";";
 		String r52 = GreemPlumTranslater.ddl.changeDropTableIfExist(q52);
 		r52 = GreemPlumTranslater.ddl.changePrimaryIndex(r52);
-//		System.out.println(r52);
+		if(!a52.equals(r52))
+		System.out.println(r52);
 		System.out.println("CASE 52 : "+a52.equals(r52));
 //CASE53 : 
 //		String q53 = "";

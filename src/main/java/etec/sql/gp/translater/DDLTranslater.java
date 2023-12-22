@@ -1,6 +1,7 @@
 package etec.sql.gp.translater;
 
 import etec.common.utils.ConvertFunctionsSafely;
+import etec.src.main.Params;
 
 public class DDLTranslater {
 	/**
@@ -60,7 +61,7 @@ public class DDLTranslater {
 	 * */
 	public String changeDropTableIfExist(String sql) {
 		String res = sql
-			.replaceAll("(?i)DROP\\s+TABLE\\s+(\\S+)\\s*;", "DROP TABLE IF EXISTS $1;")
+			.replaceAll("(?i)DROP\\s+(TABLE|VIEW)\\s+(\\S+)\\s*;", "DROP $1 IF EXISTS $2"+(Params.gp.IS_CASCADE?" CASCADE":"")+";")
 			;
 		return res;
 	}
