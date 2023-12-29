@@ -5,6 +5,8 @@ import java.util.List;
 
 public class SelectTableModel {
 	
+	private boolean distinct;
+	
 	private List<String> lstColumn = new ArrayList<String>();
 	
 	private String fromTable = "";
@@ -43,6 +45,14 @@ public class SelectTableModel {
 
 	public void setLstGroupBy(List<String> lstGroupBy) {
 		this.lstGroupBy = lstGroupBy;
+	}
+
+	public boolean isDistinct() {
+		return distinct;
+	}
+
+	public void setDistinct(boolean distinct) {
+		this.distinct = distinct;
 	}
 	
 }

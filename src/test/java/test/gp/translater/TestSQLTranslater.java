@@ -1,5 +1,6 @@
 package test.gp.translater;
 
+import etec.common.exception.UnknowSQLTypeException;
 import etec.sql.gp.translater.GreemPlumTranslater;
 
 /**
@@ -11,7 +12,7 @@ import etec.sql.gp.translater.GreemPlumTranslater;
  * 
  * */
 public class TestSQLTranslater {
-	public static String run() {
+	public static String run() throws UnknowSQLTypeException {
 		String res = "";
 		
 		testAddMonths();
@@ -19,7 +20,7 @@ public class TestSQLTranslater {
 		return res;
 	}
 	
-	private static void testAddMonths() {
+	private static void testAddMonths() throws UnknowSQLTypeException {
 //CASE1 : ADD_MONTHS
 		String q1 = "ADD_MONTHS(a.RPT_DT,-1) = c.RPT_DT";
 		String a1 = "CAST(a.RPT_DT-INTERVAL'1 MONTH' AS DATE) = c.RPT_DT";
@@ -158,7 +159,8 @@ public class TestSQLTranslater {
 		System.out.println("CASE 15 : "+a15.equals(r15));
 
 //CASE16 : Qualify
-		/*
+/*
+
 SELECT DISTINCT
 	TRIM( LEADING '0' FROM VENDORCODE) AS VENDORCODE ,GROUPCODE,GROUPNAME
 FROM PSTAGE_CN.DW_VW_VENDORGROUP_EDW
@@ -166,7 +168,8 @@ QUALIFY ROW_NUMBER()OVER(
 	PARTITION BY NEWVENDORCODE,VENDORCODE,GROUPCODE,GROUPNAME
 	ORDER BY NEWVENDORCODE,VENDORCODE,GROUPCODE
 )=1
-		*/
+
+*/
 		String q16 = "SELECT DISTINCT\r\n"
 				+ "	TRIM( LEADING '0' FROM VENDORCODE) AS VENDORCODE ,GROUPCODE,GROUPNAME\r\n"
 				+ "FROM PSTAGE_CN.DW_VW_VENDORGROUP_EDW\r\n"
@@ -174,8 +177,18 @@ QUALIFY ROW_NUMBER()OVER(
 				+ "	PARTITION BY NEWVENDORCODE,VENDORCODE,GROUPCODE,GROUPNAME\r\n"
 				+ "	ORDER BY NEWVENDORCODE,VENDORCODE,GROUPCODE\r\n"
 				+ ")=1";
-		String a16 = "";
-		String r16 = GreemPlumTranslater.sql.easyReplase(q16);
+		String a16 = "SELECT DISTINCT\r\n" + 
+				"	VENDORCODE ,GROUPCODE,GROUPNAME\r\n" + 
+				"FROM ( SELECT\r\n" + 
+				"	TRIM( LEADING '0' FROM VENDORCODE) AS VENDORCODE ,GROUPCODE,GROUPNAME\r\n" + 
+				"	,ROW_NUMBER()OVER(\r\n" + 
+				"	PARTITION BY NEWVENDORCODE,VENDORCODE,GROUPCODE,GROUPNAME\r\n" + 
+				"	ORDER BY NEWVENDORCODE,VENDORCODE,GROUPCODE\r\n" + 
+				") AS ROW_NUMBER\r\n" + 
+				"	FROM PSTAGE_CN.DW_VW_VENDORGROUP_EDW\r\n" + 
+				" ) tmp_qrn \r\n" + 
+				" where tmp_qrn.ROW_NUMBER =1";
+		String r16 = GreemPlumTranslater.dql.changeQualifaRank(q16);
 		if(!a16.equals(r16))
 		System.out.println(r16);
 		System.out.println("CASE 16 : "+a16.equals(r16));
@@ -192,9 +205,77 @@ QUALIFY ROW_NUMBER()OVER(
 //		String a19 = "";
 //		System.out.println("CASE 19 : "+a19.equals(GreemPlumTranslater.sql.easyReplase(q19)));
 //CASE20 : 
-//		String q20 = "";
-//		String a20 = "";
-//		System.out.println("CASE 20 : "+a20.equals(GreemPlumTranslater.sql.easyReplase(q20)));
+/*
+INSERT INTO PTEMP.RPT_EMS_FE_EQP_TACTTIME_TMP1_TT6
+SELECT	PLANT_LOC_ID
+		,FAB_CODE
+		,PLAN_VER_CD
+		,MFG_MN
+		,CLNDR_MN
+		,R12_PROD_ID
+		,CAST('' AS VARCHAR(20)) AS ERP_ITEM_ID
+		,ITEM_ID
+		,DATA_TYPE_CD
+		,EQUIP_USG_GRP_ID
+		,BN_RANK_NUM
+		,MAJOR_FCTR_MEAS
+		,MAJOR_ECTR_RW_MEAS
+FROM(
+	SEL	DISTINCT 
+		PLANT_LOC_ID
+		,FAB_CODE
+		,PLAN_VER_CD
+		,MFG_MN
+		,CLNDR_MN
+		,R12_PROD_ID
+		,ITEM_ID
+		,DATA_TYPE_CD
+		,EQUIP_USG_GRP_ID
+		,BN_RANK_NUM
+		,MAJOR_FCTR_MEAS
+		,MAJOR_ECTR_RW_MEAS
+	FROM PDATA.FCT_FCST__TFT_M12_LN A
+) A
+QUALIFY ROW_NUMBER() OVER
+(PARTITION BY PLANT_LOC_ID,MFG_MN,CLNDR_MN,R12_PROD_ID,EQUIP_USG_GRP_ID,ITEM_ID,BN_RANK_NUM ORDER BY PLAN_VER_CD DESC) = 1
+ */
+		String q20 = "INSERT INTO PTEMP.RPT_EMS_FE_EQP_TACTTIME_TMP1_TT6\r\n" + 
+				"SELECT	PLANT_LOC_ID\r\n" + 
+				"		,FAB_CODE\r\n" + 
+				"		,PLAN_VER_CD\r\n" + 
+				"		,MFG_MN\r\n" + 
+				"		,CLNDR_MN\r\n" + 
+				"		,R12_PROD_ID\r\n" + 
+				"		,CAST('' AS VARCHAR(20)) AS ERP_ITEM_ID\r\n" + 
+				"		,ITEM_ID\r\n" + 
+				"		,DATA_TYPE_CD\r\n" + 
+				"		,EQUIP_USG_GRP_ID\r\n" + 
+				"		,BN_RANK_NUM\r\n" + 
+				"		,MAJOR_FCTR_MEAS\r\n" + 
+				"		,MAJOR_ECTR_RW_MEAS\r\n" + 
+				"FROM(\r\n" + 
+				"	SEL	DISTINCT \r\n" + 
+				"		PLANT_LOC_ID\r\n" + 
+				"		,FAB_CODE\r\n" + 
+				"		,PLAN_VER_CD\r\n" + 
+				"		,MFG_MN\r\n" + 
+				"		,CLNDR_MN\r\n" + 
+				"		,R12_PROD_ID\r\n" + 
+				"		,ITEM_ID\r\n" + 
+				"		,DATA_TYPE_CD\r\n" + 
+				"		,EQUIP_USG_GRP_ID\r\n" + 
+				"		,BN_RANK_NUM\r\n" + 
+				"		,MAJOR_FCTR_MEAS\r\n" + 
+				"		,MAJOR_ECTR_RW_MEAS\r\n" + 
+				"	FROM PDATA.FCT_FCST__TFT_M12_LN A\r\n" + 
+				") A\r\n" + 
+				"QUALIFY ROW_NUMBER() OVER\r\n" + 
+				"(PARTITION BY PLANT_LOC_ID,MFG_MN,CLNDR_MN,R12_PROD_ID,EQUIP_USG_GRP_ID,ITEM_ID,BN_RANK_NUM ORDER BY PLAN_VER_CD DESC) = 1";
+		String a20 = "";
+		String r20 = GreemPlumTranslater.dql.changeQualifaRank(q20);
+		if(!a20.equals(r20))
+		System.out.println(r20);
+		System.out.println("CASE 20 : "+a20.equals(r20));
 //CASE21 : 
 //		String q21 = "";
 //		String a21 = "";

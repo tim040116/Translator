@@ -1,19 +1,15 @@
 package etec.sql.gp.translater;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import etec.common.utils.ConvertFunctionsSafely;
-import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
 
 /**
- * @author	Tim
- * @since	2023年11月30日
- * @version	4.0.0.0
+ * 
  * 
  * td 轉 gp 通用語法轉換
  * 
@@ -24,6 +20,9 @@ import etec.common.utils.TransduceTool;
  * <br><br><h2>常見GP語法</h2>
  * <br>INTERVAL	時間間隔，為一種資料型態，用於時間運算，並可以藉由後綴詞限制儲存內容
  * 
+ * @author	Tim
+ * @since	4.0.0.0
+ * @version	4.0.0.0
  * */
 public class SQLTranslater {
 	
@@ -31,8 +30,7 @@ public class SQLTranslater {
 	String regInt = "0-9ZI\\.,\\+\\-\\$\\%\\(\\)";//數字格式會用到的字符
 	
 	/**
-	 * @author	Tim
-	 * @since	2023年12月5日
+	 * 
 	 * 
 	 * <h1>轉換SQL語法</h1><br>
 	 * 
@@ -50,6 +48,9 @@ public class SQLTranslater {
 	 * <br> {@link SQLTranslater#changeAddMonths(String)}
 	 * <br> {@link SQLTranslater#changeDateFormat(String)}
 	 * <br>DATE 轉成 CURRENT_DATE
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
 	 * */
 	public String easyReplase(String script) {
 		//語法正規化
@@ -66,7 +67,7 @@ public class SQLTranslater {
 //				.replaceAll("(?<!')0\\d+(?!'|\\d)", "'$0'")//0字頭的數字要包在字串裡
 				;
 		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
-		res = cff.saveTranslateFunction(res, (String t)->{
+		res = cff.savelyConvert(res, (String t)->{
 			t = t
 				.replaceAll("(?i)INDEX\\s*\\(([^,]+),([^\\)]+)\\)", "POSITION\\($2 IN $1\\)")//INDEX改成POSITION
 				.replaceAll("(?i)ZEROIFNULL\\s*\\(([^\\)]+)\\)", "COALESCE\\($1,0\\)")//ZEROIFNULL改成COALESCE
@@ -76,7 +77,7 @@ public class SQLTranslater {
 			;
 			return t;
 		});
-		res = cff.saveTranslateFunction(res, (String t)->{
+		res = cff.savelyConvert(res, (String t)->{
 			t = changeAddMonths(t);
 			t = changeLastDay(t);
 			t = changeDateFormat(t);
@@ -85,7 +86,7 @@ public class SQLTranslater {
 			return t;
 		});
 		//須隔離處裡的項目
-		res = cff.saveTranslateFunction(res, (String t)->{
+		res = cff.savelyConvert(res, (String t)->{
 			t = t
 				//CAST($1 AS DATE FORMAT 'YYYY-MM-DD') 轉成 TO_DATE
 				.replaceAll("(?i)CAST\\s*\\(([^\\(\\)]+)\\s*AS\\s+DATE\\s+FORMAT\\s+('[^']+')\\s*\\)", "TO_DATE\\($1,$2\\)")
@@ -96,14 +97,15 @@ public class SQLTranslater {
 		return res;
 	}
 	/**
-	 * @author	Tim
-	 * @since	2023年11月30日
-	 * 
 	 * <br>INTERVAL可進行月份加減
 	 * <br>但會將資料型態轉變為 timestamp
 	 * <br>因此需要配合CAST語法進行轉換
 	 * <br>
 	 * <br>ADD_MONTHS($1,$2) 轉成 CAST($1-INTERVAL'$2 MONTH' AS DATE)
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * 
 	 * 
 	 * */
 	public String changeAddMonths(String sql) {
@@ -116,8 +118,6 @@ public class SQLTranslater {
 		return res;
 	}
 	/**
-	 * @author	Tim
-	 * @since	2023年12月18日
 	 * 
 	 * <h1>LAST_DAY 取該月的最後一天</h1>
 	 * 
@@ -126,6 +126,9 @@ public class SQLTranslater {
 	 * <br> 先使用DATE_TRUNC 取該月第一天
 	 * <br> 用 INTERVAL 語法 加一個月後減一天
 	 * <br> 由於 INTERVAL 語法運算後會轉成 timestamp 所以要再轉回 DATE
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * 
 	 * */
 	public String changeLastDay(String sql) {
 		String res = sql;
@@ -136,8 +139,7 @@ public class SQLTranslater {
 	}
 	
 	/**
-	 * @author	Tim
-	 * @since	2023年11月30日
+	 * 
 	 * 
 	 * <br>1. 強制轉換  //2023-12-10 搬遷至changeTypeConversion
 	 * <br>		1-1. (FORMAT 'YYYY-MM-DD')(CHAR(7)) 轉成 TO_CHAR($1,'$2')
@@ -157,14 +159,15 @@ public class SQLTranslater {
 	 * <br>2023/12/06	Tim	因涉及邏輯問題暫時廢棄
 	 * <br>2023/12/12	Tim 重啟功能，分層處理
 	 * 		
-	 * 		
+	 * @author	Tim
+	 * @since	4.0.0.0
 	 * */
 //	@Deprecated
 	public String changeDateFormat(String sql) {
 		String res = sql;
 		
 		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
-		res = cff.saveTranslateFunction(sql,(String t)->{
+		res = cff.savelyConvert(sql,(String t)->{
 			/**  2.處理日期截取語法
 			 * 1. 先將SUBSTR(CAST(AS DATE FORMAT語法轉換成TO_CHAR，FORMAT 跟 SUBSTR 合併
 			 * 	SUBSTR(CAST($1 AS DATE FORMAT $2),$3,$4) 轉成 TO_CHAR(CAST($1 AS DATE),SUBSTR($2,$3,$4))
@@ -206,25 +209,21 @@ public class SQLTranslater {
 	}
 	/**
 	 * 
-	 * 
-	 * 
-	 * */
-	/**
-	 * @author	Tim
-	 * @since	2023年11月30日
-	 * 
 	 * <br>轉換欄位強制轉換的語法
 	 * <br>
 	 * <br>$1(FORMAT 'YYYY-MM-DD') >> TO_DATE($1,'YYYY-MM-DD')
 	 * <br>$1(CHAR(7)) >> cast($1 as char(7))
 	 * <br>$1(FORMAT 'YYYY-MM-DD')(CHAR(7)) >> TO_CHAR($1 ,'YYYY-MM-DD')
 	 * <br>DATE'${TX4Y-M}-01' >> CAST('${TX4Y-M}-01' AS DATE)
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
 	 * */
 	public String changeTypeConversion(String sql) {
 		
 		String res = sql;
 		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
-		res = cff.saveTranslateFunction(sql, (String t)->{
+		res = cff.savelyConvert(sql, (String t)->{
 			t = t
 				//1-1 (FORMAT 'YYYY-MM-DD')(CHAR(7))
 				.replaceAll("(?i)([.\\w]+)\\s*(\\([^\\)]+\\))?\\s*\\(\\s*FORMAT\\s+('["+regDate+"]+')\\s*\\)\\s*\\(\\s*(VAR)?CHAR\\(\\d+\\)\\s*\\)", "TO_CHAR\\($1$2, $3\\)")
@@ -243,10 +242,11 @@ public class SQLTranslater {
 		return res;
 	}
 	/**
-	 * @author	Tim
-	 * @since	2023年12月20日
-	 * 
 	 * CURRENT_DATE 轉換
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * 
 	 * */
 	public String changeCurrentDate(String sql) {
 		String res = sql;
@@ -259,17 +259,16 @@ public class SQLTranslater {
 		return res;
 	}
 	/**
-	 * @author	Tim
-	 * @since	2023年12月20日
-	 * 
 	 * <h1>轉換CAST轉換數字的語法</h1>
 	 * <br>CAST($1 AS FORMAT '9(12)') -> TO_CHAR($1,'000000000000')
 	 * 
+	 * @author	Tim
+	 * @since	2023年12月20日
 	 * */
 	public String changeFormatNumber(String sql) {
 		String res = sql;
 		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
-		res = cff.saveTranslateFunction(res, (String t)->{
+		res = cff.savelyConvert(res, (String t)->{
 			Map<String,String> mapIntFormat = new HashMap<String,String>();//需轉換的語法
 			mapIntFormat.put("9", "0");
 			mapIntFormat.put("Z", "9");

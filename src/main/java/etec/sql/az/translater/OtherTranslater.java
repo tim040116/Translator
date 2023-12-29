@@ -28,7 +28,7 @@ public class OtherTranslater {
 		3.CLOSE (\S) 改成 CLOSE $1 \r\nDEALLOCATE $1
 	 * */
 	public static String transduceCursor(String script) {
-		String txt = script.toUpperCase();
+		String txt = script;
 		txt = txt
 				.replaceAll("(?i)\\bEXECUTE\\s+IMMEDIATE", "EXECUTE")
 				.replaceAll("(?i)\\bFETCH\\b", "FETCH NEXT FROM")
@@ -52,7 +52,7 @@ public class OtherTranslater {
 	 * 
 	 * */
 	public static String transduceIF(String script) {
-		String res = script.toUpperCase();
+		String res = script;
 		//先處理else 因為會跟case的搞混
 //		res = res
 //				.replaceAll("(?i)END\\s+IF\\s*;","中")
@@ -101,7 +101,7 @@ public class OtherTranslater {
 					if(p.matches("\\s*")||p.matches("")) {
 						continue;
 					}
-					t = t.replaceAll("\\b"+p.trim()+"\\b", "@"+p.trim());
+					t = t.replaceAll("(?i)\\b"+p.trim()+"\\b", "@"+p.trim());
 				}
 				return t;
 			});
@@ -124,7 +124,7 @@ public class OtherTranslater {
 	public static String changeIndex(String sql) {
 		String result = sql;
 		//取得sample
-		List<String> lstIndex = RegexTool.getRegexTarget("(?<=[, ])[Ii][Nn][Dd][Ee][Xx][^\\)]+",result);
+		List<String> lstIndex = RegexTool.getRegexTarget("(?i)(?<=[, ])INDEX[^\\)]+",result);
 		//是否存在sample
 		if(lstIndex.isEmpty()) {
 			return sql;
@@ -136,7 +136,7 @@ public class OtherTranslater {
 					||upper.contains("UNIQUE")) {
 				continue;
 			}
-			List<String>lstP = RegexTool.getRegexTarget("(?<=[Ii][Nn][Dd][Ee][Xx]\\s{0,10}\\()[^\\)]+",data);
+			List<String>lstP = RegexTool.getRegexTarget("(?i)(?<=INDEX\\s{0,10}\\()[^\\)]+",data);
 			if(lstP.isEmpty()) {
 				continue;
 			}

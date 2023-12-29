@@ -18,7 +18,6 @@ public class RegexTool {
 	 * 
 	 * @author	Tim
 	 * @since	2023/04/29
-	 * @
 	 * @param	functionNm	括號前面的象徵性字串
 	 * @param	context		文章
 	 * @return	String		括號中的內容

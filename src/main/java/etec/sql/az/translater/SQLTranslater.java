@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import etec.common.exception.SQLFormatException;
+import etec.common.utils.ConvertFunctionsSafely;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
 
@@ -70,125 +71,81 @@ public class SQLTranslater {
 		String res = sql;
 		res = res
 				// SEL
-				.replaceAll("\\bSEL\\vb", "SELECT")
+				.replaceAll("(?i)\\bSEL\\vb", "SELECT")
 				// ||
 				.replaceAll("\\|\\|", "+")
 				// SUBSTR
-				.replaceAll("SUBSTR\\s*\\(", "SUBSTRING(")
+				.replaceAll("(?i)SUBSTR\\s*\\(", "SUBSTRING(")
 				// oreplace
-				.replaceAll("OREPLACE\\s*\\(", "REPLACE(")
+				.replaceAll("(?i)OREPLACE\\s*\\(", "REPLACE(")
 				// strtok
-				.replaceAll("STRTOK\\s*\\(", "STRING_SPLIT(")
+				.replaceAll("(?i)STRTOK\\s*\\(", "STRING_SPLIT(")
 				//NVL
-				.replaceAll("NVL\\s*\\(", "ISNULL(")
+				.replaceAll("(?i)NVL\\s*\\(", "ISNULL(")
 				//truncCAST(A.TIME_RANGE/10000 AS INTEGER)
-				.replaceAll("TRUNC\\((.*?)(,\\s*0)?\\)", "CAST($1 AS INTEGER)")
+				.replaceAll("(?i)TRUNC\\((.*?)(,\\s*0)?\\)", "CAST($1 AS INTEGER)")
 				//TO_NUMBER
-				.replaceAll("TO_NUMBER\\s*\\(\\s*(.*?)\\s*\\)", "CAST($1 AS INTEGER)")
+				.replaceAll("(?i)TO_NUMBER\\s*\\(\\s*(.*?)\\s*\\)", "CAST($1 AS INTEGER)")
 				//TO_DATE
-				.replaceAll("TO_DATE\\s*\\(\\s*(.*?)\\s*,\\s*\\S+\\s*\\)", "CAST($1 AS DATETIME)")
+				.replaceAll("(?i)TO_DATE\\s*\\(\\s*(.*?)\\s*,\\s*\\S+\\s*\\)", "CAST($1 AS DATETIME)")
 				//TO_CHAR
 //				.replaceAll("TO_CHAR\\s*\\(\\s*([^,\\(\\)]+)\\s*\\)", "CAST($1 AS VARCHAR)")
 				// rank over
-				.replaceAll("(?<!_|[A-Za-z0-9])[Rr][Aa][Nn][Kk]\\((?! |\\))", " RANK ( ) OVER ( order by ")// all
+				.replaceAll("(?i)\\bRANK\\((?! |\\))", "RANK ( ) OVER ( order by ")// all
 				// extract
-				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Dd][Aa][Yy] *[Ff][Rr][Oo][Mm]", "DatePart(day ,")// all
-				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Mm][Oo][Nn][Tt][Hh] *[Ff][Rr][Oo][Mm]",
-						"DatePart(month ,")// all
-				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Yy][Ee][Aa][Rr] *[Ff][Rr][Oo][Mm]", "DatePart(year ,")// all
-				.replaceAll("[Ww][Ii][Tt][Hh] *[Cc][Oo][Uu][Nn][Tt]\\(\\*\\) *[Bb][Yy] *\\w*", "")
-				.replaceAll(RegexTool.getReg("[Dd][Aa][Tt][Ee] [Ff][Oo][Rr][Mm][Aa][Tt] '[YyMmDdHhSs/\\-]*'"), "DATE")
+				.replaceAll("(?i)EXTRACT\\s*\\(\\s*(DAY|MONTH|YEAR)\\s*FROM", "DatePart($1,")// all
+				.replaceAll("(?i)WITH\\s*COUNT\\s*\\(\\*\\)\\s*BY\\s*\\w*", "")
+				.replaceAll("(?i)DATE\\s*FORMAT\\s+'[YMDHS/\\-]*'", "DATE")
 				.replaceAll(RegexTool.getReg(" +[Dd][Aa][Tt][Ee] +'"), " '")
-				.replaceAll(RegexTool.getReg("length \\("), "LEN(")//all
-				.replaceAll(RegexTool.getReg("Character \\("), "LEN(")//all
-				.replaceAll(RegexTool.getReg(" MINUS "), " EXCEPT ")//all
+				.replaceAll("(?i)length\\s*\\(", "LEN(")//all
+				.replaceAll("(?i)Character\\s*\\(", "LEN(")//all
+				.replaceAll("(?i)\\bMINUS\\b", "EXCEPT")//all
 				.replaceAll("(?i)INSTR\\s*\\(([@A-Za-z0-9_'\\(\\)]+),('[^']+'+)(,[0-9]+)?\\)", "CHARINDEX($2,$1 $3)")
 		;
 		res = convertDecode(res);
 		return res;
 	}
 	/**	
-	 * 轉換decode語法
+	 * <h1>轉換decode語法<h1>
 	 * 
-	 * azure 不支援decode語法
-	 *於是要改成case when
-	 *
-	 * TD語法:
-	 * 	decode(target_col,condition,col,def_col)
-	 * az語法:
-	 * 	CASE WHEN target_col = condition THEN col ELSE def_col END
+	 * <br>azure 不支援decode語法
+	 * <br>於是要改成case when
+	 * <br>
+	 * <br>TD語法:
+	 * <br>	decode(target_col,number,NULL,target_col)
+	 * <br>az語法:
+	 * <br> NULLIF(target_col,number)
+	 * <br>
+	 * <br>TD語法:
+	 * <br>	decode(target_col,condition,col,def_col)
+	 * <br>az語法:
+	 * <br>	CASE WHEN target_col = condition THEN col ELSE def_col END
+	 * <br>
+	 * 
 	 * 
 	 * @author	Tim
-	 * @since	2022/05/05
+	 * @since	4.0.0.0
 	 * @param	String	SQL語句
 	 * @return	String	轉換後的SQL語句
 	 * @throws SQLFormatException 
+	 * 
+	 * <br>2023/12/28	Tim	改使用 ConvertFunctionsSafely 處理
+	 * 
 	 * */
-	public static String convertDecode(String sql) throws SQLFormatException {
+	public static String convertDecode(String sql){
 		String res = "";
-		String[] arr = sql.toUpperCase()
-				.replaceAll("\\)", " "+TransduceTool.SPLIT_CHAR_CH_01+"\\)"+TransduceTool.SPLIT_CHAR_CH_01+" ")
-				.replaceAll(",", " "+TransduceTool.SPLIT_CHAR_CH_01+","+TransduceTool.SPLIT_CHAR_CH_01+" ")
-				.split("\\b");
-		boolean isDecode = false;
-		int cntBrackets = 0;
-		String temp = "";
-		List<String> lstParam = new ArrayList<String>();
-		for(String str : arr) {
-			if("DECODE".equals(str)) {
-				isDecode = true;
-				continue;
-			}else if(TransduceTool.SPLIT_CHAR_CH_01.equals(str)) {
-				continue;
-			}
-			if(!isDecode) {
-				res+=str;
-				continue;
-			}
-			
-			//計算括號
-			cntBrackets+="(".equals(str)?1:")".equals(str)?-1:0;
-			
-			if(cntBrackets==1&&",".equals(str)) {
-				lstParam.add(temp);
-				temp = "";
-			}else {
-				temp+=str;
-			}
-			if(isDecode&&cntBrackets==0) {
-				lstParam.add(temp);
-				temp = "";
-				isDecode = false;
-				if(lstParam.size()!=4) {
-					throw SQLFormatException.wrongParam("DECODE", 4,lstParam.size());
-				}
-				res+=" IIF"+lstParam.get(0)+"="+lstParam.get(1)+","+lstParam.get(2)+","+lstParam.get(3)+" ";
-//				String strDecode = "CASE";
-//				for(int i = 1;i<lstParam.size();i+=2) {
-//					strDecode+=
-//						  " WHEN "+lstParam.get(0)
-//						+ " = "+lstParam.get(i)+" THEN "
-//					;
-//				}
-			}
-		}
-		/*String res = sql.toUpperCase();
-		List<String> lst = RegexTool.getRegexTarget("(?i)DECODE\\s*\\([^\\)]+\\)", res);
-		for(String decode : lst) {
-			String strcase = "CASE";
-			String[] arrcol =  decode.replaceAll("(?i)DECODE\\s*\\(", "").replace(")", "").split(",");
-			int len = arrcol.length;
-			boolean iswhen = true;
-			String targetCol = arrcol[0];
-			for(int i=1;i<=len-2;i++) {
-				strcase+=iswhen
-						?" WHEN "+targetCol+" = "+arrcol[i]
-						:" THEN "+arrcol[i];
-				iswhen = !iswhen;
-			}
-			strcase+=" ELSE "+(len%2==1?"NULL":arrcol[len-1])+" END";
-			res = res.replace(decode,strcase);
-		}*/
+		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
+		res =cfs.savelyConvert(sql, (t)->{
+			String r = t
+				//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
+				.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*(\\d+)\\s*,\\s*NULL\\s*,\\s*\\1\\s*\\)", "NULLIF\\($1,$2\\)")
+				//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
+				.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*NULL\\s*,\\s*(\\d+)\\s*,\\s*\\1\\s*\\)","COALESCE\\($1,$2\\)")
+				//other
+				.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*\\)","CASE WHEN $1 = $2 THEN $3 ELSE $4 END")
+			;
+			return r;
+		});
 		return res;
 	}
 	
@@ -201,9 +158,8 @@ public class SQLTranslater {
 	 * */
 	public static String replaceToChar(String sql) {
 		String res = sql;
-		RegexTool.getRegexTarget("TO_CHAR\\s*\\(\\s*([^,]+\\))\\s*,\\s*([^\\)]+)\\s*\\)", "");
+		RegexTool.getRegexTarget("(?i)TO_CHAR\\s*\\(\\s*([^,]+\\))\\s*,\\s*([^\\)]+)\\s*\\)", "");
 		return res;
 	}
-	
 	
 }

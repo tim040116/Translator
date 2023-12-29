@@ -32,7 +32,7 @@ public class DDLTranslater {
 				.replaceAll("(?i)\\bSTRTOK\\s*\\(", "SPLIT_PART\\(")//STRTOK
 				;
 		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
-		res = cff.saveTranslateFunction(res, (String t)->{
+		res = cff.savelyConvert(res, (String t)->{
 			t = changeCreateTableIfNotExist(t);
 			return t;
 		});

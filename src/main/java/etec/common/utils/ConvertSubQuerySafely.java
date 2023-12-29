@@ -1,23 +1,25 @@
 package etec.common.utils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
  * @author	Tim
- * @since	2023年11月30日
+ * @since	2023年12月26日
  * @version	4.0.0.0
  * 
  * <h1>安全的轉換SQL語句</h1>
- * <br>因應SQL語法中很多在方法中包覆其他方法的語法
- * <br>避免在取代的時候受到小括號跟逗號的影響導致轉換錯誤
+ * <br>因應SQL語法中很多子查詢及聯立的語法
+ * <br>避免在語法拆解的時候因此影響構造的判讀
  * <br>
  * <br>使用savelyConvert()可以安全的進行轉換，
- * <br>會對特殊符號進行轉換，
- * <br>在從外圍依序還原符號，
- * <br>以確保方法的參數不會受到其他小括號及逗號影響
+ * <br>拆解每個子查詢再切聯立
+ * <br>
+ * <br>以確保方法的參數不會受到其他子查詢影響
  * 
  * */
-public class ConvertFunctionsSafely {
+public class ConvertSubQuerySafely {
 	
 	public static final String SPLIT_CHAR_RED =  "🀄";
 	public static final String SPLIT_CHAR_WHITE =  "🀆";
@@ -25,13 +27,14 @@ public class ConvertFunctionsSafely {
 	public static final String SPLIT_CHAR_BLACK =  "🀫";
 	public static final String SPLIT_CHAR_CH_01 =  "蛬";
 	
+	public static int subQueryId = 0;
+	public static int unionQueryId = 0;
 	public int maxCnt = 0;
 	/**
 	 * @author	Tim
 	 * @since	2023年11月30日
 	 * 	
-	 * 會依小括號進行分層
-	 * 避免函式轉換時造成錯位
+	 *
 	 * */
 	public String savelyConvert(String script,Function<String, String> function) {
 		String res = "";
@@ -60,7 +63,47 @@ public class ConvertFunctionsSafely {
 			String leftQuaterMark = markName("leftquater", i);
 			String rightQuaterMark = markName("rightquater", i);
 			String commaMark = markName("comma", i);
+			
+			//尋找小括號
+			String temp = "";
+			String tempSub = "";
+			Map<String,String> mapSubquery = new HashMap<String,String>();
+			boolean isSub = false;
+			boolean isQuery = false;
+			for(String str : res.split("\\b")) {
+				if(str.matches("\\s*\\(\\s*")) {
+					isSub = true;
+				}
+				if(isSub) {
+					if(isSub&&str.matches("(?i)\\s*SELECT\\s*")) {
+						isQuery = true;
+						isSub = false;
+						tempSub = str;
+					}else {
+						isSub = false;
+					}
+				}
+				if(isQuery) {
+					if(str.matches("\\s*\\)\\s*")) {
+						isQuery = false;
+						String id = markName("SubQuery", subQueryId);
+						subQueryId++;
+						mapSubquery.put(id, tempSub);
+						temp += id+str;
+					}else {
+						tempSub+=str;
+					}
+					
+				}else {
+					temp+=str;
+				}
+			}
+			
 			res = function.apply(res);
+			
+			
+			
+			
 			res = res
 					.replaceAll(leftQuaterMark, "(")
 					.replaceAll(rightQuaterMark, ")")
@@ -77,20 +120,6 @@ public class ConvertFunctionsSafely {
 		return markName(type,Integer.toString(i));
 	}
 	protected static String markName(String type,String i) {
-		return "<saveTranslateFunctionMark_"+type+"_"+i+">";
-	}
-	/**
-	 * @author	Tim
-	 * @since	2023年12月20日
-	 * 
-	 * 將字串解編
-	 * */
-	public static String decodeMark(String script) {
-		String res = script
-			.replaceAll(markName("leftquater","\\d+"), "\\(")
-			.replaceAll(markName("rightquater","\\d+"), "\\)")
-			.replaceAll(markName("comma","\\d+"), ",")
-		;
-		return res;
+		return "<ConvertSubQuerySafelyMark_"+type+"_"+i+">";
 	}
 }

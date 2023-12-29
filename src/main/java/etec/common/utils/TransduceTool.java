@@ -45,7 +45,7 @@ public class TransduceTool {
 				//rank over
 				.replaceAll("(?i)(?<!_|[A-Za-z0-9])RANK\\((?! |\\))", " RANK ( ) OVER ( order by ")//all
 				//extract
-				.replaceAll("(?i)EXTRACT\\s*\\(\\s**(YEAR|MONTH|DAY)\\s*FROM", "DatePart($1,")//all
+				.replaceAll("(?i)EXTRACT\\s*\\(\\s*(YEAR|MONTH|DAY)\\s*FROM", "DatePart($1,")//all
 //				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Dd][Aa][Yy] *[Ff][Rr][Oo][Mm]", "DatePart(day ,")//all
 //				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Mm][Oo][Nn][Tt][Hh] *[Ff][Rr][Oo][Mm]", "DatePart(month ,")//all
 //				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Yy][Ee][Aa][Rr] *[Ff][Rr][Oo][Mm]", "DatePart(year ,")//all
@@ -155,7 +155,7 @@ public class TransduceTool {
 		if(lstSample.isEmpty()) {
 			return selectSQL;
 		}
-		String sample = " SELECT TOP " + RegexTool.getRegexTarget("\\d+",lstSample.get(0)).get(0) +" ";
+		String sample = " SELECT TOP " + RegexTool.getRegexTarget("(?i)\\d+",lstSample.get(0)).get(0) +" ";
 		result = result
 				.replaceFirst("(?i)SELECT", sample)
 				.replaceAll("(?i)SAMPLE\\s+\\d+\\s*;", ";");

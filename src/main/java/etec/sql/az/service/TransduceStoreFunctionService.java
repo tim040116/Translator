@@ -10,6 +10,7 @@ import java.util.List;
 import etec.common.exception.UnknowSQLTypeException;
 import etec.common.model.BasicParams;
 import etec.common.model.SFSPModel;
+import etec.common.utils.ConvertFunctionsSafely;
 import etec.common.utils.FileTool;
 import etec.common.utils.Log;
 import etec.common.utils.RegexTool;
@@ -17,6 +18,7 @@ import etec.common.utils.TransduceTool;
 import etec.sql.az.translater.DDLTranslater;
 import etec.sql.az.translater.DQLTranslater;
 import etec.sql.az.translater.OtherTranslater;
+import etec.sql.az.translater.SQLTranslater;
 
 /**
  * @author	Tim
@@ -37,7 +39,9 @@ public class TransduceStoreFunctionService {
 		String result = "SUCCESS";
 		//讀檔
 		String content = FileTool.readFile(f);
-		String[] arrSF = content.toUpperCase().split("\"\\s*\"");
+		String[] arrSF = content
+//				.toUpperCase()
+				.split("\"\\s*\"");
 		//每一個sf的
 		int i = 0;
 		for(String sf : arrSF) {
@@ -51,13 +55,13 @@ public class TransduceStoreFunctionService {
 					.replaceAll("^\"", "")
 					.replaceAll("\"\\+$", "");
 			//取得檔名
-			String sfName = RegexTool.getRegexTargetFirst("^\\s*\\S+\\s+FUNCTION\\s+[^\\(]+", sf)
-					.replaceAll("^\\s*\\S+\\s+FUNCTION\\s+", "");
+			String sfName = RegexTool.getRegexTargetFirst("(?i)^\\s*\\S+\\s+FUNCTION\\s+[^\\(]+", sf)
+					.replaceAll("(?i)^\\s*\\S+\\s+FUNCTION\\s+", "");
 			String fileName = BasicParams.getTargetFileNm(sfName+".sql");
 			//取得前段
-			String txtFront = RegexTool.getRegexTargetFirst("^[\\S\\s]+\\s+RETURN\\s+", sf).trim()+"\r\n";
+			String txtFront = RegexTool.getRegexTargetFirst("(?i)^[\\S\\s]+\\s+RETURN\\s+", sf).trim()+"\r\n";
 			//取得sql
-			String txtSQL = RegexTool.getRegexTargetFirst("\\sRETURN\\s+[^;]+;", sf).replaceAll("\\s*RETURN\\s+", "").trim();
+			String txtSQL = RegexTool.getRegexTargetFirst("(?i)\\sRETURN\\s+[^;]+;", sf).replaceAll("(?i)\\s*RETURN\\s+", "").trim();
 			//轉換sql
 			txtSQL = DQLTranslater.easyReplaceSelect(txtSQL);
 			txtSQL = DQLTranslater.changeAddMonth(txtSQL);
@@ -68,7 +72,7 @@ public class TransduceStoreFunctionService {
 			txtSQL = TransduceTool.easyReplaceCreate(txtSQL);
 			//產檔
 			String txt = txtFront+txtSQL;
-			txt = txt.replaceAll("\n[\\t \r\n]+\n", "\r\n");
+			txt = txt.replaceAll("(?mi)^\\s+$", "");
 			FileTool.createFile(fileName,txt);
 			i++;
 		}
@@ -159,6 +163,8 @@ public class TransduceStoreFunctionService {
 		//參數置換
 		script = OtherTranslater.transduceDECLARE(lstParams, script);
 		//包裝
+		script = findSQLSTR(script);
+		script = SQLTranslater.convertDecode(script);
 		script = script
 				.replaceAll("(?i)SQL\\s+SECURITY\\s+INVOKER", "")
 				.replaceAll("(?i)\\bSP\\s*:\\s*BEGIN", "AS BEGIN")
@@ -225,6 +231,7 @@ public class TransduceStoreFunctionService {
 				.replaceAll("(?i)\\bEND\\s+SP\\b", "END")
 				.replaceAll("\n[\\t \r\n]+\n", "\r\n")
 				;
+		script = findSQLSTR(script);
 		res.setHeader(txtHeader);
 		res.setContext(txtSQL);
 		res.setScript(script);
@@ -266,4 +273,54 @@ public class TransduceStoreFunctionService {
 //		return FamilyMartFileTransduceService.transduceSQLScript(sql);
 	}
 	
+	/*
+	 * 處理 SET @SQLSTR = ''; 裡面的SQL雨具
+	 * */
+	public static String findSQLSTR(String script) {
+		String res = "";
+		String tmp = "";
+		boolean isQuery = false;
+		for(String line : script.split("\r\n")) {
+			if(line.matches("(?i)\\s*SET\\s+@\\S+\\s*=\\s*")) {
+				tmp = "";
+				isQuery = true;
+			}
+			if(!isQuery) {
+				res+=line+"\r\n";
+				continue;
+			}
+			tmp+=line+"\r\n";
+			if(line.matches("(?i).*'\\s*;\\s*")) {
+				isQuery = false;
+				res+=openSQLSTR(tmp)+"\r\n";
+			}
+		}
+		return res;
+	}
+	/**
+	 * SQLSTR轉成SQL
+	 * */
+	public static String openSQLSTR(String script) {
+		String res = "";
+		
+		res = script
+			.replaceAll("\\s*;\\s*$", "")
+			.replaceAll("(?<![\\+\\'])'(?![\\+\\'])", "")
+			.replaceAll("'{2}?", "'")
+			.replaceAll("(?m)'\\s*\\+\\s*$", "")
+			.replaceAll("'\\s*$", "")
+			.replaceAll("^\\s*\\+\\s*'", "")
+		;
+		
+		res = SQLTranslater.convertDecode(res);
+		
+		res = res
+			.replaceAll("'", "''")
+			.replaceAll("'('\\s*\\+.*?\\s*\\+\\s*')'", "$1")
+			.replaceAll("(?m)^", "'")
+			.replaceAll("(?m)$", "' + ")
+			.replaceAll("'\\s*\\+\\s*$", "';")
+		;
+		return res;
+	}
 }

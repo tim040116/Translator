@@ -62,7 +62,7 @@ public class DQLTranslater {
 				 * 
 				 */
 				.replaceAll("(?i)([ \\t]+)DECLARE\\s+(\\S+)\\s+(\\S+)\\s+DEFAULT\\s+([^;]+)\\s*;",
-						"$1DECLARE $2 $3;\\r\\n$1SET $2 = $4;")
+						"$1DECLARE $2 $3;\r\n$1SET $2 = $4;")
 
 		;
 
@@ -82,7 +82,7 @@ public class DQLTranslater {
 		// RegexTool.getRegexTarget2("[Aa][Dd]{2}_[Mm][Oo][Nn][Tt][Hh][Ss]\\([^\\)]*\\)
 		// *,(-?[0-9]*) *\\)",res);
 		List<String> lst = RegexTool
-				.getRegexTarget("ADD_MONTHS\\([^\\)]*\\)?,(-?[0-9]*) *\\)", res);
+				.getRegexTarget("(?i)ADD_MONTHS\\([^\\)]*\\)?,(-?[0-9]*) *\\)", res);
 		for (String str : lst) {
 			String[] param = str.replaceAll("(?i)add_Months\\(|\\)$", "").split(",");
 			res = RegexTool.encodeSQL(res);
