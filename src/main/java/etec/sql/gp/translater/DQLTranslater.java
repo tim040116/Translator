@@ -6,6 +6,7 @@ import java.util.List;
 import etec.common.enums.SelectAreaEnum;
 import etec.common.exception.UnknowSQLTypeException;
 import etec.common.utils.ConvertFunctionsSafely;
+import etec.common.utils.Mark;
 import etec.common.utils.TransduceTool;
 
 /**
@@ -27,6 +28,7 @@ public class DQLTranslater {
 	
 	/**
 	 * @author	Tim
+	 * @throws UnknowSQLTypeException 
 	 * @since	2023年12月26日
 	 * 
 	 * <h1>統整DQL的所有轉換</h1>
@@ -35,9 +37,9 @@ public class DQLTranslater {
 	 * <br>
 	 * 
 	 * */
-	public String easyReplace(String script) {
-		String res = "";
-		
+	public String easyReplace(String script) throws UnknowSQLTypeException {
+		String res = script;
+		res = changeQualifaRank(res);
 		return res;
 	}
 	
@@ -79,10 +81,10 @@ public class DQLTranslater {
 			regKey+="|"+arrSplitType[i];
 		}
 		temp = temp
-				.replaceAll(regKey, TransduceTool.SPLIT_CHAR_BLACK+"$0")
-				.replaceAll("(?i)(TRIM\\s*\\([\\S\\s]*?)"+TransduceTool.SPLIT_CHAR_BLACK+"(FROM)", "$1$2")//排除TRIM(FROM)
+				.replaceAll(regKey, Mark.MAHJONG_BLACK+"$0")
+				.replaceAll("(?i)(TRIM\\s*\\([\\S\\s]*?)"+Mark.MAHJONG_BLACK+"(FROM)", "$1$2")//排除TRIM(FROM)
 		;
-		String[] arrSplitStr = temp.split(TransduceTool.SPLIT_CHAR_BLACK);
+		String[] arrSplitStr = temp.split(Mark.MAHJONG_BLACK);
 		//依照特徵分裝
 		String select=""
 				,from=""

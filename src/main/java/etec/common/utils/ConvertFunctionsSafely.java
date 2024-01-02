@@ -19,12 +19,6 @@ import java.util.function.Function;
  * */
 public class ConvertFunctionsSafely {
 	
-	public static final String SPLIT_CHAR_RED =  "🀄";
-	public static final String SPLIT_CHAR_WHITE =  "🀆";
-	public static final String SPLIT_CHAR_GREEN =  "🀅";
-	public static final String SPLIT_CHAR_BLACK =  "🀫";
-	public static final String SPLIT_CHAR_CH_01 =  "蛬";
-	
 	public int maxCnt = 0;
 	/**
 	 * @author	Tim

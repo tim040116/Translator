@@ -13,6 +13,7 @@ import etec.common.model.SFSPModel;
 import etec.common.utils.ConvertFunctionsSafely;
 import etec.common.utils.FileTool;
 import etec.common.utils.Log;
+import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
 import etec.sql.az.translater.DDLTranslater;
@@ -214,8 +215,8 @@ public class TransduceStoreFunctionService {
 				.replaceAll("(?i)CHARACTER(\\s+SET)?\\s+\\w+", "")
 				.replaceAll("(?i)SQL\\s+SECURITY\\s+INVOKER", "")
 				.replaceAll("^[^\\(]+\\(","")
-				.replaceAll("(?i)\\)\\s*RETURNS",TransduceTool.SPLIT_CHAR_RED)
-				.replaceAll(TransduceTool.SPLIT_CHAR_RED+"[\\S\\s]+", "")
+				.replaceAll("(?i)\\)\\s*RETURNS",Mark.MAHJONG_RED)
+				.replaceAll(Mark.MAHJONG_RED+"[\\S\\s]+", "")
 				.replaceAll("\\([^\\)]+\\)", "")
 				.replaceAll("([^,\\s]+)\\s+([^,\\s]+)", "$1")
 				;
@@ -292,7 +293,9 @@ public class TransduceStoreFunctionService {
 			tmp+=line+"\r\n";
 			if(line.matches("(?i).*'\\s*;\\s*")) {
 				isQuery = false;
-				res+=openSQLSTR(tmp)+"\r\n";
+				String set = tmp.replaceAll("(?i)(\\s*SET\\s+\\S+\\s*=\\s*)[\\S\\s]+", "$1");
+				String src = tmp.replaceAll("(?i)\\s*SET\\s+\\S+\\s*=\\s*", "");
+				res+= set+openSQLSTR(src)+"\r\n";
 			}
 		}
 		return res;

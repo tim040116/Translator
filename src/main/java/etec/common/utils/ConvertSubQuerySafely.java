@@ -21,11 +21,7 @@ import java.util.function.Function;
  * */
 public class ConvertSubQuerySafely {
 	
-	public static final String SPLIT_CHAR_RED =  "🀄";
-	public static final String SPLIT_CHAR_WHITE =  "🀆";
-	public static final String SPLIT_CHAR_GREEN =  "🀅";
-	public static final String SPLIT_CHAR_BLACK =  "🀫";
-	public static final String SPLIT_CHAR_CH_01 =  "蛬";
+	
 	
 	public static int subQueryId = 0;
 	public static int unionQueryId = 0;
@@ -40,7 +36,7 @@ public class ConvertSubQuerySafely {
 		String res = "";
 		int cntBracket = 0;
 		maxCnt = 0;
-		//encode
+		//將小括號跟逗號依範圍加密
 		for(String c : script.split("")) {
 			if( "(".equals(c)) {
 				cntBracket++;
@@ -58,7 +54,7 @@ public class ConvertSubQuerySafely {
 			}
 			res+=c;
 		}
-		//decode
+		//依次解密小括號
 		for(int i = 0;i<=maxCnt+1;i++) {
 			String leftQuaterMark = markName("leftquater", i);
 			String rightQuaterMark = markName("rightquater", i);
@@ -74,7 +70,7 @@ public class ConvertSubQuerySafely {
 				if(str.matches("\\s*\\(\\s*")) {
 					isSub = true;
 				}
-				if(isSub) {
+				if(isSub) {//找到sub query的起頭
 					if(isSub&&str.matches("(?i)\\s*SELECT\\s*")) {
 						isQuery = true;
 						isSub = false;

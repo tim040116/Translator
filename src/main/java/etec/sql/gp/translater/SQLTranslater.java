@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import etec.common.utils.ConvertFunctionsSafely;
-import etec.common.utils.TransduceTool;
+import etec.common.utils.Mark;
 
 /**
  * 
@@ -251,10 +251,10 @@ public class SQLTranslater {
 	public String changeCurrentDate(String sql) {
 		String res = sql;
 		res = res
-			.replaceAll("(?i)AS(\\s+)DATE", TransduceTool.SPLIT_CHAR_BLACK+"$1"+TransduceTool.SPLIT_CHAR_WHITE)
+			.replaceAll("(?i)AS(\\s+)DATE", Mark.MAHJONG_BLACK+"$1"+Mark.MAHJONG_WHITE)
 			.replaceAll("\\bDATE\\b", "CURRENT_DATE")
-			.replaceAll(TransduceTool.SPLIT_CHAR_BLACK, "AS")
-			.replaceAll(TransduceTool.SPLIT_CHAR_WHITE, "DATE")
+			.replaceAll(Mark.MAHJONG_BLACK, "AS")
+			.replaceAll(Mark.MAHJONG_WHITE, "DATE")
 		;
 		return res;
 	}

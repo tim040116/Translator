@@ -2,6 +2,7 @@ package etec.sql.az.translater;
 
 import java.util.List;
 
+import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
 import etec.src.main.Params;
@@ -60,10 +61,10 @@ public class OtherTranslater {
 //				.replaceAll("中","END IF;")
 //				;
 		
-		String tmp = res.replaceAll("\\b", TransduceTool.SPLIT_CHAR_RED);
+		String tmp = res.replaceAll("\\b", Mark.MAHJONG_RED);
 		String tmp2 = "";
 		int caseArea = 0;
-		for(String str : tmp.split(TransduceTool.SPLIT_CHAR_RED)) {
+		for(String str : tmp.split(Mark.MAHJONG_RED)) {
 			//計算 case when
 			if("CASE".equals(str.toUpperCase())) {
 				caseArea++;

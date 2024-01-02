@@ -272,7 +272,7 @@ QUALIFY ROW_NUMBER() OVER
 				"QUALIFY ROW_NUMBER() OVER\r\n" + 
 				"(PARTITION BY PLANT_LOC_ID,MFG_MN,CLNDR_MN,R12_PROD_ID,EQUIP_USG_GRP_ID,ITEM_ID,BN_RANK_NUM ORDER BY PLAN_VER_CD DESC) = 1";
 		String a20 = "";
-		String r20 = GreemPlumTranslater.dql.changeQualifaRank(q20);
+		String r20 = GreemPlumTranslater.dml.changeInsertSelect(q20);
 		if(!a20.equals(r20))
 		System.out.println(r20);
 		System.out.println("CASE 20 : "+a20.equals(r20));

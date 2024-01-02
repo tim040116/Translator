@@ -14,11 +14,6 @@ import java.util.regex.Matcher;
  * */
 public class TransduceTool {
 	
-	public static final String SPLIT_CHAR_RED =  "🀄";
-	public static final String SPLIT_CHAR_WHITE =  "🀆";
-	public static final String SPLIT_CHAR_GREEN =  "🀅";
-	public static final String SPLIT_CHAR_BLACK =  "🀫";
-	public static final String SPLIT_CHAR_CH_01 =  "蛬";
 	//select單純的置換
 	@Deprecated
 	public static String easyReplaceCreate(String sql) {	

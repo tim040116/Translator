@@ -1,13 +1,12 @@
 package etec.sql.az.translater;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import etec.common.exception.SQLFormatException;
 import etec.common.utils.ConvertFunctionsSafely;
 import etec.common.utils.RegexTool;
-import etec.common.utils.TransduceTool;
 
 public class SQLTranslater {
 	// 去除註解
@@ -130,20 +129,49 @@ public class SQLTranslater {
 	 * @throws SQLFormatException 
 	 * 
 	 * <br>2023/12/28	Tim	改使用 ConvertFunctionsSafely 處理
-	 * 
+	 * <br>2024/01/02	Tim	解決空白造成的誤判，改用Matcher處理
 	 * */
 	public static String convertDecode(String sql){
 		String res = "";
 		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
 		res =cfs.savelyConvert(sql, (t)->{
-			String r = t
+			String r = t;
+//			r = t
+//				//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
+//				.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*(\\d+)\\s*,\\s*NULL\\s*,\\s*\\1\\s*\\)", "NULLIF\\($1,$2\\)")
+//				//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
+//				.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*NULL\\s*,\\s*(\\d+)\\s*,\\s*\\1\\s*\\)","COALESCE\\($1,$2\\)")
+//				//other
+//				.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*\\)","CASE WHEN $1 = $2 THEN $3 ELSE $4 END")
+//			;
+			Pattern p = Pattern.compile("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,\\)]+)\\s*\\)",Pattern.CASE_INSENSITIVE);
+			Matcher m = p.matcher(r);
+			while (m.find()) {
+				String p0 = m.group(0);
+				String p1 = m.group(1);
+				String p2 = m.group(2);
+				String p3 = m.group(3);
+				String p4 = m.group(4);
+				String rpm = "";
 				//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
-				.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*(\\d+)\\s*,\\s*NULL\\s*,\\s*\\1\\s*\\)", "NULLIF\\($1,$2\\)")
-				//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
-				.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*NULL\\s*,\\s*(\\d+)\\s*,\\s*\\1\\s*\\)","COALESCE\\($1,$2\\)")
-				//other
-				.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*\\)","CASE WHEN $1 = $2 THEN $3 ELSE $4 END")
-			;
+				boolean ismatch = p1.toUpperCase().replaceAll("\\s+", "").equals(p4.toUpperCase().replaceAll("\\s+", ""));
+				String tp1 = p1.replaceAll("\\w+\\.(\\w+)", "$1").trim().toUpperCase();
+				String tp4 = p4.replaceAll("\\w+\\.(\\w+)", "$1").trim().toUpperCase();
+				if(!ismatch) {
+					
+					ismatch = tp1.equals(tp4);
+				}
+				boolean ismatch2 = p2.matches("\\d+");
+				boolean ismatch3 = p3.matches("(?i)NULL");
+				if(ismatch&&p2.matches("\\d+")&&p3.matches("(?i)NULL")) {//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
+					rpm = "NULLIF("+p1+","+p2+")";
+				}else if(ismatch&&p2.matches("(?i)NULL")&&p3.matches("\\d+")) {//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
+					rpm = "COALESCE("+p1+","+p3+")";
+				}else {
+					rpm = "CASE WHEN "+p1+" = "+p2+" THEN "+p3+" ELSE "+p4+" END";
+				}
+				r = t.replace(p0,rpm);
+			}
 			return r;
 		});
 		return res;
