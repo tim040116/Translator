@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import etec.common.exception.SQLFormatException;
 import etec.common.utils.ConvertFunctionsSafely;
+import etec.common.utils.ConvertRemarkSafely;
 import etec.common.utils.RegexTool;
 
 public class SQLTranslater {
@@ -132,48 +133,50 @@ public class SQLTranslater {
 	 * <br>2024/01/02	Tim	解決空白造成的誤判，改用Matcher處理
 	 * */
 	public static String convertDecode(String sql){
-		String res = "";
+		String res = sql;
 		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
-		res =cfs.savelyConvert(sql, (t)->{
-			String r = t;
-//			r = t
-//				//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
-//				.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*(\\d+)\\s*,\\s*NULL\\s*,\\s*\\1\\s*\\)", "NULLIF\\($1,$2\\)")
-//				//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
-//				.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*NULL\\s*,\\s*(\\d+)\\s*,\\s*\\1\\s*\\)","COALESCE\\($1,$2\\)")
-//				//other
-//				.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*\\)","CASE WHEN $1 = $2 THEN $3 ELSE $4 END")
-//			;
-			Pattern p = Pattern.compile("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,\\)]+)\\s*\\)",Pattern.CASE_INSENSITIVE);
-			Matcher m = p.matcher(r);
-			while (m.find()) {
-				String p0 = m.group(0);
-				String p1 = m.group(1);
-				String p2 = m.group(2);
-				String p3 = m.group(3);
-				String p4 = m.group(4);
-				String rpm = "";
-				//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
-				boolean ismatch = p1.toUpperCase().replaceAll("\\s+", "").equals(p4.toUpperCase().replaceAll("\\s+", ""));
-				String tp1 = p1.replaceAll("\\w+\\.(\\w+)", "$1").trim().toUpperCase();
-				String tp4 = p4.replaceAll("\\w+\\.(\\w+)", "$1").trim().toUpperCase();
-				if(!ismatch) {
-					
-					ismatch = tp1.equals(tp4);
+		ConvertRemarkSafely crs = new ConvertRemarkSafely();
+		res = crs.savelyConvert(res, (t0)->{
+			String rescrs = t0;
+			rescrs = cfs.savelyConvert(rescrs, (t1)->{
+				String r = t1;
+//				r = t
+//					//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
+//					.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*(\\d+)\\s*,\\s*NULL\\s*,\\s*\\1\\s*\\)", "NULLIF\\($1,$2\\)")
+//					//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
+//					.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*NULL\\s*,\\s*(\\d+)\\s*,\\s*\\1\\s*\\)","COALESCE\\($1,$2\\)")
+//					//other
+//					.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*\\)","CASE WHEN $1 = $2 THEN $3 ELSE $4 END")
+//				;
+				Pattern p = Pattern.compile("(?i)DECODE\\s*\\(\\s*([^\\(\\),]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*\\)",Pattern.CASE_INSENSITIVE);
+				Matcher m = p.matcher(r);
+				while (m.find()) {
+					String p0 = m.group(0);
+					String p1 = m.group(1);
+					String p2 = m.group(2);
+					String p3 = m.group(3);
+					String p4 = m.group(4);
+					String rpm = "";
+					//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
+					boolean ismatch = ConvertRemarkSafely.equals(p1,p4,(eq)->{
+						return eq.replaceAll("\\w+\\.(\\w+)", "$1");
+					});
+					if(ismatch&&ConvertRemarkSafely.match("\\d+",p2)&&ConvertRemarkSafely.match("(?i)NULL",p3)) {//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
+						rpm = "NULLIF("+p1+","+p2+")";
+					}else if(ismatch&&ConvertRemarkSafely.match("(?i)NULL",p2)&&ConvertRemarkSafely.match("\\d+",p3)) {//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
+						rpm = "COALESCE("+p1+","+p3+")";
+					}else {
+						rpm = "CASE WHEN "+p1+" = "+p2+" THEN "+p3+" ELSE "+p4+" END";
+					}
+					r = t1
+						.replace(p0,rpm)
+					;
 				}
-				boolean ismatch2 = p2.matches("\\d+");
-				boolean ismatch3 = p3.matches("(?i)NULL");
-				if(ismatch&&p2.matches("\\d+")&&p3.matches("(?i)NULL")) {//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
-					rpm = "NULLIF("+p1+","+p2+")";
-				}else if(ismatch&&p2.matches("(?i)NULL")&&p3.matches("\\d+")) {//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
-					rpm = "COALESCE("+p1+","+p3+")";
-				}else {
-					rpm = "CASE WHEN "+p1+" = "+p2+" THEN "+p3+" ELSE "+p4+" END";
-				}
-				r = t.replace(p0,rpm);
-			}
-			return r;
+				return r;
+			});
+			return rescrs;
 		});
+		
 		return res;
 	}
 	

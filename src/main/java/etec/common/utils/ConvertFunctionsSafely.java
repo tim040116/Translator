@@ -3,9 +3,6 @@ package etec.common.utils;
 import java.util.function.Function;
 
 /**
- * @author	Tim
- * @since	2023年11月30日
- * @version	4.0.0.0
  * 
  * <h1>安全的轉換SQL語句</h1>
  * <br>因應SQL語法中很多在方法中包覆其他方法的語法
@@ -15,7 +12,9 @@ import java.util.function.Function;
  * <br>會對特殊符號進行轉換，
  * <br>在從外圍依序還原符號，
  * <br>以確保方法的參數不會受到其他小括號及逗號影響
- * 
+ * @author	Tim
+ * @since	4.0.0.0
+ * @version	4.0.0.0
  * */
 public class ConvertFunctionsSafely {
 	

@@ -112,6 +112,9 @@ public class ConvertSubQuerySafely {
 		}
 		return res;
 	}
+	private String savelyConvertUnion(String script,Function<String, String> function) {
+		return script;
+	}
 	protected static String markName(String type,int i) {
 		return markName(type,Integer.toString(i));
 	}
