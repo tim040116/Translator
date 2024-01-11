@@ -502,7 +502,8 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 				" USING ${TEMP_DB}.LCD6 B\r\n" + 
 				" WHERE A.LCD_LEVEL > B.LCD_LEVEL";
 		String r50 = GreemPlumTranslater.dml.changeDeleteTableUsing(q50);
-//		System.out.println(r50);
+		if(!a50.equals(r50))
+		System.out.println(r50);
 		System.out.println("CASE 50 : "+a50.equals(r50));
 //CASE51 : 
 //		String q51 = "";

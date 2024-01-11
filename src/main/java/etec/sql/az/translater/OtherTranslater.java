@@ -125,7 +125,7 @@ public class OtherTranslater {
 	public static String changeIndex(String sql) {
 		String result = sql;
 		//取得sample
-		List<String> lstIndex = RegexTool.getRegexTarget("(?i)(?<=[, ])INDEX[^\\)]+",result);
+		List<String> lstIndex = RegexTool.getRegexTarget("(?i)(?<=[, ])INDEX[^\\);]+",result);
 		//是否存在sample
 		if(lstIndex.isEmpty()) {
 			return sql;
@@ -146,7 +146,8 @@ public class OtherTranslater {
 			if(arp.length!=2) {
 				continue;
 			}
-			String index = " CHARINDEX("+arp[1]+","+arp[0];
+//			String index = " CHARINDEX("+arp[1]+","+arp[0];
+			String index = " INDEX("+arp[1]+","+arp[0];
 			String reg = RegexTool.encodeSQL(data);
 			result = RegexTool.encodeSQL(result).replaceAll(reg,RegexTool.encodeSQL(index));
 		}

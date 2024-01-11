@@ -4,11 +4,11 @@ import etec.common.exception.UnknowSQLTypeException;
 
 public class DMLTranslater {
 	/**
-	 * @author	Tim
-	 * @since	2023年12月5日
 	 * 
 	 * DELETE TABLE 要加上 USING
 	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0 
 	 * */
 	public String changeDeleteTableUsing(String sql) {
 		String res = sql
@@ -28,7 +28,7 @@ public class DMLTranslater {
 	public String changeInsertSelect(String sql) throws UnknowSQLTypeException {
 		String res = "";
 		String insert = sql.replaceAll("(?i)(\\s*INSERT\\s+INTO\\s+\\S+\\s+)[\\S\\s]+", "$1");
-		String select = sql.replaceAll("(?i)(\\s*INSERT\\s+INTO\\s+\\S+\\s+)", "");
+		String select = sql.replaceAll("(?i)\\s*INSERT\\s+INTO\\s+\\S+\\s+", "");
 		select = GreemPlumTranslater.dql.easyReplace(select);
 		res = insert+select;
 		return res;

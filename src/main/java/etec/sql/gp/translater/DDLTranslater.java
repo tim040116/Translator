@@ -5,12 +5,10 @@ import etec.src.main.Params;
 
 public class DDLTranslater {
 	/**
-	 * @author	Tim
-	 * @since	2023年12月5日
-	 * 
 	 * 在GP中如果使用REPLACE VIEW，確定轉換前後的欄位有沒有變化
 	 * 否則推薦DROP後再CREATE
-	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
 	 * */
 	public String changeReplaceView(String sql) {
 		String res = sql
@@ -19,18 +17,15 @@ public class DDLTranslater {
 		return res;
 	}
 	/**
+	 * <h1>Create Table 的轉換</h1>
+	 * <li>SEL改成SELECT
+	 * <li>if not exist的功能
+	 * 
 	 * @author	Tim
-	 * @since	2023年12月5日
-	 * 
-	 * Create table加上if not exist語法
-	 * 
+	 * @since	4.0.0.0
 	 * */
 	public String easyReplaceCreateTable(String sql) {
-		String res = sql
-				.replaceAll("(?i)\\bSEL\\b", "SELECT")//SEL
-				.replaceAll("(?i)\\bOREPLACE\\s*\\(", "REPLACE\\(")//OREPLACE
-				.replaceAll("(?i)\\bSTRTOK\\s*\\(", "SPLIT_PART\\(")//STRTOK
-				;
+		String res = sql.replaceAll("(?i)\\bSEL\\b", "SELECT");//SEL
 		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
 		res = cff.savelyConvert(res, (String t)->{
 			t = changeCreateTableIfNotExist(t);
@@ -39,12 +34,10 @@ public class DDLTranslater {
 //		res = changeTypeConversion(res);
 		return res;
 	}
-	/**
-	 * @author	Tim
-	 * @since	2023年12月5日
-	 * 
+	/** 
 	 * CREATE TABLE 要加上 if not exist
-	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
 	 * */
 	public String changeCreateTableIfNotExist(String sql) {
 		String res = sql
@@ -53,11 +46,10 @@ public class DDLTranslater {
 		return res;
 	}
 	/**
-	 * @author	Tim
-	 * @since	2023年12月5日
-	 * 
 	 * DROP TABLE 要加上 if exist
 	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
 	 * */
 	public String changeDropTableIfExist(String sql) {
 		String res = sql
@@ -67,20 +59,20 @@ public class DDLTranslater {
 	}
 	/**
 	 * @author	Tim
-	 * @since	2023年12月5日
+	 * @since	4.0.0.0
 	 * 
 	 * RENAME TABLE 改成 ALTER TABLE 加上 RENAME TO
 	 * 
 	 * */
 	public String changeRenameTable(String sql) {
 		String res = sql
-			.replaceAll("(?i)RENAME\\s+TABLE\\s+(\\S+)\\s+TO\\s+([^\\.]+\\.)?(\\S+)\\s*;", "ALTER TABLE $1\r\nRENAME TO $3;")
+			.replaceAll("(?i)RENAME\\s+TABLE\\s+(\\S+)\\s+TO\\s+(?:[^\\.]+\\.)?(\\S+)\\s*;", "ALTER TABLE $1\r\nRENAME TO $2;")
 			;
 		return res;
 	}
 	/**
 	 * @author	Tim
-	 * @since	2023年12月5日
+	 * @since	4.0.0.0
 	 * 
 	 * CREATE VOLATILE TABLE 改成 CREATE temp TABLE
 	 * 
@@ -93,7 +85,7 @@ public class DDLTranslater {
 	}
 	/**
 	 * @author	Tim
-	 * @since	2023年12月6日
+	 * @since	4.0.0.0
 	 * 
 	 * INTEGER GENERATED ALWAYS AS IDENTITY (CYCLE) 改成 SERIAL
 	 * 
@@ -106,7 +98,7 @@ public class DDLTranslater {
 	}
 	/**
 	 * @author	Tim
-	 * @since	2023年12月6日
+	 * @since	4.0.0.0
 	 * 
 	 * PRIMARY INDEX 要改成 DISTRIBUTED
 	 * 

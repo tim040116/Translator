@@ -67,7 +67,7 @@ public class TransduceStoreFunctionService {
 			txtSQL = DQLTranslater.changeAddMonth(txtSQL);
 			txtSQL = TransduceTool.changeSample(txtSQL);
 			txtSQL = DQLTranslater.changeZeroifnull(txtSQL);
-			txtSQL = TransduceTool.changeCharindex(txtSQL);
+//			txtSQL = TransduceTool.changeCharindex(txtSQL);
 			txtSQL = OtherTranslater.changeIndex(txtSQL);
 			txtSQL = TransduceTool.easyReplaceCreate(txtSQL);
 			//產檔
