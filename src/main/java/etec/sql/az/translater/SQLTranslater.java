@@ -10,53 +10,7 @@ import etec.common.utils.ConvertRemarkSafely;
 import etec.common.utils.RegexTool;
 
 public class SQLTranslater {
-	// 去除註解
-	public static String cleanSql(String fc) {
-		String res = fc;
-		// #
-//			System.out.println("cleanSql start");
-//			res = res.replaceAll("(?<='[^']{0,10})#(?=[^']{0,10}')", "<encodingCode_HashTag>");
-//			res = res.replaceAll("#.*", "");
-//			res = res.replaceAll("<encodingCode_HashTag>", "#");
-		// //
-//			res = res.replaceAll("\\/\\/.*", "");
-		// /**/
-		res = res.replaceAll("\\/\\*.*\\*\\/", "");
-//				res = res.replaceAll("\\/\\*+([^\\/]|[^\\*]\\/)*\\*+\\/","");
-//				System.out.println("/**/ s");
-		// --
-		res = res.replaceAll("--.*", "");
-		// /* \r\n*/
-//				res = res.replaceAll("(#.*)|(\\/\\*.*\\*\\/)","");
-//				res = res.replaceAll("'#'","QqAaZz").replaceAll("(#.*)|(\\/\\*.*\\*\\/)","");
-//				res = res.replaceAll("QqAaZz","'#'");
-		String sql = "";
-		boolean es = false;
-		for (String line : res.split("\r\n")) {
-			if (line.trim().equals("")) {
-				continue;
-			}
-			// /* \r\n */
-			if (line.matches(".*\\/\\*.*")) {
-				line = line.replaceAll("\\/\\*.*", "");
-				es = true;
-			}
-			if (es) {
-				if (line.matches(".*\\*\\/.*")) {
-					line = line.replaceAll(".*\\*\\/", "");
-					es = false;
-				} else {
-					continue;
-				}
-			}
-//					if(line.trim().substring(0, 1).equals(".")) {
-//						line = line + ";";
-//					}
-			sql += line + "\r\n";
-		}
-		res = sql;
-		return res;
-	}
+	
 
 	/**
 	 * 簡單轉換
@@ -70,38 +24,41 @@ public class SQLTranslater {
 	public static String easyReplaceSelect(String sql) throws IOException {
 		String res = sql;
 		res = res
-				// SEL
-				.replaceAll("(?i)\\bSEL\\vb", "SELECT")
-				// ||
-				.replaceAll("\\|\\|", "+")
-				// SUBSTR
-				.replaceAll("(?i)SUBSTR\\s*\\(", "SUBSTRING(")
-				// oreplace
-				.replaceAll("(?i)OREPLACE\\s*\\(", "REPLACE(")
-				// strtok
-				.replaceAll("(?i)STRTOK\\s*\\(", "STRING_SPLIT(")
-				//NVL
-				.replaceAll("(?i)NVL\\s*\\(", "ISNULL(")
-				//truncCAST(A.TIME_RANGE/10000 AS INTEGER)
-				.replaceAll("(?i)TRUNC\\((.*?)(,\\s*0)?\\)", "CAST($1 AS INTEGER)")
-				//TO_NUMBER
-				.replaceAll("(?i)TO_NUMBER\\s*\\(\\s*(.*?)\\s*\\)", "CAST($1 AS INTEGER)")
+				.replaceAll("(?i)\\bSEL\\b", "SELECT")// SEL
+				.replaceAll("\\|\\|", "+")// ||
+				.replaceAll("(?i)\\bSUBSTR\\b", "SUBSTRING")// SUBSTR
+				.replaceAll("(?i)OREPLACE\\s*\\(", "REPLACE(")// oreplace
+				.replaceAll("(?i)STRTOK\\s*\\(", "STRING_SPLIT(")// strtok
+				.replaceAll("(?i)NVL\\s*\\(", "ISNULL(")//NVL
+				.replaceAll("(?i)Character\\s*\\(", "LEN(")//Character
+				.replaceAll("(?i)\\bMINUS\\b", "EXCEPT")//MINUS
 				//TO_DATE
 				.replaceAll("(?i)TO_DATE\\s*\\(\\s*(.*?)\\s*,\\s*\\S+\\s*\\)", "CAST($1 AS DATETIME)")
 				//TO_CHAR
 //				.replaceAll("TO_CHAR\\s*\\(\\s*([^,\\(\\)]+)\\s*\\)", "CAST($1 AS VARCHAR)")
 				// rank over
-				.replaceAll("(?i)\\bRANK\\((?! |\\))", "RANK ( ) OVER ( order by ")// all
+				.replaceAll("(?i)\\bRANK\\(?:(?! |\\))", "RANK ( ) OVER ( order by ")// all
 				// extract
 				.replaceAll("(?i)EXTRACT\\s*\\(\\s*(DAY|MONTH|YEAR)\\s*FROM", "DatePart($1,")// all
 				.replaceAll("(?i)WITH\\s*COUNT\\s*\\(\\*\\)\\s*BY\\s*\\w*", "")
 				.replaceAll("(?i)DATE\\s*FORMAT\\s+'[YMDHS/\\-]*'", "DATE")
-				.replaceAll(RegexTool.getReg(" +[Dd][Aa][Tt][Ee] +'"), " '")
-				.replaceAll("(?i)length\\s*\\(", "LEN(")//all
-				.replaceAll("(?i)Character\\s*\\(", "LEN(")//all
-				.replaceAll("(?i)\\bMINUS\\b", "EXCEPT")//all
-				.replaceAll("(?i)INSTR\\s*\\(([@A-Za-z0-9_'\\(\\)]+),('[^']+'+)(,[0-9]+)?\\)", "CHARINDEX($2,$1 $3)")
+//				.replaceAll(RegexTool.getReg(" +[Dd][Aa][Tt][Ee] +'"), " '")
+				.replaceAll("(?i)length\\s*\\(", "LEN(")//length
+				
 		;
+		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
+		cfs.savelyConvert(res, (t)->{
+			String rt = t
+				//truncCAST(A.TIME_RANGE/10000 AS INTEGER)
+				.replaceAll("(?i)TRUNC\\((.*?)(?:,\\s*0)?\\)", "CAST($1 AS INTEGER)")
+				//TO_NUMBER
+				.replaceAll("(?i)TO_NUMBER\\s*\\(\\s*(.*?)\\s*\\)", "CAST($1 AS INTEGER)")
+				//INSTR
+				.replaceAll("(?i)INSTR\\s*\\(([@\\w'\\(\\)]+),('[^']+'+)(,\\d+)?\\)", "CHARINDEX($2,$1 $3)")
+
+			;
+			return rt;
+		});
 		res = convertDecode(res);
 		return res;
 	}
@@ -182,8 +139,7 @@ public class SQLTranslater {
 	
 	/**
 	 * @author	Tim
-	 * @since	2023年10月19日
-	 * @version	3.3.0.0
+	 * @since	3.3.0.0
 	 * @param	String	sql
 	 * 
 	 * */

@@ -12,7 +12,7 @@ public class DMLTranslater {
 	 * */
 	public String changeDeleteTableUsing(String sql) {
 		String res = sql
-			.replaceAll("(?i)DELETE\\s+FROM\\s+(\\S+)(\\s+\\S+)?\\s*,", "DELETE FROM $1$2\r\n USING ")//Locking
+			.replaceAll("(?i)DELETE\\s+FROM\\s+([^,;]+)?\\s*,", "DELETE FROM $1\r\n USING ")//Locking
 			;
 		return res;
 	}

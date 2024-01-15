@@ -155,41 +155,6 @@ public class DQLTranslater {
 			+rowNumber.replaceAll("[\\S\\s]*\\)([^\\)]+)$", "$1")
 		;
 		res += newSelect+newFrom;
-//		//依照順序拼裝
-//		for (SelectAreaEnum area : lstArea) {
-//			switch (area) {
-//			case WITH:
-//				for(String w : lstWith) {
-//					res+=w;
-//				}
-//				break;
-//			case SELECT:
-//				res+=select;
-//				break;
-//			case FROM:
-//				res+=from;
-//				break;
-////			case JOIN:
-////				for(String w : lstJoin) {
-////					res+=w;
-////				}
-////				break;
-////			case WHERE:
-////				res+=where;
-////				break;
-////			case GROUP_BY:
-////				res+=groupBy;
-////				break;
-////			case ORDER_BY:
-////				res+=orderBy;
-////				break;
-////			case QUALFY_ROW_NUMBER:
-////				res+=rowNumber;
-////				break;
-////			default:
-////				break;
-//			}
-//		}
 		return res;
 	}
 

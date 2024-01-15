@@ -9,6 +9,7 @@ import java.util.Map;
 import etec.common.enums.FileTypeEnum;
 import etec.common.utils.FileTool;
 import etec.common.utils.RegexTool;
+import etec.sql.az.translater.OtherTranslater;
 import etec.sql.az.translater.SQLTranslater;
 
 public class DDIMFileTransduceService {
@@ -25,7 +26,7 @@ public class DDIMFileTransduceService {
 			ofc = replaceParams(ofc);
 			ofc = ofc.replaceAll("\\} \\.", "}.");
 			// 清除註解
-			String fc = SQLTranslater.cleanSql(ofc);
+			String fc = OtherTranslater.cleanSql(ofc);
 			// 區分種類
 			// String file = BasicParams.getTargetFileNm(fn);
 			// ReadFileTool.createFile(file,fc);

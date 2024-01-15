@@ -4,12 +4,11 @@ import java.util.List;
 
 import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;
-import etec.common.utils.TransduceTool;
 import etec.src.main.Params;
 
 /**
  * @author	Tim
- * @since	2023年11月1日
+ * @since	3.3.1.1
  * @version	3.3.1.1
  * 
  * 處理 SF SP 用到的不是單段語法
@@ -17,7 +16,54 @@ import etec.src.main.Params;
  * 
  * */
 public class OtherTranslater {
-
+	// 去除註解
+	@Deprecated
+	public static String cleanSql(String fc) {
+		String res = fc;
+		// #
+//				System.out.println("cleanSql start");
+//				res = res.replaceAll("(?<='[^']{0,10})#(?=[^']{0,10}')", "<encodingCode_HashTag>");
+//				res = res.replaceAll("#.*", "");
+//				res = res.replaceAll("<encodingCode_HashTag>", "#");
+		// //
+//				res = res.replaceAll("\\/\\/.*", "");
+		// /**/
+		res = res.replaceAll("\\/\\*.*\\*\\/", "");
+//					res = res.replaceAll("\\/\\*+([^\\/]|[^\\*]\\/)*\\*+\\/","");
+//					System.out.println("/**/ s");
+		// --
+		res = res.replaceAll("--.*", "");
+		// /* \r\n*/
+//					res = res.replaceAll("(#.*)|(\\/\\*.*\\*\\/)","");
+//					res = res.replaceAll("'#'","QqAaZz").replaceAll("(#.*)|(\\/\\*.*\\*\\/)","");
+//					res = res.replaceAll("QqAaZz","'#'");
+		String sql = "";
+		boolean es = false;
+		for (String line : res.split("\r\n")) {
+			if (line.trim().equals("")) {
+				continue;
+			}
+			// /* \r\n */
+			if (line.matches(".*\\/\\*.*")) {
+				line = line.replaceAll("\\/\\*.*", "");
+				es = true;
+			}
+			if (es) {
+				if (line.matches(".*\\*\\/.*")) {
+					line = line.replaceAll(".*\\*\\/", "");
+					es = false;
+				} else {
+					continue;
+				}
+			}
+//						if(line.trim().substring(0, 1).equals(".")) {
+//							line = line + ";";
+//						}
+			sql += line + "\r\n";
+		}
+		res = sql;
+		return res;
+	}
 	/**
 	 * @author	Tim
 	 * @since	2023年10月27日
@@ -154,6 +200,4 @@ public class OtherTranslater {
 		result = RegexTool.decodeSQL(result);
 		return result;
 	}
-	
-	
 }
