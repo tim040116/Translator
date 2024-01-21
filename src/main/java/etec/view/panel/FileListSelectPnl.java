@@ -6,8 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import etec.common.model.element.FileListSelectElement;
-import etec.src.listener.FileListSelectListener;
-import etec.src.listener.FileListSelectNextPageListener;
+import etec.view.listener.FileListSelectListener;
+import etec.view.listener.FileListSelectNextPageListener;
 
 public class FileListSelectPnl  extends JPanel {
 	/**

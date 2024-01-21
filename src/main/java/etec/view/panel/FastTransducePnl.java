@@ -14,7 +14,7 @@ import javax.swing.text.DefaultCaret;
 
 import etec.common.interfaces.Controller;
 import etec.common.view.panel.StatusBar;
-import etec.src.listener.FastTransduceListener;
+import etec.view.listener.FastTransduceListener;
 
 /**
  * @author	Tim

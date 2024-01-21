@@ -1,7 +1,7 @@
 package test.gp.translater;
 
 import etec.common.exception.UnknowSQLTypeException;
-import etec.sql.gp.translater.GreemPlumTranslater;
+import etec.src.sql.gp.translater.GreemPlumTranslater;
 
 /**
  * @author	Tim

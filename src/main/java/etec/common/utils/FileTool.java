@@ -13,19 +13,12 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import etec.common.utils.log.Log;
+
 public class FileTool {
 	
     public static final String UTF8_BOM = "\uFEFF";
 	
-	public static List<File> readFileList(String rootPath) throws IOException {
-		List<File> lf = new ArrayList<>();
-		// 取得檔案的根目錄
-		File rp = new File(rootPath);
-		if (rp == null || !rp.isDirectory())
-			throw new IOException("系統搜尋不到文件的根目錄");
-		// 取得所有檔案資料
-		return readInsideFileList(lf, rp);
-	} 
 	//取得檔案清單
 	public static List<File> getFileList(String rootPath) throws IOException {
 		List<File> lf = new ArrayList<>();

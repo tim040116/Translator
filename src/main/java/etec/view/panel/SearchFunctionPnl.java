@@ -14,11 +14,11 @@ import javax.swing.JTextField;
 import etec.common.enums.RunStatusEnum;
 import etec.common.factory.UIPanelFactory;
 import etec.common.interfaces.Controller;
+import etec.common.utils.param.Params;
 import etec.common.view.panel.LogTextArea;
 import etec.common.view.panel.ProgressBar;
 import etec.common.view.panel.StatusBar;
-import etec.src.listener.SearchFunctionListener;
-import etec.src.main.Params;
+import etec.view.listener.SearchFunctionListener;
 
 public class SearchFunctionPnl  extends JPanel {
 

@@ -6,6 +6,8 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import etec.common.utils.convert_safely.ConvertFunctionsSafely;
+
 /**
  * 正則或類正則相關功能
  * @author 	Tim
