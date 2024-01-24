@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import etec.common.utils.RegexTool;
+
 /**
  * 
  * <h1>安全的轉換SQL語句</h1>
@@ -114,6 +116,12 @@ public class ConvertSubQuerySafely {
 		return res;
 	}
 	private String savelyConvertUnion(String script,Function<String, String> function) {
+		String res = "";
+		for(String sub : script.split("(?i)\\b(?=union\\b)")){
+			res+=RegexTool.getRegexTargetFirst("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", sub);
+			String subq = sub.replaceAll("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", "");
+			function.apply(script);
+		}
 		return script;
 	}
 	protected static String markName(String type,int i) {
