@@ -1,6 +1,7 @@
 package test;
 
-import test.gp.translater.TestSQLTranslater;
+import test.gp.translater.TestConvertSafely;
+import test.gp.translater.TestGPTranslater;
 
 /**
  * @author	Tim
@@ -12,7 +13,10 @@ public class Main {
 	
 	public static void main(String[] args) {
 		try {
-			TestSQLTranslater.run();
+			//GP
+//			TestGPTranslater.run();
+			//Convert Safely
+			TestConvertSafely.run();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

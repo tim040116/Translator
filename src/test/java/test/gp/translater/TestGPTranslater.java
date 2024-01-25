@@ -11,7 +11,7 @@ import etec.src.sql.gp.translater.GreemPlumTranslater;
  * 測試 gp 的 SQLTranslater
  * 
  * */
-public class TestSQLTranslater {
+public class TestGPTranslater {
 	public static String run() throws UnknowSQLTypeException {
 		String res = "";
 		

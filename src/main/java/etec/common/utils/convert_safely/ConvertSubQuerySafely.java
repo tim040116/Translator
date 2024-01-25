@@ -3,6 +3,7 @@ package etec.common.utils.convert_safely;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 
 import etec.common.utils.RegexTool;
 
@@ -20,7 +21,6 @@ import etec.common.utils.RegexTool;
  * @author	Tim
  * @since	2023年12月26日
  * @version	4.0.0.0
- * @deprecated	尚未完成
  * */
 public class ConvertSubQuerySafely {
 	
@@ -97,8 +97,7 @@ public class ConvertSubQuerySafely {
 					temp+=str;
 				}
 			}
-			
-			res = function.apply(res);
+			savelyConvertUnion(res,function);
 			
 			
 			
@@ -115,14 +114,17 @@ public class ConvertSubQuerySafely {
 		}
 		return res;
 	}
+	private String savelyConvertJoin(String script,Function<String, String> function) {
+		Map<String,String>
+	}
 	private String savelyConvertUnion(String script,Function<String, String> function) {
 		String res = "";
 		for(String sub : script.split("(?i)\\b(?=union\\b)")){
-			res+=RegexTool.getRegexTargetFirst("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", sub);
+			res += RegexTool.getRegexTargetFirst("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", sub);
 			String subq = sub.replaceAll("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", "");
-			function.apply(script);
+			res += function.apply(subq);
 		}
-		return script;
+		return res;
 	}
 	protected static String markName(String type,int i) {
 		return markName(type,Integer.toString(i));
