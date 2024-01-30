@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;
 
 /**
@@ -20,7 +21,6 @@ import etec.common.utils.RegexTool;
  * @author	Tim
  * @since	2023年12月26日
  * @version	4.0.0.0
- * @deprecated	尚未完成
  * */
 public class ConvertSubQuerySafely {
 	
@@ -36,98 +36,60 @@ public class ConvertSubQuerySafely {
 	 *
 	 * */
 	public String savelyConvert(String script,Function<String, String> function) {
-		String res = "";
-		int cntBracket = 0;
-		maxCnt = 0;
-		//將小括號跟逗號依範圍加密
-		for(String c : script.split("")) {
-			if( "(".equals(c)) {
-				cntBracket++;
-				c = markName("leftquater", cntBracket);
+		String res = ConvertFunctionsSafely.decodeMark(script).replaceAll("[\\(\\)]", Mark.MAHJONG_BLACK+"$0"+Mark.MAHJONG_BLACK);
+		String subSrc = "";
+		String subId = "";
+		String fthSrc = "";
+		Map<String,String> mapSub = new HashMap<String,String>();
+		int intq = 0;
+		int issub = 0;
+		for(String ch : res.split("\\b")) {
+			if(ch.matches(Mark.MAHJONG_BLACK+"+")) {
+				continue;
+			}
+			if("(".equals(ch)) {
+				intq++;
+				if(intq==1) {
+					issub=1;
+				}
+			}else if(")".equals(ch)) {
+				intq--;
+				if(issub==2) {
+					issub=0;
+				}
+			}
+			if(issub==1) {
+				issub=ch.matches("\\s*")?1:ch.matches("(?i)SEL(?:ECT)")?2:0;
+				if(issub==2) {
+					subId = markName("subQuery",subQueryId);
+					fthSrc += subId;
+				}
+			}
+			if(issub==2) {
+				subSrc+=ch;
+			}else {
 				
-			}else if(")".equals(c)) {
-				
-				c = markName("rightquater", cntBracket);
-				cntBracket--;
-			}else if(",".equals(c)) {
-				c = markName("comma", cntBracket);
-			}
-			if(cntBracket>maxCnt) {
-				maxCnt = cntBracket;
-			}
-			res+=c;
-		}
-		//依次解密小括號
-		for(int i = 0;i<=maxCnt+1;i++) {
-			String leftQuaterMark = markName("leftquater", i);
-			String rightQuaterMark = markName("rightquater", i);
-			String commaMark = markName("comma", i);
-			
-			//尋找小括號
-			String temp = "";
-			String tempSub = "";
-			Map<String,String> mapSubquery = new HashMap<String,String>();
-			boolean isSub = false;
-			boolean isQuery = false;
-			for(String str : res.split("\\b")) {
-				if(str.matches("\\s*\\(\\s*")) {
-					isSub = true;
-				}
-				if(isSub) {//找到sub query的起頭
-					if(isSub&&str.matches("(?i)\\s*SELECT\\s*")) {
-						isQuery = true;
-						isSub = false;
-						tempSub = str;
-					}else {
-						isSub = false;
-					}
-				}
-				if(isQuery) {
-					if(str.matches("\\s*\\)\\s*")) {
-						isQuery = false;
-						String id = markName("SubQuery", subQueryId);
-						subQueryId++;
-						mapSubquery.put(id, tempSub);
-						temp += id+str;
-					}else {
-						tempSub+=str;
-					}
-					
-				}else {
-					temp+=str;
-				}
 			}
 			
-			res = function.apply(res);
-			
-			
-			
-			
-			res = res
-					.replaceAll(leftQuaterMark, "(")
-					.replaceAll(rightQuaterMark, ")")
-					.replaceAll(commaMark, ",")
-					;
-			
-		}
-		if(!res.equals(script)) {
-			res = savelyConvert(res,function);
 		}
 		return res;
 	}
+	/**
+	 * 處理union的部分
+	 * */
 	private String savelyConvertUnion(String script,Function<String, String> function) {
 		String res = "";
 		for(String sub : script.split("(?i)\\b(?=union\\b)")){
 			res+=RegexTool.getRegexTargetFirst("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", sub);
-			String subq = sub.replaceAll("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", "");
-			function.apply(script);
+			String substr = sub.replaceAll("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", "");
+			res += function.apply(substr);
 		}
-		return script;
+		return res;
 	}
 	protected static String markName(String type,int i) {
 		return markName(type,Integer.toString(i));
 	}
 	protected static String markName(String type,String i) {
-		return "<ConvertSubQuerySafelyMark_"+type+"_"+i+">";
+		return "_____ConvertSubQuerySafelyMark_"+type+"_"+i+"_____";
 	}
 }
