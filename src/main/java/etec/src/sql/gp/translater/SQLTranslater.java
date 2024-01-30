@@ -34,17 +34,18 @@ public class SQLTranslater {
 	 * 
 	 * <h1>轉換SQL語法</h1><br>
 	 * 
-	 * <br>1.MINUS 轉成 EXCEPT
-	 * <br>2.SEL 轉成 SELECT
-	 * <br>3.OREPLACE 轉成 REPLACE
-	 * <br>4.STRTOK 轉成 SPLIT_PART
-	 * <br>5.DATE FORMAT 正規化
-	 * <br>6.INDEX改成POSITION
-	 * <br>7.ZEROIFNULL改成COALESCE
-	 * <br>8.IN後面一定要有括號
-	 * <br>9.NullIfZero改成NULLIF
-	 * <br>10.LIKE ANY('','','') 轉成 LIKE ANY(ARRAY['','',''])	
-	 * <br>11.日期運算轉換 
+	 * <br>NVL 轉成 COALESCE
+	 * <br>MINUS 轉成 EXCEPT
+	 * <br>SEL 轉成 SELECT
+	 * <br>OREPLACE 轉成 REPLACE
+	 * <br>STRTOK 轉成 SPLIT_PART
+	 * <br>DATE FORMAT 正規化
+	 * <br>INDEX改成POSITION
+	 * <br>ZEROIFNULL改成COALESCE
+	 * <br>IN後面一定要有括號
+	 * <br>NullIfZero改成NULLIF
+	 * <br>LIKE ANY('','','') 轉成 LIKE ANY(ARRAY['','',''])	
+	 * <br>日期運算轉換 
 	 * <br> {@link SQLTranslater#changeAddMonths(String)}
 	 * <br> {@link SQLTranslater#changeDateFormat(String)}
 	 * <br>DATE 轉成 CURRENT_DATE
@@ -57,6 +58,7 @@ public class SQLTranslater {
 		String res = script
 				.replaceAll("(?i)\\bMINUS\\b", "EXCEPT")//MINUS
 				.replaceAll("(?i)\\bSEL\\b", "SELECT")//SEL
+				.replaceAll("(?i)\\bNVL\\b", "COALESCE")//NVL
 				.replaceAll("(?i)\\bOREPLACE\\s*\\(", "REPLACE\\(")//OREPLACE
 				.replaceAll("(?i)\\bSTRTOK\\s*\\(", "SPLIT_PART\\(")//STRTOK
 				.replaceAll("(?i)CHARACTERS\\s*\\(","LENGTH\\(")//CHARACTERS

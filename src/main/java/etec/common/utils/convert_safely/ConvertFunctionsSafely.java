@@ -66,6 +66,18 @@ public class ConvertFunctionsSafely {
 		}
 		return res;
 	}
+	
+	/**
+	 * @author	Tim
+	 * @since	2023年11月30日
+	 * 	
+	 * 會依小括號進行分層
+	 * 避免函式轉換時造成錯位
+	 * */
+	public static String convert(String script,Function<String, String> function) {
+		return (new ConvertFunctionsSafely()).savelyConvert(script, function);
+	}
+	
 	protected static String markName(String type,int i) {
 		return markName(type,Integer.toString(i));
 	}

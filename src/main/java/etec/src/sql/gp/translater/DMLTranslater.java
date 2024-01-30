@@ -30,6 +30,7 @@ public class DMLTranslater {
 		String insert = sql.replaceAll("(?i)(\\s*INSERT\\s+INTO\\s+\\S+\\s+)[\\S\\s]+", "$1");
 		String select = sql.replaceAll("(?i)\\s*INSERT\\s+INTO\\s+\\S+\\s+", "");
 		select = GreemPlumTranslater.dql.easyReplace(select);
+		
 		res = insert+select;
 		return res;
 	}

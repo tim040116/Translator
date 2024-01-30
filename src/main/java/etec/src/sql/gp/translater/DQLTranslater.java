@@ -7,6 +7,7 @@ import etec.common.enums.SelectAreaEnum;
 import etec.common.exception.UnknowSQLTypeException;
 import etec.common.utils.Mark;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
+import etec.common.utils.convert_safely.ConvertSubQuerySafely;
 
 /**
  * @author	Tim
@@ -38,7 +39,15 @@ public class DQLTranslater {
 	 * */
 	public String easyReplace(String script) throws UnknowSQLTypeException {
 		String res = script;
-		res = changeQualifaRank(res);
+		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
+		res = csqs.savelyConvert(res, (t)->{
+			try {
+				t = changeQualifaRank(t);//Qualify Row Number
+			} catch (UnknowSQLTypeException e) {
+				e.printStackTrace();
+			}
+			return t;
+		});
 		return res;
 	}
 	
@@ -65,7 +74,7 @@ public class DQLTranslater {
 		 * */
 		//安插標記
 		String[] arrSplitType = {//所有特殊階段的關鍵字
-			"SELECT"
+			"SEL(?:ECT)?"
 			,"WITH"
 			,"FROM"
 //			,"((OUTER|INNER|LEFT|RIGHT|CROSS)\\s+)?JOIN"
@@ -73,7 +82,7 @@ public class DQLTranslater {
 			,"WHERE"
 //			,"GROUP\\s+BY"
 //			,"ORDER\\s+BY"
-			,"QUALIFY\\s+ROW_NUMBER\\(\\)"
+			,"QUALIFY\\s+ROW_NUMBER"
 		};
 		String regKey = "(?i)"+arrSplitType[0];
 		for(int i = 1; i<arrSplitType.length;i++) {
@@ -101,7 +110,7 @@ public class DQLTranslater {
 			}else if(str.matches("(?i)WITH[\\S\\s]+")) {
 				lstWith.add(str);
 				lstArea.add(SelectAreaEnum.WITH);
-			}else if(str.matches("(?i)SELECT[\\S\\s]+")) {
+			}else if(str.matches("(?i)SEL(?:ECT)?[\\S\\s]+")) {
 				select = str;
 				lstArea.add(SelectAreaEnum.SELECT);
 			}else if(str.matches("(?i)FROM[\\S\\s]+")) {
@@ -119,8 +128,8 @@ public class DQLTranslater {
 //			}else if(str.matches("(?i)ORDER\\s+BY[\\S\\s]+")) {
 //				orderBy = str;
 //				lstArea.add(SelectAreaEnum.ORDER_BY);
-			}else if(str.matches("(?i)QUALIFY\\s+ROW_NUMBER\\(\\)[\\S\\s]+")) {
-				rowNumber = str;
+			}else if(str.matches("(?i)QUALIFY\\s+ROW_NUMBER[\\S\\s]+")) {
+				rowNumber = ConvertFunctionsSafely.decodeMark(str);
 				lstArea.add(SelectAreaEnum.QUALFY_ROW_NUMBER);
 			}else {
 				throw new UnknowSQLTypeException(str, null);
