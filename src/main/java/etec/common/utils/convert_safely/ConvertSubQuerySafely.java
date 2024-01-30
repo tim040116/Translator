@@ -3,6 +3,7 @@ package etec.common.utils.convert_safely;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 
 import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;
@@ -70,7 +71,6 @@ public class ConvertSubQuerySafely {
 			}else {
 				
 			}
-			
 		}
 		return res;
 	}
@@ -83,6 +83,32 @@ public class ConvertSubQuerySafely {
 			res+=RegexTool.getRegexTargetFirst("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", sub);
 			String substr = sub.replaceAll("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", "");
 			res += function.apply(substr);
+			savelyConvertUnion(res,function);
+			
+			
+			
+			
+			res = res
+					.replaceAll(leftQuaterMark, "(")
+					.replaceAll(rightQuaterMark, ")")
+					.replaceAll(commaMark, ",")
+					;
+			
+		}
+		if(!res.equals(script)) {
+			res = savelyConvert(res,function);
+		}
+		return res;
+	}
+	private String savelyConvertJoin(String script,Function<String, String> function) {
+		Map<String,String>
+	}
+	private String savelyConvertUnion(String script,Function<String, String> function) {
+		String res = "";
+		for(String sub : script.split("(?i)\\b(?=union\\b)")){
+			res += RegexTool.getRegexTargetFirst("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", sub);
+			String subq = sub.replaceAll("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", "");
+			res += function.apply(subq);
 		}
 		return res;
 	}
