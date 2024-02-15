@@ -9,6 +9,6 @@ public class MissParamsException extends RuntimeException{
 
 	
 	public MissParamsException(Object key) {
-        super("Can't find param: "+key);
+        super("參數遺失，請確認參數檔是否完整: "+key);
     }
 }

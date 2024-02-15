@@ -99,22 +99,25 @@ public class SQLTranslater {
 		return res;
 	}
 	/**
+	 * <h1>日期加減轉換</h1>
 	 * <br>INTERVAL可進行月份加減
 	 * <br>但會將資料型態轉變為 timestamp
 	 * <br>因此需要配合CAST語法進行轉換
 	 * <br>
 	 * <br>ADD_MONTHS($1,$2) 轉成 CAST($1-INTERVAL'$2 MONTH' AS DATE)
+	 * <br>
 	 * 
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * 
+	 * @
 	 * 
 	 * */
 	public String changeAddMonths(String sql) {
 		String res = sql;
 		res = res
-			.replaceAll("(?i)ADD_MONTHS\\s*\\(([^,]+)\\s*,\\s*\\-\\s*(\\d+)\\s*\\)", "CAST\\($1-INTERVAL'$2 MONTH' AS DATE\\)")//ADD_MONTHS
-			.replaceAll("(?i)ADD_MONTHS\\s*\\(([^,]+)\\s*,\\s*(\\d+)\\s*\\)", "CAST\\($1+INTERVAL'$2 MONTH' AS DATE\\)")//ADD_MONTHS
+			.replaceAll("(?i)ADD_MONTHS", "ADD_MONTH")//ADD_MONTHS
+			.replaceAll("(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*\\-\\s*(\\d+)\\s*\\)", "CAST\\($2-INTERVAL'$3 $1' AS DATE\\)")//ADD_MONTHS
+			.replaceAll("(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*(\\d+)\\s*\\)", "CAST\\($2+INTERVAL'$3 $1' AS DATE\\)")//ADD_MONTHS
 			.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT\\s+('[^']+')\\s*\\)\\s*([\\+\\-]\\s*INTERVAL'[^']+'\\s+AS\\s+DATE)\\s*\\)","AS DATE\\)$2 FORMAT $1\\)")//ADD_MONTH(CAST AS DATE
 		;
 		return res;
@@ -146,9 +149,10 @@ public class SQLTranslater {
 	 * <br>1. 強制轉換  //2023-12-10 搬遷至changeTypeConversion
 	 * <br>		1-1. (FORMAT 'YYYY-MM-DD')(CHAR(7)) 轉成 TO_CHAR($1,'$2')
 	 * <br>		1-2. $1(FORMAT '$2') 轉成 TO_DATE($1,'$2')
-	 * <br>2. SUBSTR(CAST($1 AS DATE FORMAT $2),$3,$4) 轉成 TO_CHAR($1,'$2')
+	 * <br>(廢棄)2. SUBSTR(CAST($1 AS DATE FORMAT $2),$3,$4) 轉成TO_CHAR($1,$2)
 	 * <br>		2-1. 放棄單獨處理 AS FORMAT 一律於easyReplase()中正規化為 AS DATE FORMAT
 	 * <br>		2-2. 先處理日期截取
+	 * <br>2. SUBSTR(CAST($1 AS DATE FORMAT $2),$3,$4) 轉成SUBSTR(TO_CHAR($1 AS DATE FORMAT $2),$3,$4)
 	 * <br>3. 簡化日期轉字串的語法
 	 * <br>		3-1. CAST(CAST($1 AS DATE FORMAT '$2') AS VARCHAR(d+)) 轉成 TO_CHAR($1,$2)
 	 * <br>		3-2. CAST(TO_CHAR($1, 'YYYY-MM') AS CHAR(7)) 轉成 TO_CHAR($1, 'YYYY-MM')
@@ -158,8 +162,9 @@ public class SQLTranslater {
 	 * <br>5. 
 	 * 
 	 * 
-	 * <br>2023/12/06	Tim	因涉及邏輯問題暫時廢棄
-	 * <br>2023/12/12	Tim 重啟功能，分層處理
+	 * <p>2023/12/06	Tim	因涉及邏輯問題暫時廢棄</p>
+	 * <p>2023/12/12	Tim 重啟功能，分層處理</p>
+	 * <p>2024年2月5日	Tim	為求穩定性，Jason 要求第二項改為SUBSTR(TO_CHAR($1,'YYYY-MM-DD'),9,2)</p>
 	 * 		
 	 * @author	Tim
 	 * @since	4.0.0.0
@@ -170,24 +175,34 @@ public class SQLTranslater {
 		
 		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
 		res = cff.savelyConvert(sql,(String t)->{
-			/**  2.處理日期截取語法
-			 * 1. 先將SUBSTR(CAST(AS DATE FORMAT語法轉換成TO_CHAR，FORMAT 跟 SUBSTR 合併
-			 * 	SUBSTR(CAST($1 AS DATE FORMAT $2),$3,$4) 轉成 TO_CHAR(CAST($1 AS DATE),SUBSTR($2,$3,$4))
-			 * 2.SUBSTR($2,$3,$4)轉成一般字串
+			
+			/**
+			 * substr(cast(as date))改成substr(to_char())
 			 * */
 			t = t
 				//步驟2-1
-				.replaceAll("(?i)SUBSTR\\s*\\(\\s*CAST\\s*\\(\\s*([^\\(\\)]+)\\s+AS\\s+DATE\\s+FORMAT\\s+('[^']+')\\),(\\d+),(\\d+)\\)", "TO_CHAR\\(CAST\\($1 AS DATE\\),SUBSTR\\($2,$3,$4\\)\\)")
+				.replaceAll("(?i)(SUBSTR\\s*\\(\\s*)CAST(\\s*\\(\\s*[^\\(\\)]+\\s+AS\\s+DATE\\s+FORMAT\\s+'[^']+'\\s*\\)\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*\\))", "$1TO_CHAR$2")
 			;
-			//步驟2-2
-			Matcher m = Pattern.compile("(?i)SUBSTR\\s*\\(\\s*'([^']+)'\\s*,(\\d+)\\s*,\\s*(\\d+)\\s*\\)",Pattern.CASE_INSENSITIVE).matcher(t);
-			while (m.find()) {
-				String format = m.group(1);
-				int substr1 = Integer.parseInt(m.group(2))-1;
-				int substr2 = substr1+Integer.parseInt(m.group(3));
-				format = "'"+format.substring(substr1, substr2)+"'";
-				t = t.replace(m.group(0),format);
-			}
+//			/**  2.處理日期截取語法
+//			 * 1. 先將SUBSTR(CAST(AS DATE FORMAT語法轉換成TO_CHAR，FORMAT 跟 SUBSTR 合併
+//			 * 	SUBSTR(CAST($1 AS DATE FORMAT $2),$3,$4) 轉成 TO_CHAR(CAST($1 AS DATE),SUBSTR($2,$3,$4))
+//			 * 2.SUBSTR($2,$3,$4)轉成一般字串
+//			 * 
+//			 * <p>2024年2月5日	Tim	應Jason要求更改寫法</p>
+//			 * */
+//			t = t
+//					//步驟2-1
+//					.replaceAll("(?i)SUBSTR\\s*\\(\\s*CAST\\s*\\(\\s*([^\\(\\)]+)\\s+AS\\s+DATE\\s+FORMAT\\s+('[^']+')\\),(\\d+),(\\d+)\\)", "TO_CHAR\\(CAST\\($1 AS DATE\\),SUBSTR\\($2,$3,$4\\)\\)")
+//				;
+//			//步驟2-2
+//			Matcher m = Pattern.compile("(?i)SUBSTR\\s*\\(\\s*'([^']+)'\\s*,(\\d+)\\s*,\\s*(\\d+)\\s*\\)",Pattern.CASE_INSENSITIVE).matcher(t);
+//			while (m.find()) {
+//				String format = m.group(1);
+//				int substr1 = Integer.parseInt(m.group(2))-1;
+//				int substr2 = substr1+Integer.parseInt(m.group(3));
+//				format = "'"+format.substring(substr1, substr2)+"'";
+//				t = t.replace(m.group(0),format);
+//			}
 			//步驟3
 			t = t
 				//3-1  CAST(CAST($1 AS DATE FORMAT '$2') AS VARCHAR(d+))

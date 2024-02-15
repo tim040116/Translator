@@ -14,9 +14,9 @@ public class Main {
 	public static void main(String[] args) {
 		try {
 			//GP
-//			TestGPTranslater.run();
+			TestGPTranslater.run();
 			//Convert Safely
-			TestConvertSafely.run();
+//			TestConvertSafely.run();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

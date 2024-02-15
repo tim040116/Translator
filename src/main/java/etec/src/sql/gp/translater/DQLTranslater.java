@@ -1,11 +1,16 @@
 package etec.src.sql.gp.translater;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import etec.common.enums.SelectAreaEnum;
 import etec.common.exception.UnknowSQLTypeException;
 import etec.common.utils.Mark;
+import etec.common.utils.RegexTool;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 import etec.common.utils.convert_safely.ConvertSubQuerySafely;
 
@@ -37,8 +42,7 @@ public class DQLTranslater {
 	 * <br>
 	 * 
 	 * */
-	public String easyReplace(String script) throws UnknowSQLTypeException {
-		String res = script;
+	public String easyReplace(String script) throws UnknowSQLTypeException {		String res = GreemPlumTranslater.sql.easyReplase(script);;
 		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
 		res = csqs.savelyConvert(res, (t)->{
 			try {
@@ -61,6 +65,9 @@ public class DQLTranslater {
 	 * 
 	 * */
 	public String changeQualifaRank(String sql) throws UnknowSQLTypeException {
+		if(RegexTool.contains("(?i)QUALIFY\\s+ROW_NUMBER",sql)) {
+			return sql;
+		}
 		String res = "";
 		String temp = sql;
 		/*
@@ -165,6 +172,105 @@ public class DQLTranslater {
 		res += newSelect+newFrom;
 		return res;
 	}
-
-
+	/**
+	 * <h1>UNPIVOT</h1>
+	 * 
+	 * <h2>功能介紹</h2>
+	 * 	<br>此語法為將多個欄位轉換成多筆資料
+	 * 	<br>範例：
+	 * 	<br>原本資料：
+	 * 	<table>
+	 * 		<tr>
+	 * 			<td>jan_sales</td>
+	 * 			<td>jan_expense</td>
+	 * 			<td>feb_sales</td>
+	 * 			<td>feb_expense</td>
+	 * 			<td>dec_sales</td>
+	 * 			<td>dec_expense</td>
+	 * 		</tr>
+	 * 	</table>
+	 * 	<br>轉換後資料：
+	 * 	<table>
+	 * 		<tr>
+	 * 			<td>jan</td>
+	 * 			<td>jan_sales</td>
+	 * 			<td>jan_expense</td>
+	 * 		</tr>
+	 * 		<tr>
+	 * 			<td>feb</td>
+	 * 			<td>feb_sales</td>
+	 * 			<td>feb_expense</td>
+	 * 		</tr>
+	 * 		<tr>
+	 * 			<td>dec</td>
+	 * 			<td>dec_sales</td>
+	 * 			<td>dec_expense</td>
+	 * 		</tr>
+	 * 	</table>
+	 * <h2>TD架構</h2>
+		<br>UNPIVOT(
+		<br>    ON( select * from T)
+		<br>    USING
+		<br>        VALUE_COLUMNS('monthly_sales', 'monthly_expense') -- 轉換後的欄位名
+		<br>        UNPIVOT_COLUMN('month') -- 第一個欄位的欄位名
+		<br>        COLUMN_LIST('jan_sales, jan_expense', 'feb_sales,feb_expense', ..., 'dec_sales, dec_expense') -- 要取得的欄位
+		<br>        COLUMN_ALIAS_LIST('jan', 'feb', ..., 'dec' ) -- 第一個欄位的資料
+		<br>)
+	 * <h2>GP架構</h2>
+		<br>SELECT 
+		<br>	unnest(ARRAY['jan', 'feb', ..., 'dec']) AS month,
+		<br>	unnest(ARRAY[jan_sales, feb_sales, ..., dec_sales]) AS monthly_sales,
+		<br>	unnest(ARRAY[jan_expense, feb_expense, ..., dec_expense]) AS monthly_expense
+		<br>FROM T
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * 
+	 * */
+	public String changeUNPIVOT(String script) {
+		String res = "";
+		//取得整段UNPIVOT語法
+		Pattern p = Pattern.compile("UNPIVOT\\s*\\(\\s+ON\\s+(\\S+)\\s+USING((?:\\s*[^\\(]+\\([^\\)]+\\))+)\\s*\\)",Pattern.CASE_INSENSITIVE);
+		Matcher m = p.matcher(script);
+		while(m.find()) {
+			String unpivot = m.group(0);//全文
+			String replacement = "(";
+			String temp = m.group(0)//暫存
+					.replaceAll("\\)$","")//最後的括號
+					.replaceAll("(?i)UNPIVOT\\s*\\(\\s*\\ON\\s+", "")//開頭
+			;
+			String table = temp.replaceAll("^(\\S+)\\s+[\\S\\s]+", "$1");//表
+			//分析參數
+			//取得參數的map
+			Map<String,String> mapUnpivot = new HashMap<String,String>();
+			temp = temp.replaceAll("^\\s*\\s*USING\\s+","");
+			Pattern p2 = Pattern.compile("\\b([^\\(]+)\\s*\\(\\s*([^\\)]+)\\s*\\)", Pattern.CASE_INSENSITIVE);
+			Matcher m2 = p2.matcher(temp);
+			while (m2.find()) {
+				mapUnpivot.put(m2.group(1).trim().toUpperCase(),m2.group(2));
+			}
+			//分析各參數
+			//第一個欄位
+			String comma = " ";
+			if(mapUnpivot.containsKey("COLUMN_ALIAS_LIST")&&mapUnpivot.containsKey("UNPIVOT_COLUMN")) {
+				String columnAliasList 	= mapUnpivot.get("COLUMN_ALIAS_LIST");	//第一個欄位的資料
+				String unpivotColumn	= mapUnpivot.get("UNPIVOT_COLUMN");		//第一個欄位的欄位名
+				replacement += "\r\n\t unnest(ARRAY['" + columnAliasList + "']) AS " + unpivotColumn;
+				comma = ",";
+			}
+			//後面的欄位
+			String[] arrValueColumns = mapUnpivot.get("VALUE_COLUMNS") //轉換後的欄位名
+					.replaceAll("^\\s*'\\s*|\\s*'\\s*$", "")
+					.split("\\s*'\\s*,\\s*'\\s*")
+			;		
+			String[] arrColumnList = mapUnpivot.get("COLUMN_LIST") //要取得的欄位
+					.replaceAll("^\\s*'\\s*|\\s*'\\s*$", "")
+					.split("\\s*'\\s*,\\s*'\\s*")
+			;
+			//欄位數不同則報錯
+			for(String colList : replaceAll)
+			//處理欄位名
+		}
+		return res;
+	}
 }

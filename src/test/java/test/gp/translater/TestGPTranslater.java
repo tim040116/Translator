@@ -188,10 +188,10 @@ QUALIFY ROW_NUMBER()OVER(
 				"	FROM PSTAGE_CN.DW_VW_VENDORGROUP_EDW\r\n" + 
 				" ) tmp_qrn \r\n" + 
 				" where tmp_qrn.ROW_NUMBER =1";
-		String r16 = GreemPlumTranslater.dql.changeQualifaRank(q16);
-		if(!a16.equals(r16))
-		System.out.println(r16);
-		System.out.println("CASE 16 : "+a16.equals(r16));
+//		String r16 = GreemPlumTranslater.dql.changeQualifaRank(q16);
+//		if(!a16.equals(r16))
+//		System.out.println(r16);
+//		System.out.println("CASE 16 : "+a16.equals(r16));
 //CASE17 : 
 //		String q17 = "";
 //		String a17 = "";

@@ -58,6 +58,17 @@ public class RegexTool {
 		}
 		return lstRes;
 	}
+	/**
+	 * <h1>是否包含特定格式</h1>
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * 
+	 * */
+	public static boolean contains(String regex, String content) {
+		Pattern p = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
+		Matcher m = p.matcher(content);
+		return m.find();
+	}
 	public static String getRegexTargetFirst(String regex, String content) {
 		String res = "";
 		Pattern p = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
