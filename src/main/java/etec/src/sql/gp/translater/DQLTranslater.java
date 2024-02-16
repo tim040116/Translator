@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import etec.common.enums.SelectAreaEnum;
+import etec.common.exception.SQLFormatException;
 import etec.common.exception.UnknowSQLTypeException;
 import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;
@@ -224,26 +225,27 @@ public class DQLTranslater {
 		<br>FROM T
 	 * 
 	 * @author	Tim
+	 * @throws SQLFormatException	COLUMN_LIST 跟 COLUMN_ALIAS_LIST 數量不同時報錯
 	 * @since	4.0.0.0
 	 * 
 	 * */
-	public String changeUNPIVOT(String script) {
-		String res = "";
+	public String changeUNPIVOT(String script) throws SQLFormatException {
+		String res = script;
 		//取得整段UNPIVOT語法
-		Pattern p = Pattern.compile("UNPIVOT\\s*\\(\\s+ON\\s+(\\S+)\\s+USING((?:\\s*[^\\(]+\\([^\\)]+\\))+)\\s*\\)",Pattern.CASE_INSENSITIVE);
+		Pattern p = Pattern.compile("UNPIVOT\\s*\\(\\s*ON\\s*\\(\\s*SELECT[\\S\\s]+FROM\\s+(\\S+)\\)\\s*USING((?:\\s*[^\\(]+\\([^\\)]+\\))+)\\s*\\)",Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(script);
 		while(m.find()) {
 			String unpivot = m.group(0);//全文
-			String replacement = "(";
+			String replacement = "(\r\n\tSELECT";
 			String temp = m.group(0)//暫存
 					.replaceAll("\\)$","")//最後的括號
-					.replaceAll("(?i)UNPIVOT\\s*\\(\\s*\\ON\\s+", "")//開頭
+					.replaceAll("(?i)UNPIVOT\\s*\\(\\s*ON\\s*", "")//開頭
 			;
-			String table = temp.replaceAll("^(\\S+)\\s+[\\S\\s]+", "$1");//表
+			String table = temp.replaceAll("\\s*USING[\\S\\s]*", "");//表
 			//分析參數
 			//取得參數的map
 			Map<String,String> mapUnpivot = new HashMap<String,String>();
-			temp = temp.replaceAll("^\\s*\\s*USING\\s+","");
+			temp = temp.replaceAll("[\\S\\s]+USING\\s+", "");
 			Pattern p2 = Pattern.compile("\\b([^\\(]+)\\s*\\(\\s*([^\\)]+)\\s*\\)", Pattern.CASE_INSENSITIVE);
 			Matcher m2 = p2.matcher(temp);
 			while (m2.find()) {
@@ -255,7 +257,7 @@ public class DQLTranslater {
 			if(mapUnpivot.containsKey("COLUMN_ALIAS_LIST")&&mapUnpivot.containsKey("UNPIVOT_COLUMN")) {
 				String columnAliasList 	= mapUnpivot.get("COLUMN_ALIAS_LIST");	//第一個欄位的資料
 				String unpivotColumn	= mapUnpivot.get("UNPIVOT_COLUMN");		//第一個欄位的欄位名
-				replacement += "\r\n\t unnest(ARRAY['" + columnAliasList + "']) AS " + unpivotColumn;
+				replacement += "\r\n\t\t unnest(ARRAY['" + columnAliasList + "']) AS " + unpivotColumn;
 				comma = ",";
 			}
 			//後面的欄位
@@ -267,9 +269,31 @@ public class DQLTranslater {
 					.replaceAll("^\\s*'\\s*|\\s*'\\s*$", "")
 					.split("\\s*'\\s*,\\s*'\\s*")
 			;
-			//欄位數不同則報錯
-			for(String colList : replaceAll)
 			//處理欄位名
+			for(int i = 0 ; i < arrValueColumns.length ; i++) {
+				arrValueColumns[i] = "]) AS " + arrValueColumns[i];
+			}
+			//處理欄位值
+			for(String collist : arrColumnList) {
+				String[] arrcol = collist.split("\\s*,\\s*");
+				//欄位數不同則報錯
+				if(arrValueColumns.length != arrcol.length) {
+					throw SQLFormatException.wrongParam("UNPIVOT",arrValueColumns.length,arrcol.length);
+				}
+				//將欄位值塞進去
+				for(int i = arrValueColumns.length-1 ; i >= 0 ; i--) {
+					arrValueColumns[i] = "," + arrcol[i] + arrValueColumns[i];
+				}
+			}
+			//處理開頭
+			for(int i = 0 ; i < arrValueColumns.length ; i++) {
+				replacement += "\r\n\t\t" + comma + arrValueColumns[i].replaceAll("^,", "unnest(ARRAY[");
+				if(" ".equals(comma)) {
+					comma = ",";
+				}
+			}
+			replacement += "\r\n\tFROM " + table + "\r\n)";
+			res = res.replace(unpivot,replacement);
 		}
 		return res;
 	}

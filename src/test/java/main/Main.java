@@ -28,8 +28,8 @@ public class Main {
 					"        USING\r\n" + 
 					"            VALUE_COLUMNS('monthly_sales', 'monthly_expense')\r\n" + 
 					"            UNPIVOT_COLUMN('month')\r\n" + 
-					"            COLUMN_LIST('jan_sales, jan_expense', 'feb_sales,feb_expense', ..., 'dec_sales, dec_expense')\r\n" + 
-					"            COLUMN_ALIAS_LIST('jan', 'feb', ..., 'dec' )\r\n" + 
+					"            COLUMN_LIST('jan_sales, jan_expense', 'feb_sales,feb_expense', 'mch_sales,mch_expense', 'apr_sales,apr_expense', 'may_sales,may_expense', 'jun_sales,jun_expense', 'jly_sales,jly_expense', 'ogs_sales,ogs_expense', 'sep_sales,sep_expense', 'oct_sales,oct_expense', 'nov_sales,nov_expense', 'dec_sales, dec_expense')\r\n" + 
+					"            COLUMN_ALIAS_LIST('jan', 'feb', 'mch', 'apr', 'may', 'jun', 'jly', 'ogs', 'sep', 'oct', 'nov', 'dec' )\r\n" + 
 					"    )X;";
 			String b = GreemPlumTranslater.dql.changeUNPIVOT(a);
 			System.out.println(b);
