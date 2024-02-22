@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import etec.common.exception.UnknowSQLTypeException;
+import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.utils.FileTool;
 import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;

@@ -29,11 +29,9 @@ public class Log {
 		send(Params.log.COLOR_WARN,"WARN", content); 
 	}
 
-	public static void error(Object content) {
-		send(Params.log.COLOR_ERROR,"ERROR", content);
-	}
 	public static void error(Exception e) {
 		send(Params.log.COLOR_ERROR,"ERROR", e.getMessage());
+		e.printStackTrace();
 	}
 	public static void debug(Object content) {
 		send(Params.log.COLOR_DEBUG,"DEBUG",content);

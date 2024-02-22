@@ -3,7 +3,7 @@ package etec.src.sql.az.service;
 import java.io.IOException;
 import java.util.List;
 
-import etec.common.exception.SQLFormatException;
+import etec.common.exception.sql.SQLFormatException;
 import etec.common.utils.FileTool;
 import etec.common.utils.RegexTool;
 import etec.src.file.model.BasicParams;

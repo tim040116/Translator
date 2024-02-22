@@ -1,13 +1,12 @@
-package etec.common.exception;
+package etec.common.exception.sql;
 
-import java.io.IOException;
 /**
  * @author	Tim
  * @since	2023年11月29日
  * 
  * 程式轉換時發生的問題
  */
-public class SQLFormatException extends IOException{
+public class SQLFormatException extends SQLTransduceException{
 
 	
 	private static final long serialVersionUID = 1L;

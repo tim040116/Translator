@@ -1,4 +1,4 @@
-package etec.common.exception;
+package etec.common.exception.sql;
 
 import etec.common.enums.SQLTypeEnum;
 
@@ -7,7 +7,7 @@ import etec.common.enums.SQLTypeEnum;
  * @since	2023年10月20日
  * 當遇到無法識別的sql語句會回傳此例外
  * */
-public class UnknowSQLTypeException extends Exception{
+public class UnknowSQLTypeException extends SQLTransduceException{
 
 	/**
 	 * 

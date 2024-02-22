@@ -26,7 +26,7 @@ public class FastTransduceListener implements ActionListener {
 				} catch (Exception e1) {
 					FastTransduceFrame.pnl.statusBar.setStatus(RunStatusEnum.FAIL);
 					FastTransduceFrame.pnl.txtNewScript.setText(e1.getMessage());
-					Log.error(e1.getMessage());
+					Log.error(e1);
 				}
 			}
 		}.start();

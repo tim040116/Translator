@@ -1,4 +1,4 @@
-package etec.src.sql.az.controller;
+package etec.src.controller;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import etec.common.enums.RunStatusEnum;
+import etec.common.exception.TransduceException;
 import etec.common.interfaces.Controller;
 import etec.common.utils.FileTool;
 import etec.common.utils.RegexTool;
@@ -90,7 +91,7 @@ public class SearchFunctionController implements Controller{
 				newContent = FamilyMartFileTransduceService.transduceSQLScript(newContent);
 				String srcFileName = RegexTool.getRegexTargetFirst("\\bP\\w+\\.\\w+",RegexTool.getRegexTargetFirst("^.*",newContent));
 				if(lstFile.contains(srcFileName)) {
-					Log.error(srcFileName);
+					Log.error(new TransduceException(srcFileName));
 				} else {
 					lstFile.add(srcFileName);
 				}

@@ -1,19 +1,16 @@
 package etec.src.sql.gp.translater;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import etec.common.enums.SelectAreaEnum;
-import etec.common.exception.SQLFormatException;
-import etec.common.exception.UnknowSQLTypeException;
+import etec.common.exception.sql.SQLFormatException;
+import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 import etec.common.utils.convert_safely.ConvertSubQuerySafely;
+import etec.src.sql.td.model.SelectTableModel;
 
 /**
  * @author	Tim
@@ -33,17 +30,23 @@ import etec.common.utils.convert_safely.ConvertSubQuerySafely;
 public class DQLTranslater {
 	
 	/**
-	 * @author	Tim
-	 * @throws UnknowSQLTypeException 
-	 * @since	2023年12月26日
-	 * 
 	 * <h1>統整DQL的所有轉換</h1>
+	 * <p>qualify row_number over 處理</p>
+	 * <p></p>
 	 * 
-	 * <br>qualify row_number over 處理
-	 * <br>
+	 * <h2>異動紀錄</h2>
+	 * <br>2023年12月26日	Tim	建立功能
 	 * 
-	 * */
-	public String easyReplace(String script) throws UnknowSQLTypeException {		String res = GreemPlumTranslater.sql.easyReplase(script);;
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @see
+	 * @param	script 單一段完整的SQL語法
+	 * @throws	UnknowSQLTypeException
+	 * @throws	SQLFormatException
+	 * @return	String	轉換完成的SQL
+			 */
+	public String easyReplace(String script) throws UnknowSQLTypeException, SQLFormatException {		
+		String res = GreemPlumTranslater.sql.easyReplase(script);
 		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
 		res = csqs.savelyConvert(res, (t)->{
 			try {
@@ -66,7 +69,7 @@ public class DQLTranslater {
 	 * 
 	 * */
 	public String changeQualifaRank(String sql) throws UnknowSQLTypeException {
-		if(RegexTool.contains("(?i)QUALIFY\\s+ROW_NUMBER",sql)) {
+		if(!RegexTool.contains("(?i)QUALIFY\\s+ROW_NUMBER",sql)) {
 			return sql;
 		}
 		String res = "";
@@ -105,40 +108,32 @@ public class DQLTranslater {
 		String select=""
 				,from=""
 				,where=""
-//				,groupBy=""
-//				,orderBy=""
+				,groupBy=""
+				,orderBy=""
 				,rowNumber="";
 		List<String> lstWith = new ArrayList<String>();
 //		List<String> lstJoin = new ArrayList<String>();
-		List<SelectAreaEnum> lstArea = new ArrayList<SelectAreaEnum>();//紀錄各階段的順序
 		for(String str : arrSplitStr) {
 			if(str.matches("\\s*")) {
 				res+=str;
 				continue;
-			}else if(str.matches("(?i)WITH[\\S\\s]+")) {
-				lstWith.add(str);
-				lstArea.add(SelectAreaEnum.WITH);
+//			}else if(str.matches("(?i)WITH[\\S\\s]+")) {
+//				lstWith.add(str);
 			}else if(str.matches("(?i)SEL(?:ECT)?[\\S\\s]+")) {
 				select = str;
-				lstArea.add(SelectAreaEnum.SELECT);
 			}else if(str.matches("(?i)FROM[\\S\\s]+")) {
 				from = str;
-				lstArea.add(SelectAreaEnum.SELECT);
 //			}else if(str.matches("(?i)((OUTER|INNER|LEFT|RIGHT|CROSS)\\\\s+)?JOIN[\\S\\s]+")) {
 //				lstJoin.add(str);
 //				lstArea.add(SelectAreaEnum.JOIN);
 			}else if(str.matches("(?i)WHERE[\\S\\s]+")) {
 				where = str;
-				lstArea.add(SelectAreaEnum.WHERE);
-//			}else if(str.matches("(?i)GROUP\\s+BY[\\S\\s]+")) {
-//				groupBy = str;
-//				lstArea.add(SelectAreaEnum.GROUP_BY);
-//			}else if(str.matches("(?i)ORDER\\s+BY[\\S\\s]+")) {
-//				orderBy = str;
-//				lstArea.add(SelectAreaEnum.ORDER_BY);
-			}else if(str.matches("(?i)QUALIFY\\s+ROW_NUMBER[\\S\\s]+")) {
+			}else if(str.matches("(?i)GROUP\\s+BY[\\S\\s]+")) {
+				groupBy = str;
+			}else if(str.matches("(?i)ORDER\\s+BY[\\S\\s]+")) {
+				orderBy = str;
+			}else if(str.matches("(?i)\\bQUALIFY\\s+ROW_NUMBER[\\S\\s]+")) {
 				rowNumber = ConvertFunctionsSafely.decodeMark(str);
-				lstArea.add(SelectAreaEnum.QUALFY_ROW_NUMBER);
 			}else {
 				throw new UnknowSQLTypeException(str, null);
 			}

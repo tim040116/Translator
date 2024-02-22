@@ -1,6 +1,6 @@
 package etec.view.application;
 
-import etec.src.sql.az.controller.SearchFunctionController;
+import etec.src.controller.SearchFunctionController;
 import etec.view.frame.SearchFunctionFrame;
 
 public class SearchFunctionApplication {

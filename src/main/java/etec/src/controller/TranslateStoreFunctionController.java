@@ -1,4 +1,4 @@
-package etec.src.sql.az.controller;
+package etec.src.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import etec.common.enums.RunStatusEnum;
-import etec.common.exception.UnknowSQLTypeException;
+import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.interfaces.Controller;
 import etec.common.utils.FileTool;
 import etec.common.utils.log.Log;

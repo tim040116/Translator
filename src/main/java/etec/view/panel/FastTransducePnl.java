@@ -2,6 +2,8 @@ package etec.view.panel;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -39,8 +41,10 @@ public class FastTransducePnl  extends JPanel {
 	public StatusBar	statusBar;//狀態列
 	public JPanel		pnlCtrl;//選項區
 	public JCheckBox 	chbIsSetToVarchar;//是否轉換成字串
-	public JRadioButton rdoAZ;
-	public JRadioButton rdoMS;
+	public Map<String,JRadioButton>	maprdo = new HashMap<String,JRadioButton>();
+//	public JRadioButton rdoAZ;
+//	public JRadioButton rdoMS;
+//	public JRadioButton rdoGP;
 	public ButtonGroup	grpSQLType;
 	// 事件監聽器
 	FastTransduceListener lr;
@@ -75,23 +79,23 @@ public class FastTransducePnl  extends JPanel {
 		statusBar = new StatusBar();
 		//是否轉換成字串
 		chbIsSetToVarchar = new JCheckBox("是否轉換成字串");
-		chbIsSetToVarchar.setSelected(true);
-		//要轉換成CTAS還是select into
-		rdoAZ = new JRadioButton("Azure Synapse");
-		rdoAZ.setActionCommand("az");
-		rdoAZ.setSelected(true);
-		rdoMS = new JRadioButton("MS SQL");
-		rdoMS.setActionCommand("ms");
+//		chbIsSetToVarchar.setSelected(true);
+//		//要轉換成CTAS還是select into
+//		rdoAZ = new JRadioButton("Azure Synapse");
+//		rdoAZ.setActionCommand("az");
+//		rdoAZ.setSelected(true);
+//		rdoMS = new JRadioButton("MS SQL");
+//		rdoMS.setActionCommand("ms");
 		grpSQLType = new ButtonGroup();
-		grpSQLType.add(rdoAZ);
-		grpSQLType.add(rdoMS);
+//		grpSQLType.add(rdoAZ);
+//		grpSQLType.add(rdoMS);
 		//選項區
 		pnlCtrl= new JPanel();
 		pnlCtrl.setLayout(new GridLayout(1,1));
 		pnlCtrl.setPreferredSize(new Dimension(1300, 600));
 		pnlCtrl.add(chbIsSetToVarchar);
-		pnlCtrl.add(rdoAZ);
-		pnlCtrl.add(rdoMS);
+//		pnlCtrl.add(rdoAZ);
+//		pnlCtrl.add(rdoMS);
 		//狀態區
 		pnlInfo = new JPanel();
 		pnlInfo.setLayout(new GridLayout(3,1));
@@ -104,4 +108,30 @@ public class FastTransducePnl  extends JPanel {
 		add(pnlInfo);
 		add(new JScrollPane(txtNewScript));
 	}
+	
+	/**
+	 * <h1>增加轉換的SQL環境選項</h1>
+	 * <p></p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年2月20日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	String	參數資料
+	 * @param	String	radio顯示文字
+	 * @throws	
+	 * @exception	
+	 * @see
+	 * @return	void
+			 */
+	public void addLanguageRadio(String commend,String show) {
+		JRadioButton rdo = new JRadioButton(show);
+		maprdo.put(commend, rdo);
+		rdo.setActionCommand(commend);
+		grpSQLType.add(rdo);
+		pnlCtrl.add(rdo);
+	}
+	
 }

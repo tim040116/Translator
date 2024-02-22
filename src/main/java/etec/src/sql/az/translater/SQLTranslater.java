@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.exception.SQLFormatException;
+import etec.common.exception.sql.SQLFormatException;
 import etec.common.utils.RegexTool;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 import etec.common.utils.convert_safely.ConvertRemarkSafely;

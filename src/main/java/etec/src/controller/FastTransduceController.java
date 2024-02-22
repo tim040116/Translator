@@ -1,8 +1,9 @@
-package etec.src.sql.az.controller;
+package etec.src.controller;
 
 import etec.common.enums.RunStatusEnum;
 import etec.common.interfaces.Controller;
 import etec.src.sql.az.service.FastTransduceService;
+import etec.src.sql.gp.translater.GreemPlumTranslater;
 import etec.view.frame.FastTransduceFrame;
 
 /**
@@ -19,7 +20,16 @@ public class FastTransduceController implements Controller {
 		String script = FastTransduceFrame.pnl.txtOldScript.getText();
 		boolean isToVarchar = FastTransduceFrame.pnl.chbIsSetToVarchar.isSelected();
 		String sqlType = FastTransduceFrame.pnl.grpSQLType.getSelection().getActionCommand();
-		String result = FastTransduceService.transduceSetExcute(script, isToVarchar,sqlType);
+		String result = "";
+		switch(sqlType) {
+			case "gp" :
+				result = GreemPlumTranslater.dql.easyReplace(script);
+				break;
+			case "az" :
+			case "ms" :
+				result = FastTransduceService.transduceSetExcute(script, isToVarchar,sqlType);
+				break;
+		}
 //		String result = FamilyMartFileTransduceService.transduceSQLScript(script);
 		FastTransduceFrame.pnl.txtNewScript.setText(result);
 		FastTransduceFrame.pnl.statusBar.setStatus(RunStatusEnum.SUCCESS);

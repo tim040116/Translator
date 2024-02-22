@@ -2,6 +2,8 @@ package main;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import etec.common.utils.convert_safely.ConvertRemarkSafely;
 import etec.src.sql.gp.translater.GreemPlumTranslater;
@@ -19,20 +21,12 @@ public class Main {
 		try {
 			String now = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
 			
-			String a = "SELECT \r\n" + 
-					"	month,\r\n" + 
-					"    monthly_sales,\r\n" + 
-					"    monthly_expense \r\n" + 
-					"from UNPIVOT(\r\n" + 
-					"        ON( select * from T)\r\n" + 
-					"        USING\r\n" + 
-					"            VALUE_COLUMNS('monthly_sales', 'monthly_expense')\r\n" + 
-					"            UNPIVOT_COLUMN('month')\r\n" + 
-					"            COLUMN_LIST('jan_sales, jan_expense', 'feb_sales,feb_expense', 'mch_sales,mch_expense', 'apr_sales,apr_expense', 'may_sales,may_expense', 'jun_sales,jun_expense', 'jly_sales,jly_expense', 'ogs_sales,ogs_expense', 'sep_sales,sep_expense', 'oct_sales,oct_expense', 'nov_sales,nov_expense', 'dec_sales, dec_expense')\r\n" + 
-					"            COLUMN_ALIAS_LIST('jan', 'feb', 'mch', 'apr', 'may', 'jun', 'jly', 'ogs', 'sep', 'oct', 'nov', 'dec' )\r\n" + 
-					"    )X;";
-			String b = GreemPlumTranslater.sql.changeUNPIVOT(a);
-			System.out.println(b);
+			//()攤開
+//			Pattern p1 = Pattern.compile("A");
+//			Matcher m1 = p1.matcher("A");
+//			System.out.println(m1.group());
+//			Matcher m2 = Pattern.compile("A",Pattern.CASE_INSENSITIVE).matcher("123");
+//			System.out.println(m2.group());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

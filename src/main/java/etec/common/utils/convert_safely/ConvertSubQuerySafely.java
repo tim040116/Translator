@@ -56,7 +56,6 @@ public class ConvertSubQuerySafely {
 		String subSrc = "";
 		String fthSrc = "";
 		String subId = "";
-		String tmp = "";
 		Map<String,String> mapSub = new HashMap<String,String>();
 		int intq = 0;
 		int issub = 0;

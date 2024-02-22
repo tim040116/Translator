@@ -3,7 +3,7 @@ package etec.src.sql.az.service;
 import java.io.IOException;
 
 import etec.common.enums.SQLTypeEnum;
-import etec.common.exception.UnknowSQLTypeException;
+import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.src.sql.az.translater.DDLTranslater;
 import etec.src.sql.td.classifier.TeradataClassifier;
 

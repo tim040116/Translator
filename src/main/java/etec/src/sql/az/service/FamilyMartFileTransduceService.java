@@ -6,7 +6,7 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 import etec.common.enums.SQLTypeEnum;
-import etec.common.exception.UnknowSQLTypeException;
+import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.utils.FileTool;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;

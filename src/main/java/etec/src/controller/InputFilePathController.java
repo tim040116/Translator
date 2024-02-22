@@ -1,4 +1,4 @@
-package etec.src.sql.az.controller;
+package etec.src.controller;
 
 public class InputFilePathController{
 	

@@ -2,7 +2,7 @@ package etec.common.utils.param;
 
 import java.util.HashMap;
 
-import etec.common.exception.MissParamsException;
+import etec.common.exception.param.MissParamsException;
 
 public class ParamMap<K,V> extends HashMap<K,V> {
 

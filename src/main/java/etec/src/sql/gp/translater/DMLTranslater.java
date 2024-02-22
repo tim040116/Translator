@@ -1,6 +1,7 @@
 package etec.src.sql.gp.translater;
 
-import etec.common.exception.UnknowSQLTypeException;
+import etec.common.exception.sql.SQLTransduceException;
+import etec.common.exception.sql.UnknowSQLTypeException;
 
 public class DMLTranslater {
 	/**
@@ -12,7 +13,7 @@ public class DMLTranslater {
 	 * */
 	public String changeDeleteTableUsing(String sql) {
 		String res = sql
-			.replaceAll("(?i)DELETE\\s+FROM\\s+([^,;]+)?\\s*,", "DELETE FROM $1\r\n USING ")//Locking
+			.replaceAll("(?i)(DELETE\\s+FROM\\s+[^,;]+?)\\s+,", "$1\r\n USING ")//Locking
 			;
 		return res;
 	}
@@ -25,7 +26,7 @@ public class DMLTranslater {
 	 * 
 	 * 
 	 * */
-	public String changeInsertSelect(String sql) throws UnknowSQLTypeException {
+	public String changeInsertSelect(String sql) throws SQLTransduceException {
 		String res = "";
 		String insert = sql.replaceAll("(?i)(\\s*INSERT\\s+INTO\\s+\\S+\\s+)[\\S\\s]+", "$1");
 		String select = sql.replaceAll("(?i)\\s*INSERT\\s+INTO\\s+\\S+\\s+", "");

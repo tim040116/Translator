@@ -5,9 +5,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.exception.SQLFormatException;
+import etec.common.exception.sql.SQLFormatException;
 import etec.common.utils.Mark;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
+import etec.src.sql.gp.translater.service.UnpivotService;
 
 /**
  * 
@@ -50,13 +51,14 @@ public class SQLTranslater {
 	 * <br> {@link SQLTranslater#changeAddMonths(String)}
 	 * <br> {@link SQLTranslater#changeDateFormat(String)}
 	 * <br>DATE 轉成 CURRENT_DATE
-	 * <br>
-	 * <br>{@link SQLTranslater#changeDateFormat(String)}
+	 * <br>UNPIVOT語法轉換
+	 * <br> {@link UnpivotService}
 	 * 
 	 * @author	Tim
+	 * @throws SQLFormatException 
 	 * @since	4.0.0.0
 	 * */
-	public String easyReplase(String script) {
+	public String easyReplase(String script) throws SQLFormatException {
 		//語法正規化
 		String res = script
 				.replaceAll("(?i)\\bMINUS\\b", "EXCEPT")//MINUS
@@ -99,6 +101,9 @@ public class SQLTranslater {
 			return t;
 		});
 		res = changeCurrentDate(res);
+		UnpivotService us = new UnpivotService();
+		res = us.changeTD_UNPIVOT(res);
+		res = us.changeUNPIVOT(res);
 		return res;
 	}
 	/**
@@ -184,7 +189,7 @@ public class SQLTranslater {
 			 * */
 			t = t
 				//步驟2-1
-				.replaceAll("(?i)(SUBSTR\\s*\\(\\s*)CAST(\\s*\\(\\s*[^\\(\\)]+\\s+AS\\s+DATE\\s+FORMAT\\s+'[^']+'\\s*\\)\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*\\))", "$1TO_CHAR$2")
+				.replaceAll("(?i)(SUBSTR\\s*\\(\\s*)CAST(\\s*\\(\\s*[^\\(\\)]+)\\s+AS\\s+DATE\\s+FORMAT\\s+('[^']+'\\s*\\)\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*\\))", "$1TO_CHAR$2,$3")
 			;
 //			/**  2.處理日期截取語法
 //			 * 1. 先將SUBSTR(CAST(AS DATE FORMAT語法轉換成TO_CHAR，FORMAT 跟 SUBSTR 合併
@@ -294,158 +299,36 @@ public class SQLTranslater {
 			mapIntFormat.put("Z", "9");
 			//先抓出FORMAT語句
 			Matcher m = Pattern.compile("(?i)CAST\\(([^\\(\\)]+)\\s+AS\\s+FORMAT\\s+'([^']+)'\\s*\\)",Pattern.CASE_INSENSITIVE).matcher(t);
+			StringBuffer sb = new StringBuffer();
 			while (m.find()) {
-				String oldscript = m.group(0);
 				String col = m.group(1);//參數
 				String fmt = ConvertFunctionsSafely.decodeMark(m.group(2));//格式
 				if(!fmt.matches("["+regInt+"]+")) {//確認是否為數字轉換
 					return sql;
 				}
+				
 				//代碼轉換
 				for (Map.Entry<String, String> e : mapIntFormat.entrySet()) {
 					fmt = fmt.replace(e.getKey(),e.getValue());
 				}
 				//()攤開
 				Matcher m2 = Pattern.compile("(?i)(.)\\((\\d+)\\)",Pattern.CASE_INSENSITIVE).matcher(fmt);
+				StringBuffer sb2 = new StringBuffer();
 				while (m2.find()) {
-					String oldscript2 = m2.group(0);
 					String c = m2.group(1);//字符
 					int cnt = Integer.parseInt(m2.group(2));//數量
 					String newscript2 = "";
 					for(int i = 0;i<cnt;i++) {
 						newscript2+=c;
 					}
-					fmt = fmt.replace(oldscript2, newscript2);
+					m2.appendReplacement(sb2, newscript2);
 				}
-				String newscript = "TO_CHAR("+col+",'"+fmt+"')";
-				t = t.replace(oldscript, newscript);
+				m2.appendTail(sb2);
+				m.appendReplacement(sb, "TO_CHAR("+col+",'"+sb2+"')");
 			}
-			return t;
+			return m.appendTail(sb).toString();
 		});
 		return res;
 	}
-	/**
-	 * <h1>UNPIVOT</h1>
-	 * 
-	 * <h2>功能介紹</h2>
-	 * 	<br>此語法為將多個欄位轉換成多筆資料
-	 * 	<br>範例：
-	 * 	<br>原本資料：
-	 * 	<table>
-	 * 		<tr>
-	 * 			<td>jan_sales</td>
-	 * 			<td>jan_expense</td>
-	 * 			<td>feb_sales</td>
-	 * 			<td>feb_expense</td>
-	 * 			<td>dec_sales</td>
-	 * 			<td>dec_expense</td>
-	 * 		</tr>
-	 * 	</table>
-	 * 	<br>轉換後資料：
-	 * 	<table>
-	 * 		<tr>
-	 * 			<td>jan</td>
-	 * 			<td>jan_sales</td>
-	 * 			<td>jan_expense</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>feb</td>
-	 * 			<td>feb_sales</td>
-	 * 			<td>feb_expense</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>dec</td>
-	 * 			<td>dec_sales</td>
-	 * 			<td>dec_expense</td>
-	 * 		</tr>
-	 * 	</table>
-	 * <h2>TD架構</h2>
-		<br>UNPIVOT(
-		<br>    ON( select * from T)
-		<br>    USING
-		<br>        VALUE_COLUMNS('monthly_sales', 'monthly_expense') -- 轉換後的欄位名
-		<br>        UNPIVOT_COLUMN('month') -- 第一個欄位的欄位名
-		<br>        COLUMN_LIST('jan_sales, jan_expense', 'feb_sales,feb_expense', ..., 'dec_sales, dec_expense') -- 要取得的欄位
-		<br>        COLUMN_ALIAS_LIST('jan', 'feb', ..., 'dec' ) -- 第一個欄位的資料
-		<br>)
-	 * <h2>GP架構</h2>
-		<br>SELECT 
-		<br>	unnest(ARRAY['jan', 'feb', ..., 'dec']) AS month,
-		<br>	unnest(ARRAY[jan_sales, feb_sales, ..., dec_sales]) AS monthly_sales,
-		<br>	unnest(ARRAY[jan_expense, feb_expense, ..., dec_expense]) AS monthly_expense
-		<br>FROM T
-	 * 
-	 * @author	Tim
-	 * @throws SQLFormatException	COLUMN_LIST 跟 COLUMN_ALIAS_LIST 數量不同時報錯
-	 * @since	4.0.0.0
-	 * 
-	 * */
-	public String changeUNPIVOT(String script) throws SQLFormatException {
-		String res = script;
-		//取得整段UNPIVOT語法
-		Pattern p = Pattern.compile("UNPIVOT\\s*\\(\\s*ON\\s*\\(\\s*SELECT[\\S\\s]+FROM\\s+(\\S+)\\)\\s*USING((?:\\s*[^\\(]+\\([^\\)]+\\))+)\\s*\\)",Pattern.CASE_INSENSITIVE);
-		Matcher m = p.matcher(script);
-		while(m.find()) {
-			String unpivot = m.group(0);//全文
-			String replacement = "(\r\n\tSELECT";
-			String temp = m.group(0)//暫存
-					.replaceAll("\\)$","")//最後的括號
-					.replaceAll("(?i)UNPIVOT\\s*\\(\\s*ON\\s*", "")//開頭
-			;
-			String table = temp.replaceAll("\\s*USING[\\S\\s]*", "");//表
-			//分析參數
-			//取得參數的map
-			Map<String,String> mapUnpivot = new HashMap<String,String>();
-			temp = temp.replaceAll("[\\S\\s]+USING\\s+", "");
-			Pattern p2 = Pattern.compile("\\b([^\\(]+)\\s*\\(\\s*([^\\)]+)\\s*\\)", Pattern.CASE_INSENSITIVE);
-			Matcher m2 = p2.matcher(temp);
-			while (m2.find()) {
-				mapUnpivot.put(m2.group(1).trim().toUpperCase(),m2.group(2));
-			}
-			//分析各參數
-			//第一個欄位
-			String comma = " ";
-			if(mapUnpivot.containsKey("COLUMN_ALIAS_LIST")&&mapUnpivot.containsKey("UNPIVOT_COLUMN")) {
-				String columnAliasList 	= mapUnpivot.get("COLUMN_ALIAS_LIST");	//第一個欄位的資料
-				String unpivotColumn	= mapUnpivot.get("UNPIVOT_COLUMN");		//第一個欄位的欄位名
-				replacement += "\r\n\t\t unnest(ARRAY['" + columnAliasList + "']) AS " + unpivotColumn;
-				comma = ",";
-			}
-			//後面的欄位
-			String[] arrValueColumns = mapUnpivot.get("VALUE_COLUMNS") //轉換後的欄位名
-					.replaceAll("^\\s*'\\s*|\\s*'\\s*$", "")
-					.split("\\s*'\\s*,\\s*'\\s*")
-			;		
-			String[] arrColumnList = mapUnpivot.get("COLUMN_LIST") //要取得的欄位
-					.replaceAll("^\\s*'\\s*|\\s*'\\s*$", "")
-					.split("\\s*'\\s*,\\s*'\\s*")
-			;
-			//處理欄位名
-			for(int i = 0 ; i < arrValueColumns.length ; i++) {
-				arrValueColumns[i] = "]) AS " + arrValueColumns[i];
-			}
-			//處理欄位值
-			for(String collist : arrColumnList) {
-				String[] arrcol = collist.split("\\s*,\\s*");
-				//欄位數不同則報錯
-				if(arrValueColumns.length != arrcol.length) {
-					throw SQLFormatException.wrongParam("UNPIVOT",arrValueColumns.length,arrcol.length);
-				}
-				//將欄位值塞進去
-				for(int i = arrValueColumns.length-1 ; i >= 0 ; i--) {
-					arrValueColumns[i] = "," + arrcol[i] + arrValueColumns[i];
-				}
-			}
-			//處理開頭
-			for(int i = 0 ; i < arrValueColumns.length ; i++) {
-				replacement += "\r\n\t\t" + comma + arrValueColumns[i].replaceAll("^,", "unnest(ARRAY[");
-				if(" ".equals(comma)) {
-					comma = ",";
-				}
-			}
-			replacement += "\r\n\tFROM " + table + "\r\n)";
-			res = res.replace(unpivot,replacement);
-		}
-		return res;
-	}
+
 }

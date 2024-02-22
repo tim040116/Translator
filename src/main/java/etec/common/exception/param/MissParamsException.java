@@ -1,6 +1,6 @@
-package etec.common.exception;
+package etec.common.exception.param;
 
-public class MissParamsException extends RuntimeException{
+public class MissParamsException extends ParamException{
 
 	/**
 	 * 
