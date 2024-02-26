@@ -1,9 +1,5 @@
 package etec.src.sql.gp.translater;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import etec.common.enums.SelectAreaEnum;
 import etec.common.exception.sql.SQLFormatException;
 import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.utils.Mark;
@@ -108,10 +104,9 @@ public class DQLTranslater {
 		String select=""
 				,from=""
 				,where=""
-				,groupBy=""
-				,orderBy=""
+//				,groupBy=""
+//				,orderBy=""
 				,rowNumber="";
-		List<String> lstWith = new ArrayList<String>();
 //		List<String> lstJoin = new ArrayList<String>();
 		for(String str : arrSplitStr) {
 			if(str.matches("\\s*")) {
@@ -128,10 +123,10 @@ public class DQLTranslater {
 //				lstArea.add(SelectAreaEnum.JOIN);
 			}else if(str.matches("(?i)WHERE[\\S\\s]+")) {
 				where = str;
-			}else if(str.matches("(?i)GROUP\\s+BY[\\S\\s]+")) {
-				groupBy = str;
-			}else if(str.matches("(?i)ORDER\\s+BY[\\S\\s]+")) {
-				orderBy = str;
+//			}else if(str.matches("(?i)GROUP\\s+BY[\\S\\s]+")) {
+//				groupBy = str;
+//			}else if(str.matches("(?i)ORDER\\s+BY[\\S\\s]+")) {
+//				orderBy = str;
 			}else if(str.matches("(?i)\\bQUALIFY\\s+ROW_NUMBER[\\S\\s]+")) {
 				rowNumber = ConvertFunctionsSafely.decodeMark(str);
 			}else {
@@ -169,4 +164,35 @@ public class DQLTranslater {
 		return res;
 	}
 	
+	/**
+	 * <h1>Alias name 轉換</h1>
+	 * <p>Teradata環境中
+	 * <br>GROUP BY語法可以使用SELECT裡的Alias name
+	 * <br>但是GreenPlum不行，
+	 * <br>所以需要包一層sub Query 再進行group by
+	 * </p>
+	 * <p>僅支援</p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年2月26日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	script	要轉換的SQL語法
+	 * @throws	
+	 * @see
+	 * @return	String	轉換後的SQL
+	 * @throws UnknowSQLTypeException 
+			 */
+	public String changeAliasName(String script) throws UnknowSQLTypeException {
+		String res = "";
+		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
+		res = csqs.savelyConvert(res, (t)->{
+			return t;
+		});
+		SelectTableModel stm = new SelectTableModel(script);
+		String sel = stm.select;
+		
+		return res;
+	}
 }

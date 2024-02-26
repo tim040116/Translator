@@ -47,11 +47,11 @@ public class POCTransduserService {
 	}
 	private static String convertStoreFunction(String sql) {
 		String res = sql
-				.replaceAll(RegexTool.getReg("BIT_AND")+"\\s*\\(", "dbo.bit_and(")
-				.replaceAll(RegexTool.getReg("BIT_EXTRACT")+"\\s*\\(", "dbo.bit_extract(")
-				.replaceAll(RegexTool.getReg("BIT_GEN_AGGT")+"\\s*\\(", "dbo.bit_gen_aggt(")
-				.replaceAll(RegexTool.getReg("BIT_OR")+"\\s*\\(", "dbo.bit_or(")
-				.replaceAll(RegexTool.getReg("BIT_OR_AGGT")+"\\s*\\(", "dbo.bit_or_aggt(")
+				.replaceAll("(?i)BIT_AND\\s*\\(", "dbo.bit_and(")
+				.replaceAll("(?i)BIT_EXTRACT\\s*\\(", "dbo.bit_extract(")
+				.replaceAll("(?i)BIT_GEN_AGGT\\s*\\(", "dbo.bit_gen_aggt(")
+				.replaceAll("(?i)BIT_OR\\s*\\(", "dbo.bit_or(")
+				.replaceAll("(?i)BIT_OR_AGGT\\s*\\(", "dbo.bit_or_aggt(")
 		
 				;
 		return res;
@@ -112,7 +112,7 @@ public class POCTransduserService {
 		}
 		
 		// drop view
-		else if (newSql.matches("[^;]*" + RegexTool.getReg("drop view") + "[^;]*;")) {
+		else if (newSql.matches("(?i)[^;]*drop\\s+view[^;]*;")) {
 			// drop view
 			int sqlindex = newSql.replaceAll("[Dd][Rr][Oo][Pp]", "drop").indexOf("drop");
 			String BFsql = "";
@@ -120,21 +120,21 @@ public class POCTransduserService {
 				BFsql = newSql.substring(0, sqlindex);
 				newSql = newSql.substring(sqlindex);
 			}
-			String tableVw = newSql.replaceAll("( *[Dd][Rr][Oo][Pp] *[Vv][Ii][Ee][Ww] *)|;|( *--\\S* *)", "").trim();
+			String tableVw = newSql.replaceAll("(?i)(\\s*DROP\\s*VIEW\\s*)|;|( *--\\S* *)", "").trim();
 			newSql = BFsql + "IF OBJECT_ID(N'" + tableVw + "') IS NOT NULL \r\n" + "DROP VIEW " + tableVw + " ; \r\n";
 			res += newSql + "\r\n";
 		}
 		// rename table
-		else if (newSql.matches("[^;]*" + RegexTool.getReg("rename table ") + "[^;]*;")) {
+		else if (newSql.matches("(?i)[^;]*rename\\s+table\\s+[^;]*;")) {
 			// rename table
-			int sqlindex = sql.replaceAll("[Rr][Ee][Nn][Aa][Mm][Ee]", "rename").indexOf("rename");
+			int sqlindex = sql.replaceAll("(?i)RENAME", "rename").indexOf("rename");
 			String BFsql = "";
 			if (sqlindex > 0) {
 				// 取出 rename 前面的字串
 				BFsql = sql.substring(0, sqlindex);
 				sql = sql.substring(sqlindex);
 			}
-			String[] tableNm = sql.replaceAll(RegexTool.getReg(",|rename table"), "").split(" +[Tt][Oo] +");
+			String[] tableNm = sql.replaceAll("(?i),|rename\\s+table", "").split("(?i)\\s+TO\\s+");
 			// 20220613 update
 			// String renameSql = " exec sp_rename N'"+tableNm[0]+"', N'"+tableNm[1]+"';
 			// \r\n\r\n";
@@ -143,18 +143,18 @@ public class POCTransduserService {
 			// '"+tableNm[1].replaceAll(RegexTool.getReg("\\$\\{[^\\.]*\\."),"").replaceAll(";",
 			// "").trim()+"'; \r\n\r\n";
 			newSql = BFsql + " rename object " + tableNm[0].replaceAll(" ", "").trim() + " to "
-					+ tableNm[1].replaceAll(RegexTool.getReg("\\$\\{[^\\.]*\\."), "").replaceAll(";", "").trim()
+					+ tableNm[1].replaceAll("\\$\\{[^\\.]*\\.", "").replaceAll(";", "").trim()
 					+ "; \r\n\r\n";
 
 			res += newSql + "\r\n";
 		}
 		// COLLECT STATISTICS
-		else if (sql.matches("[^;]*" + RegexTool.getReg("COLLECT STATISTICS ") + "[^;]*;")) {
-			newSql = sql.replaceAll(RegexTool.getReg("COLLECT STATISTICS ON"), "UPDATE STATISTICS");
+		else if (sql.matches("(?i)[^;]*COLLECT\\s+STATISTICS\\s+[^;]*;")) {
+			newSql = sql.replaceAll("(?i)COLLECT\\s+STATISTICS\\s+ON", "UPDATE STATISTICS");
 			res += newSql + "\r\n";
 		}
 		// COMMENT ON
-		else if (sql.matches("[^;]*" + RegexTool.getReg("COMMENT ON ") + "[^;]*;")) {
+		else if (sql.matches("(?i)[^;]*COMMENT\\s+ON\\s+[^;]*;")) {
 			newSql = "";
 			res += newSql + "\r\n";
 		}
@@ -182,16 +182,16 @@ public class POCTransduserService {
 
 		String res = fc.replaceAll("\\.[Ss][Ee][Tt] [^\\r\\n]*\\r\\n", "")
 				.replaceAll("\\.[Qq][Uu][Ii][Tt] *[0-9]*;", "")
-				.replaceAll(RegexTool.getReg("\\.IF ERRORCODE <> 0 THEN") + "[^\\r\\n]*\\r\\n", "")
-				.replaceAll(RegexTool.getReg("\\.SET ERROROUT STDOUT") + "[^\\r\\n]*\\r\\n", "")
-				.replaceAll(RegexTool.getReg("\\.GOTO ERRORSFOUND") + "[^\\r\\n]*\\r\\n", "")
-				.replaceAll(RegexTool.getReg("\\.LABEL ERRORSFOUND") + "[^\\r\\n]*\\r\\n", "")
-				.replaceAll(RegexTool.getReg("\\.IF ACTIVITY") + "[^\\r\\n]*\\r\\n", "")
+				.replaceAll("(?i)\\.IF\\s+ERRORCODE\\s+<>\\s+0\\s+THEN[^\\r\\n]*\\r\\n", "")
+				.replaceAll("(?i)\\.SET\\s+ERROROUT\\s+STDOUT[^\\r\\n]*\\r\\n", "")
+				.replaceAll("(?i)\\.GOTO\\s+ERRORSFOUND[^\\r\\n]*\\r\\n", "")
+				.replaceAll("(?i)\\.LABEL\\s+ERRORSFOUND[^\\r\\n]*\\r\\n", "")
+				.replaceAll("(?i)\\.IF\\s+ACTIVITY[^\\r\\n]*\\r\\n", "")
 				.replaceAll(
-						"[^\\r\\n]*" + RegexTool.getReg("logon \\$\\{USERID\\}, \\$\\{PASSWD\\};" + "[^\\r\\n]*\\r\\n"),
+						"(?i)[^\\r\\n]*logon\\s+\\$\\{USERID\\},\\s*\\$\\{PASSWD\\};[^\\r\\n]*\\r\\n",
 						"")
-				.replaceAll("[^\\r\\n]*" + RegexTool.getReg("LOGOFF;") + "[^\\r\\n]*\\r\\n", "")
-				.replaceAll(RegexTool.getReg("\\.EXPORT RESET;"), "");
+				.replaceAll("(?i)[^\\r\\n]*LOGOFF;[^\\r\\n]*\\r\\n", "")
+				.replaceAll("(?i)\\.EXPORT\\s+RESET;", "");
 
 		return res;
 	}
@@ -250,12 +250,12 @@ public class POCTransduserService {
 
 	// 清除TD特有的語法
 	private static String replaceTDsql(String sql) {
-		String result = sql.replaceAll(RegexTool.getReg("CREATE MULTISET TABLE"), "CREATE TABLE")// MULTISET
-				.replaceAll(RegexTool.getReg("CREATE SET TABLE"), "CREATE TABLE")// SET TABLE
-				.replaceAll("(UNIQUE\\s+)?(PRIMARY\\s+)?INDEX\\s+\\([^\\)]+\\)", " ")// UNIQUE PRIMARY INDEX
-				.replaceAll(RegexTool.getReg("NO PRIMARY INDEX"), "")
-				.replaceAll(RegexTool.getReg("RANGE_N") + "\\s*\\([^\\)]+\\)", " ")// PARTITION BY
-				.replaceAll(RegexTool.getReg("PARTITION BY") + "(\\s*\\([^\\)]*\\))?", " ")// PARTITION BY
+		String result = sql.replaceAll("(?i)CREATE\\s+MULTISET\\s+TABLE", "CREATE TABLE")// MULTISET
+				.replaceAll("(?i)CREATE\\s+SET\\s+TABLE", "CREATE TABLE")// SET TABLE
+				.replaceAll("(?i)(UNIQUE\\s+)?(PRIMARY\\s+)?INDEX\\s+\\([^\\)]+\\)", " ")// UNIQUE PRIMARY INDEX
+				.replaceAll("(?i)NO\\s+PRIMARY\\s+INDEX", "")
+				.replaceAll("(?i)RANGE_N\\s*\\([^\\)]+\\)", " ")// PARTITION BY
+				.replaceAll("(?i)PARTITION\\s+BY(\\s*\\([^\\)]*\\))?", " ")// PARTITION BY
 		;
 		return result;
 	}

@@ -111,28 +111,6 @@ public class RegexTool {
 		}
 		return lstRes;
 	}
-	/**
-	 * @author	Tim
-	 * @since	2023年12月13日
-	 * @deprecated
-	 * 
-	 * 正則表達式不區分大小寫<br>
-	 * 請改用(?i)語法
-	 * */
-	public static String getReg(String str) {
-		String[] ar = str.split("");
-		String res = "(?i)";
-		for (String s : ar) {
-			if (s.matches("[A-Za-z]")) {
-				res += "[" + s.toUpperCase() + s.toLowerCase() + "]";
-			} else if (s.matches(" ")) {
-				res += " *";
-			} else {
-				res += s;
-			}
-		}
-		return res;
-	}
 
 	// 解決$造成比對失敗
 	public static String encodeSQL(String sql) {
@@ -158,7 +136,6 @@ public class RegexTool {
 				.replaceAll("\\]", "<encodingCode_SquareBracketRight>")
 				.replaceAll("\\(", "<encodingCode_ParentBracketLeft>")
 				.replaceAll("\\)", "<encodingCode_ParentBracketRight>")
-				
 				;
 		return res;
 	}

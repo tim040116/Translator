@@ -16,8 +16,7 @@ public class TransformService {
 		String sql = getTransformSQL(fc);
 		
 		sql=sql
-		.replaceAll(RegexTool.getReg("Create MultiSet Table"),"Create Table")
-		.replaceAll(RegexTool.getReg("Create Set Table"),"Create Table")
+		.replaceAll("(?i)CREATE\\s+(?:MULTI)?SET\\s+TABLE","Create Table")
 		;
 		
 		//取出清單
@@ -44,12 +43,12 @@ public class TransformService {
 		 * */
 		//content = TransduceTool.changeAddMonth(content)
 		content = content
-				.replaceAll("[Ww][Ii][Tt][Hh] *[Cc][Oo][Uu][Nn][Tt]\\(\\*\\) *[Bb][Yy] *\\w*", "")
-				.replaceAll(RegexTool.getReg("[Dd][Aa][Tt][Ee] [Ff][Oo][Rr][Mm][Aa][Tt] '[YyMmDdHhSs/\\-]*'"), "DATE")
-				.replaceAll(RegexTool.getReg(" +[Dd][Aa][Tt][Ee] +'"), " '")
-				.replaceAll(RegexTool.getReg("length \\("), "LEN(")//all
-				.replaceAll(RegexTool.getReg("Character \\("), "LEN(")//all
-				.replaceAll(RegexTool.getReg(" MINUS "), " EXCEPT ")//all
+				.replaceAll("(?i)with\\s+count\\(\\*\\)\\s*by\\s*\\w*", "")
+				.replaceAll("(?i)date\\s+format\\s+'[YyMmDdHhSs/\\-]*'", "DATE")
+				.replaceAll("(?i)\\s+date\\s+'", " '")
+				.replaceAll("(?i)length\\s+\\(", "LEN(")//all
+				.replaceAll("(?i)Character\\s+\\(", "LEN(")//all
+				.replaceAll("(?i)\\s+MINUS\\s+", " EXCEPT ")//all
 
 
 //				.replaceAll(RegexTool.getReg("(?<!_|[A-Za-z0-9])[Rr][Aa][Nn][Kk]\\((?! |\\))"), " RANK ( ) OVER ( order by ")//all
@@ -108,18 +107,18 @@ public class TransformService {
 		String res = "";
 		boolean flag = false;
 		for(String line : fc.split("\r\n") ) {
-			if(line.matches(RegexTool.getReg(" \\/\\* End of bteq script \\*\\/ "))||
+			if(line.matches("(?i)\\s+\\/\\*\\s+End\\s+of\\s+bteq\\s+script\\s+\\*\\/\\s+")||
 			   //line.matches(RegexTool.getReg(" \\/\\* End of bteq script \\*\\/ "))||
-			   line.matches(RegexTool.getReg("[^;]*LOGOFF[^;]*;"))) {
+			   line.matches("(?i)[^;]*LOGOFF[^;]*;")) {
 				flag = false;
 				break;
 			}
 			if(flag) {
 				res += line+"\r\n";
 			}
-			if(line.matches(RegexTool.getReg(" \\/\\* Add you bteq options here \\*\\/  "))||
+			if(line.matches("(?i)\\s\\/\\*\\s+Add\\s+you\\s+bteq\\s+options\\s+here\\s+\\*\\/\\s+")||
 			   // line.matches(RegexTool.getReg(" \\/\\* Add you bteq options here \\*\\/  "))||
-			   line.matches(RegexTool.getReg("[^;]*LOGON[^;]*;"))) {
+			   line.matches("(?i)[^;]*LOGON[^;]*;")) {
 				flag = true;
 			}
 			
@@ -162,7 +161,7 @@ public class TransformService {
 				res += DDLTranslater.runDropTable(sql)+"\r\n";
 			}
 			//drop view
-			else if(sql.matches("[^;]*"+RegexTool.getReg("drop view")+"[^;]*;")) {
+			else if(sql.matches("(?i)[^;]*DROP\\s+VIEW[^;]*;")) {
 				//drop view
 				int sqlindex=sql.replaceAll("[Dd][Rr][Oo][Pp]","drop").indexOf("drop");
 				String BFsql="";
@@ -176,11 +175,11 @@ public class TransformService {
 				res += newSql+"\r\n";
 			}
 			//rename table
-			else if(sql.matches("[^;]*"+RegexTool.getReg("rename table ")+"[^;]*;")) {
+			else if(sql.matches("(?i)[^;]*rename\\s+table\\s+[^;]*;")) {
 				//lst
 				CreateListService.createLstRenameTable(fn, sql);
 				//rename table
-				int sqlindex=sql.replaceAll("[Rr][Ee][Nn][Aa][Mm][Ee]","rename").indexOf("rename");
+				int sqlindex=sql.replaceAll("(?i)RENAME","rename").indexOf("rename");
 				String BFsql="";
 				if( sqlindex > 0) {
 					//取出 rename 前面的字串
@@ -188,31 +187,31 @@ public class TransformService {
 					sql=sql.substring(sqlindex);
 				}
 				String[] tableNm = sql
-						.replaceAll(RegexTool.getReg(",|rename table"), "")
-						.split(" +[Tt][Oo] +");
-				newSql = BFsql + " rename object "+tableNm[0].replaceAll(" ", "").trim()+" to "+tableNm[1].replaceAll(RegexTool.getReg("\\$\\{[^\\.]*\\."),"").replaceAll(";", "").trim()+"; \r\n\r\n";
+						.replaceAll("(?i),|rename table", "")
+						.split("(?i)\\bTO\\b");
+				newSql = BFsql + " rename object "+tableNm[0].replaceAll(" ", "").trim()+" to "+tableNm[1].replaceAll("\\$\\{[^\\.]*\\.","").replaceAll(";", "").trim()+"; \r\n\r\n";
 
 				res += newSql+"\r\n";
 			}
 			//REPLACE VIEW
-			else if(sql.matches("[^;]*"+RegexTool.getReg("REPLACE VIEW")+" [^;]*;")) {
-				newSql = sql.replaceAll(RegexTool.getReg("REPLACE VIEW"), "ALTER VIEW");
+			else if(sql.matches("(?i)[^;]*REPLACE\\s+VIEW\\s+[^;]*;")) {
+				newSql = sql.replaceAll("(?i)REPLACE\\s+VIEW", "ALTER VIEW");
 				res += newSql+"\r\n";
 			}
 			//COLLECT STATISTICS
-			else if(sql.matches("[^;]*"+RegexTool.getReg("COLLECT STATISTICS ")+"[^;]*;")) {
-				newSql = sql.replaceAll(RegexTool.getReg("COLLECT STATISTICS ON"), "UPDATE STATISTICS");
+			else if(sql.matches("(?i)[^;]*COLLECT\\s+STATISTICS\\s+[^;]*;")) {
+				newSql = sql.replaceAll("(?i)COLLECT\\s+STATISTICS\\s+ON", "UPDATE STATISTICS");
 				res += newSql+"\r\n";
 			}
 			//COMMENT ON
-			else if(sql.matches("[^;]*"+RegexTool.getReg("COMMENT ON ")+"[^;]*;")) {
+			else if(sql.matches("(?i)[^;]*COMMENT\\s+ON\\s+[^;]*;")) {
 				newSql = "";
 				res += newSql+"\r\n";
 			}
 			//insert into 
-			else if(sql.matches("[^;]*"+RegexTool.getReg("Insert into")+" [^;]*;")) {
+			else if(sql.matches("(?i)[^;]*Insert\\s+into\\s+[^;]*;")) {
 				newSql = sql;
-				List<String> lstSelect = RegexTool.getRegexTarget(RegexTool.getReg("select"), newSql);
+				List<String> lstSelect = RegexTool.getRegexTarget("(?i)select", newSql);
 				if(!lstSelect.isEmpty()) {
 					newSql = DQLTranslater.transduceSelectSQL(newSql);
 				}
@@ -296,16 +295,16 @@ public class TransformService {
          * */
 		
 		String res = fc
-			.replaceAll("\\.[Ss][Ee][Tt] [^\\r\\n]*\\r\\n", "")
-			.replaceAll("\\.[Qq][Uu][Ii][Tt] *[0-9]*;", "")
-			.replaceAll(RegexTool.getReg("\\.IF ERRORCODE <> 0 THEN")+"[^\\r\\n]*\\r\\n", "")
-			.replaceAll(RegexTool.getReg("\\.SET ERROROUT STDOUT")+"[^\\r\\n]*\\r\\n", "")
-			.replaceAll(RegexTool.getReg("\\.GOTO ERRORSFOUND")+"[^\\r\\n]*\\r\\n", "")
-			.replaceAll(RegexTool.getReg("\\.LABEL ERRORSFOUND")+"[^\\r\\n]*\\r\\n", "")
-			.replaceAll(RegexTool.getReg("\\.IF ACTIVITY")+"[^\\r\\n]*\\r\\n", "")
-			.replaceAll("[^\\r\\n]*"+RegexTool.getReg("logon \\$\\{USERID\\}, \\$\\{PASSWD\\};"+"[^\\r\\n]*\\r\\n"),"")
-			.replaceAll("[^\\r\\n]*"+RegexTool.getReg("LOGOFF;")+"[^\\r\\n]*\\r\\n", "")
-			.replaceAll(RegexTool.getReg("\\.EXPORT RESET;"), "")
+			.replaceAll("(?i)\\.SET\\s+[^\\r\\n]*\\r\\n", "")
+			.replaceAll("(?i)\\.QUIT\\s*\\d*;", "")
+			.replaceAll("(?i)\\.IF\\s+ERRORCODE\\s*<>\\s*0\\s+THEN[^\\r\\n]*\\r\\n", "")
+			.replaceAll("(?i)\\.SET\\s+ERROROUT\\s+STDOUT[^\\r\\n]*\\r\\n", "")
+			.replaceAll("(?i)\\.GOTO\\s+ERRORSFOUND[^\\r\\n]*\\r\\n", "")
+			.replaceAll("(?i)\\.LABEL\\s+ERRORSFOUND[^\\r\\n]*\\r\\n", "")
+			.replaceAll("(?i)\\.IF\\s+ACTIVITY[^\\r\\n]*\\r\\n", "")
+			.replaceAll("(?i)[^\\r\\n]*logon\\s+\\$\\{USERID\\},\\s+\\$\\{PASSWD\\};[^\\r\\n]*\\r\\n","")
+			.replaceAll("(?i)[^\\r\\n]*LOGOFF;[^\\r\\n]*\\r\\n", "")
+			.replaceAll("(?i)\\.EXPORT\\s+RESET;", "")
 		;
 		
 		return res;

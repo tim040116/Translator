@@ -1,14 +1,11 @@
 package etec.src.sql.td.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.enums.SelectAreaEnum;
 import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.utils.Mark;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
@@ -190,5 +187,24 @@ public class SelectTableModel {
 			res = res.replace(getTag(en.getKey()),en.getValue());
 		}
 		return res;
+	}
+	
+	/**
+	 * <h1></h1>
+	 * <p></p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年2月26日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	
+	 * @throws	
+	 * @see		
+	 * @return	
+			 */
+	public void changeConstruction() {
+		
 	}
 }

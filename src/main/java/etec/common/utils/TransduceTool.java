@@ -72,7 +72,7 @@ public class TransduceTool {
 					data2 = lst.get(i+1);
 				}
 				// 為子查詢時開始錄製
-				if ((!flag) &&(data.matches(RegexTool.getReg("\\(select"))||(data.equals("(") && data2.matches(RegexTool.getReg("select"))))) {
+				if ((!flag) &&(data.matches("(?i)\\(select")||(data.equals("(") && data2.matches("(?i)select")))) {
 					temp = "";
 					flag = true;
 					flag2 = 1;
