@@ -1,11 +1,17 @@
 package etec.src.sql.gp.translater;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import etec.common.exception.sql.SQLFormatException;
 import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 import etec.common.utils.convert_safely.ConvertSubQuerySafely;
+import etec.common.utils.convert_safely.SplitCommaSafely;
 import etec.src.sql.td.model.SelectTableModel;
 
 /**
@@ -186,12 +192,36 @@ public class DQLTranslater {
 			 */
 	public String changeAliasName(String script) throws UnknowSQLTypeException {
 		String res = "";
+		//排除子查詢
 		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
 		res = csqs.savelyConvert(res, (t)->{
+			try {
+				//解析查詢語句
+				SelectTableModel stm = new SelectTableModel(t);
+				//取得col清單
+				String sel = stm.select.replaceAll("(?i)^\\s*SELECT\\s+", "");
+				List<String> lstCol = SplitCommaSafely.splitComma(sel);
+				
+				//取得Alias name清單
+				Pattern p = Pattern.compile("[^\\s\\.]+$");
+				List<String> lstAlias = SplitCommaSafely.splitComma(sel,(col) ->{
+					Matcher m = p.matcher(col);
+					m.find();
+					m.group();
+					return m.group();
+				});
+				//取得group by欄位
+				String[] arrGroupBy = stm.groupBy.replaceAll("(?i)^\\s*GROUP\\s+BY\\s*|\\s+","").toUpperCase().split(",");
+				//先處理數字的group by
+				for(String col : lstCol) {
+					
+				}
+			} catch (UnknowSQLTypeException e) {
+				e.printStackTrace();
+			}
+			
 			return t;
 		});
-		SelectTableModel stm = new SelectTableModel(script);
-		String sel = stm.select;
 		
 		return res;
 	}
