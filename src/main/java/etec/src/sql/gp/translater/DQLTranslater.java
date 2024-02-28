@@ -201,7 +201,6 @@ public class DQLTranslater {
 				//取得col清單
 				String sel = stm.select.replaceAll("(?i)^\\s*SELECT\\s+", "");
 				List<String> lstCol = SplitCommaSafely.splitComma(sel);
-				
 				//取得Alias name清單
 				Pattern p = Pattern.compile("[^\\s\\.]+$");
 				List<String> lstAlias = SplitCommaSafely.splitComma(sel,(col) ->{
@@ -213,9 +212,12 @@ public class DQLTranslater {
 				//取得group by欄位
 				String[] arrGroupBy = stm.groupBy.replaceAll("(?i)^\\s*GROUP\\s+BY\\s*|\\s+","").toUpperCase().split(",");
 				//先處理數字的group by
-				for(String col : lstCol) {
-					
+				for (int i = 0; i < arrGroupBy.length; i++) {
+					if(arrGroupBy[i].matches("\\d+")){
+						arrGroupBy[i] = lstAlias.get(Integer.parseInt(arrGroupBy[i]));
+					}
 				}
+				//處理Alias name
 			} catch (UnknowSQLTypeException e) {
 				e.printStackTrace();
 			}
