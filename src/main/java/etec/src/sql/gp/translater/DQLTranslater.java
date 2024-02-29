@@ -202,7 +202,7 @@ public class DQLTranslater {
 				String sel = stm.select.replaceAll("(?i)^\\s*SELECT\\s+", "");
 				List<String> lstCol = SplitCommaSafely.splitComma(sel);
 				//取得Alias name清單
-				Pattern p = Pattern.compile("[^\\s\\.]+$");
+				Pattern p = Pattern.compile("([^\\s\\.]+)$");
 				List<String> lstAlias = SplitCommaSafely.splitComma(sel,(col) ->{
 					Matcher m = p.matcher(col);
 					m.find();
@@ -218,6 +218,10 @@ public class DQLTranslater {
 					}
 				}
 				//處理Alias name
+				/* 邏輯：
+				 * 1.
+				 * 
+				 * */
 			} catch (UnknowSQLTypeException e) {
 				e.printStackTrace();
 			}
