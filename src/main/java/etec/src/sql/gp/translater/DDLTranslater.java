@@ -4,6 +4,19 @@ import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 import etec.common.utils.param.Params;
 
 public class DDLTranslater {
+	
+	public String easyReplace(String sql) {
+		if(sql.matches("(?i)\\s*CREATE\\s+[\\S\\s]+")) {
+			sql = easyReplaceCreateTable(sql);
+		}
+		sql = changeReplaceView(sql);
+		sql = changeDropTableIfExist(sql);
+		sql = changeRenameTable(sql);
+		sql = changeCreateVolaTileTable(sql);
+		sql = changeIntegerGeneratedAlwaysAsIdentity(sql);
+		sql = changePrimaryIndex(sql);
+		return sql;
+	}
 	/**
 	 * 在GP中如果使用REPLACE VIEW，確定轉換前後的欄位有沒有變化
 	 * 否則推薦DROP後再CREATE

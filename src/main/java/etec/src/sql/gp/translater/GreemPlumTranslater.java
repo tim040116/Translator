@@ -1,5 +1,11 @@
 package etec.src.sql.gp.translater;
 
+import java.util.Arrays;
+
+import etec.common.exception.sql.SQLFormatException;
+import etec.common.exception.sql.SQLTransduceException;
+import etec.common.exception.sql.UnknowSQLTypeException;
+
 /**
  * <h1>GreenPlumn轉換</h1>
  * 
@@ -37,6 +43,51 @@ public class GreemPlumTranslater {
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * */
+	public static String[] arrDQL = {
+			 "WITH"
+			,"SELECT"
+	};
+	public static String[] arrDML = {
+			 "INSERT"
+			,"DELETE"
+			,"UPDATE"
+	};
+	public static String[] arrDDL = {
+			 "CREATE"
+			,"TRUNCAT"
+			,
+	};
 	public static SQLTranslater sql = new SQLTranslater();
+	
+	/**
+	 * <h1>區分並轉換</h1>
+	 * <p>將SQL分類後轉換</p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年3月1日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	
+	 * @throws	
+	 * @see
+	 * @return	
+	 * @throws SQLFormatException 
+	 * @throws UnknowSQLTypeException 
+			 */
+	public static String translate(String sql) throws SQLTransduceException {
+		String res = "";
+		String title = sql.trim().replaceAll("^(\\S+)[\\S\\s]+","$1").toUpperCase();
+		
+		if(Arrays.asList(arrDQL).contains(title)) {
+			dql.easyReplace(sql);
+		}else if(Arrays.asList(arrDML).contains(title)) {
+			dml.easyReplace(sql);
+		}else if(Arrays.asList(arrDDL).contains(title)) {
+			ddl.easyReplace(sql);
+		}
+		return res;
+	}
 	
 }

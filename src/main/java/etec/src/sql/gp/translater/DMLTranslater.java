@@ -4,6 +4,14 @@ import etec.common.exception.sql.SQLTransduceException;
 import etec.common.exception.sql.UnknowSQLTypeException;
 
 public class DMLTranslater {
+	
+	public String easyReplace(String sql) throws SQLTransduceException {
+		if(sql.matches("(?i)\\s*INSERT\\s+INTO\\s+[\\S\\s]+")) {
+			sql = changeInsertSelect(sql);
+		}
+		sql = changeDeleteTableUsing(sql);
+		return sql;
+	}
 	/**
 	 * 
 	 * DELETE TABLE 要加上 USING
