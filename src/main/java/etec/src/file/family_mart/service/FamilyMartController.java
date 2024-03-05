@@ -1,4 +1,4 @@
-package etec.src.controller;
+package etec.src.file.family_mart.service;
 
 import java.io.File;
 import java.util.List;
@@ -8,12 +8,12 @@ import etec.common.interfaces.Controller;
 import etec.common.utils.FileTool;
 import etec.common.utils.param.Params;
 import etec.src.file.model.BasicParams;
-import etec.src.file.service.GreenPlumTestFileService;
 import etec.src.sql.az.service.CreateListService;
+import etec.src.sql.az.service.FamilyMartFileTransduceService;
 import etec.src.sql.az.service.IOpathSettingService;
 import etec.view.panel.SearchFunctionPnl;
 
-public class GreenPlumController implements Controller {
+public class FamilyMartController implements Controller {
 
 	public void run() throws Exception {
 
@@ -35,7 +35,7 @@ public class GreenPlumController implements Controller {
 			// 寫入檔案清單
 			CreateListService.createFileList(f);
 			// 置換
-			GreenPlumTestFileService.run(f);
+			FamilyMartFileTransduceService.run(f);
 			// 寫檔案
 			SearchFunctionPnl.tsLog.setLog("資訊", "產製檔案：" + BasicParams.getTargetFileNm(f.getPath()));
 			SearchFunctionPnl.progressBar.plusOne();

@@ -1,4 +1,4 @@
-package etec.src.controller;
+package etec.src.file.gp_test.controller;
 
 import java.io.File;
 import java.util.List;
@@ -7,13 +7,29 @@ import etec.common.enums.RunStatusEnum;
 import etec.common.interfaces.Controller;
 import etec.common.utils.FileTool;
 import etec.common.utils.param.Params;
+import etec.src.file.gp_test.service.TestGreenPlumFileService;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.az.service.CreateListService;
-import etec.src.sql.az.service.FamilyMartFileTransduceService;
 import etec.src.sql.az.service.IOpathSettingService;
 import etec.view.panel.SearchFunctionPnl;
 
-public class FamilyMartController implements Controller {
+/**
+ * <h1>測試GreenPlum轉換</h1>
+ * <p></p>
+ * <h2>屬性</h2>
+ * <p></p>
+ * <h2>方法</h2>
+ * <p></p>
+ * 
+ * <h2>異動紀錄</h2>
+ * <br>2024年3月4日	Tim	建立功能
+ * 
+ * @author	Tim
+ * @version	4.0.0.0
+ * @since	4.0.0.0
+ * @see		TestGreenPlumFileService
+ */
+public class TestGreenPlumFileController implements Controller {
 
 	public void run() throws Exception {
 
@@ -32,10 +48,8 @@ public class FamilyMartController implements Controller {
 		for (File f : lf) {
 			// 讀檔案
 			SearchFunctionPnl.tsLog.setLog("資訊", "讀取檔案：" + f.getPath());
-			// 寫入檔案清單
-			CreateListService.createFileList(f);
 			// 置換
-			FamilyMartFileTransduceService.run(f);
+			TestGreenPlumFileService.run(f);
 			// 寫檔案
 			SearchFunctionPnl.tsLog.setLog("資訊", "產製檔案：" + BasicParams.getTargetFileNm(f.getPath()));
 			SearchFunctionPnl.progressBar.plusOne();

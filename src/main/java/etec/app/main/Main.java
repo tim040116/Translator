@@ -1,17 +1,13 @@
 package etec.app.main;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
-import etec.common.annotation.Application;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
-import etec.src.controller.DDIMWriteFileController;
+import etec.src.file.ddim.controller.DDIMWriteFileController;
 import etec.view.application.FamilyMartApplication;
 import etec.view.application.FastTransduceApplication;
 import etec.view.application.OldApplication;
 import etec.view.application.SearchFunctionApplication;
+import etec.view.application.TestGreenPlumFileApplication;
 import etec.view.application.TranslateStoreFunctionApplication;
 import etec.view.application.UIApplication;
 
@@ -39,6 +35,9 @@ public class Main {
 			break;
 		case "FAST_TRANSDUCE":// 3.4 即時轉換
 			FastTransduceApplication.run();
+			break;
+		case "GP_TEST":// 4.0 Green Plum 測試
+			TestGreenPlumFileApplication.run();
 			break;
 		default:
 			break;

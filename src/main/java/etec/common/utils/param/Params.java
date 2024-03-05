@@ -27,8 +27,8 @@ import etec.app.params.SearchFunctionParams;
 public class Params {
 	
 	//設定檔路徑
-	public static final String ROOT_PATH = "C:\\Users\\User\\Desktop\\Trans\\";
-//		public static final String ROOT_CONFIG_PATH = "config\\";
+//	public static final String ROOT_PATH = "C:\\Users\\User\\Desktop\\Trans\\";
+	public static final String ROOT_PATH = "";
 	
 	public static final String[] CONFIG_FILE_LIST = {
 			"config"

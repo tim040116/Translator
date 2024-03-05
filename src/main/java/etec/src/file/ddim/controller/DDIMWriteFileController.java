@@ -1,4 +1,4 @@
-package etec.src.controller;
+package etec.src.file.ddim.controller;
 
 import java.io.File;
 import java.io.IOException;

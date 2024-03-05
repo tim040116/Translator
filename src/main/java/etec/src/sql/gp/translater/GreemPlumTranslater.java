@@ -33,6 +33,8 @@ public class GreemPlumTranslater {
 	public static DQLTranslater dql = new DQLTranslater();
 	
 	public static OtherTranslater other = new OtherTranslater();
+	
+	public static SQLTranslater sql = new SQLTranslater();
 	/**
 	 * <h1>sql : 轉換通用語句</h1>
 	 * <br>下列為需要人工處理之語法：
@@ -57,7 +59,7 @@ public class GreemPlumTranslater {
 			,"TRUNCAT"
 			,
 	};
-	public static SQLTranslater sql = new SQLTranslater();
+	
 	
 	/**
 	 * <h1>區分並轉換</h1>
@@ -76,16 +78,18 @@ public class GreemPlumTranslater {
 	 * @throws SQLFormatException 
 	 * @throws UnknowSQLTypeException 
 			 */
-	public static String translate(String sql) throws SQLTransduceException {
+	public static String translate(String script) throws SQLTransduceException {
 		String res = "";
-		String title = sql.trim().replaceAll("^(\\S+)[\\S\\s]+","$1").toUpperCase();
+		String title = script.trim().replaceAll("^(\\S+)[\\S\\s]+","$1").toUpperCase();
 		
 		if(Arrays.asList(arrDQL).contains(title)) {
-			dql.easyReplace(sql);
+			res = dql.easyReplace(script);
 		}else if(Arrays.asList(arrDML).contains(title)) {
-			dml.easyReplace(sql);
+			res = dml.easyReplace(script);
 		}else if(Arrays.asList(arrDDL).contains(title)) {
-			ddl.easyReplace(sql);
+			res = ddl.easyReplace(script);
+		}else {
+			res = sql.easyReplase(script);
 		}
 		return res;
 	}

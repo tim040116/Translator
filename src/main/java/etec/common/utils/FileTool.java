@@ -25,7 +25,7 @@ public class FileTool {
 		// 取得標案的根目錄
 		File rp = new File(rootPath);
 		if (rp == null || !rp.isDirectory())
-			throw new IOException("系統搜尋不到文件的根目錄");
+			throw new IOException("系統搜尋不到文件的根目錄"+rootPath);
 		// 取得所有檔案資料
 		return getInsideFileList(lf, rp);
 	} 
@@ -86,14 +86,10 @@ public class FileTool {
 		File newFile = new File(filePath);
 		newFile.getParentFile().mkdirs();
 		newFile.createNewFile();
-//			FileWriter fw = new FileWriter(newFile);
-//			BufferedWriter bw = new BufferedWriter(fw);
 		FileOutputStream writerStream = new FileOutputStream(filePath);    
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(writerStream,charset)); 
 		bw.write(content);
-//			fw.flush();
 		bw.close();
-//			fw.close();
 		return true;
 	}
 	//產檔案
