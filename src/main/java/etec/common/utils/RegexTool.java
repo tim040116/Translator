@@ -113,6 +113,7 @@ public class RegexTool {
 	}
 
 	// 解決$造成比對失敗
+	@Deprecated
 	public static String encodeSQL(String sql) {
 		String res = sql;
 		res = res
@@ -139,7 +140,7 @@ public class RegexTool {
 				;
 		return res;
 	}
-
+	@Deprecated
 	public static String decodeSQL(String sql) {
 		String res = sql;
 		res = res
