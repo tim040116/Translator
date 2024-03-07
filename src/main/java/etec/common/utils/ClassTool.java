@@ -2,6 +2,10 @@ package etec.common.utils;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -22,28 +26,29 @@ import java.util.List;
  */
 public class ClassTool {
 
-//	public static List<Class> getClassFromPackage(String pack){
-//		boolean recursive = true ;//是否查詢子包
-//		String packageName = "";
-//		String packageDirName = "";
-//		Enumeration<URL> dirs;
-//		
-//		try {
-//			dirs = Thread.currentThread().getContextClassLoader().getResources(packageDirName);
-//			while(dirs.hasMoreElements()) {
-//				URL url = dirs.nextElement();
-//				String protocol = url.getProtocol();
-//				if("file".equals(protocol)) {
-//					String filePath = url.getFile();
-////					findClass
-//					
-//				}
-//			}
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
-//	}
+	public static List<Class> getClassFromPackage(String pack){
+		boolean recursive = true ;//是否查詢子包
+		String packageName = "";
+		String packageDirName = "";
+		Enumeration<URL> dirs;
+		List<Class> clazzs = new ArrayList<Class>();
+		try {
+			dirs = Thread.currentThread().getContextClassLoader().getResources(packageDirName);
+			while(dirs.hasMoreElements()) {
+				URL url = dirs.nextElement();
+				String protocol = url.getProtocol();
+				if("file".equals(protocol)) {
+					String filePath = url.getFile();
+					findClassInPackageByFile(packageName,filePath,recursive,clazzs);
+				}else if("jar".equals(protocol)) {
+					System.out.println("jar");
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return clazzs;
+	}
 	
 //	https://blog.51cto.com/u_15344989/5012608
 	
@@ -67,7 +72,14 @@ public class ClassTool {
 		
 		for(File file : dirFiles) {
 			if(file.isDirectory()) {
-				
+				findClassInPackageByFile(packageName+"."+file.getName(),file.getAbsolutePath(),recursive,clazzs);
+			}else {
+				String className = file.getName().substring(0,file.getName().length()-6);
+				try {
+					clazzs.add(Thread.currentThread().getContextClassLoader().loadClass(packageName+"."+className));
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
