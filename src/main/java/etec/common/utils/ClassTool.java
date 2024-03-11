@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import etec.common.annotation.Application;
+
 /**
  * <h1>做程式的映射處理</h1>
  * <p></p>
@@ -76,6 +78,10 @@ public class ClassTool {
 			}else {
 				String className = file.getName().substring(0,file.getName().length()-6);
 				try {
+					Thread.currentThread()
+						.getContextClassLoader()
+						.loadClass(packageName+"."+className)
+						.getDeclaredAnnotationsByType(Application.class);
 					clazzs.add(Thread.currentThread().getContextClassLoader().loadClass(packageName+"."+className));
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();

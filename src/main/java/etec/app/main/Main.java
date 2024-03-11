@@ -1,11 +1,17 @@
 package etec.app.main;
 
+import java.lang.annotation.Annotation;
+import java.util.List;
+
+import etec.common.annotation.Application;
+import etec.common.utils.ClassTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 import etec.src.file.ddim.controller.DDIMWriteFileController;
 import etec.view.application.FamilyMartApplication;
 import etec.view.application.FastTransduceApplication;
 import etec.view.application.OldApplication;
+import etec.view.application.SearchDDLApplication;
 import etec.view.application.SearchFunctionApplication;
 import etec.view.application.TestGreenPlumFileApplication;
 import etec.view.application.TranslateStoreFunctionApplication;
@@ -28,7 +34,7 @@ public class Main {
 			SearchFunctionApplication.run("方法統計");
 			break;
 		case "SD_MAKER":// 3.2分析CREATE TABLE與法治做成資料表清單
-			SearchFunctionApplication.run("SD製作工具");
+			SearchDDLApplication.run("SD製作工具");
 			break;
 		case "SF_SP":// 3.3轉換sf 跟sp
 			TranslateStoreFunctionApplication.run();
@@ -42,25 +48,10 @@ public class Main {
 		default:
 			break;
 		}
-//		try {
-//			Class.forName("etec.common.annotation.Application");
-//			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-//			assert classLoader != null;
-//			String path = packageName.replace('.', '/');
-//			Enumeration resources = classLoader.getResources(path);
-//			List dirs = new ArrayList();
-//			while (resources.hasMoreElements()) {
-//				URL resource = resources.nextElement();
-//				dirs.add(new File(resource.getFile()));
-//			}
-//			ArrayList classes = new ArrayList();
-//			for (File directory : dirs) {
-//				classes.addAll(findClasses(directory, packageName));
-//			}
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
+//		List<Class> lst = ClassTool.getClassFromPackage("etec.common.annotation.Application",Application.class);
+//		for(Class  c: lst) {
+//			Application a = (Application)c.getDeclaredAnnotationsByType(Application.class)[0];
+//			System.out.println(a.value());
 //		}
-
 	}
 }

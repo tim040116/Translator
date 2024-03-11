@@ -231,7 +231,9 @@ public class FamilyMartFileTransduceService {
 	 * */
 	public static String transduceSQLScript(String content)throws UnknowSQLTypeException , IOException {
 		String result = "";
-		result = content.toUpperCase().trim().replaceAll("\\bSEL\\b", "SELECT");
+		result = content.toUpperCase().trim()
+				.replaceAll("\\bSEL\\b", "SELECT")
+				.replaceAll("\\-\\-.*", "");
 		//清除註解
 		String cleanSQL = TransduceTool.cleanRemark(result);
 		//區分類型
