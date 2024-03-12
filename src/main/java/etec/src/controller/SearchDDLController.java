@@ -79,29 +79,36 @@ public class SearchDDLController implements Controller{
 			
 			List<String> lstFile = new ArrayList<String>();
 			
-			//SD
-			if("SD_MAKER".equals(Params.config.APPLICATION_TYPE)) {
-				//src轉換
-				String newContent = "";
-				for(String sql : content.replaceAll("\"[^\"]+\"\\s+", "").split(";")) {
-					newContent += FamilyMartFileTransduceService.transduceSQLScript(sql.trim());
-				}
-				String srcFileName = RegexTool.getRegexTargetFirst("\\bP\\w+\\.\\w+",RegexTool.getRegexTargetFirst("^.*",newContent));
-				if(lstFile.contains(srcFileName)) {
-					Log.error(new TransduceException(srcFileName));
-				} else {
-					lstFile.add(srcFileName);
-				}
-				String srcFilePath = BasicParams.getOutputPath()+"\\src\\"+srcFileName+".sql";
-				FileTool.addFile(srcFilePath, newContent);
-				//SD List
-				String tp1 = CreateListService.createSD(content);
-				if("Success".equals(tp1)) {
-					i++;
-					SearchFunctionPnl.progressBar.plusOne();
-					continue;
-				}
-			}
+			/**
+			 * 2024/03/12 Tim	
+			 * 當初有辦法取得TD的DDL語法，且一個檔案只放一段語法
+			 * 此功能為將該DDL語法轉換成AZ語法
+			 * 之後會用其他功能替換掉
+			 * 
+			 * */
+//			//SD
+//			if("SD_MAKER".equals(Params.config.APPLICATION_TYPE)) {
+//				//src轉換
+//				String newContent = "";
+//				for(String sql : content.replaceAll("\"[^\"]+\"\\s+", "").split(";")) {
+//					newContent += FamilyMartFileTransduceService.transduceSQLScript(sql)+"\r\n;\r\n";
+//				}
+//				String srcFileName = RegexTool.getRegexTargetFirst("\\bP\\w+\\.\\w+",RegexTool.getRegexTargetFirst("^.*",newContent));
+//				if(lstFile.contains(srcFileName)) {
+//					Log.error(new TransduceException(srcFileName));
+//				} else {
+//					lstFile.add(srcFileName);
+//				}
+//				String srcFilePath = BasicParams.getOutputPath()+"\\src\\"+srcFileName+".sql";
+//				FileTool.addFile(srcFilePath, newContent);
+//				//SD List
+//				String tp1 = CreateListService.createSD(content);
+//				if("Success".equals(tp1)) {
+//					i++;
+//					SearchFunctionPnl.progressBar.plusOne();
+//					continue;
+//				}
+//			}
 			
 			//轉換語法
 			
