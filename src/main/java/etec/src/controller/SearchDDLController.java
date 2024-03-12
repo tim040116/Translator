@@ -82,8 +82,10 @@ public class SearchDDLController implements Controller{
 			//SD
 			if("SD_MAKER".equals(Params.config.APPLICATION_TYPE)) {
 				//src轉換
-				String newContent = content.replaceAll("\"[^\"]+\"\\s+", "");
-				newContent = FamilyMartFileTransduceService.transduceSQLScript(newContent);
+				String newContent = "";
+				for(String sql : content.replaceAll("\"[^\"]+\"\\s+", "").split(";")) {
+					newContent += FamilyMartFileTransduceService.transduceSQLScript(sql);
+				}
 				String srcFileName = RegexTool.getRegexTargetFirst("\\bP\\w+\\.\\w+",RegexTool.getRegexTargetFirst("^.*",newContent));
 				if(lstFile.contains(srcFileName)) {
 					Log.error(new TransduceException(srcFileName));
