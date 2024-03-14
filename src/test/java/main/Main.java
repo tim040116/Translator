@@ -10,6 +10,7 @@ import etec.common.annotation.Application;
 import etec.common.utils.convert_safely.ConvertRemarkSafely;
 import etec.src.sql.gp.translater.GreemPlumTranslater;
 import etec.view.application.FastTransduceApplication;
+import test.td.service.TestCreateSDIService;
 /**
  * @author	Tim
  * @since	2023年10月11日
@@ -22,9 +23,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		try {
-			String now = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
-			Application app = (Application)FastTransduceApplication.class.getDeclaredAnnotationsByType(Application.class)[0];
-			System.out.println(app.value());
+			TestCreateSDIService.run();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
