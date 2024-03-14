@@ -82,13 +82,11 @@ public class CreateSDIService {
 			String tableName = m.group(2);//target table name
 			String context	 = m.group(3);//other script
 			String primaryIndex = m.group(4);//primary index
-			if(context.matches("(?i)AS.*")) {
-				continue;
-			}
+			
 			Map<String, TableColumnModel> colMap = TableColumnModel.convertToMap(context);
-			for(Entry<String, TableColumnModel> en : colMap.entrySet()) {
-				System.out.println(en.getValue());
-			}  
+			for(String index : primaryIndex.split(",")) {
+				colMap.get(index.trim().toUpperCase()).getSetting().setPrimaryIndex("Y");;
+			}
 			System.out.println();
 		}
 	}

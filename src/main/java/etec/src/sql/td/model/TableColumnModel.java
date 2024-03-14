@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <h1></h1>
+ * <h1>欄位的物件</h1>
  * <p></p>
  * <h2>屬性</h2>
  * <p>
@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * </p>
  * <h2>方法</h2>
  * <p>
- * 	<br>{@link #}
+ * 	<br>static Map {@link #convertToMap(String)}
  * </p>
  * <h2>異動紀錄</h2>
  * <br>2024年3月14日	Tim	建立功能
@@ -56,7 +56,7 @@ public class TableColumnModel {
 			this.setting = new ColumnSettingModel(mLine.group(3));
 		}
 	}
-	private TableColumnModel(String colNm,String colType,String columnScript) {
+	public TableColumnModel(String colNm,String colType,String columnScript) {
 		this.columnName = colNm;
 		this.columnType = colType;
 		this.setting = new ColumnSettingModel(columnScript);

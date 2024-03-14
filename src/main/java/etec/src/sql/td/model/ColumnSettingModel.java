@@ -56,7 +56,10 @@ public class ColumnSettingModel {
 	 * @author	Tim
 	 * @since	4.0.0.0 */
 	private String characterSet = "";
-	
+	/**	PK
+	 * @author	Tim
+	 * @since	4.0.0.0 */
+	private String primaryIndex = "";
 	public ColumnSettingModel() {};
 	/**
 	 * <h1>包裝CREATE TABLE時各欄位的設定值</h1>
@@ -157,5 +160,11 @@ public class ColumnSettingModel {
 				+ " " + nullable 
 				+ " CHARACTER SET " + characterSet 
 				+ " ";
+	}
+	public String getPrimaryIndex() {
+		return primaryIndex;
+	}
+	public void setPrimaryIndex(String primaryIndex) {
+		this.primaryIndex = primaryIndex;
 	}
 }
