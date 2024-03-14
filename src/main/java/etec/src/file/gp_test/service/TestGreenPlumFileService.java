@@ -56,7 +56,10 @@ public class TestGreenPlumFileService {
 			 */
 	public static void run(File f) throws IOException {
 		String context = FileTool.readFile(f);
-		String newFileName = BasicParams.getOutputPath()+f.getName();
+
+		String newFileName = BasicParams.getTargetFileNm(f.getPath())+f.getName();
+		
+		
 		context = context.replaceAll("//.*",";$0;");
 		Pattern p = Pattern.compile("([^;]+);", Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(context);
