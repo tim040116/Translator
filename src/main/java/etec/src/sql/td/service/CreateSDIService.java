@@ -15,9 +15,6 @@ import etec.src.sql.td.model.TableColumnModel;
  * <h1>產製SDM</h1>
  * <p> 取出SQL中CREATE TABLE 語法
  * <br>並製作成SD文件
- * <br>
- * <br>
- * <br>
  * </p>
  * <h2>屬性</h2>
  * <p></p>
@@ -101,7 +98,7 @@ public class CreateSDIService {
 	 * 
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * @param	
+	 * @param	script	原城市
 	 * @throws	
 	 * @see
 	 * @return	
