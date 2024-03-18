@@ -2,3 +2,5 @@
 *.class
 *.class
 src/main/java/etec/common/utils/param/Params.java
+src/main/java/etec/common/utils/param/Params.java
+*.class
