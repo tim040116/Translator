@@ -57,7 +57,7 @@ public class GreemPlumTranslater {
 	public static String[] arrDDL = {
 			 "CREATE"
 			,"TRUNCAT"
-			,
+			,"DROP"
 	};
 	
 	

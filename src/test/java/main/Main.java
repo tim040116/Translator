@@ -1,15 +1,6 @@
 package main;
 
-import java.lang.annotation.Annotation;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import etec.common.annotation.Application;
-import etec.common.utils.convert_safely.ConvertRemarkSafely;
-import etec.src.sql.gp.translater.GreemPlumTranslater;
-import etec.view.application.FastTransduceApplication;
+import etec.common.utils.excel.Excel;
 /**
  * @author	Tim
  * @since	2023年10月11日
@@ -22,11 +13,11 @@ public class Main {
 	
 	public static void main(String[] args) {
 		try {
-			String now = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
-			Application app = (Application)FastTransduceApplication.class.getDeclaredAnnotationsByType(Application.class)[0];
-			System.out.println(app.value());
+			Excel et = Excel.readFromResource("SDI-Sample.xls");
+			et.writeFile("C:\\Users\\User\\Desktop\\test\\SDI-Sample.xls");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
 }
