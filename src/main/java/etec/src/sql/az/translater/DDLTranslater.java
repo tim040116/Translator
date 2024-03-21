@@ -67,7 +67,8 @@ public class DDLTranslater {
 		String oldselect = sql
 				.replaceAll("(?i)CREATE(\\s+\\S+)*\\s+TABLE\\s+\\S+\\s+AS\\s*\\(", "")
 				.replaceAll("(?i)\\)\\s*WITH\\s+DATA\\s*[^;]+", "")
-				.replaceAll("TtEeSsTt", "%;%").trim();
+//				.replaceAll("TtEeSsTt", "%;%")
+				.trim();
 		select = DQLTranslater.transduceSelectSQL(oldselect);
 		res = create.trim() + "\r\n" + with.trim() + "\r\nAS\r\n" + select.trim()+"\r\n;";
 		res = res.replaceAll(";\\s*;", ";");

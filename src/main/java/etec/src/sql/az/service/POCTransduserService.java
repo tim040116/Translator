@@ -162,7 +162,7 @@ public class POCTransduserService {
 		else if (newSql.matches("SELECT.*")) {
 			res = DQLTranslater.transduceSelectSQL(newSql);
 		}
-		res = res.replaceAll("TtEeSsTt", "%;%");
+//		res = res.replaceAll("TtEeSsTt", "%;%");
 		return res;
 	}
 

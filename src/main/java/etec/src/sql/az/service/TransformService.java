@@ -280,7 +280,7 @@ public class TransformService {
 				res += sql + "\r\n\r\n";
 			}
 		}
-		res=res.replaceAll("TtEeSsTt","%;%");
+//		res=res.replaceAll("TtEeSsTt","%;%");
 		return res;
 	}
 	/*

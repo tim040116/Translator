@@ -71,7 +71,7 @@ public class CreateSDIService {
 		 * <h2>異動紀錄 ：</h2>
 		 * 2024年3月11日	Tim	建立邏輯
 		 * */
-		String reg = "CREATE\\s+(?:(MULTISET|SET)\\s+)?TABLE\\s+([^\\s\\(]+)(?:\\s+[^\\(]+)?\\(([^;]+)\\)\\s*(?:PRIMARY\\s+INDEX\\s*\\(([^\\)]+)\\))?";
+		String reg = "CREATE\\s+(MULTISET|SET)?\\s+TABLE\\s+(?:([^.]+)\\.)?([^\\(\\s]+)\\s*\\((.+?)\\)\\s*(?:PRIMARY\\s+INDEX\\s*\\(([\\w,\\s]+)\\))?\\s*;";
 		Pattern p = Pattern.compile(reg,Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(script);
 		while(m.find()) {
