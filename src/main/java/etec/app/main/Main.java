@@ -8,6 +8,7 @@ import etec.common.utils.ClassTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 import etec.src.file.ddim.controller.DDIMWriteFileController;
+import etec.view.application.AssessmentApplication;
 import etec.view.application.FamilyMartApplication;
 import etec.view.application.FastTransduceApplication;
 import etec.view.application.OldApplication;
@@ -30,12 +31,16 @@ public class Main {
 		case "FAMILY_MART_TRANSLATOR":// 全家
 			FamilyMartApplication.run();
 			break;
-		case "SEARCH_FUNCTION":// 分析程式後列出清單
-			SearchFunctionApplication.run("方法統計");
+		case "ASSESSMENT":// 3 執行 Assessment 作業 包含 3.1 、 3.2
+			AssessmentApplication.run("Assessment製作工具");
 			break;
-		case "SD_MAKER":// 3.2分析CREATE TABLE與法治做成資料表清單
-			SearchDDLApplication.run("SD製作工具");
-			break;
+//		case "SEARCH_FUNCTION":// 3.1 分析程式後列出清單
+//			SearchFunctionApplication.run("方法統計");
+//			break;
+//		case "SD_MAKER":// 3.2分析CREATE TABLE與法治做成資料表清單
+//			SearchDDLApplication.run("SD製作工具");
+//			break;
+
 		case "SF_SP":// 3.3轉換sf 跟sp
 			TranslateStoreFunctionApplication.run();
 			break;

@@ -32,6 +32,7 @@ public class SearchDDLToSDIController implements Controller{
 
 	@Override
 	public void run() throws Exception {
+
 		// 儲存參數
 		SearchFunctionPnl.tsLog.clearLog();
 		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.WORKING);
@@ -80,14 +81,17 @@ public class SearchDDLToSDIController implements Controller{
 				//處理前後空白
 				String sql = m.group().trim();
 				
-				//sql = GreemPlumTranslater.translate(sql);
 				
-				
-				String regCol ="CREATE\\s+(?:MULTISET|SET)?\\s+TABLE[^;]+;";
+				//確認為CREATE 語法
+				//String regCol ="CREATE\\s+(?:MULTISET|SET)?\\s+TABLE[^;]+;";
+				String regCol ="(?i)CREATE\\s*(MULTISET|SET)?(\\s+VOLATILE)?\\s+TABLE\\s+[\\S\\s]+;";
 				Pattern pCol = Pattern.compile(regCol,Pattern.CASE_INSENSITIVE); //不用動
 				Matcher mCol = pCol.matcher(sql); //參數放要處裡的字串
 				while(mCol.find()) { 
-					String res = CreateSDIService.createSD(mCol.group(0)); // 查到的CREATE 語法
+					//排除 CTAS 語法
+					if(!mCol.group(0).matches("[\\S\\s]*\\s+SELECT\\s+[\\S\\s]*;")){
+						String res = CreateSDIService.createSD(mCol.group(0)); // 查到的CREATE 語法						
+					}
 				}
 				//確認為CREATE 語法
 				/* sql = sql.trim().replaceAll("^(\\S+)[\\S\\s]+","$1").toUpperCase();
