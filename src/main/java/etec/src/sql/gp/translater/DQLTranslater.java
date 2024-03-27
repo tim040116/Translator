@@ -176,11 +176,14 @@ public class DQLTranslater {
 	 * <br>但是GreenPlum不行，
 	 * <br>所以需要包一層sub Query 再進行group by
 	 * </p>
-	 * <p>僅支援</p>
 	 * 
+	 * <p>
+	 * <br>先將程式取出 SELECT~FROM ,取得所有是Alias name的欄位
+	 * <br>找到WHERE 中有沒有使用ALIAS 欄位
+	 * <br>有的話外面包一層
+	 * </p>
 	 * <h2>異動紀錄</h2>
-	 * <br>2024年2月26日	Tim	建立功能
-	 * 
+	 * <br>2024年3月26日	Tim	建立功能
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	script	要轉換的SQL語法
@@ -194,37 +197,7 @@ public class DQLTranslater {
 		//排除子查詢
 		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
 		res = csqs.savelyConvert(res, (t)->{
-			try {
-				//解析查詢語句
-				SelectTableModel stm = new SelectTableModel(t);
-				//取得col清單
-				String sel = stm.select.replaceAll("(?i)^\\s*SELECT\\s+", "");
-				List<String> lstCol = SplitCommaSafely.splitComma(sel);
-				//取得Alias name清單
-				Pattern p = Pattern.compile("([^\\s\\.]+)$");
-				List<String> lstAlias = SplitCommaSafely.splitComma(sel,(col) ->{
-					Matcher m = p.matcher(col);
-					m.find();
-					m.group();
-					return m.group();
-				});
-				//取得group by欄位
-				String[] arrGroupBy = stm.groupBy.replaceAll("(?i)^\\s*GROUP\\s+BY\\s*|\\s+","").toUpperCase().split(",");
-				//先處理數字的group by
-				for (int i = 0; i < arrGroupBy.length; i++) {
-					if(arrGroupBy[i].matches("\\d+")){
-						arrGroupBy[i] = lstAlias.get(Integer.parseInt(arrGroupBy[i]));
-					}
-				}
-				//處理Alias name
-				/* 邏輯：
-				 * 1.
-				 * 
-				 * */
-			} catch (UnknowSQLTypeException e) {
-				e.printStackTrace();
-			}
-			
+			//
 			return t;
 		});
 		

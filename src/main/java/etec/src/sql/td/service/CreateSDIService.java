@@ -71,14 +71,19 @@ public class CreateSDIService {
 		 * <h2>異動紀錄 ：</h2>
 		 * 2024年3月11日	Tim	建立邏輯
 		 * */
-		String reg = "CREATE\\s+(MULTISET|SET)?\\s+TABLE\\s+(?:([^.]+)\\.)?([^\\(\\s]+)\\s*\\((.+?)\\)\\s*(?:PRIMARY\\s+INDEX\\s*\\(([\\w,\\s]+)\\))?\\s*;";
+		String reg = "CREATE\\s+(MULTISET|SET)?\\s+TABLE\\s+"
+				+ "(?:([^.]+)\\.)?([^\\(\\s]+)\\s*"
+				+ "\\((.+?)\\)\\s*"
+				+ "(?:(?:PRIMARY\\s+)?INDEX\\s*\\(([\\w,\\s]+)\\)\\s*"
+				+ "|NO\\s+PRIMARY\\s+INDEX\\s*)?;";
 		Pattern p = Pattern.compile(reg,Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(script);
 		while(m.find()) {
 			String setType	 = m.group(1);//Set or Multiset
-			String tableName = m.group(2);//target table name
-			String context	 = m.group(3);//other script
-			String primaryIndex = m.group(4);//primary index
+			String dbName	 = m.group(2);
+			String tableName = m.group(3);//target table name
+			String context	 = m.group(4);//other script
+			String primaryIndex = m.group(5);//primary index
 			
 			Map<String, TableColumnModel> colMap = TableColumnModel.convertToMap(context);
 			for(String index : primaryIndex.split(",")) {

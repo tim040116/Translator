@@ -32,33 +32,25 @@ import etec.common.utils.RegexTool;
  */
 public class ColumnSettingModel {
 
-	/**	欄位的敘述
-	 * @author	Tim
-	 * @since	4.0.0.0 */
+	//	欄位的敘述
 	private String title = "";
-	/**	日期欄位的格式
-	 * @author	Tim
-	 * @since	4.0.0.0 */
+	
+	//	日期欄位的格式
 	private String format = "";
-	/**	預設值
-	 * @author	Tim
-	 * @since	4.0.0.0 */
+	
+	//	預設值
 	private String defaultData = "";
-	/**	是否區分大小寫
-	 * @author	Tim
-	 * @since	4.0.0.0 */
+	
+	//	是否區分大小寫
 	private String casespecific = "";
-	/**	可否為空值
-	 * @author	Tim
-	 * @since	4.0.0.0 */
+	
+	//	可否為空值
 	private String nullable = "";
-	/**	語系
-	 * @author	Tim
-	 * @since	4.0.0.0 */
+	
+	//	語系
 	private String characterSet = "";
-	/**	PK
-	 * @author	Tim
-	 * @since	4.0.0.0 */
+	
+	//	PK
 	private String primaryIndex = "";
 	public ColumnSettingModel() {};
 	/**
