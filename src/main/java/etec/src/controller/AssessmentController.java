@@ -10,7 +10,7 @@ public class AssessmentController implements Controller{
 	@Override
 	public void run() throws Exception {
 		//呼叫執行searchFunction
- 	   	 new SearchFunctionController().run();
+ 	  // 	 new SearchFunctionController().run();
 		//呼叫執行SearchDDLToSDI
 		new SearchDDLToSDIController().run();
 

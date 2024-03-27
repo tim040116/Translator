@@ -16,6 +16,7 @@ import etec.common.exception.TransduceException;
 import etec.common.interfaces.Controller;
 import etec.common.utils.FileTool;
 import etec.common.utils.RegexTool;
+import etec.common.utils.TransduceTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 import etec.src.file.model.BasicParams;
@@ -64,7 +65,9 @@ public class SearchDDLToSDIController implements Controller{
 			
 			
 			content = content.replaceAll("//.*",";$0;");
-			
+			//去除註解
+			content=TransduceTool.cleanRemark(content);
+
 			Pattern p = Pattern.compile("([^;]+);", Pattern.CASE_INSENSITIVE);
 			Matcher m = p.matcher(content);
 			StringBuffer sb = new StringBuffer();

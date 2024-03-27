@@ -8,6 +8,7 @@ import etec.common.model.sql.CreateIndexModel;
 import etec.common.model.sql.CreateTableModel;
 import etec.common.model.sql.TableColumnModel;
 import etec.common.utils.FileTool;
+import etec.common.utils.TransduceTool;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.azure.wrapper.TeradataSqlModelWrapper;
 
@@ -44,7 +45,8 @@ public class CreateSDIService {
 			FileTool.addFile(sdDetailFileName ,"\"DB_NAME\",\"TABLE_NAME\",\"COLUMN_NAME\",\"COLUMN_TYPE\",\"CHARACTER\",\"CASESPECIFIC\",\"TITLE\",\"DEFAULT\",\"NOT_NULL\",\"OTHER\"");//路徑,檔名,類型,資料表名
 			
 		}
-		
+
+        //將Create table語法 轉成 CreateTableModel 物件 
 		TeradataSqlModelWrapper wp = new TeradataSqlModelWrapper();
 		CreateTableModel cm = wp.createTable(content.replaceAll("\"Request Text\"",""));
 		String dbNm = cm.getDatabaseName();
