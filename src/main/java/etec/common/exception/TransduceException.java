@@ -1,7 +1,5 @@
 package etec.common.exception;
 
-import java.io.IOException;
-
 /**
  * <h1>傳換例外的父類別</h1>
  * <p></p>
@@ -12,7 +10,7 @@ import java.io.IOException;
  * @author	Tim
  * @since	1.0.0.0
  */
-public class TransduceException extends IOException{
+public class TransduceException extends RuntimeException {
 
 	public TransduceException(String script) {
 		super(script);

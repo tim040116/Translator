@@ -1,5 +1,6 @@
 package etec.src.sql.gp.translater;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,7 +12,6 @@ import etec.common.utils.RegexTool;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 import etec.common.utils.convert_safely.ConvertSubQuerySafely;
 import etec.common.utils.convert_safely.SplitCommaSafely;
-import etec.src.sql.td.model.SelectTableModel;
 
 /**
  * @author	Tim
@@ -48,15 +48,8 @@ public class DQLTranslater {
 			 */
 	public String easyReplace(String script) throws UnknowSQLTypeException, SQLFormatException {		
 		String res = GreemPlumTranslater.sql.easyReplase(script);
-		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
-		res = csqs.savelyConvert(res, (t)->{
-			try {
-				t = changeQualifaRank(t);//Qualify Row Number
-			} catch (UnknowSQLTypeException e) {
-				e.printStackTrace();
-			}
-			return t;
-		});
+		res = changeQualifaRank(res);//Qualify Row Number
+		res = changeAliasName(res);
 		return res;
 	}
 	
@@ -70,20 +63,7 @@ public class DQLTranslater {
 	 * 
 	 * */
 	public String changeQualifaRank(String sql) throws UnknowSQLTypeException {
-		if(!RegexTool.contains("(?i)QUALIFY\\s+ROW_NUMBER",sql)) {
-			return sql;
-		}
 		String res = "";
-		String temp = sql;
-		/*
-		 *  這個語法是建立在沒有sub query的前提下
-		 *  所以要先處理子查詢
-		 *  
-		 * 第一步要先將UNION語法分段 
-		 * 再把一些階段的關鍵字加上標記
-		 *再用split切分 
-		 * 
-		 * */
 		//安插標記
 		String[] arrSplitType = {//所有特殊階段的關鍵字
 			"SEL(?:ECT)?"
@@ -96,77 +76,92 @@ public class DQLTranslater {
 //			,"ORDER\\s+BY"
 			,"QUALIFY\\s+ROW_NUMBER"
 		};
-		String regKey = "(?i)"+arrSplitType[0];
-		for(int i = 1; i<arrSplitType.length;i++) {
-			regKey+="|"+arrSplitType[i];
-		}
-		temp = temp
-				.replaceAll(regKey, Mark.MAHJONG_BLACK+"$0")
-				.replaceAll("(?i)(TRIM\\s*\\([\\S\\s]*?)"+Mark.MAHJONG_BLACK+"(FROM)", "$1$2")//排除TRIM(FROM)
-		;
-		String[] arrSplitStr = temp.split(Mark.MAHJONG_BLACK);
-		//依照特徵分裝
-		String select=""
-				,from=""
-				,where=""
-//				,groupBy=""
-//				,orderBy=""
-				,rowNumber="";
-//		List<String> lstJoin = new ArrayList<String>();
-		for(String str : arrSplitStr) {
-			if(str.matches("\\s*")) {
-				res+=str;
-				continue;
-//			}else if(str.matches("(?i)WITH[\\S\\s]+")) {
-//				lstWith.add(str);
-			}else if(str.matches("(?i)SEL(?:ECT)?[\\S\\s]+")) {
-				select = str;
-			}else if(str.matches("(?i)FROM[\\S\\s]+")) {
-				from = str;
-//			}else if(str.matches("(?i)((OUTER|INNER|LEFT|RIGHT|CROSS)\\\\s+)?JOIN[\\S\\s]+")) {
-//				lstJoin.add(str);
-//				lstArea.add(SelectAreaEnum.JOIN);
-			}else if(str.matches("(?i)WHERE[\\S\\s]+")) {
-				where = str;
-//			}else if(str.matches("(?i)GROUP\\s+BY[\\S\\s]+")) {
-//				groupBy = str;
-//			}else if(str.matches("(?i)ORDER\\s+BY[\\S\\s]+")) {
-//				orderBy = str;
-			}else if(str.matches("(?i)\\bQUALIFY\\s+ROW_NUMBER[\\S\\s]+")) {
-				rowNumber = ConvertFunctionsSafely.decodeMark(str);
-			}else {
-				throw new UnknowSQLTypeException(str, null);
+		String regKey = "(?i)"+String.join("|", arrSplitType);
+		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
+		res = csqs.savelyConvert(sql, (t)->{
+			String rt = "";
+			if(!RegexTool.contains("(?i)QUALIFY\\s+ROW_NUMBER",t)) {
+				return t;
 			}
-		}
-		/* 
-		 * 轉換邏輯
-		 * 	- select
-		 * 		1.有邏輯的部分全部只留Alias name
-		 * 	- from
-		 * 		1.包sub query
-		 * 		2.加上row_number
-		 * 	- where
-		 * 		1.加上where row_number = 1
-		 * 
-		 * 2023/12/26 Tim 跟Jason討論過，可以將邏輯放在子查詢
-		 * */
-		//select只留Alias name
-		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
-		String newSelect = select.replaceAll("(?i)(SELECT(\\s+DISTINCT)?\\s+)[\\S\\s]+", "$1")+
-			cfs.savelyConvert(select.replaceAll("(?i)SELECT(\\s+DISTINCT)?\\s+", ""), (t) ->{
-				return t
-					.replaceAll("(?i)[^,]+\\s+AS\\s+([^\\s,]+)", "$1")//只保留Alias name
-					.replaceAll("\\S+\\.(\\S+)","tmp_qrn.$1")// 清除Table Alias name
-				;
-			});
-		String newFrom = "FROM ( "
-			+select.replaceAll("(?i)\\s+DISTINCT", "")
-			+"\t,"+rowNumber.replaceAll("(?i)QUALIFY\\s+", "").replaceAll("([\\S\\s]*\\))[^\\)]+$", "$1")+" AS ROW_NUMBER\r\n\t"
-			+from+where+" ) tmp_qrn \r\n where tmp_qrn.ROW_NUMBER "
-			+rowNumber.replaceAll("[\\S\\s]*\\)([^\\)]+)$", "$1")
-		;
-		res += newSelect+newFrom;
+			String temp = t; 
+			temp = temp//先排除依些可能ˊ會造成問題的項目
+					.replaceAll(regKey, Mark.MAHJONG_BLACK+"$0")
+					.replaceAll("(?i)(TRIM\\s*\\([\\S\\s]*?)"+Mark.MAHJONG_BLACK+"(FROM)", "$1$2")//排除TRIM(FROM)
+			;
+			String[] arrSplitStr = temp.split(Mark.MAHJONG_BLACK);
+			
+			//依照特徵分裝
+			String select=""
+					,from=""
+					,where=""
+//					,groupBy=""
+//					,orderBy=""
+					,rowNumber="";
+			for(String str : arrSplitStr) {
+				if(str.matches("\\s*")) {
+					rt+=str;
+					continue;
+//				}else if(str.matches("(?i)WITH[\\S\\s]+")) {
+//					lstWith.add(str);
+				}else if(str.matches("(?i)SEL(?:ECT)?[\\S\\s]+")) {
+					select = str;
+				}else if(str.matches("(?i)FROM[\\S\\s]+")) {
+					from = str;
+//				}else if(str.matches("(?i)((OUTER|INNER|LEFT|RIGHT|CROSS)\\\\s+)?JOIN[\\S\\s]+")) {
+//					lstJoin.add(str);
+//					lstArea.add(SelectAreaEnum.JOIN);
+				}else if(str.matches("(?i)WHERE[\\S\\s]+")) {
+					where = str;
+//				}else if(str.matches("(?i)GROUP\\s+BY[\\S\\s]+")) {
+//					groupBy = str;
+//				}else if(str.matches("(?i)ORDER\\s+BY[\\S\\s]+")) {
+//					orderBy = str;
+				}else if(str.matches("(?i)\\bQUALIFY\\s+ROW_NUMBER[\\S\\s]+")) {
+					rowNumber = ConvertFunctionsSafely.decodeMark(str);
+				}else {
+					throw new UnknowSQLTypeException(str, null);
+				}
+			}
+			/* 
+			 * 轉換邏輯
+			 * 	- select
+			 * 		1.有邏輯的部分全部只留Alias name
+			 * 	- from
+			 * 		1.包sub query
+			 * 		2.加上row_number
+			 * 	- where
+			 * 		1.加上where row_number = 1
+			 * 
+			 * 2023/12/26 Tim 跟Jason討論過，可以將邏輯放在子查詢
+			 * */
+			//select只留Alias name
+			ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
+			String newSelect = select.replaceAll("(?i)(SELECT(\\s+DISTINCT)?\\s+)[\\S\\s]+", "$1")+
+				cfs.savelyConvert(select.replaceAll("(?i)SELECT(\\s+DISTINCT)?\\s+", ""), (t2) ->{
+					return t2
+						.replaceAll("(?i)[^,]+\\s+AS\\s+([^\\s,]+)", "$1")//只保留Alias name
+						.replaceAll("\\S+\\.(\\S+)","tmp_qrn.$1")// 清除Table Alias name
+					;
+				});
+			String newFrom = "FROM ( "
+				+select.replaceAll("(?i)\\s+DISTINCT", "")
+				+"\t,"+rowNumber.replaceAll("(?i)QUALIFY\\s+", "").replaceAll("([\\S\\s]*\\))[^\\)]+$", "$1")+" AS ROW_NUMBER\r\n\t"
+				+from+where+" ) tmp_qrn \r\n where tmp_qrn.ROW_NUMBER "
+				+rowNumber.replaceAll("[\\S\\s]*\\)([^\\)]+)$", "$1")
+			;
+			rt += newSelect+newFrom;
+			return rt;
+		});
+		
 		return res;
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 	
 	/**
@@ -194,13 +189,51 @@ public class DQLTranslater {
 			 */
 	public String changeAliasName(String script) throws UnknowSQLTypeException {
 		String res = "";
+		
+		List<String> lstAliasNm = new ArrayList<String>();
 		//排除子查詢
 		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
 		res = csqs.savelyConvert(res, (t)->{
-			//
-			return t;
+			//取出 SELECT~FROM
+			String col = t.replaceAll("(?is)select\\s+(.*)\\s+from.*", "$1");
+			//取出Alias
+			Pattern p = Pattern.compile("(?is)\\bAS\\s+(\\w+)(?!\\s*\\()(?=[\\s,]+|\\s*$)");
+			Matcher m = p.matcher(col);
+			while(m.find()) {
+				lstAliasNm.add(m.group(1));
+			}
+			//取出 WHERE
+			String where = t.replaceAll("(?is)select\\s+(.*)\\s+from.*", "$1").toUpperCase();
+			//判斷有沒有Alias 語法
+			boolean isAlias = false;
+			for(String alias : lstAliasNm) {
+				if(where.contains(alias)) {
+					isAlias = true;
+					break;
+				}
+			}
+			//有Alias 語法，進行處理
+			if(!isAlias) {
+				return t;
+			}
+			//處理外面層的
+			String newCol = col;
+			String tempNm = "TP_GRP_"+csqs.loopId;
+			List<String> lstCol = SplitCommaSafely.splitComma(newCol, (t2) ->{
+				t2 = t2.trim().replaceAll("(?i).*\\bAS\\s+", "");
+				return t2;
+			});
+			String newSQL = "\r\nSELECT"
+					+ "\r\n\t" + String.join(",\r\n\t",lstCol)
+					+ "\r\nFROM ( "
+					+ "\r\n\t" + t.replaceAll("(?i)\\bWHERE\\s+.*","")
+					+ "\r\n) " + tempNm
+					+ "\r\nWHERE"
+					+ "\r\n\t" + t.replaceAll(".*\\bWHERE\\s+", "")
+					+ "\r\n;\r\n"
+			;
+			return newSQL;
 		});
-		
 		return res;
 	}
 }

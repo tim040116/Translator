@@ -29,7 +29,7 @@ public class ConvertSubQuerySafely {
 	
 	public static long subQueryId = 0;
 	public static long unionQueryId = 0;
-	public long maxCnt = 0;
+	public long loopId = 0;
 	/**
 	 * <h1>安全的轉換SQL語句</h1>
 	 * <br>因應SQL語法中很多子查詢及聯立的語法
@@ -46,6 +46,7 @@ public class ConvertSubQuerySafely {
 	 *
 	 * */
 	public String savelyConvert(String script,Function<String, String> function) {
+		loopId = 0;
 		if(RegexTool.getRegexTarget("(?i)\\(\\s*SEL(?:ECT)?", script).isEmpty()) {
 			return savelyConvertUnion(script, function);
 		}
@@ -122,6 +123,7 @@ public class ConvertSubQuerySafely {
 //			return function.apply(script);
 //		}
 		for(String sub : script.split("(?i)\\b(?=union\\b)")){
+			loopId++;
 			res += RegexTool.getRegexTargetFirst("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", sub);
 			String subq = sub.replaceAll("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", "");
 			res += function.apply(subq);
