@@ -1,6 +1,9 @@
 package etec.src.sql.gp.translater;
 
 import java.util.Arrays;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import etec.common.exception.sql.SQLFormatException;
 import etec.common.exception.sql.SQLTransduceException;
@@ -94,4 +97,28 @@ public class GreemPlumTranslater {
 		return res;
 	}
 	
+	/**
+	 * <h1></h1>
+	 * <p>
+	 * <br>從程式中找到符合REG的SQL
+	 * <br>所以不用從檔案抽出SQL
+	 * </p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年3月29日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	
+	 * @throws	
+	 * @see
+	 * @return	
+			 */
+	public static void easyRun(String reg,String script,Function<String, String> f) {
+		Pattern p = Pattern.compile(reg,Pattern.CASE_INSENSITIVE);
+		Matcher m = p.matcher(script);
+		while(m.find()) {
+			
+		}
+	}
 }
