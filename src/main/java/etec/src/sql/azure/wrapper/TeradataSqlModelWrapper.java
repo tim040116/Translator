@@ -65,7 +65,10 @@ public class TeradataSqlModelWrapper{
 			//DB,TABLE name
 			model.setDatabaseName(m.group("dbNm"));
 			model.setTableName(m.group("tblNm"));
-			model.setTableSetting(m.group("tblSetting").split(","));
+			String tblSetting = m.group("tblSetting");
+			if(tblSetting != null) {
+				model.setTableSetting(m.group("tblSetting").split(","));
+			}
 			/**
 			 * <p>功能 ：切分欄位資訊</p>
 			 * <p>類型 ：切分</p>
@@ -117,7 +120,7 @@ public class TeradataSqlModelWrapper{
 					indexModel.setPrimary(mIndex.group(1).toUpperCase().contains("PRIMARY"));
 					indexModel.setUnique(mIndex.group(1).toUpperCase().contains("UNIQUE"));
 				}
-				String[] arrIndex = mIndex.group(1).trim().split("\\s*,\\s*");
+				String[] arrIndex = mIndex.group(2).trim().split("\\s*,\\s*");
 				indexModel.setColumn(arrIndex);
 				model.getIndex().add(indexModel);
 			}
