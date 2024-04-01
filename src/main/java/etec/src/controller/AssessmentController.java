@@ -14,6 +14,7 @@ import etec.common.enums.RunStatusEnum;
 import etec.common.interfaces.Controller;
 import etec.common.utils.FileTool;
 import etec.common.utils.RegexTool;
+import etec.common.utils.TransduceTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 import etec.src.file.model.BasicParams;
@@ -64,20 +65,21 @@ public class AssessmentController implements Controller{
 			
 			// 讀取檔案
 			String content = FileTool.readFile(f,Charset.forName("utf-8"));
-			
+			content= TransduceTool.cleanRemark(content);
 			String category = "\\" + f.getPath()
 			.replace(BasicParams.getInputPath(), "")
 			.replace(f.getName(), "")
 			.replaceAll("\\\\$", "")
 			;
+			
 			/* Generate SDI file */
 			SearchSDIList(content);
 			
 			/* Generate file List */
-			SearchFileList(f,content,category);
+//			SearchFileList(f,content,category);
 			
 			/* Generate function List */
-			SearchFunctionList(f,content,category);
+//			SearchFunctionList(f,content,category);
 			
 			
 			i++;
@@ -110,6 +112,7 @@ public class AssessmentController implements Controller{
 	public void SearchSDIList(String content) throws Exception {
 
 		//String newFileName = BasicParams.getTargetFileNm(f.getPath())+f.getName();
+		SearchFunctionPnl.tsLog.setLog("資訊","SearchSDIList" );
 		
 		content = content.replaceAll("//.*",";$0;");
 				
@@ -136,7 +139,7 @@ public class AssessmentController implements Controller{
 			Matcher mCol = pCol.matcher(sql); //參數放要處裡的字串
 			while(mCol.find()) { 
 				//排除 CTAS 語法
-				if(!mCol.group(0).matches("[\\S\\s]*\\s+SELECT\\s+[\\S\\s]*;")){
+				if(!mCol.group(0).matches("(?si).*\\bSELECT\\b.*;")){
 					String res = CreateSDIService.createSD(mCol.group(0)); // 查到的CREATE 語法						
 				}
 			}
@@ -148,6 +151,7 @@ public class AssessmentController implements Controller{
 	/* Generate fileList */
 	public void SearchFileList(File f,String content,String category) throws Exception {
 		
+		SearchFunctionPnl.tsLog.setLog("資訊","SearchFileList" );
 		//建立清單檔
 		String fileListNm = BasicParams.getOutputPath()+Params.searchFunction.FILE_LIST_NAME;//列出所有檔案
 		//是否要包含title
@@ -175,6 +179,7 @@ public class AssessmentController implements Controller{
 	/* Generate functionList */
 	public void SearchFunctionList(File f,String content,String category) throws Exception {
 
+		SearchFunctionPnl.tsLog.setLog("資訊","SearchFunctionList" );
 
 		content = SearchFunctionService.getSqlContent(content);
 		List<String> lstSql = RegexTool.getRegexTarget("SELECT[^;]*", content);
