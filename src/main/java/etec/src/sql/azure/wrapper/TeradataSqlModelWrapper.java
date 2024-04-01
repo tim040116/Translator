@@ -2,6 +2,8 @@ package etec.src.sql.azure.wrapper;
 
 import java.util.Collections;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import etec.common.enums.MultiSetEnum;
 import etec.common.model.sql.CreateIndexModel;
@@ -30,136 +32,97 @@ public class TeradataSqlModelWrapper{
 	public CreateTableModel createTable(String sql) {
 		sql = sql.replaceAll("\"REQUEST TEXT\"", "").trim();
 		String tempsql = sql.toUpperCase(Locale.TAIWAN).replaceAll("\\s+", " ");
-		String temp = "";// 暫存字串
-		int parenthesesCnt = 0;// 括號記數
-		int step = 0;// 步驟
-		boolean flag = false;
 		CreateTableModel model = new CreateTableModel();
 
-		// 解析SQL 語法
-		for (String c : tempsql.split("")) {
-
-			switch (step) {
-			case 0:// create
-				if ("".equals(c)) {
-					continue;
+		/**
+		 * <p>功能 ：拆解Create table 語法</p>
+		 * <p>類型 ：搜尋</p>
+		 * <p>修飾詞：gmis</p>
+		 * <p>範圍 ：從 CREATE TABLE 到 ;</p>
+		 * <h2>群組 ：</h2>
+		 * 	1.set : set table設定
+		 * 	2.dbNm : 資料庫名稱(可能為空)
+		 * 	3.tblNm : 表明稱
+		 *  4.tblSetting : 表的設定
+		 *  5.col : 欄位資訊
+		 *  6.pi : primary index
+		 * <h2>異動紀錄 ：</h2>
+		 * 2024年4月1日	Tim	建立邏輯
+		 * */
+		String regex = "(?is)CREATE\\s+(?<set>MULTISET|SET)?\\s+TABLE\\s+"
+				+ "(?:(?<dbNm>[^.]+)\\.)?(?<tblNm>[^\\(\\s]+)\\s*"
+				+ "(?<tblSetting>[^\\(]+)?"
+				+ "\\((?<col>.+?)\\)\\s*"
+				+ "(?:PRIMARY\\s+?INDEX\\s*\\((?<pi>[\\w,\\s]+)\\)"
+				+ "|NO\\s+PRIMARY\\s+INDEX\\s*)?\\s*;";
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(tempsql);
+		while(m.find()) {
+			//SET TABLE
+			String strSet = m.group("set").toUpperCase();
+			MultiSetEnum multiSet = "SET".equals(strSet)?MultiSetEnum.SET:"MULTISET".equals(strSet)?MultiSetEnum.MULTI_SET:MultiSetEnum.NULL;
+			model.setMultiSet(multiSet);
+			//DB,TABLE name
+			model.setDatabaseName(m.group("dbNm"));
+			model.setTableName(m.group("tblNm"));
+			model.setTableSetting(m.group("tblSetting").split(","));
+			/**
+			 * <p>功能 ：切分欄位資訊</p>
+			 * <p>類型 ：切分</p>
+			 * <p>不屬於括號內的逗號</p>
+			 * <h2>異動紀錄 ：</h2>
+			 * 2024年4月1日	Tim	建立邏輯
+			 * */
+			for(String strCol : m.group("col").split(",(?![^\\(\\)]+\\))")) {
+				TableColumnModel col = new TableColumnModel();
+				/**
+				 * <p>功能 ：切分單行欄位資訊</p>
+				 * <p>類型 ：切分</p>
+				 * <p>修飾詞：m</p>
+				 * <p>範圍 ：行頭到行尾</p>
+				 * <h2>群組 ：</h2>
+				 * 	1.欄位名
+				 * 	2.欄位型態
+				 * 	3.設定
+				 * <h2>異動紀錄 ：</h2>
+				 * 2024年4月1日	Tim	建立邏輯
+				 * */
+				Pattern pLine = Pattern.compile("^\\s*,?\\s*(\\S+)\\s+(\\S+)\\s*(.*),?",Pattern.MULTILINE);
+				Matcher mLine = pLine.matcher(strCol);
+				while(mLine.find()) {
+					col.setColumnName(mLine.group(1));
+					col.setColumnType(mLine.group(2));
+					col.setSetting(mLine.group(3));
 				}
-				if ("CREATE".equals(temp.trim())) {
-					step = 1;
-					temp = "";
-					continue;
-				}
-				temp += c;
-				break;
-			case 1:// multiSet + table name
-				temp += c;
-				if (temp.matches("(MULTISET|SET)?\\s*TABLE\\s+\\S+\\s+")) {
-					// Multi set
-					if (temp.contains("MULTISET TABLE")) {
-						model.setMultiSet(MultiSetEnum.MULTI_SET);
-					} else if (temp.contains("SET TABLE")) {
-						model.setMultiSet(MultiSetEnum.SET);
-					} else {
-						model.setMultiSet(MultiSetEnum.MULTI_SET);
-					}
-					// table name
-					String[] table = temp.replaceAll("\\s*(MULTISET|SET)?\\s+TABLE\\s+", "").trim().split("\\.");
-					if (table.length > 1) {
-						model.setDatabaseName(table[table.length - 2]);
-					}
-					model.setTableName(table[table.length - 1]);
-					temp = "";
-					step = 2;
-					continue;
-				}
-				break;
-			case 2:// table setting
-				if ("(".equals(c)) {
-					String[] arrSetting = temp.replaceAll("^\\s*,\\s*", "").split(",");
-					model.setTableSetting(arrSetting);
-					temp = "";
-					step = 3;
-					parenthesesCnt = 1;
-					continue;
-				}
-				temp += c;
-				break;
-			case 3:// column
-					// 計算括號
-				if ("(".equals(c)) {
-					parenthesesCnt++;
-				} else if (")".equals(c)) {
-					parenthesesCnt--;
-				}
-				if("'".equals(c)) {
-					flag = !flag;
-				}
-				if ((",".equals(c) && parenthesesCnt == 1 || parenthesesCnt == 0)&&flag==false) {
-					TableColumnModel col = new TableColumnModel();
-					String[] arCol = temp.replaceAll("^,\\s+", "").trim().split(" ");
-					col.setColumnName(arCol[0]);
-					col.setColumnType(arCol[1]);
-					col.setSetting(temp.replaceAll(arCol[0], "").replace(arCol[1], "").trim());
-					model.getColumn().add(col);
-					temp = "";
-					if (parenthesesCnt == 0) {
-						step = 4;
-						continue;
-					}
-				}
-				temp += c;
-				break;
-			case 4:// 判斷接下來要進入的階段
-				temp += c;
-				if ("PARTITION BY".equals(temp)) {
-					step = 5;
-					continue;
-				} else if (temp.contains("INDEX")) {
-					step = 6;
-					continue;
-				}
-				break;
-			case 5:// PARTITION BY
-					// 計算範圍
-				temp += c;
-				if ("(".equals(c)) {
-					parenthesesCnt++;
-				} else if (")".equals(c)) {
-					parenthesesCnt--;
-					if (parenthesesCnt == 0) {
-						model.getWithSetting().setPartition(temp);
-						temp = "";
-						step = 4;
-						continue;
-					}
-				}
-				break;
-			case 6:// index
-					// 計算範圍
-				temp += c;
-				if ("(".equals(c)) {
-					parenthesesCnt++;
-				} else if (")".equals(c)) {
-					parenthesesCnt--;
-					if (parenthesesCnt == 0) {
-						CreateIndexModel indexModel = new CreateIndexModel();
-						indexModel.setStr(temp);
-						indexModel.setPrimary(temp.contains("PRIMARYE "));
-						indexModel.setUnique(temp.contains("UNIQUE "));
-						RegexTool.getRegexTargetFirst("\\([^\\)]+", temp);
-						String[] arrIndex = temp.replaceAll("(UNIQUE\\s+)?(PRIMARY\\s+)?\\s?INDEX\\s*\\(", "")
-								.replaceAll("\\)$", "").trim().split(",");
-						indexModel.setColumn(arrIndex);
-						model.getIndex().add(indexModel);
-						temp = "";
-						step = 4;
-						continue;
-					}
-				}
-				break;
-			default:
-				break;
+				model.getColumn().add(col);
 			}
+			/**
+			 * <p>功能 ：取得INDEX資訊</p>
+			 * <p>類型 ：搜尋</p>
+			 * <p>修飾詞：i</p>
+			 * <p>範圍 ：PRIMARY|UNIQUE INDEX(.+)</p>
+			 * <h2>群組 ：</h2>
+			 * 	1.primary 跟 unique 設定
+			 * 	2.index 欄位
+			 * <h2>異動紀錄 ：</h2>
+			 * 2024年4月1日	Tim	建立邏輯
+			 * */
+			String regIndex = "((?:PRIMARY\\s+|UNIQUE\\s+)*)INDEX\\s*\\(([^\\)]+)\\)";
+			Pattern pIndex = Pattern.compile(regIndex,Pattern.CASE_INSENSITIVE);
+			Matcher mIndex = pIndex.matcher(m.group(0));
+			while(mIndex.find()) {
+				CreateIndexModel indexModel = new CreateIndexModel();
+				indexModel.setStr(mIndex.group(0));
+				if(mIndex.group(1)!=null) {
+					indexModel.setPrimary(mIndex.group(1).toUpperCase().contains("PRIMARY"));
+					indexModel.setUnique(mIndex.group(1).toUpperCase().contains("UNIQUE"));
+				}
+				String[] arrIndex = mIndex.group(1).trim().split("\\s*,\\s*");
+				indexModel.setColumn(arrIndex);
+				model.getIndex().add(indexModel);
+			}
+			//partition by
+			model.getWithSetting().setPartition(m.group(0).replaceAll("(?i)PARTITION\\s+BY\\s*([^\\)]+)\\)","$1"));
 		}
 		return model;
 	}
