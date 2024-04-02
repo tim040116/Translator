@@ -1,6 +1,8 @@
 package etec.src.sql.azure.wrapper;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import etec.common.enums.MultiSetEnum;
@@ -27,8 +29,9 @@ public class TeradataSqlModelWrapper{
 	 * @return CreateTableModel create table的物件
 	 * 
 	 */
-	public CreateTableModel createTable(String sql) {
+	public List<CreateTableModel> createTable(String sql) {
 		sql = sql.replaceAll("\"REQUEST TEXT\"", "").trim();
+<<<<<<< Updated upstream
 		String tempsql = sql.toUpperCase(Locale.TAIWAN).replaceAll("\\s+", " ");
 		String temp = "";// 暫存字串
 		int parenthesesCnt = 0;// 括號記數
@@ -48,6 +51,99 @@ public class TeradataSqlModelWrapper{
 					step = 1;
 					temp = "";
 					continue;
+=======
+		String tempsql = sql.toUpperCase(Locale.TAIWAN).replaceAll("\\s+", " ").replaceAll("\\\"","");
+		List<CreateTableModel> resList = new ArrayList<CreateTableModel>();
+
+		/**
+		 * <p>功能 ：拆解Create table 語法</p>
+		 * <p>類型 ：搜尋</p>
+		 * <p>修飾詞：gmis</p>
+		 * <p>範圍 ：從 CREATE TABLE 到 ;</p>
+		 * <h2>群組 ：</h2>
+		 * 	1.set : set table設定
+		 * 	2.dbNm : 資料庫名稱(可能為空)
+		 * 	3.tblNm : 表明稱
+		 *  4.tblSetting : 表的設定
+		 *  5.col : 欄位資訊
+		 *  6.index : index
+		 *  7.pa : PARTITION BY
+		 * <h2>異動紀錄 ：</h2>
+		 * 2024年4月1日	Tim	建立邏輯
+		 * */
+		String regex = "(?is)CREATE\\s+(?<set>MULTISET|SET)?\\s+TABLE\\s+"
+				+ "(?:(?<dbNm>[^.]+)\\.)?(?<tblNm>[^\\(\\s]+)\\s*"
+				+ "(?<tblSetting>[^\\(]+)?\\((?<col>.+?)\\)\\s*"
+				+ "(?<index>(?:(?:UNIQUE\\s+|PRIMARY\\s+)+INDEX\\s*\\([\\w,\\s\\\"]+\\)\\s*"
+				+ "|NO\\s+PRIMARY\\s+INDEX\\s*)+)\\s*"
+				+ "(?:PARTITION\\s+BY(?<pa>[^;]*))?\\s*;";
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(tempsql);
+		while(m.find()) {
+			CreateTableModel model = new CreateTableModel();
+			//SET TABLE
+			String strSet = m.group("set").toUpperCase();
+			MultiSetEnum multiSet = "SET".equals(strSet)?MultiSetEnum.SET:"MULTISET".equals(strSet)?MultiSetEnum.MULTI_SET:MultiSetEnum.NULL;
+			model.setMultiSet(multiSet);
+			//DB,TABLE name
+			model.setDatabaseName(m.group("dbNm"));
+			model.setTableName(m.group("tblNm"));
+			String tblSetting = m.group("tblSetting");
+			if(tblSetting != null) {
+				model.setTableSetting(m.group("tblSetting").split(","));
+			}
+			/**
+			 * <p>功能 ：切分欄位資訊</p>
+			 * <p>類型 ：切分</p>
+			 * <p>不屬於括號內的逗號</p>
+			 * <h2>異動紀錄 ：</h2>
+			 * 2024年4月1日	Tim	建立邏輯
+			 * */
+			for(String strCol : m.group("col").split("\\s*,\\s*(?![^\\(\\)]+\\))")) {
+				TableColumnModel col = new TableColumnModel();
+				/**
+				 * <p>功能 ：切分單行欄位資訊</p>
+				 * <p>類型 ：切分</p>
+				 * <p>修飾詞：m</p>
+				 * <p>範圍 ：行頭到行尾</p>
+				 * <h2>群組 ：</h2>
+				 * 	1.欄位名
+				 * 	2.欄位型態
+				 * 	3.設定
+				 * <h2>異動紀錄 ：</h2>
+				 * 2024年4月1日	Tim	建立邏輯
+				 * */
+				String rLine = "^\\s*,?\\s*([\\w\\\"]+)\\s+(\\w+(?:\\([\\d,\\s]+\\))?)\\s*(.*),?";
+				Pattern pLine = Pattern.compile(rLine,Pattern.MULTILINE);
+				Matcher mLine = pLine.matcher(strCol);
+				while(mLine.find()) {
+					col.setColumnName(mLine.group(1).replaceAll("\"", ""));
+					col.setColumnType(mLine.group(2));
+					col.setSetting(mLine.group(3));
+				}
+				model.getColumn().add(col);
+			}
+			/**
+			 * <p>功能 ：取得INDEX資訊</p>
+			 * <p>類型 ：搜尋</p>
+			 * <p>修飾詞：i</p>
+			 * <p>範圍 ：PRIMARY|UNIQUE INDEX(.+)</p>
+			 * <h2>群組 ：</h2>
+			 * 	1.primary 跟 unique 設定
+			 * 	2.index 欄位
+			 * <h2>異動紀錄 ：</h2>
+			 * 2024年4月1日	Tim	建立邏輯
+			 * */
+			String regIndex = "((?:PRIMARY\\s+|UNIQUE\\s+)*)INDEX\\s*\\(([^\\)]+)\\)";
+			Pattern pIndex = Pattern.compile(regIndex,Pattern.CASE_INSENSITIVE);
+			Matcher mIndex = pIndex.matcher(m.group("index"));
+			while(mIndex.find()) {
+				CreateIndexModel indexModel = new CreateIndexModel();
+				indexModel.setStr(mIndex.group(0));
+				if(mIndex.group(1)!=null) {
+					indexModel.setPrimary(mIndex.group(1).toUpperCase().contains("PRIMARY"));
+					indexModel.setUnique(mIndex.group(1).toUpperCase().contains("UNIQUE"));
+>>>>>>> Stashed changes
 				}
 				temp += c;
 				break;
@@ -160,8 +256,14 @@ public class TeradataSqlModelWrapper{
 			default:
 				break;
 			}
+<<<<<<< Updated upstream
+=======
+			//partition by
+			model.getWithSetting().setPartition(m.group(0).replaceAll("(?i)PARTITION\\s+BY\\s*([^\\)]+)\\)","$1"));
+			resList.add(model);
+>>>>>>> Stashed changes
 		}
-		return model;
+		return resList;
 	}
 
 	/**
