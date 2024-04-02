@@ -31,7 +31,7 @@ public class TeradataSqlModelWrapper{
 	 */
 	public CreateTableModel createTable(String sql) {
 		sql = sql.replaceAll("\"REQUEST TEXT\"", "").trim();
-		String tempsql = sql.toUpperCase(Locale.TAIWAN).replaceAll("\\s+", " ");
+		String tempsql = sql.toUpperCase(Locale.TAIWAN).replaceAll("\\s+", " ").replaceAll("\\\"","");
 		CreateTableModel model = new CreateTableModel();
 
 		/**
@@ -77,7 +77,7 @@ public class TeradataSqlModelWrapper{
 			 * <h2>異動紀錄 ：</h2>
 			 * 2024年4月1日	Tim	建立邏輯
 			 * */
-			for(String strCol : m.group("col").split(",(?![^\\(\\)]+\\))")) {
+			for(String strCol : m.group("col").split("\\s*,\\s*(?![^\\(\\)]+\\))")) {
 				TableColumnModel col = new TableColumnModel();
 				/**
 				 * <p>功能 ：切分單行欄位資訊</p>
@@ -91,10 +91,11 @@ public class TeradataSqlModelWrapper{
 				 * <h2>異動紀錄 ：</h2>
 				 * 2024年4月1日	Tim	建立邏輯
 				 * */
-				Pattern pLine = Pattern.compile("^\\s*,?\\s*(\\w+)\\s+(\\w+(?:\\([\\d,\\s]+\\))?)\\s*(.*),?",Pattern.MULTILINE);
+				String rLine = "^\\s*,?\\s*([\\w\\\"]+)\\s+(\\w+(?:\\([\\d,\\s]+\\))?)\\s*(.*),?";
+				Pattern pLine = Pattern.compile(rLine,Pattern.MULTILINE);
 				Matcher mLine = pLine.matcher(strCol);
 				while(mLine.find()) {
-					col.setColumnName(mLine.group(1));
+					col.setColumnName(mLine.group(1).replaceAll("\"", ""));
 					col.setColumnType(mLine.group(2));
 					col.setSetting(mLine.group(3));
 				}
