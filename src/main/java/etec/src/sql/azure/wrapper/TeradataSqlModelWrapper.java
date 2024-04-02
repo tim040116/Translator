@@ -45,16 +45,16 @@ public class TeradataSqlModelWrapper{
 		 * 	3.tblNm : 表明稱
 		 *  4.tblSetting : 表的設定
 		 *  5.col : 欄位資訊
-		 *  6.pi : primary index
+		 *  6.index : index
+		 *  7.pa : PARTITION BY
 		 * <h2>異動紀錄 ：</h2>
 		 * 2024年4月1日	Tim	建立邏輯
 		 * */
 		String regex = "(?is)CREATE\\s+(?<set>MULTISET|SET)?\\s+TABLE\\s+"
 				+ "(?:(?<dbNm>[^.]+)\\.)?(?<tblNm>[^\\(\\s]+)\\s*"
-				+ "(?<tblSetting>[^\\(]+)?"
-				+ "\\((?<col>.+?)\\)\\s*"
-				+ "(?:(UNIQUE\\s+)?(PRIMARY\\s+)?INDEX\\s*\\((?<pi>[\\w,\\s\\\"]+)\\)"
-				+ "|NO\\s+PRIMARY\\s+INDEX\\s*)?\\s*"
+				+ "(?<tblSetting>[^\\(]+)?\\((?<col>.+?)\\)\\s*"
+				+ "(?<index>(?:(?:UNIQUE\\s+|PRIMARY\\s+)+INDEX\\s*\\([\\w,\\s\\\"]+\\)\\s*"
+				+ "|NO\\s+PRIMARY\\s+INDEX\\s*)+)\\s*"
 				+ "(?:PARTITION\\s+BY(?<pa>[^;]*))?\\s*;";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(tempsql);
