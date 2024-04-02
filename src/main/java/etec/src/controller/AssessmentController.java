@@ -74,7 +74,7 @@ public class AssessmentController implements Controller{
 			;
 			
 			/* Generate SDI file */
-			SearchSDIList(content);
+			SearchSDIList(f.getName(),content);
 			
 			/* Generate file List */
 //			SearchFileList(f,content,category);
@@ -110,7 +110,7 @@ public class AssessmentController implements Controller{
 	}
 	
 	/* Generate SDI file */
-	public void SearchSDIList(String content) throws Exception {
+	public void SearchSDIList(String  fileName,String content) throws Exception {
 
 		//String newFileName = BasicParams.getTargetFileNm(f.getPath())+f.getName();
 		SearchFunctionPnl.tsLog.setLog("資訊","SearchSDIList" );
@@ -141,7 +141,7 @@ public class AssessmentController implements Controller{
 			while(mCol.find()) { 
 				//排除 CTAS 語法
 				if(!mCol.group(0).matches("(?si).*\\bSELECT\\b.*;")){
-					String res = CreateSDIService.createSD(mCol.group(0)); // 查到的CREATE 語法						
+					String res = CreateSDIService.createSD(fileName,mCol.group(0)); // 查到的CREATE 語法						
 				}
 			}
 		}

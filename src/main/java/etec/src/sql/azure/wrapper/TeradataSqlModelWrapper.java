@@ -53,8 +53,9 @@ public class TeradataSqlModelWrapper{
 				+ "(?:(?<dbNm>[^.]+)\\.)?(?<tblNm>[^\\(\\s]+)\\s*"
 				+ "(?<tblSetting>[^\\(]+)?"
 				+ "\\((?<col>.+?)\\)\\s*"
-				+ "(?:PRIMARY\\s+?INDEX\\s*\\((?<pi>[\\w,\\s]+)\\)"
-				+ "|NO\\s+PRIMARY\\s+INDEX\\s*)?\\s*;";
+				+ "(?:(UNIQUE\\s+)?(PRIMARY\\s+)?INDEX\\s*\\((?<pi>[\\w,\\s\\\"]+)\\)"
+				+ "|NO\\s+PRIMARY\\s+INDEX\\s*)?\\s*"
+				+ "(?:PARTITION\\s+BY(?<pa>[^;]*))?\\s*;";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(tempsql);
 		while(m.find()) {

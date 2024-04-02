@@ -93,7 +93,7 @@ public class SearchDDLToSDIController implements Controller{
 				while(mCol.find()) { 
 					//排除 CTAS 語法
 					if(!mCol.group(0).matches("[\\S\\s]*\\s+SELECT\\s+[\\S\\s]*;")){
-						String res = CreateSDIService.createSD(mCol.group(0)); // 查到的CREATE 語法						
+						String res = CreateSDIService.createSD(f.getName(),mCol.group(0)); // 查到的CREATE 語法						
 					}
 				}
 				//確認為CREATE 語法

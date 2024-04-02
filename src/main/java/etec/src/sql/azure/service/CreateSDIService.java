@@ -3,7 +3,6 @@ package etec.src.sql.azure.service;
 import java.io.File;
 import java.io.IOException;
 
-
 import etec.common.model.sql.CreateIndexModel;
 import etec.common.model.sql.CreateTableModel;
 import etec.common.model.sql.TableColumnModel;
@@ -28,7 +27,7 @@ public class CreateSDIService {
 	 * 產生SDI.csv 紀錄每個資料表中各欄位的設定
 	 * 
 	 * */
-	public static String createSD(String content) throws IOException {
+	public static String createSD(String fileName,String content) throws IOException {
 		String result = "Success";
 		String sdMainFileName = BasicParams.getOutputPath()+"list\\SDI_MAIN.csv";//列出所有檔案
 		String sdDetailFileName = BasicParams.getOutputPath()+"list\\SDI_DETAIL.csv";//列出所有檔案
@@ -79,8 +78,9 @@ public class CreateSDIService {
 					+ "\",\""+other
 					+ "\"");
 		}
-		FileTool.addFile(sdMainFileName,																
-				  "\""+dbNm
+		FileTool.addFile(sdMainFileName,
+				  "\""   +fileName
+			    + "\",\""+dbNm
 				+ "\",\""+tableNm
 				+ "\",\""+setTable
 				+ "\",\""+index.trim()
