@@ -91,7 +91,7 @@ public class TeradataSqlModelWrapper{
 				 * <h2>異動紀錄 ：</h2>
 				 * 2024年4月1日	Tim	建立邏輯
 				 * */
-				Pattern pLine = Pattern.compile("^\\s*,?\\s*(\\S+)\\s+(\\S+)\\s*(.*),?",Pattern.MULTILINE);
+				Pattern pLine = Pattern.compile("^\\s*,?\\s*(\\w+)\\s+(\\w+(?:\\([\\d,\\s]+\\))?)\\s*(.*),?",Pattern.MULTILINE);
 				Matcher mLine = pLine.matcher(strCol);
 				while(mLine.find()) {
 					col.setColumnName(mLine.group(1));
