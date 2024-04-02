@@ -20,6 +20,8 @@ public class CreateColumnSettingModel {
 
 	private String setting;
 	
+	public CreateColumnSettingModel() {}
+	
 	public CreateColumnSettingModel(String setting) {
 		String tmpsetting = setting.toUpperCase();
 		this.setting = setting;

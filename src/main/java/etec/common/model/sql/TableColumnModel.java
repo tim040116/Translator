@@ -14,7 +14,7 @@ public class TableColumnModel {
 	
 	private String columnType;
 	
-	private CreateColumnSettingModel setting;
+	private CreateColumnSettingModel setting = new CreateColumnSettingModel();
 
 	public String getColumnName() {
 		return columnName;
