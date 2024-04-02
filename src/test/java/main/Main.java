@@ -15,6 +15,7 @@ public class Main {
 		try {
 //			Excel et = Excel.readFromResource("SDI-Sample.xls");
 //			et.writeFile("C:\\Users\\User\\Desktop\\test\\SDI-Sample.xls");
+			Excel et = Excel.copyFromResource("SDI-Sample.xls","C:\\Users\\User\\Desktop\\test\\SDI-Sample.xls");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
