@@ -2,6 +2,7 @@ package etec.src.sql.azure.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import etec.common.model.sql.CreateIndexModel;
 import etec.common.model.sql.CreateTableModel;
@@ -34,7 +35,7 @@ public class CreateSDIService {
 		File sdMainFile = new File(sdMainFileName);
 		sdMainFile.getParentFile().mkdirs();
 		if (!sdMainFile.exists()) {
-			FileTool.addFile(sdMainFileName,"\"DB_NAME\",\"TABLE_NAME\",\"SET_TABLE\",\"INDEX\"");//路徑,檔名,段落,方法名
+			FileTool.addFile(sdMainFileName,"\"FILE_NAME\",\"DB_NAME\",\"TABLE_NAME\",\"SET_TABLE\",\"INDEX\"");//路徑,檔名,段落,方法名
         }
 		
 		File sdDetailFile = new File(sdDetailFileName);
@@ -46,44 +47,54 @@ public class CreateSDIService {
 
         //將Create table語法 轉成 CreateTableModel 物件 
 		TeradataSqlModelWrapper wp = new TeradataSqlModelWrapper();
-		CreateTableModel cm = wp.createTable(content.replaceAll("\"Request Text\"",""));
-		String dbNm = cm.getDatabaseName();
-		String tableNm = cm.getTableName();
-		String setTable = cm.getMultiSet();
-		String index = "";
-		for(CreateIndexModel m : cm.getIndex()) {
-			index+=" "+m.toString();
-		}
-		for(TableColumnModel col : cm.getColumn()) {
-			String colNm = col.getColumnName();
-			String colType = col.getColumnType();
-			String title = col.getSetting().getTitle();
-			String notNull = col.getSetting().getNotNull();
-			String casespecific = col.getSetting().getCasespecific();
-			String format = col.getSetting().getFormat();
-			String def = col.getSetting().getDefaultData();
-			String character = col.getSetting().getCharacter();
-			String other = col.getSetting().getOther();
-			FileTool.addFile(sdDetailFileName,																
-					  "\""+dbNm
+		List<CreateTableModel> lstcm =  wp.createTable(content.replaceAll("\"Request Text\"",""));
+		for(CreateTableModel cm : lstcm) {
+
+			String dbNm = cm.getDatabaseName();
+			String tableNm = cm.getTableName();
+			String setTable = cm.getMultiSet();
+			String index = "";
+			for(CreateIndexModel m : cm.getIndex()) {
+				index+=" "+m.toString();
+			}
+			for(TableColumnModel col : cm.getColumn()) {
+				String colNm = col.getColumnName();
+				String colType = col.getColumnType();
+				String title = col.getSetting().getTitle();
+				String notNull = col.getSetting().getNotNull();
+				String casespecific = col.getSetting().getCasespecific();
+				String format = col.getSetting().getFormat();
+				String def = col.getSetting().getDefaultData();
+				String character = col.getSetting().getCharacter();
+				String other = col.getSetting().getOther();
+				/*
+				 * 202240408 Tim format 歸類在 Other
+				 * */
+				if(!"".equals(col.getSetting().getFormat())) {
+					other +=  " FORMAT '" + col.getSetting().getFormat()+ "' ";
+				}
+				FileTool.addFile(sdDetailFileName,																
+						  "\""+dbNm
+						+ "\",\""+tableNm
+						+ "\",\""+colNm
+						+ "\",\""+colType
+						+ "\",\""+character
+						+ "\",\""+casespecific
+						+ "\",\""+title
+						+ "\",\""+def
+						+ "\",\""+notNull
+						+ "\",\""+other
+						+ "\"");
+			}
+			FileTool.addFile(sdMainFileName,
+					  "\""   +fileName
+				    + "\",\""+dbNm
 					+ "\",\""+tableNm
-					+ "\",\""+colNm
-					+ "\",\""+colType
-					+ "\",\""+character
-					+ "\",\""+casespecific+" "+format
-					+ "\",\""+title
-					+ "\",\""+def
-					+ "\",\""+notNull
-					+ "\",\""+other
+					+ "\",\""+setTable
+					+ "\",\""+index.trim()
 					+ "\"");
 		}
-		FileTool.addFile(sdMainFileName,
-				  "\""   +fileName
-			    + "\",\""+dbNm
-				+ "\",\""+tableNm
-				+ "\",\""+setTable
-				+ "\",\""+index.trim()
-				+ "\"");
+		
 		return result;
 	}
 	
