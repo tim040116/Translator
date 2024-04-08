@@ -73,7 +73,7 @@ public class RegexTool {
 		String res = "";
 		Pattern p = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(content);
-		while (m.find()) {
+		if (m.find()) {
 			res = m.group(0);
 		}
 		return res;

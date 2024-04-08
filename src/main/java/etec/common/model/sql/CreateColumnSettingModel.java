@@ -1,5 +1,8 @@
 package etec.common.model.sql;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import etec.common.utils.RegexTool;
 
 public class CreateColumnSettingModel {
@@ -28,10 +31,7 @@ public class CreateColumnSettingModel {
 		this.title = RegexTool.getRegexTargetFirst("TITLE\\s+\\'[^\\']*\\'", setting).replaceAll("TITLE\\s+", "").replaceAll("\\'", "");
 		this.format = RegexTool.getRegexTargetFirst("FORMAT\\s+\\'[^\\']*\\'", setting).replaceAll("FORMAT\\s+", "").replaceAll("\\'", "");
 		this.defaultData = RegexTool.getRegexTargetFirst("DEFAULT\\s+\\S+", setting).replaceAll("DEFAULT\\s+", "");
-		this.casespecific = RegexTool.getRegexTargetFirst("NOT\\s+CASESPECIFIC", setting);
-		if(this.casespecific.equals("")) {
-			this.casespecific = RegexTool.getRegexTargetFirst("CASESPECIFIC", setting);
-		}
+		this.casespecific = RegexTool.getRegexTargetFirst("(?:NOT\\s+)?CASESPECIFIC", setting);
 		this.notNull = RegexTool.getRegexTargetFirst("NOT\\s+NULL", setting);
 		this.character = RegexTool.getRegexTargetFirst("CHARACTER\\s+SET\\s+\\S+", setting).replaceAll("CHARACTER\\s+SET\\s+", "");
 		tmpsetting = tmpsetting.replaceAll("TITLE\\s+\\'[^\\']*\\'","");

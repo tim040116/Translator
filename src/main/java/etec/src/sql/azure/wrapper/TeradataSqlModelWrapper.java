@@ -1,6 +1,8 @@
 package etec.src.sql.azure.wrapper;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,17 +25,24 @@ import etec.common.utils.RegexTool;
 public class TeradataSqlModelWrapper{
 
 	/**
-	 * @author Tim
-	 * @since 2023/04/06
-	 * @param String create table的sql語句
-	 * @return CreateTableModel create table的物件
+	 * <h1>找出所有CREATE TABLE 語句並轉成ModelSQL語句</h1>
+	 * <p></p>
 	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年4月8日	Tim	建立功能
+	 * <br>2024年4月8日	Tim	暫時將format歸類在Other裡面
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	
+	 * @throws	
+	 * @see
+	 * @return	List<CreateTableModel>
 	 */
-	public CreateTableModel createTable(String sql) {
+	public List<CreateTableModel> createTable(String sql) {
 		sql = sql.replaceAll("\"REQUEST TEXT\"", "").trim();
 		String tempsql = sql.toUpperCase(Locale.TAIWAN).replaceAll("\\s+", " ").replaceAll("\\\"","");
-		CreateTableModel model = new CreateTableModel();
-
+		
+		List<CreateTableModel> res = new ArrayList<CreateTableModel>();
 		/**
 		 * <p>功能 ：拆解Create table 語法</p>
 		 * <p>類型 ：搜尋</p>
@@ -59,6 +68,7 @@ public class TeradataSqlModelWrapper{
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(tempsql);
 		while(m.find()) {
+			CreateTableModel model = new CreateTableModel();
 			//SET TABLE
 			String strSet = m.group("set").toUpperCase();
 			MultiSetEnum multiSet = "SET".equals(strSet)?MultiSetEnum.SET:"MULTISET".equals(strSet)?MultiSetEnum.MULTI_SET:MultiSetEnum.NULL;
@@ -128,8 +138,9 @@ public class TeradataSqlModelWrapper{
 			}
 			//partition by
 			model.getWithSetting().setPartition(m.group(0).replaceAll("(?i)PARTITION\\s+BY\\s*([^\\)]+)\\)","$1"));
+			res.add(model);
 		}
-		return model;
+		return res;
 	}
 
 	/**
