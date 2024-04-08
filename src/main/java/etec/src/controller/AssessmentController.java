@@ -66,18 +66,22 @@ public class AssessmentController implements Controller{
 			
 			// 讀取檔案
 			String content = FileTool.readFile(f,Charset.forName("utf-8"));
-			content= TransduceTool.cleanRemark(content);
+			
 			String category = "\\" + f.getPath()
 			.replace(BasicParams.getInputPath(), "")
 			.replace(f.getName(), "")
 			.replaceAll("\\\\$", "")
 			;
-			
-			/* Generate SDI file */
-			SearchSDIList(f.getName(),content);
-			
+
 			/* Generate file List */
 //			SearchFileList(f,content,category);
+
+			// 清除註解
+			content= TransduceTool.cleanRemark(content);
+			
+			/* Generate SDI file */
+//			SearchSDIList(f.getName(),content);
+			
 			
 			/* Generate function List */
 //			SearchFunctionList(f,content,category);
