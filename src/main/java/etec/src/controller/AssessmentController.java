@@ -80,11 +80,11 @@ public class AssessmentController implements Controller{
 			content= TransduceTool.cleanRemark(content);
 			
 			/* Generate SDI file */
-//			SearchSDIList(f.getName(),content);
+			SearchSDIList(f.getName(),content);
 			
 			
 			/* Generate function List */
-//			SearchFunctionList(f,content,category);
+			SearchFunctionList(f,content,category);
 			
 			
 			i++;
@@ -101,13 +101,31 @@ public class AssessmentController implements Controller{
 			FileTool.addFile(funcListNm,"\"FUNCTION_NAME\",\"USE_CNT\"");//方法名
 		}
 		
+		/**
+		 * 20240409	Tim	把有小數點的項目放在後面
+		 * */
+		Map<String,Integer> mapNodeItem = new HashMap<String,Integer>();
 		for(Entry<String, Integer> entry : mapFunc.entrySet()) {
+			if(entry.getKey().contains(".")) {
+				mapNodeItem.put(entry.getKey(), entry.getValue());
+				continue;
+			}
 			FileTool.addFile(funcListNm,
 					    "\""+entry.getKey()
 					+"\",\"" + entry.getValue()
 					+"\"");
 			SearchFunctionPnl.progressBar.plusOne();
 		}
+		FileTool.addFile(funcListNm,"\r\n");
+		//有小數點的部分
+		for(Entry<String, Integer> entry : mapNodeItem.entrySet()) {
+			FileTool.addFile(funcListNm,
+					    "\""+entry.getKey()
+					+"\",\"" + entry.getValue()
+					+"\"");
+			SearchFunctionPnl.progressBar.plusOne();
+		}
+		
 		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.SUCCESS);
 		SearchFunctionPnl.tsLog.setLog("資訊","Function資訊產生完成，共 "+i+" 個檔案");
 		Log.info("完成，共 "+i+" 個檔案");
@@ -183,11 +201,10 @@ public class AssessmentController implements Controller{
 	
 	/* Generate functionList */
 	public void SearchFunctionList(File f,String content,String category) throws Exception {
-
 		SearchFunctionPnl.tsLog.setLog("資訊","SearchFunctionList" );
-
 		content = SearchFunctionService.getSqlContent(content);
 		List<String> lstSql = RegexTool.getRegexTarget("SELECT[^;]*", content);
+		
 		//每一段sql
 		int j = 1;
 		String temp = "";
