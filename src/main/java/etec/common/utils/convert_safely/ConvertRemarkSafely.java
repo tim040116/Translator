@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  * */
 public class ConvertRemarkSafely {
 	
-	public int idRemarkDash = 0;
+	public static int idRemarkDash = 0;
 	
 	/**
 	 * <h1>轉換語句時排除註解</h1>
@@ -33,7 +33,7 @@ public class ConvertRemarkSafely {
 	 * @since	4.0.0.0
 	 * <p>2024年1月3日	Tim	先製作SQL兩槓的轉換</p>
 	 * */
-	public String savelyConvert(String script,Function<String, String> function) {
+	public static String savelyConvert(String script,Function<String, String> function) {
 		String res = script;
 		Map<String,String> mapRemark = new HashMap<String,String>();
 		Pattern p = Pattern.compile("(?mi)\r?\n?\\s*--.*\r?\n");

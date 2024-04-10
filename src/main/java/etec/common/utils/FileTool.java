@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,7 @@ public class FileTool {
 	//讀取檔案
 	public static String readFile(File f) throws IOException {
 		//return readFile(f,detectCharset(f.getPath()));
+		
 		return readFile(f,Charset.defaultCharset());
 	}
 	public static String readFile(String fileName) throws IOException {
@@ -95,17 +99,23 @@ public class FileTool {
 	//產檔案
 	public static boolean addFile(String file,String content) throws IOException {
 		Log.info("新增資料到檔案：" + file);
+		return addFile(file,Charset.forName("UTF-8"),content);
+	}
+	//產檔案
+	public static boolean addFile(String file,Charset charset,String content) throws IOException {
+		Log.info("新增資料到檔案：" + file);
 		File newFile = new File(file);
 		newFile.getParentFile().mkdirs();
 		if (!newFile.exists()) {
 			newFile.createNewFile();
         }
-		FileWriter fw = new FileWriter(newFile, true);
-		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write(content+"\r\n");
-		fw.flush();
-		bw.close();
-		fw.close();
+		try(BufferedWriter bw = Files.newBufferedWriter(Paths.get(file), charset,StandardOpenOption.APPEND)){
+			bw.write(content+"\r\n");
+		}catch (Exception e) {
+			System.out.println(content);
+			e.printStackTrace();
+			System.out.println();
+		}
 		return true;
 	}
 	// 取得子目錄下的檔案

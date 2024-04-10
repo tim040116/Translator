@@ -5,6 +5,7 @@ import java.util.Arrays;
 import etec.common.exception.sql.SQLFormatException;
 import etec.common.exception.sql.SQLTransduceException;
 import etec.common.exception.sql.UnknowSQLTypeException;
+import etec.common.utils.log.Log;
 
 /**
  * <h1>GreenPlumn轉換</h1>
@@ -59,7 +60,9 @@ public class GreemPlumTranslater {
 			,"TRUNCAT"
 			,"DROP"
 	};
-	
+	public static String[] arrOther = {
+			 "CALL"
+	};
 	
 	/**
 	 * <h1>區分並轉換</h1>
@@ -80,8 +83,8 @@ public class GreemPlumTranslater {
 			 */
 	public static String translate(String script) throws SQLTransduceException {
 		String res = "";
-		String title = script.trim().replaceAll("^(\\S+)[\\S\\s]+","$1").toUpperCase();
-		
+		String title = script.trim().replaceAll("^\\b([\\w]+)\\b[\\S\\s]+","$1").toUpperCase();
+		Log.debug("開始轉換語法："+title);
 		if(Arrays.asList(arrDQL).contains(title)) {
 			res = dql.easyReplace(script);
 		}else if(Arrays.asList(arrDML).contains(title)) {
@@ -89,8 +92,9 @@ public class GreemPlumTranslater {
 		}else if(Arrays.asList(arrDDL).contains(title)) {
 			res = ddl.easyReplace(script);
 		}else {
-			res = sql.easyReplase(script);
+//			res = sql.easyReplase(script);
 		}
+		Log.debug("轉換完成");
 		return res;
 	}
 	

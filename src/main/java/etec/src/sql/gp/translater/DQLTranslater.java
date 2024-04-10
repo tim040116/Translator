@@ -1,5 +1,6 @@
 package etec.src.sql.gp.translater;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,6 +12,7 @@ import etec.common.utils.RegexTool;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 import etec.common.utils.convert_safely.ConvertSubQuerySafely;
 import etec.common.utils.convert_safely.SplitCommaSafely;
+import etec.common.utils.log.Log;
 import etec.src.sql.td.model.SelectTableModel;
 
 /**
@@ -73,6 +75,7 @@ public class DQLTranslater {
 		if(!RegexTool.contains("(?i)QUALIFY\\s+ROW_NUMBER",sql)) {
 			return sql;
 		}
+		Log.debug("開始 changeQualifaRank");
 		String res = "";
 		String temp = sql;
 		/*
@@ -166,15 +169,16 @@ public class DQLTranslater {
 			+rowNumber.replaceAll("[\\S\\s]*\\)([^\\)]+)$", "$1")
 		;
 		res += newSelect+newFrom;
+		Log.debug("結束 changeQualifaRank");
 		return res;
 	}
 	
 	/**
 	 * <h1>Alias name 轉換</h1>
 	 * <p>Teradata環境中
-	 * <br>GROUP BY語法可以使用SELECT裡的Alias name
+	 * <br>語法可以使用SELECT裡的Alias name
 	 * <br>但是GreenPlum不行，
-	 * <br>所以需要包一層sub Query 再進行group by
+	 * <br>所以需要包一層sub Query 再進行group by跟where
 	 * </p>
 	 * <p>僅支援</p>
 	 * 
@@ -191,6 +195,7 @@ public class DQLTranslater {
 			 */
 	public String changeAliasName(String script) throws UnknowSQLTypeException {
 		String res = "";
+		Log.debug("開始 AliasName");
 		//排除子查詢
 		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
 		res = csqs.savelyConvert(res, (t)->{
@@ -199,35 +204,61 @@ public class DQLTranslater {
 				SelectTableModel stm = new SelectTableModel(t);
 				//取得col清單
 				String sel = stm.select.replaceAll("(?i)^\\s*SELECT\\s+", "");
-				List<String> lstCol = SplitCommaSafely.splitComma(sel);
+				List<String> lstCol = new ArrayList<String>();//用在外層的
+				List<String> lstAlias = new ArrayList<String>();//用來比對的
 				//取得Alias name清單
-				Pattern p = Pattern.compile("([^\\s\\.]+)$");
-				List<String> lstAlias = SplitCommaSafely.splitComma(sel,(col) ->{
+				/**
+				 * <p>功能 ：找到所有欄位名稱</p>
+				 * <p>類型 ：搜尋</p>
+				 * <p>修飾詞：gmi</p>
+				 * <p>範圍 ：從  到 </p>
+				 * <h2>群組 ：</h2>
+				 * 	1.
+				 * 	2.
+				 * 	3.
+				 * <h2>備註 ：</h2>
+				 * 	
+				 * <h2>異動紀錄 ：</h2>
+				 * 2024年4月10日	Tim	建立邏輯
+				 * */
+				Pattern p = Pattern.compile("^.*?([\\w]+)\\s*$");
+				SplitCommaSafely.splitComma(sel,(col) ->{
 					Matcher m = p.matcher(col);
 					m.find();
+					lstCol.add(m.group(1));
+					if(m.group(1)==m.group(0)) {
+						lstAlias.add(m.group(1).toUpperCase());
+					}
 					m.group();
-					return m.group();
 				});
+				
+				
 				//取得group by欄位
 				String[] arrGroupBy = stm.groupBy.replaceAll("(?i)^\\s*GROUP\\s+BY\\s*|\\s+","").toUpperCase().split(",");
+				
+				
 				//先處理數字的group by
 				for (int i = 0; i < arrGroupBy.length; i++) {
+					//數字改為欄位名稱
 					if(arrGroupBy[i].matches("\\d+")){
 						arrGroupBy[i] = lstAlias.get(Integer.parseInt(arrGroupBy[i]));
 					}
+					
 				}
-				//處理Alias name
-				/* 邏輯：
-				 * 1.
-				 * 
-				 * */
+				//比對
+				boolean flag = false;//是否需要轉換
+				//group by 中是否有 Alias name
+				for (String g : arrGroupBy) {
+					if(lstAlias.contains(g.trim().toUpperCase())) {
+						flag = true;
+					}
+				}
 			} catch (UnknowSQLTypeException e) {
 				e.printStackTrace();
 			}
-			
 			return t;
 		});
-		
+		Log.debug("結束 AliasName");
 		return res;
 	}
 }

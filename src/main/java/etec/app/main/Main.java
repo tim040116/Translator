@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 import etec.common.annotation.Application;
+import etec.common.exception.TransduceException;
 import etec.common.utils.ClassTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
@@ -14,9 +15,10 @@ import etec.view.application.FastTransduceApplication;
 import etec.view.application.OldApplication;
 import etec.view.application.SearchDDLApplication;
 import etec.view.application.SearchFunctionApplication;
-import etec.view.application.TestGreenPlumFileApplication;
+import etec.view.application.GreenPlumFileApplication;
 import etec.view.application.TranslateStoreFunctionApplication;
 import etec.view.application.UIApplication;
+import test.gp.translater.TestGPTranslater;
 
 public class Main {
 	public static void main(String[] args) {
@@ -48,7 +50,14 @@ public class Main {
 			FastTransduceApplication.run();
 			break;
 		case "GP_TEST":// 4.0 Green Plum 測試
-			TestGreenPlumFileApplication.run();
+			try {
+				TestGPTranslater.run();
+			} catch (TransduceException e) {
+				e.printStackTrace();
+			}
+			break;
+		case "GP":// 4.1.0.0 Green Plum 轉換
+			GreenPlumFileApplication.run();
 			break;
 		default:
 			break;

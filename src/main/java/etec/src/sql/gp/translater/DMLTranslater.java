@@ -24,7 +24,7 @@ public class DMLTranslater {
 			.replaceAll("(?i)(DELETE\\s+FROM\\s+[^,;]+?)\\s+,", "$1\r\n USING ")//Locking
 			;
 		return res;
-	}
+	}	
 	/**
 	 * @author	Tim
 	 * @throws UnknowSQLTypeException 

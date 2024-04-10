@@ -2,6 +2,7 @@ package etec.src.sql.gp.translater;
 
 import etec.common.exception.sql.SQLFormatException;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
+import etec.common.utils.log.Log;
 import etec.src.sql.gp.translater.service.DataTypeService;
 import etec.src.sql.gp.translater.service.UnpivotService;
 
@@ -54,6 +55,7 @@ public class SQLTranslater {
 	 * @see	UnpivotService
 	 * */
 	public String easyReplase(String script) throws SQLFormatException {
+		Log.debug("正規化");
 		//語法正規化
 		String res = script
 				.replaceAll("(?i)\\bMINUS\\b", "EXCEPT")//MINUS
@@ -67,6 +69,7 @@ public class SQLTranslater {
 //				.replaceAll("(?i)(\\(\\s*FORMAT\\s+'[^']+'\\s*\\))\\s*\\((VAR)?CHAR\\s*\\(\\s*\\d+\\s*\\)\\s*\\)", "$1")//FORMAT DATE 語法正規化
 //				.replaceAll("(?<!')0\\d+(?!'|\\d)", "'$0'")//0字頭的數字要包在字串裡
 				;
+		Log.debug("第一階段轉換");
 		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
 		res = cff.savelyConvert(res, (String t)->{
 			t = t
@@ -78,14 +81,21 @@ public class SQLTranslater {
 			;
 			return t;
 		});
+		Log.debug("第二階段轉換");
 		res = cff.savelyConvert(res, (String t)->{
+			Log.debug("\t轉換日期 1");
 			t = DataTypeService.changeAddMonths(t);
+			Log.debug("\t轉換日期 2");
 			t = DataTypeService.changeLastDay(t);
+			Log.debug("\t轉換日期 3");
 			t = DataTypeService.changeDateFormat(t);
+			Log.debug("\t轉換日期 4");
 			t = DataTypeService.changeTypeConversion(t);
+			Log.debug("\t轉換日期 5");
 			t = DataTypeService.changeFormatNumber(t);
 			return t;
 		});
+		Log.debug("第三階段轉換");
 		//須隔離處裡的項目
 		res = cff.savelyConvert(res, (String t)->{
 			t = t
@@ -94,6 +104,7 @@ public class SQLTranslater {
 			;
 			return t;
 		});
+		Log.debug("第四階段轉換");
 		res = DataTypeService.changeCurrentDate(res);
 		UnpivotService us = new UnpivotService();
 		res = us.changeTD_UNPIVOT(res);

@@ -7,7 +7,7 @@ import etec.common.enums.RunStatusEnum;
 import etec.common.interfaces.Controller;
 import etec.common.utils.FileTool;
 import etec.common.utils.param.Params;
-import etec.src.file.gp_test.service.TestGreenPlumFileService;
+import etec.src.file.gp_test.service.GreenPlumFileService;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.az.service.CreateListService;
 import etec.src.sql.az.service.IOpathSettingService;
@@ -27,9 +27,9 @@ import etec.view.panel.SearchFunctionPnl;
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
- * @see		TestGreenPlumFileService
+ * @see		GreenPlumFileService
  */
-public class TestGreenPlumFileController implements Controller {
+public class GreenPlumFileController implements Controller {
 
 	public void run() throws Exception {
 
@@ -49,7 +49,7 @@ public class TestGreenPlumFileController implements Controller {
 			// 讀檔案
 			SearchFunctionPnl.tsLog.setLog("資訊", "讀取檔案：" + f.getPath());
 			// 置換
-			TestGreenPlumFileService.run(f);
+			GreenPlumFileService.run(f);
 			// 寫檔案
 			SearchFunctionPnl.tsLog.setLog("資訊", "產製檔案：" + BasicParams.getTargetFileNm(f.getPath()));
 			SearchFunctionPnl.progressBar.plusOne();
