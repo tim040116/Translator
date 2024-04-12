@@ -7,8 +7,8 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.utils.FileTool;
 import etec.common.utils.Mark;
+import etec.common.utils.file.FileTool;
 import etec.src.sql.td.model.TableColumnModel;
 
 /**

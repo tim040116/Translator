@@ -7,7 +7,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import etec.common.utils.FileTool;
+import etec.common.utils.file.FileTool;
 
 /**
  * 讀取靜態資源

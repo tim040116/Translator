@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.swing.DefaultListModel;
 
-import etec.common.utils.FileTool;
+import etec.common.utils.file.FileTool;
 import etec.src.file.model.BasicParams;
 
 public class FileListSelectService {

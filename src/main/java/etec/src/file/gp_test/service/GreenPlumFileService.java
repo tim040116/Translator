@@ -8,9 +8,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import etec.common.exception.sql.SQLTransduceException;
-import etec.common.utils.FileTool;
 import etec.common.utils.Mark;
 import etec.common.utils.convert_safely.ConvertRemarkSafely;
+import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 import etec.src.file.model.BasicParams;

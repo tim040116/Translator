@@ -1,4 +1,4 @@
-package etec.common.utils;
+package etec.common.utils.file;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;

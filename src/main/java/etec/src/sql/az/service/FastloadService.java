@@ -2,7 +2,7 @@ package etec.src.sql.az.service;
 
 import java.io.IOException;
 
-import etec.common.utils.FileTool;
+import etec.common.utils.file.FileTool;
 import etec.src.file.model.BasicParams;
 
 public class FastloadService {

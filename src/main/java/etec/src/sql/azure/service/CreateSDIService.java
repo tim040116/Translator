@@ -7,7 +7,7 @@ import java.util.List;
 import etec.common.model.sql.CreateIndexModel;
 import etec.common.model.sql.CreateTableModel;
 import etec.common.model.sql.TableColumnModel;
-import etec.common.utils.FileTool;
+import etec.common.utils.file.FileTool;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.azure.wrapper.TeradataSqlModelWrapper;
 

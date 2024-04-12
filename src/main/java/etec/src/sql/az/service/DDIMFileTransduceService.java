@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import etec.common.enums.FileTypeEnum;
-import etec.common.utils.FileTool;
 import etec.common.utils.RegexTool;
+import etec.common.utils.file.FileTool;
 import etec.src.sql.az.translater.OtherTranslater;
 
 public class DDIMFileTransduceService {

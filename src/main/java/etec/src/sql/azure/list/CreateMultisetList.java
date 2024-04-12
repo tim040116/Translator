@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import etec.common.model.sql.CreateIndexModel;
 import etec.common.model.sql.CreateTableModel;
-import etec.common.utils.FileTool;
+import etec.common.utils.file.FileTool;
 import etec.common.model.sql.CreateTableModel;
 
 import etec.src.file.model.BasicParams;

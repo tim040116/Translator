@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import etec.common.exception.sql.SQLFormatException;
-import etec.common.utils.FileTool;
 import etec.common.utils.RegexTool;
+import etec.common.utils.file.FileTool;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.az.translater.DDLTranslater;
 import etec.src.sql.az.translater.DMLTranslater;
