@@ -59,6 +59,7 @@ public class DQLTranslater {
 			}
 			return t;
 		});
+		res = changeAliasName(res);
 		return res;
 	}
 	
@@ -193,12 +194,14 @@ public class DQLTranslater {
 	 * @return	String	轉換後的SQL
 	 * @throws UnknowSQLTypeException 
 			 */
+	static int aliasId = 1;
 	public String changeAliasName(String script) throws UnknowSQLTypeException {
 		String res = "";
+		aliasId = 1;
 		Log.debug("開始 AliasName");
 		//排除子查詢
 		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
-		res = csqs.savelyConvert(res, (t)->{
+		res = csqs.savelyConvert(script, (t)->{
 			try {
 				//解析查詢語句
 				SelectTableModel stm = new SelectTableModel(t);
@@ -221,21 +224,24 @@ public class DQLTranslater {
 				 * <h2>異動紀錄 ：</h2>
 				 * 2024年4月10日	Tim	建立邏輯
 				 * */
+				
 				Pattern p = Pattern.compile("^.*?([\\w]+)\\s*$");
 				SplitCommaSafely.splitComma(sel,(col) ->{
 					Matcher m = p.matcher(col);
-					m.find();
-					lstCol.add(m.group(1));
-					if(m.group(1)==m.group(0)) {
-						lstAlias.add(m.group(1).toUpperCase());
+					if(m.find()) {
+						lstCol.add(m.group(1));
+						if(!m.group(0).matches("(?i)(?:\\w+\\.)?\\Q"+m.group(1)+"\\E")) {
+							lstAlias.add(m.group(1).toUpperCase());
+						}
 					}
-					m.group();
 				});
 				
+				if(lstAlias.isEmpty()) {
+					return t;
+				}
 				
 				//取得group by欄位
 				String[] arrGroupBy = stm.groupBy.replaceAll("(?i)^\\s*GROUP\\s+BY\\s*|\\s+","").toUpperCase().split(",");
-				
 				
 				//先處理數字的group by
 				for (int i = 0; i < arrGroupBy.length; i++) {
@@ -253,6 +259,27 @@ public class DQLTranslater {
 						flag = true;
 					}
 				}
+				//where 中是否有 Alias name
+				String regAls = "(?is).*\\b(?:"+String.join("|", lstAlias)+").*";
+				if(stm.where.matches(regAls)) {
+					flag = true;
+				}
+				//沒有Alias 
+				if(!flag) {
+					return t;
+				}
+				//組合Alias語法
+				String aliasTblNm = "tmp_als_" + aliasId;
+				String[] arrTmp = stm.toString().split("(?i)\\bWHERE\\b");
+				t = "SELECT * FROM ( \r\n\t"
+						+ arrTmp[0]
+						+ " ) " +aliasTblNm + " \r\n"
+						+ "WHERE \r\n"
+						+ arrTmp[1].replaceAll("\\b\\w+\\.(\\w+)\\b", aliasTblNm+".$1")
+						;
+				;
+				aliasId++;
+				
 			} catch (UnknowSQLTypeException e) {
 				e.printStackTrace();
 			}
