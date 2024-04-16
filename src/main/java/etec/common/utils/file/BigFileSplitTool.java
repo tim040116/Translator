@@ -4,103 +4,69 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.Base64;
+
+import etec.common.utils.log.Log;
 
 public class BigFileSplitTool {
 
-	private static String tmpFilePath = "C:\\Assignment_Temp\\Temp_Data\\";
-	
-	private static String targetFilePath = "C:\\Assignment_Temp\\Target_Data\\";
-	
-	private static String strQ = "D12E";
-	
-	private static String strE = "QExA";
-	
-	public static void splitFile(String rootPath) {
+	public static void splitFile(File f, Charset chs) {
+		// 讀
 		try {
-			for (File f : FileTool.getFileList(rootPath)) {
-				// 名
-				String content = "";
-				String fileName = f.getPath().replace(rootPath, "");
-				fileName = tmpFilePath + fileName.replaceAll(".", strQ+"$0"+strE);
-				// 讀
-				try (FileInputStream fis = new FileInputStream(f);
-						InputStreamReader isr = new InputStreamReader(fis);
-						BufferedReader br = new BufferedReader(isr);) {
-					StringBuffer sb;
-					sb = new StringBuffer();
-					while (br.ready()) {
-						String line = br.readLine();
-						sb.append(line + "\r\n");
-					}
-					content.hashCode();
-					content = sb.toString();
+			String content = "";
+			try (
+					FileInputStream fis = new FileInputStream(f);
+					InputStreamReader isr = new InputStreamReader(fis, chs);
+					BufferedReader br = new BufferedReader(isr);
+				) {
+				StringBuffer sb;
+				sb = new StringBuffer();
+				while (br.ready()) {
+					String line = br.readLine();
+					sb.append(line + "\r\n");
 				}
-				// 編
-				Base64.Encoder encoder = Base64.getEncoder();
-				content = encoder.encodeToString(content.getBytes("UTF-8"));
-				// 寫
-				File newFile = new File(fileName);
+				content.hashCode();
+				content = sb.toString();
+			}
+
+			// 寫
+			String filePath = "";
+			try (
+					FileOutputStream writerStream = new FileOutputStream(filePath);
+					BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(writerStream));
+				) {
+				File newFile = new File(filePath);
 				newFile.getParentFile().mkdirs();
 				if (!newFile.exists()) {
 					newFile.createNewFile();
 				}
-				try (FileOutputStream writerStream = new FileOutputStream(fileName);
-						BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(writerStream));) {
-					
-					newFile.getParentFile().mkdirs();
-					newFile.createNewFile();
-					bw.write(content);
-				}
+				newFile.getParentFile().mkdirs();
+				newFile.createNewFile();
+				bw.write(content);
+				bw.close();
 			}
+
+			// 編
+			final Base64.Decoder decoder = Base64.getDecoder();
+			final Base64.Encoder encoder = Base64.getEncoder();
+			final String text = "字串文字";
+			final byte[] textByte = text.getBytes("UTF-8");
+			// 編碼
+			final String encodedText = encoder.encodeToString(textByte);
+			System.out.println(encodedText);
+			// 解碼
+			System.out.println(new String(decoder.decode(encodedText), "UTF-8"));
 		} catch (Exception e) {
-			e.printStackTrace();
+
 		}
 
 	}
 
-	public static void dec(String rootPath) {
-		try {
-
-			for (File f : FileTool.getFileList(tmpFilePath)) {
-				String content = "";
-				// 名
-				String fileName = f.getPath().replace(rootPath, "");
-				fileName = targetFilePath + fileName.replaceAll(strQ+"(.)"+strE, "$1");
-				// 讀
-				try (FileInputStream fis = new FileInputStream(f);
-						InputStreamReader isr = new InputStreamReader(fis);
-						BufferedReader br = new BufferedReader(isr);) {
-					StringBuffer sb;
-					sb = new StringBuffer();
-					while (br.ready()) {
-						String line = br.readLine();
-						sb.append(line + "\r\n");
-					}
-					content.hashCode();
-					content = sb.toString();
-				}
-				// 編
-				Base64.Decoder decoder = Base64.getDecoder();
-				content = new String(decoder.decode(content));
-				// 寫
-				try (FileOutputStream writerStream = new FileOutputStream(fileName);
-						BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(writerStream));) {
-					File newFile = new File(fileName);
-					newFile.getParentFile().mkdirs();
-					if (!newFile.exists()) {
-						newFile.createNewFile();
-					}
-					newFile.getParentFile().mkdirs();
-					newFile.createNewFile();
-					bw.write(content);
-				}
-			}
-		} catch (Exception e) {
-
-		}
-	}
 }
