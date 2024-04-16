@@ -14,6 +14,7 @@ import etec.common.enums.RunStatusEnum;
 import etec.common.interfaces.Controller;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
+import etec.common.utils.file.BigFileSplitTool;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
@@ -35,7 +36,7 @@ public class AssessmentController implements Controller{
 		 SearchDDLToSDIController.run(); 
 		 SearchFunctionController.run(); 
 		 */
-		   
+		  
 		// 儲存參數
 		SearchFunctionPnl.tsLog.clearLog();
 		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.WORKING);
@@ -52,7 +53,7 @@ public class AssessmentController implements Controller{
 		lf = FileTool.getFileList(BasicParams.getInputPath());
 		BasicParams.setListFile(lf);
 		SearchFunctionPnl.tsLog.setLog("資訊", "取得檔案清單");
-		
+		BigFileSplitTool.splitFile(BasicParams.getInputPath());
 		// log 讀取檔案
 		SearchFunctionPnl.tsLog.setLog("資訊", "開始讀取檔案");
 		SearchFunctionPnl.progressBar.reset();
