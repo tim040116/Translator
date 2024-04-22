@@ -19,18 +19,9 @@ import etec.src.sql.gp.translater.GreemPlumTranslater;
 /**
  * <h1>測試GP功能</h1>
  * <p>
- * 單純的測試SQL語法
- * </p>
- * <p>
- * 沒有前後格式，單純用分號區隔
- * </p>
- * <p>
- * 雙斜線為註解，會先清除再進行轉換
- * </p>
- * <p>
- * </p>
- * <p>
- * </p>
+ * <br>單純的測試SQL語法
+ * <br>沒有前後格式，單純用分號區隔
+ * <br>雙斜線為註解，會先清除再進行轉換
  * 
  * </p>
  * <h2>屬性</h2>
@@ -42,7 +33,7 @@ import etec.src.sql.gp.translater.GreemPlumTranslater;
  * </p>
  * 
  * <h2>異動紀錄</h2> <br>
- * 2024年3月1日 Tim 建立功能
+ * <br>2024年3月1日 Tim 建立功能
  * 
  * @author Tim
  * @version 4.0.0.0
@@ -54,18 +45,18 @@ public class GreenPlumFileService {
 	/**
 	 * <h1>執行入口</h1>
 	 * <p>
-	 * 單純的測試SQL語法 <br>
-	 * 沒有前後格式，單純用分號區隔 <br>
-	 * 雙斜線為註解，會先清除再進行轉換
+	 * <br>單純的測試SQL語法
+	 * <br>沒有前後格式，單純用分號區隔
+	 * <br>雙斜線為註解，會先清除再進行轉換
 	 * </p>
 	 * 
-	 * <h2>異動紀錄</h2> <br>
-	 * 2024年3月1日 Tim 建立功能
-	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年03月01日	Tim	建立功能
+	 * <br>2024年04月22日	Tim	修正副檔名有兩個的錯誤
 	 * @author Tim
 	 * @since 4.0.0.0
 	 * @param context 檔案的內容
-	 * @throws @see
+	 * @see
 	 * @return
 	 * @throws IOException
 	 */
