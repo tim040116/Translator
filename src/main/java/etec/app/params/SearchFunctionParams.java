@@ -11,6 +11,8 @@ public class SearchFunctionParams {
 	
 	public final String[] OVER_LIST;
 	
+	public final String DATA_TYPE_LIST;
+	
 	public final boolean  IS_TITLE = false;
 	
 	public final String FILE_LIST_NAME = "list\\file_list.csv";//列出所有檔案
@@ -27,5 +29,6 @@ public class SearchFunctionParams {
 		Map<String, String> map = ParamsTool.readParam("=",f);
 		SKIP_LIST = map.get("SKIP_LIST").toUpperCase().split(",");
 		OVER_LIST = map.get("OVER_LIST").toUpperCase().split(",");
+		DATA_TYPE_LIST = map.get("DATA_TYPE_LIST").toUpperCase().replaceAll(",", "|");
 	}
 }

@@ -53,7 +53,9 @@ public class AssessmentController implements Controller{
 		lf = FileTool.getFileList(BasicParams.getInputPath());
 		BasicParams.setListFile(lf);
 		SearchFunctionPnl.tsLog.setLog("資訊", "取得檔案清單");
-		BigFileSplitTool.splitFile(BasicParams.getInputPath());
+		if(Params.config.BIG_FILE_SPLIT) {
+			BigFileSplitTool.splitFile(BasicParams.getInputPath());
+		}
 		// log 讀取檔案
 		SearchFunctionPnl.tsLog.setLog("資訊", "開始讀取檔案");
 		SearchFunctionPnl.progressBar.reset();
@@ -200,9 +202,25 @@ public class AssessmentController implements Controller{
 				+ "\"");
 	}
 	
-	/* Generate functionList */
+	/**
+	 * <h1></h1>
+	 * <p></p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年4月17日	Tim	增加排除資料型態強制轉換的功能
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	f	來源檔
+	 * @param	content	內容
+	 * @param	category	資料夾
+	 * @throws	Exception
+	 * @see		
+	 * @return	void
+	 */
 	public void SearchFunctionList(File f,String content,String category) throws Exception {
-		SearchFunctionPnl.tsLog.setLog("資訊","SearchFunctionList" );
+		SearchFunctionPnl.tsLog.setLog("資訊","SearchFunctionList");
 		content = SearchFunctionService.getSqlContent(content);
 		List<String> lstSql = RegexTool.getRegexTarget("[^;]*SELECT[^;]*", content);
 		
@@ -216,6 +234,17 @@ public class AssessmentController implements Controller{
 		}
 
 		for(String sql : lstSql) {
+			/**
+			 * 2024年4月17日	Tim	增加排除資料型態強制轉換的功能
+			 * 2024年4月22日 Tim 增加只查詢SELECT語法的功能
+			 * 2024年4月22日 Tim 排除FORMAT語法
+			 * */
+			sql = "SELECT"+sql.split("(?i)\\bSELECT\\b", 2)[1];
+			String reg = "(?i)\\(\\s*(?:"+Params.searchFunction.DATA_TYPE_LIST+")";
+			sql = sql
+					.replaceAll("(?i)\\(\\s*FORMAT\\b", "")
+					.replaceAll("(?i)\\(\\s*("+Params.searchFunction.DATA_TYPE_LIST+")\\s*\\(?", "")
+					;
 			List<String> lfc = RegexTool.getRegexTarget("(?i)(QUALIFY +|AS +)?[A-Z0-9_\\$\\{\\}\\.]+\\s*\\(", sql);
 			for(String func : lfc) {
 				if(func==null) {
