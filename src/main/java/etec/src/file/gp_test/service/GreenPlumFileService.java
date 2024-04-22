@@ -72,7 +72,7 @@ public class GreenPlumFileService {
 	public static void run(File f) throws IOException {
 
 		String context = FileTool.readFile(f);
-		String newFileName = BasicParams.getTargetFileNm(f.getPath()) + f.getName();
+		String newFileName = BasicParams.getTargetFileNm(f.getPath());
 		Log.debug("清理資料");
 		String newContext = ConvertRemarkSafely.savelyConvert(context, (t) -> {
 			StringBuffer sb = new StringBuffer();

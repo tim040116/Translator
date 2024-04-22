@@ -36,10 +36,10 @@ public class DMLTranslater {
 	 * */
 	public String changeInsertSelect(String sql) throws SQLTransduceException {
 		String res = "";
-		String insert = sql.replaceAll("(?i)(\\s*INSERT\\s+INTO\\s+\\S+\\s+)[\\S\\s]+", "$1");
-		String select = sql.replaceAll("(?i)\\s*INSERT\\s+INTO\\s+\\S+\\s+", "");
+		String[] arr = sql.split("(?i)\\bSELECT\\b", 1);
+		String insert = arr[0];
+		String select = "SELECT"+arr[1];
 		select = GreemPlumTranslater.dql.easyReplace(select);
-		
 		res = insert+select;
 		return res;
 	}
