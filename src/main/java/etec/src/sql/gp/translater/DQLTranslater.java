@@ -64,13 +64,20 @@ public class DQLTranslater {
 	
 	
 	/**
-	 * @author	Tim
-	 * @throws UnknowSQLTypeException 
-	 * @since	2023年12月19日
-	 * 
 	 * <h1>QUALIFY ROW_NUMBER()語法轉換</h1>
+	 * <p></p>
+	 * <p></p>
 	 * 
-	 * */
+	 * <h2>異動紀錄</h2>
+	 * <br>2023年12月19日	Tim	建立功能
+	 * <br>2024年04月22日	Tim	修復 alias name 因為 cast as date 而出現錯位的問題
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	sql
+	 * @throws	UnknowSQLTypeException
+	 * @see		
+	 * @return	return_type
+	 */
 	public String changeQualifaRank(String sql) throws UnknowSQLTypeException {
 		if(!RegexTool.contains("(?i)QUALIFY\\s+ROW_NUMBER",sql)) {
 			return sql;
@@ -152,13 +159,14 @@ public class DQLTranslater {
 		 * 		1.加上where row_number = 1
 		 * 
 		 * 2023/12/26 Tim 跟Jason討論過，可以將邏輯放在子查詢
+		 * 2024/04/22 Tim 修復alias name 因為 cast as date 而出現錯位的問題
 		 * */
 		//select只留Alias name
 		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
 		String newSelect = select.replaceAll("(?i)(SELECT(\\s+DISTINCT)?\\s+)[\\S\\s]+", "$1")+
 			cfs.savelyConvert(select.replaceAll("(?i)SELECT(\\s+DISTINCT)?\\s+", ""), (t) ->{
 				return t
-					.replaceAll("(?i)[^,]+\\s+AS\\s+([^\\s,]+)", "$1")//只保留Alias name
+					.replaceAll("(?i)[^,]+\\s+AS\\s+([\\w]+)\\s*,?\\s*$", "$1")//只保留Alias name
 					.replaceAll("\\S+\\.(\\S+)","tmp_qrn.$1")// 清除Table Alias name
 				;
 			});
