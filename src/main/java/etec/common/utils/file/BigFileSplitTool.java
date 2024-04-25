@@ -3,7 +3,10 @@ package etec.common.utils.file;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.util.List;
 
 public class BigFileSplitTool {
 
@@ -11,18 +14,21 @@ public class BigFileSplitTool {
 
 	private static String targetFilePath = "C:\\Assignment_Temp\\Target_Data\\";
 
-	private static String strQ = "D12E";
+	private static String strQ = "DD";
 
-	private static String strE = "QExA";
+	private static String strE = "QQ";
 
 	public static void splitFile(String rootPath) {
 		// 讀
 		try {
-			for (File f : FileTool.getFileList(rootPath)) {
+			List<File> lf = FileTool.getFileList(rootPath);
+			for (File f : lf) {
 				// 名
-				String content = "";
+				System.out.println(f.getPath());
 				String fileName = f.getPath().replace(rootPath, "");
-				fileName = tmpFilePath + fileName.replaceAll(".", strQ + "$0" + strE);
+//				fileName = tmpFilePath + fileName.replaceAll(".", strQ + "$0" + strE);
+				fileName = tmpFilePath + fileName.replaceAll("(?<=.)", "@");
+				
 				File newFile = new File(fileName);
 				newFile.getParentFile().mkdirs();
 				if (newFile.exists()) {
@@ -30,11 +36,21 @@ public class BigFileSplitTool {
 				}
 				newFile.createNewFile();
 			    try (
-			    		FileChannel sourceChannel = new FileInputStream(f).getChannel();
-			    		FileChannel destChannel = new FileOutputStream(newFile).getChannel();
+			    		InputStream is = new FileInputStream(f);
+			    	    OutputStream os = new FileOutputStream(newFile);
+//			    		FileChannel sourceChannel = new FileInputStream(f).getChannel();
+//			    		FileChannel destChannel = new FileOutputStream(newFile).getChannel();
 		    		){
-			        destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-			    }
+//			        destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+			        byte[] buffer = new byte[1024];
+			        int length;
+			        while ((length = is.read(buffer)) > 0) {
+			            os.write(buffer, 0, length);
+			        }
+
+			    }catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
