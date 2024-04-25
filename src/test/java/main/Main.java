@@ -1,6 +1,9 @@
 package main;
 
-import etec.common.utils.excel.Excel;
+import java.io.File;
+
+import etec.common.utils.file.BigFileSplitTool;
+import etec.common.utils.file.CompressTool;
 import etec.src.sql.gp.translater.GreemPlumTranslater;
 /**
  * @author	Tim
@@ -10,17 +13,24 @@ import etec.src.sql.gp.translater.GreemPlumTranslater;
  * */
 public class Main {
 	
-	static String folder = "C:\\Users\\User\\Desktop\\familymart\\T1\\SQLAExport.txt";
+	static String folder = "C:\\Users\\User\\Desktop\\Trans\\Target";
 	
 	public static void main(String[] args) {
 		try {
-			GreemPlumTranslater.dql.changeAliasName("");
-			
-//			Excel et = Excel.readFromResource("SDI-Sample.xls");
-//			et.writeFile("C:\\Users\\User\\Desktop\\test\\SDI-Sample.xls");
+			BigFileSplitTool.splitFile(folder);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	public static String str() {
+		String str = "SELECT\r\n" + 
+				"         CARD_NO\r\n" + 
+				"        ,STORE_ID FAVOR_STORE_ID  --最喜歡消費的店\r\n" + 
+				"       FROM SCV_PMART.SCV_ALL_ITEM_TP11\r\n" + 
+				"       QUALIFY ROW_NUMBER() OVER (PARTITION BY CARD_NO\r\n" + 
+				"               ORDER BY STORE_TXN_CNT DESC\r\n" + 
+				"                       ,STORE_TXN_AMT DESC)=1";
+		return str;
+	}
 }
