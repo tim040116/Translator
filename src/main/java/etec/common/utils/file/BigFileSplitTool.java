@@ -7,11 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import org.apache.commons.io.FileUtils;
 
 public class BigFileSplitTool {
 
@@ -28,7 +27,7 @@ public class BigFileSplitTool {
 			CompressTool.compressFolderToZip("C:\\Assignment_Temp\\Temp_Data\\","sample","C:\\Assignment_Temp\\sample_"+sf.format(new Date())+".zip");
 			//清
 			File delf = new File("C:\\Assignment_Temp\\Temp_Data");
-			FileUtils.forceDelete(delf);
+			FileTool.deleteDirectory( Path.of("C:\\Assignment_Temp\\Temp_Data"));
 			delf.delete();
 			
 			System.out.println("Success");

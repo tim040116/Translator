@@ -11,10 +11,15 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 import etec.common.utils.log.Log;
 
@@ -174,6 +179,13 @@ public class FileTool {
 		}
 		return lf;
 	}
+	
+	 public static void deleteDirectory(Path directory) throws IOException {
+	        Files.walk(directory)
+	                .sorted(Comparator.reverseOrder())
+	                .map(Path::toFile)
+	                .forEach(File::delete);
+	    } 
 //	/**
 //	 * 判斷檔案的編碼
 //	 * 
