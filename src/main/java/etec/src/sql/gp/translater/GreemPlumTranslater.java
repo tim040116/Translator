@@ -92,7 +92,7 @@ public class GreemPlumTranslater {
 		}else if(Arrays.asList(arrDDL).contains(title)) {
 			res = ddl.easyReplace(script);
 		}else {
-//			res = sql.easyReplase(script);
+			res = script;
 		}
 		Log.debug("轉換完成");
 		return res;

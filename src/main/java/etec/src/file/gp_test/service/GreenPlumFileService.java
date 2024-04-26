@@ -69,9 +69,9 @@ public class GreenPlumFileService {
 			try {
 				Log.debug("開始捕獲語法");
 				// DDL
-				String reg = "(?:" + String.join("|", Stream
+				String reg = "\\b(?:" + String.join("|", Stream
 						.concat(Arrays.stream(GreemPlumTranslater.arrDDL), Arrays.stream(GreemPlumTranslater.arrDML))
-						.toArray(String[]::new)) + ")[^;]+?;";
+						.toArray(String[]::new)) + ")\\b[^;]+?;";
 				Pattern p = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
 				Matcher m = p.matcher(context);
 				while (m.find()) {
