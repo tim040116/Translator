@@ -209,7 +209,7 @@ public class AssessmentController implements Controller{
 	 * 
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年4月17日	Tim	增加排除資料型態強制轉換的功能
-	 * 
+	 * <br>2024年4月26日	Tim	增加欄位function的前後文
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	f	來源檔
@@ -240,13 +240,34 @@ public class AssessmentController implements Controller{
 			 * 2024年4月22日 Tim 排除FORMAT語法
 			 * */
 			sql = "SELECT"+sql.split("(?i)\\bSELECT\\b", 2)[1];
-			String reg = "(?i)\\(\\s*(?:"+Params.searchFunction.DATA_TYPE_LIST+")";
 			sql = sql
 					.replaceAll("(?i)\\(\\s*FORMAT\\b", "")
 					.replaceAll("(?i)\\(\\s*("+Params.searchFunction.DATA_TYPE_LIST+")\\s*\\(?", "")
 					;
-			List<String> lfc = RegexTool.getRegexTarget("(?i)(QUALIFY +|AS +)?[A-Z0-9_\\$\\{\\}\\.]+\\s*\\(", sql);
-			for(String func : lfc) {
+			/**
+			 * <p>功能 ：查function</p>
+			 * <p>類型 ：搜尋</p>
+			 * <p>修飾詞：i</p>
+			 * <p>範圍 ：從 function name 到 \n | ; | \) |下一個function name</p>
+			 * <h2>群組 ：</h2>
+			 * 	1.function name
+			 * <h2>敘述</h2>
+			 * <p>
+			 * <br>1.如果名稱前方為QUALIFY或AS倆的單詞，需一併包括進來
+			 * <br>2.$1為function name
+			 * <br>3.方便查詢該函式於檔案中的位置，加上函式內的參數，於$0
+			 * <br>4.函式內參數的補獲會於[\n;\)]停止
+			 * <br>5.若遇到下一個函式名會轉為下一個捕獲
+			 * </p>
+			 * <h2>異動紀錄 ：</h2>
+			 * 2024年4月17日	Tim	建立邏輯
+			 * 2024年4月26日	Tim	增加function後面的文字
+			 * */
+			String reg = "((?:QUALIFY +|AS +)?[\\w\\$\\{\\}\\.]+)\\s*\\([^;\\r\\n]*?(?=[\\w\\$\\{\\}\\.]+\\s*\\(|$|[;])";
+			Pattern p = Pattern.compile(reg,Pattern.CASE_INSENSITIVE);
+			Matcher m = p.matcher(content);
+			while (m.find()) {
+				String func = m.group(1);
 				if(func==null) {
 					continue;
 				}
@@ -288,6 +309,7 @@ public class AssessmentController implements Controller{
 						+"\",\"" + f.getName()
 						+"\",\"" + j
 						+"\",\"" + func
+						+"\",\"" + m.group(0)
 						+"\"");
 				//加到函式表
 				mapFunc.put(func,mapFunc.get(func)==null?1:mapFunc.get(func)+1);
