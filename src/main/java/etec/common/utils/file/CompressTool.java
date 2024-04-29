@@ -4,7 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.util.Enumeration;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -118,4 +123,56 @@ public class CompressTool {
 	        zipOutputStream.closeEntry();
 	    }
 	    
+
+    /**
+	 * <h1>解壓縮</h1>
+	 * <p></p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年4月29日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	enclosing_method_arguments
+	 * @throws	e
+	 * @see		
+	 * @return	return_type
+			 */
+	public static void unZipFiles(File zipFile, String descDir) throws IOException {
+	    File destFile = new File(descDir);
+	    if (!destFile.exists()) {
+	        destFile.mkdirs();
+	    }
+	    // 解决zip文件中有中文目录或者中文文件
+	    ZipFile zip = new ZipFile(zipFile);
+	    for (Enumeration entries = zip.entries(); entries.hasMoreElements(); ) {
+	        ZipEntry entry = (ZipEntry) entries.nextElement();
+	        InputStream in = zip.getInputStream(entry);
+	        String curEntryName = entry.getName();
+	        // 判断文件名路径是否存在文件夹
+	        int endIndex = curEntryName.lastIndexOf('/');
+	        // 替换
+	        String outPath = (descDir + curEntryName).replaceAll("\\*", "/");
+	        if (endIndex != -1) {
+	            File file = new File(outPath.substring(0, outPath.lastIndexOf("/")));
+	            if (!file.exists()) {
+	                file.mkdirs();
+	            }
+	        }
+	        // 判断文件全路径是否为文件夹,如果是上面已经上传,不需要解压
+	        File outFile = new File(outPath);
+	        if (outFile.isDirectory()) {
+	            continue;
+	        }
+	        OutputStream out = new FileOutputStream(outPath);
+	        byte[] buf1 = new byte[1024];
+	        int len;
+	        while ((len = in.read(buf1)) > 0) {
+	            out.write(buf1, 0, len);
+	        }
+	        in.close();
+	        out.close();
+	    }
+	}
 }

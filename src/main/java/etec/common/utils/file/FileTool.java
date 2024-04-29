@@ -5,49 +5,46 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
 
 import etec.common.utils.log.Log;
 
 public class FileTool {
-	
-    public static final String UTF8_BOM = "\uFEFF";
-	
-	//取得檔案清單
+
+	public static final String UTF8_BOM = "\uFEFF";
+
+	// 取得檔案清單
 	public static List<File> getFileList(String rootPath) throws IOException {
 		List<File> lf = new ArrayList<>();
 		// 取得標案的根目錄
 		File rp = new File(rootPath);
 		if (rp == null || !rp.isDirectory())
-			throw new IOException("系統搜尋不到文件的根目錄"+rootPath);
+			throw new IOException("系統搜尋不到文件的根目錄" + rootPath);
 		// 取得所有檔案資料
 		return getInsideFileList(lf, rp);
-	} 
-	//讀取檔案
+	}
+
+	// 讀取檔案
 	public static String readFile(File f) throws IOException {
-		//return readFile(f,detectCharset(f.getPath()));
-		
-		return readFile(f,Charset.defaultCharset());
+		// return readFile(f,detectCharset(f.getPath()));
+
+		return readFile(f, Charset.defaultCharset());
 	}
+
 	public static String readFile(String fileName) throws IOException {
-		//return readFile(f,detectCharset(f.getPath()));
-		return readFile(new File(fileName),Charset.defaultCharset());
+		// return readFile(f,detectCharset(f.getPath()));
+		return readFile(new File(fileName), Charset.defaultCharset());
 	}
-	public static String readFile(File f,Charset encoding) throws IOException {
+
+	public static String readFile(File f, Charset encoding) throws IOException {
 		Log.info("讀取檔案：" + f.getPath());
 		String content;
 		FileInputStream fis;
@@ -56,73 +53,78 @@ public class FileTool {
 		StringBuffer sb;
 //		encoding = Charset.forName("BIG5");
 		fis = new FileInputStream(f);
-		isr = new InputStreamReader(fis,encoding);
+		isr = new InputStreamReader(fis, encoding);
 		br = new BufferedReader(isr);
 		sb = new StringBuffer();
 		while (br.ready()) {
 			String line = br.readLine();
 			sb.append(line + "\r\n");
 		}
-		content = sb.toString().replace(UTF8_BOM,"");
+		content = sb.toString().replace(UTF8_BOM, "");
 		br.close();
 		isr.close();
 		fis.close();
 		return content;
 	}
-	//產檔案
-	public static boolean createFile(String filePath,String content) throws IOException {
+
+	// 產檔案
+	public static boolean createFile(String filePath, String content) throws IOException {
 		Log.info("產生檔案：" + filePath);
 		File newFile = new File(filePath);
 		newFile.getParentFile().mkdirs();
 		if (!newFile.exists()) {
 			newFile.createNewFile();
-        }
+		}
 		newFile.getParentFile().mkdirs();
 		newFile.createNewFile();
 //		FileWriter fw = new FileWriter(newFile);
 //		BufferedWriter bw = new BufferedWriter(fw);
-		FileOutputStream writerStream = new FileOutputStream(filePath);    
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(writerStream, "UTF-8")); 
+		FileOutputStream writerStream = new FileOutputStream(filePath);
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(writerStream, "UTF-8"));
 		bw.write(content);
 //		fw.flush();
 		bw.close();
 //		fw.close();
 		return true;
 	}
-	//產檔案
-	public static boolean createFile(String filePath,String content,Charset charset) throws IOException {
+
+	// 產檔案
+	public static boolean createFile(String filePath, String content, Charset charset) throws IOException {
 		Log.info("產生檔案：" + filePath);
 		File newFile = new File(filePath);
 		newFile.getParentFile().mkdirs();
 		newFile.createNewFile();
-		FileOutputStream writerStream = new FileOutputStream(filePath);    
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(writerStream,charset)); 
+		FileOutputStream writerStream = new FileOutputStream(filePath);
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(writerStream, charset));
 		bw.write(content);
 		bw.close();
 		return true;
 	}
-	//產檔案
-	public static boolean addFile(String file,String content) throws IOException {
+
+	// 產檔案
+	public static boolean addFile(String file, String content) throws IOException {
 		Log.info("新增資料到檔案：" + file);
-		return addFile(file,Charset.forName("UTF-8"),content);
+		return addFile(file, Charset.forName("UTF-8"), content);
 	}
-	//產檔案
-	public static boolean addFile(String file,Charset charset,String content) throws IOException {
+
+	// 產檔案
+	public static boolean addFile(String file, Charset charset, String content) throws IOException {
 		Log.info("新增資料到檔案：" + file);
 		File newFile = new File(file);
 		newFile.getParentFile().mkdirs();
 		if (!newFile.exists()) {
 			newFile.createNewFile();
-        }
-		try(BufferedWriter bw = Files.newBufferedWriter(Paths.get(file), charset,StandardOpenOption.APPEND)){
-			bw.write(content+"\r\n");
-		}catch (Exception e) {
+		}
+		try (BufferedWriter bw = Files.newBufferedWriter(Paths.get(file), charset, StandardOpenOption.APPEND)) {
+			bw.write(content + "\r\n");
+		} catch (Exception e) {
 			System.out.println(content);
 			e.printStackTrace();
 			System.out.println();
 		}
 		return true;
 	}
+
 	// 取得子目錄下的檔案
 	private static List<File> readInsideFileList(List<File> lf, File p) throws IOException {
 		// 取得所有檔案資料
@@ -151,6 +153,7 @@ public class FileTool {
 		}
 		return lf;
 	}
+
 	// 取得子目錄下的檔案
 	private static List<File> getInsideFileList(List<File> lf, File p) throws IOException {
 		// 取得所有檔案資料
@@ -179,13 +182,38 @@ public class FileTool {
 		}
 		return lf;
 	}
-	
-	 public static void deleteDirectory(Path directory) throws IOException {
-	        Files.walk(directory)
-	                .sorted(Comparator.reverseOrder())
-	                .map(Path::toFile)
-	                .forEach(File::delete);
-	    } 
+
+	/**
+	 * <h1>刪除檔案</h1>
+	 * <p></p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年4月29日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	
+	 * @throws	e
+	 * @see		
+	 * @return	void
+			 */
+	public static void deleteFile(File file) {
+		if(file.exists()) {//判斷路徑是否存在
+			if(file.isFile()){//boolean isFile():測試此抽象路徑名錶示的檔案是否是一個標準檔案。 
+				file.delete();
+			}else{//不是檔案，對於資料夾的操作
+				//儲存 路徑D:/1/新建資料夾2  下的所有的檔案和資料夾到listFiles陣列中
+				File[] listFiles = file.listFiles();//listFiles方法：返回file路徑下所有檔案和資料夾的絕對路徑
+				for (File file2 : listFiles) {
+					deleteFile(file2);
+				}
+			}
+			file.delete();
+		}else {
+			System.out.println("該file路徑不存在！！");
+		}
+	}
 //	/**
 //	 * 判斷檔案的編碼
 //	 * 

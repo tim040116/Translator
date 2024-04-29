@@ -1,6 +1,7 @@
 package main;
 
 import java.io.File;
+import java.util.Scanner;
 
 import etec.common.utils.file.BigFileSplitTool;
 import etec.common.utils.file.CompressTool;
@@ -17,7 +18,13 @@ public class Main {
 	
 	public static void main(String[] args) {
 		try {
-			BigFileSplitTool.splitFile(folder);
+//			BigFileSplitTool.splitFile(folder);
+			Scanner sc = new Scanner(System.in);
+			System.out.println("請輸入檔案路徑：");
+			String zipPath = sc.next();
+			BigFileSplitTool.concatFile(zipPath);
+			System.out.println("完成");
+			sc.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
