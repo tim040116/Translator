@@ -234,15 +234,19 @@ public class AssessmentController implements Controller{
 		}
 
 		for(String sql : lstSql) {
-			/**
+			/**初步排除
 			 * 2024年4月17日	Tim	增加排除資料型態強制轉換的功能
 			 * 2024年4月22日 Tim 增加只查詢SELECT語法的功能
 			 * 2024年4月22日 Tim 排除FORMAT語法
+			 * 2024年5月2日	Tim	排除Alias name的語法
+			 * 2024年5月2日	Tim	排除單引號裡的括號
 			 * */
 			sql = "SELECT"+sql.split("(?i)\\bSELECT\\b", 2)[1];
 			sql = sql
-					.replaceAll("(?i)\\(\\s*FORMAT\\b", "")
-					.replaceAll("(?i)\\(\\s*("+Params.searchFunction.DATA_TYPE_LIST+")\\s*\\(?", "")
+					.replaceAll("(?i)\\(\\s*FORMAT\\b", "")//FORMAT語法   ex: CURRENT_DATE(FORMAT 'YYYY-MM-DD')
+					.replaceAll("(?i)\\(\\s*("+Params.searchFunction.DATA_TYPE_LIST+")\\s*\\(?", "")//強制轉換 ex: CURRENT_DATE(VARCHAR(10))
+					.replaceAll("\\)\\s*\\w+\\s*\\(","")//Alias name ex: join (select aa,trim(bb) from tbl_nm) b (aa,bb_new)
+					.replaceAll("'[^']+'","")//單引號裡的括號 ex: ,'比例(金額)' as desc_title
 					;
 			/**
 			 * <p>功能 ：查function</p>
