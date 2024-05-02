@@ -3,7 +3,7 @@ package etec.src.controller;
 import etec.common.enums.RunStatusEnum;
 import etec.common.interfaces.Controller;
 import etec.src.sql.az.service.FastTransduceService;
-import etec.src.sql.gp.translater.GreemPlumTranslater;
+import etec.src.sql.gp.translater.GreenPlumTranslater;
 import etec.view.frame.FastTransduceFrame;
 
 /**
@@ -23,7 +23,7 @@ public class FastTransduceController implements Controller {
 		String result = "";
 		switch(sqlType) {
 			case "gp" :
-				result = GreemPlumTranslater.dql.easyReplace(script);
+				result = GreenPlumTranslater.dql.easyReplace(script);
 				break;
 			case "az" :
 			case "ms" :

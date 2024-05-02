@@ -13,7 +13,7 @@ import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 import etec.src.file.model.BasicParams;
-import etec.src.sql.gp.translater.GreemPlumTranslater;
+import etec.src.sql.gp.translater.GreenPlumTranslater;
 
 /**
  * <h1>測試GP功能</h1>
@@ -70,14 +70,14 @@ public class GreenPlumFileService {
 				Log.debug("開始捕獲語法");
 				// DDL
 				String reg = "\\b(?:" + String.join("|", Stream
-						.concat(Arrays.stream(GreemPlumTranslater.arrDDL), Arrays.stream(GreemPlumTranslater.arrDML))
+						.concat(Arrays.stream(GreenPlumTranslater.arrDDL), Arrays.stream(GreenPlumTranslater.arrDML))
 						.toArray(String[]::new)) + ")\\b[^;]+?;";
 				Pattern p = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
 				Matcher m = p.matcher(context);
 				while (m.find()) {
 					// 處理前後空白
 					String sql = m.group().trim();
-					sql = GreemPlumTranslater.translate(sql);
+					sql = GreenPlumTranslater.translate(sql);
 					m.appendReplacement(sb, Matcher.quoteReplacement(sql + "\r\n"));
 				}
 				m.appendTail(sb);

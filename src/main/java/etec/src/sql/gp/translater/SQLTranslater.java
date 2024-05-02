@@ -48,6 +48,9 @@ public class SQLTranslater {
 	 * <br> {@link UnpivotService#changeTD_UNPIVOT(String)}
 	 * <br>	{@link UnpivotService#changeUNPIVOT(String)}
 	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年5月2日	Tim	建立功能
+	 * <br>2024年5月2日	Tim	開通轉換日期 6 CURRENT_DATE
 	 * @author	Tim
 	 * @throws SQLFormatException 
 	 * @since	4.0.0.0
@@ -93,6 +96,8 @@ public class SQLTranslater {
 			t = DataTypeService.changeTypeConversion(t);
 			Log.debug("\t轉換日期 5");
 			t = DataTypeService.changeFormatNumber(t);
+			Log.debug("\t轉換日期 6");
+			t = DataTypeService.changeCurrentDate(t);
 			return t;
 		});
 		Log.debug("第三階段轉換");

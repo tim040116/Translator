@@ -1,6 +1,8 @@
 package etec.src.sql.gp.translater;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,7 +51,7 @@ public class DQLTranslater {
 	 * @return	String	轉換完成的SQL
 			 */
 	public String easyReplace(String script) throws UnknowSQLTypeException, SQLFormatException {		
-		String res = GreemPlumTranslater.sql.easyReplase(script);
+		String res = GreenPlumTranslater.sql.easyReplase(script);
 		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
 		res = csqs.savelyConvert(res, (t)->{
 			try {
@@ -70,7 +72,8 @@ public class DQLTranslater {
 	 * 
 	 * <h2>異動紀錄</h2>
 	 * <br>2023年12月19日	Tim	建立功能
-	 * <br>2024年04月22日	Tim	修復 alias name 因為 cast as date 而出現錯位的問題
+	 * <br>2024年4月22日		Tim	修復 alias name 因為 cast as date 而出現錯位的問題
+	 * <br>2024年5月2日		Tim	修復 alias name 不再以 AS 為標的
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	sql
@@ -160,17 +163,25 @@ public class DQLTranslater {
 		 * 
 		 * 2023/12/26 Tim 跟Jason討論過，可以將邏輯放在子查詢
 		 * 2024/04/22 Tim 修復alias name 因為 cast as date 而出現錯位的問題
+		 * 2024/05/02 Tim 保留Alias name邏輯修改
 		 * */
 		//select只留Alias name
 		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
-		String newSelect = select.replaceAll("(?i)(SELECT(\\s+DISTINCT)?\\s+)[\\S\\s]+", "$1")+
-			cfs.savelyConvert(select.replaceAll("(?i)SELECT(\\s+DISTINCT)?\\s+", ""), (t) ->{
-				return t
-					.replaceAll("(?i)[^,]+\\s+AS\\s+([\\w]+)\\s*,?\\s*$", "$1")//只保留Alias name
-					.replaceAll("\\S+\\.(\\S+)","tmp_qrn.$1")// 清除Table Alias name
-				;
-			});
-		String newFrom = "FROM ( "
+//		String newSelect = select.replaceAll("(?i)(SELECT(\\s+DISTINCT)?\\s+)[\\S\\s]+", "$1")+
+//			cfs.savelyConvert(select.replaceAll("(?i)SELECT(\\s+DISTINCT)?\\s+", ""), (t) ->{
+//				return t
+//					.replaceAll("(?i)[^,]+?([\\w.${}]+)\\s+(?=,|$)", "$1")//只保留Alias name
+//					.replaceAll("\\S+\\.(\\S+)","tmp_qrn.$1")// 清除Table Alias name
+//				;
+//			});
+		String newSelect =select.replaceAll("(?i)(SELECT(\\s+DISTINCT)?\\s+)[\\S\\s]+", "$1")
+				+String.join(",",SplitCommaSafely.splitComma(select.replaceAll("(?i)SELECT(\\s+DISTINCT)?\\s+", ""), (t) ->{
+					return t
+						.replaceAll("(?i)[^,]*?([\\w.${}]+)\\s*(?=,|$)", "$1")//只保留Alias name
+						.replaceAll("\\S+\\.(\\S+)","tmp_qrn.$1")// 清除Table Alias name
+					;
+				}));
+		String newFrom = "\r\nFROM ( "
 			+select.replaceAll("(?i)\\s+DISTINCT", "")
 			+"\t,"+rowNumber.replaceAll("(?i)QUALIFY\\s+", "").replaceAll("([\\S\\s]*\\))[^\\)]+$", "$1")+" AS ROW_NUMBER\r\n\t"
 			+from+where+" ) tmp_qrn \r\n where tmp_qrn.ROW_NUMBER "

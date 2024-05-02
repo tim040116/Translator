@@ -16,7 +16,7 @@ import etec.common.utils.log.Log;
  * @since	4.0.0.0
  * @version	4.0.0.0
  * */
-public class GreemPlumTranslater {
+public class GreenPlumTranslater {
 	/**
 	 * <h1>ddl : 資料定義語言轉換</h1>
 	 * <br>提供語法轉換：
@@ -60,6 +60,7 @@ public class GreemPlumTranslater {
 			,"TRUNCAT"
 			,"DROP"
 			,"RENAME"
+			,"REPLACE"
 	};
 	public static String[] arrOther = {
 			 "CALL",

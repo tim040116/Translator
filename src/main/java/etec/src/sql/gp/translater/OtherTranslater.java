@@ -45,7 +45,7 @@ public class OtherTranslater {
 	 * */
 	public String changeCollectStatistics(String sql) {
 		String res = sql
-			.replaceAll("(?i)COLLECT\\s+STATISTICS\\s+ON\\s+(\\S+)[^;]+;", "ANALYZE $1;")
+			.replaceAll("(?i)COLLECT\\s+STATISTICS\\s+ON\\s+(\\S+)[^;]*;", "ANALYZE $1;")
 			;
 		return res;
 	}

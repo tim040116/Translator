@@ -46,7 +46,7 @@ public class DMLTranslater {
 		String[] arr = sql.split("(?i)\\bSELECT\\b", 2);
 		String insert = arr[0];
 		String select = sql.replace(arr[0],"");
-		select = GreemPlumTranslater.dql.easyReplace(select);
+		select = GreenPlumTranslater.dql.easyReplace(select);
 		res = insert+select;
 		return res;
 	}

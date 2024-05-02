@@ -85,6 +85,7 @@ public class SplitCommaSafely {
 				temp += str;
 			}
 		}
+		lst.add(f.apply(temp.trim()));
 		return lst;
 	}
 	/**

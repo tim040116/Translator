@@ -1,11 +1,16 @@
 package etec.src.sql.gp.translater;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import etec.common.exception.sql.SQLFormatException;
+import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 import etec.common.utils.param.Params;
 
 public class DDLTranslater {
 	
-	public String easyReplace(String sql) {
+	public String easyReplace(String sql) throws UnknowSQLTypeException, SQLFormatException {
 		if(sql.matches("(?i)\\s*CREATE\\s+[\\S\\s]+")) {
 			sql = easyReplaceCreateTable(sql);
 		}
@@ -18,16 +23,48 @@ public class DDLTranslater {
 		return sql;
 	}
 	/**
-	 * 在GP中如果使用REPLACE VIEW，確定轉換前後的欄位有沒有變化
-	 * 否則推薦DROP後再CREATE
+	 * 
 	 * @author	Tim
+	 *
 	 * @since	4.0.0.0
 	 * */
-	public String changeReplaceView(String sql) {
-		String res = sql
-			.replaceAll("(?i)REPLACE\\s+VIEW\\s+(\\S+)\\s+AS", "DROP VIEW IF EXISTS $1;\r\nCREATE VIEW $1 AS")
-			;
-		return res;
+	/**
+	 * <h1>EPLACE VIEW</h1>
+	 * <p>在GP中如果使用REPLACE VIEW，確定轉換前後的欄位有沒有變化
+	 * <br>否則推薦DROP後再CREATE</p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年5月2日	Tim	建立功能
+	 * <br>2024年5月2日	增加處理後面的select語法
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	sql
+	 * @throws	SQLFormatException 
+	 * @throws	UnknowSQLTypeException 
+	 * @see		
+	 * @return	String
+			 */
+	public String changeReplaceView(String sql) throws UnknowSQLTypeException, SQLFormatException {
+		if(sql.matches("(?i)\\s*REPLACE\\s+VIEW[^;]*;?")) {
+			String res = "";
+			Pattern p = Pattern.compile("(?i)REPLACE\\s+VIEW\\s+(\\S+)\\s+AS\\s+([^;]+;?)");
+			Matcher m = p.matcher(sql);
+			while(m.find()) {
+				String select = m.group(2);
+				select = GreenPlumTranslater.other.easyReplace(select);
+				select = GreenPlumTranslater.dql.easyReplace(select);
+				res = "DROP VIEW IF EXISTS "+m.group(1)+";"
+						+ "\r\nCREATE VIEW "+m.group(1)+" AS \r\n"
+						+ select
+				;
+			}
+//			String res = sql
+//					.replaceAll("(?i)REPLACE\\s+VIEW\\s+(\\S+)\\s+AS", "DROP VIEW IF EXISTS $1;\r\nCREATE VIEW $1 AS")
+//					;
+			return res;
+		}
+		return sql;
 	}
 	/**
 	 * <h1>Create Table 的轉換</h1>

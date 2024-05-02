@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import etec.common.utils.file.BigFileSplitTool;
 import etec.common.utils.file.CompressTool;
-import etec.src.sql.gp.translater.GreemPlumTranslater;
+import etec.src.sql.gp.translater.GreenPlumTranslater;
 /**
  * @author	Tim
  * @since	2023年10月11日
