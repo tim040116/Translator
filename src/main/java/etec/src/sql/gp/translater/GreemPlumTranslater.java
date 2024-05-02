@@ -59,9 +59,12 @@ public class GreemPlumTranslater {
 			 "CREATE"
 			,"TRUNCAT"
 			,"DROP"
+			,"RENAME"
 	};
 	public static String[] arrOther = {
-			 "CALL"
+			 "CALL",
+			 "COLLECT",
+			 "LOCKING"
 	};
 	
 	/**
@@ -71,6 +74,7 @@ public class GreemPlumTranslater {
 	 * 
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年3月1日	Tim	建立功能
+	 * <br>2024年5月2日	Tim	增加Other類別
 	 * 
 	 * @author	Tim
 	 * @since	4.0.0.0
@@ -91,6 +95,8 @@ public class GreemPlumTranslater {
 			res = dml.easyReplace(script);
 		}else if(Arrays.asList(arrDDL).contains(title)) {
 			res = ddl.easyReplace(script);
+		}else if(Arrays.asList(arrOther).contains(title)) {
+			res = other.easyReplace(script);
 		}else {
 			res = script;
 		}

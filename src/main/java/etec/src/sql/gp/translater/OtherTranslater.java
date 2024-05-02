@@ -15,7 +15,7 @@ public class OtherTranslater {
 	 * @since	2023年12月20日
 	 * 
 	 * */
-	public String easyReplase(String script) {
+	public String easyReplace(String script) {
 		String res = script;
 		res = changeLockingTable(res);
 		res = changeCollectStatistics(res);
@@ -45,7 +45,7 @@ public class OtherTranslater {
 	 * */
 	public String changeCollectStatistics(String sql) {
 		String res = sql
-			.replaceAll("(?i)COLLECT\\s+STATISTICS\\s+ON\\s+(\\S+)\\s*;", "ANALYZE $1;")
+			.replaceAll("(?i)COLLECT\\s+STATISTICS\\s+ON\\s+(\\S+)[^;]+;", "ANALYZE $1;")
 			;
 		return res;
 	}

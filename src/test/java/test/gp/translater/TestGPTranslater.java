@@ -432,9 +432,7 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 				"SELECT A.*, '比例' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC A\r\n" + 
 				"UNION ALL\r\n" + 
 				"SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B";
-		String r31 = GreemPlumTranslater.sql.easyReplase(q31);
-		r31 = GreemPlumTranslater.other.easyReplase(r31);
-		r31 = GreemPlumTranslater.ddl.changeReplaceView(r31);
+		String r31 = GreemPlumTranslater.translate(q31);
 		System.out.println("CASE 31 : "+a31.equals(r31));
 		if(!a31.equals(r31))
 		System.out.println(r31);
@@ -443,7 +441,7 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 				"INDEX ( PLANT_LOC_ID,MFG_DT,MFG_SHIFT_ID,MFG_ORD_ID);";
 		String a32 = "ANALYZE ${BIMART_DB}.BI_ACTUAL_IMP_SUM_TW;\r\n" + 
 				"/*INDEX ( PLANT_LOC_ID,MFG_DT,MFG_SHIFT_ID,MFG_ORD_ID);*/";
-		String r32 = GreemPlumTranslater.other.easyReplase(q32);
+		String r32 = GreemPlumTranslater.other.easyReplace(q32);
 		System.out.println("CASE 32 : "+a32.equals(r32));
 		if(!a32.equals(r32))
 		System.out.println(r32);
