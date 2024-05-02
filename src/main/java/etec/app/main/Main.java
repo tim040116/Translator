@@ -18,6 +18,7 @@ import etec.view.application.SearchFunctionApplication;
 import etec.view.application.GreenPlumFileApplication;
 import etec.view.application.TranslateStoreFunctionApplication;
 import etec.view.application.UIApplication;
+import etec.view.application.UncompressApplication;
 import test.gp.translater.TestGPTranslater;
 
 public class Main {
@@ -58,6 +59,9 @@ public class Main {
 			break;
 		case "GP":// 4.1.0.0 Green Plum 轉換
 			GreenPlumFileApplication.run();
+			break;
+		case "UNCOMPRESS":
+			UncompressApplication.run();
 			break;
 		default:
 			break;
