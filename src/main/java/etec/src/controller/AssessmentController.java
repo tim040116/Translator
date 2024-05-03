@@ -222,7 +222,7 @@ public class AssessmentController implements Controller{
 	public void SearchFunctionList(File f,String content,String category) throws Exception {
 		SearchFunctionPnl.tsLog.setLog("資訊","SearchFunctionList");
 		content = SearchFunctionService.getSqlContent(content);
-		List<String> lstSql = RegexTool.getRegexTarget("[^;]*(?:SELECT|CALL)[^;]*", content);
+		List<String> lstSql = RegexTool.getRegexTarget("[^;]*(?:SELECT)[^;]*", content);
 		
 		//每一段sql
 		int j = 1;
@@ -264,8 +264,9 @@ public class AssessmentController implements Controller{
 			 * <br>5.若遇到下一個函式名會轉為下一個捕獲
 			 * </p>
 			 * <h2>異動紀錄 ：</h2>
-			 * 2024年4月17日	Tim	建立邏輯
-			 * 2024年4月26日	Tim	增加function後面的文字
+			 * <br>2024年4月17日	Tim	建立邏輯
+			 * <br>2024年4月26日	Tim	增加function後面的文字
+			 * <br>2024年5月3日	Tim	將查詢的字串由context改為sql
 			 * */
 			String reg = "((?:QUALIFY +|AS +)?[\\w\\$\\{\\}\\.]+)\\s*\\([^;\\r\\n]*?(?=[\\w\\$\\{\\}\\.]+\\s*\\(|$|[;])";
 			Pattern p = Pattern.compile(reg,Pattern.CASE_INSENSITIVE);
