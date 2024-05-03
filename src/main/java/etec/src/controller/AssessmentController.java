@@ -268,11 +268,12 @@ public class AssessmentController implements Controller{
 			 * <br>2024年4月26日	Tim	增加function後面的文字
 			 * <br>2024年5月3日	Tim	將查詢的字串由context改為sql
 			 * */
-			String reg = "((?:QUALIFY +|AS +)?[\\w\\$\\{\\}\\.]+)\\s*\\([^;\\r\\n]*?(?=[\\w\\$\\{\\}\\.]+\\s*\\(|$|[;])";
+			String reg = "(?mi)((?:QUALIFY +|AS +)?[\\w\\$\\{\\}\\.]+)\\s*\\([^;\\r\\n]*?(?=[\\w\\$\\{\\}\\.]+?\\s*\\(|$|[;])";
 			Pattern p = Pattern.compile(reg,Pattern.CASE_INSENSITIVE);
 			Matcher m = p.matcher(sql);
 			while (m.find()) {
 				String func = m.group(1);
+				System.out.println(func);
 				if(func==null) {
 					continue;
 				}
