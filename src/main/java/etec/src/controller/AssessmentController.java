@@ -222,7 +222,7 @@ public class AssessmentController implements Controller{
 	public void SearchFunctionList(File f,String content,String category) throws Exception {
 		SearchFunctionPnl.tsLog.setLog("資訊","SearchFunctionList");
 		content = SearchFunctionService.getSqlContent(content);
-		List<String> lstSql = RegexTool.getRegexTarget("[^;]*SELECT[^;]*", content);
+		List<String> lstSql = RegexTool.getRegexTarget("[^;]*(?:SELECT|CALL)[^;]*", content);
 		
 		//每一段sql
 		int j = 1;
@@ -244,9 +244,9 @@ public class AssessmentController implements Controller{
 			sql = "SELECT"+sql.split("(?i)\\bSELECT\\b", 2)[1];
 			sql = sql
 					.replaceAll("(?i)\\(\\s*FORMAT\\b", "")//FORMAT語法   ex: CURRENT_DATE(FORMAT 'YYYY-MM-DD')
-					.replaceAll("(?i)\\(\\s*("+Params.searchFunction.DATA_TYPE_LIST+")\\s*\\(?", "")//強制轉換 ex: CURRENT_DATE(VARCHAR(10))
+					.replaceAll("(?i)\\(\\s*("+Params.searchFunction.DATA_TYPE_LIST+")(?:\\s*\\([^)]+\\))?\\s*\\)", "")//強制轉換 ex: CURRENT_DATE(VARCHAR(10))
 					.replaceAll("(?i)\\)\\s*\\w+\\s*\\((?!\\s*SELECT\\b)[\\s\\w,]+\\)","")//Alias name ex: join (select aa,trim(bb) from tbl_nm) b (aa,bb_new)
-					.replaceAll("'[^']+'","")//單引號裡的括號 ex: ,'比例(金額)' as desc_title
+					.replaceAll("'[^']+'","''")//單引號裡的括號 ex: ,'比例(金額)' as desc_title
 					;
 			/**
 			 * <p>功能 ：查function</p>
@@ -269,7 +269,7 @@ public class AssessmentController implements Controller{
 			 * */
 			String reg = "((?:QUALIFY +|AS +)?[\\w\\$\\{\\}\\.]+)\\s*\\([^;\\r\\n]*?(?=[\\w\\$\\{\\}\\.]+\\s*\\(|$|[;])";
 			Pattern p = Pattern.compile(reg,Pattern.CASE_INSENSITIVE);
-			Matcher m = p.matcher(content);
+			Matcher m = p.matcher(sql);
 			while (m.find()) {
 				String func = m.group(1);
 				if(func==null) {
