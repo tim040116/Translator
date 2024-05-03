@@ -245,7 +245,7 @@ public class AssessmentController implements Controller{
 			sql = sql
 					.replaceAll("(?i)\\(\\s*FORMAT\\b", "")//FORMAT語法   ex: CURRENT_DATE(FORMAT 'YYYY-MM-DD')
 					.replaceAll("(?i)\\(\\s*("+Params.searchFunction.DATA_TYPE_LIST+")\\s*\\(?", "")//強制轉換 ex: CURRENT_DATE(VARCHAR(10))
-					.replaceAll("\\)\\s*\\w+\\s*\\(","")//Alias name ex: join (select aa,trim(bb) from tbl_nm) b (aa,bb_new)
+					.replaceAll("\\)\\s*\\w+\\s*\\((?!\\s*SELECT)[\\s\\w,]+\\)","")//Alias name ex: join (select aa,trim(bb) from tbl_nm) b (aa,bb_new)
 					.replaceAll("'[^']+'","")//單引號裡的括號 ex: ,'比例(金額)' as desc_title
 					;
 			/**
