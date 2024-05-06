@@ -1,21 +1,14 @@
 package etec.app.main;
 
-import java.lang.annotation.Annotation;
-import java.util.List;
-
-import etec.common.annotation.Application;
 import etec.common.exception.TransduceException;
-import etec.common.utils.ClassTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 import etec.src.file.ddim.controller.DDIMWriteFileController;
 import etec.view.application.AssessmentApplication;
 import etec.view.application.FamilyMartApplication;
 import etec.view.application.FastTransduceApplication;
-import etec.view.application.OldApplication;
-import etec.view.application.SearchDDLApplication;
-import etec.view.application.SearchFunctionApplication;
 import etec.view.application.GreenPlumFileApplication;
+import etec.view.application.OldApplication;
 import etec.view.application.TranslateStoreFunctionApplication;
 import etec.view.application.UIApplication;
 import etec.view.application.UncompressApplication;

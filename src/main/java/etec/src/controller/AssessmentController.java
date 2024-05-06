@@ -1,7 +1,6 @@
 package etec.src.controller;
 
 import java.io.File;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +13,7 @@ import etec.common.enums.RunStatusEnum;
 import etec.common.interfaces.Controller;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
+import etec.common.utils.charset.CharsetTool;
 import etec.common.utils.file.BigFileSplitTool;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
@@ -68,8 +68,8 @@ public class AssessmentController implements Controller{
 			SearchFunctionPnl.tsLog.setLog("資訊","讀取檔案：" + f.getPath());
 			
 			// 讀取檔案
-			String content = FileTool.readFile(f,Charset.forName("utf-8"));
-			
+			//String content = FileTool.readFile(f,Charset.forName("utf-8"));
+			String content = CharsetTool.readFileInCharset("UTF-8", f.getPath());
 			String category = "\\" + f.getPath()
 			.replace(BasicParams.getInputPath(), "")
 			.replace(f.getName(), "")

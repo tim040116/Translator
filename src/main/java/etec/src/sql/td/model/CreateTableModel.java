@@ -1,10 +1,5 @@
 package etec.src.sql.td.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import etec.common.enums.MultiSetEnum;
-
 /**
  * create table的語法模組
  * 

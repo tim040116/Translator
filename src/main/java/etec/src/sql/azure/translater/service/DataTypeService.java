@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.w3c.dom.stylesheets.LinkStyle;
-
 import etec.common.utils.Mark;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 

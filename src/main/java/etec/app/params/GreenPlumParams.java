@@ -22,8 +22,11 @@ public class GreenPlumParams {
 	 * */
 	public final boolean IS_CASCADE;
 	
+	public final String CHARSET;
+	
 	public GreenPlumParams(File f) {
 		Map<String, String> map = ParamsTool.readParam("=",f);
 		this.IS_CASCADE = map.get("IS_CASCADE").toUpperCase().equals("TRUE");
+		this.CHARSET = map.get("CHARSET").toUpperCase();
 	}
 }

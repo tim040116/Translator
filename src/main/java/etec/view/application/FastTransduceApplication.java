@@ -1,7 +1,5 @@
 package etec.view.application;
 
-import javax.swing.JRadioButton;
-
 import etec.common.annotation.Application;
 import etec.src.controller.FastTransduceController;
 import etec.view.frame.FastTransduceFrame;

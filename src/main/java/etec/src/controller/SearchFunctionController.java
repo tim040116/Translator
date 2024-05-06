@@ -2,7 +2,6 @@ package etec.src.controller;
 
 import java.io.File;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -10,15 +9,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import etec.common.enums.RunStatusEnum;
-import etec.common.exception.TransduceException;
 import etec.common.interfaces.Controller;
 import etec.common.utils.RegexTool;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 import etec.src.file.model.BasicParams;
-import etec.src.sql.az.service.CreateListService;
-import etec.src.sql.az.service.FamilyMartFileTransduceService;
 import etec.src.sql.az.service.IOpathSettingService;
 import etec.src.sql.az.service.SearchFunctionService;
 import etec.view.panel.SearchFunctionPnl;

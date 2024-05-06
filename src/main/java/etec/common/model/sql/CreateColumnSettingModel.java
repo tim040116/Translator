@@ -1,8 +1,5 @@
 package etec.common.model.sql;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import etec.common.utils.RegexTool;
 
 public class CreateColumnSettingModel {

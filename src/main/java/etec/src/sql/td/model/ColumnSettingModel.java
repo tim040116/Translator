@@ -3,8 +3,6 @@ package etec.src.sql.td.model;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.utils.RegexTool;
-
 /**
  * <h1>Create Table 中欄位的設定</h1>
  * <p>包裝CREATE TABLE時各欄位的設定值</p>

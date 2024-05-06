@@ -1,6 +1,5 @@
 package test;
 
-import test.gp.translater.TestConvertSafely;
 import test.gp.translater.TestGPTranslater;
 
 /**

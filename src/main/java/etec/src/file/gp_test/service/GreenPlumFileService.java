@@ -7,9 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import etec.common.exception.sql.SQLTransduceException;
+import etec.common.utils.charset.CharsetTool;
 import etec.common.utils.convert_safely.ConvertRemarkSafely;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
@@ -55,6 +55,7 @@ public class GreenPlumFileService {
 	 * <br>2024年03月01日	Tim	建立功能
 	 * <br>2024年04月22日	Tim	修正副檔名有兩個的錯誤
 	 * <br>2024年05月06日	Tim	擴大捕獲SQL的範圍
+	 * <br>2024年05月06日	Tim	強制轉換成指定編碼
 	 * @author Tim
 	 * @since 4.0.0.0
 	 * @param context 檔案的內容
@@ -64,7 +65,10 @@ public class GreenPlumFileService {
 	 */
 	public static void run(File f) throws IOException {
 
-		String context = FileTool.readFile(f);
+		/* 2024/05/06	Tim	強制轉換成指定編碼
+		 * */
+//		String context = FileTool.readFile(f);
+		String context = CharsetTool.readFileInCharset(Params.gp.CHARSET,f.getPath());
 		String newFileName = BasicParams.getTargetFileNm(f.getPath());
 		Log.debug("清理資料");
 		String newContext = ConvertRemarkSafely.savelyConvert(context, (t) -> {

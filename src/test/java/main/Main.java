@@ -1,11 +1,7 @@
 package main;
 
-import java.io.File;
-import java.util.Scanner;
+import etec.common.utils.charset.CharsetTool;
 
-import etec.common.utils.file.BigFileSplitTool;
-import etec.common.utils.file.CompressTool;
-import etec.src.sql.gp.translater.GreenPlumTranslater;
 /**
  * @author	Tim
  * @since	2023年10月11日
@@ -18,26 +14,16 @@ public class Main {
 	
 	public static void main(String[] args) {
 		try {
-//			BigFileSplitTool.splitFile(folder);
-			Scanner sc = new Scanner(System.in);
-			System.out.println("請輸入檔案路徑：");
-			String zipPath = sc.next();
-			BigFileSplitTool.concatFile(zipPath);
-			System.out.println("完成");
-			sc.close();
+			String f_utf8 = "C:\\Users\\user\\Desktop\\Trans\\Target\\test_utf8.pl";
+			String f_big5 = "C:\\Users\\user\\Desktop\\Trans\\Target\\test_big5.pl";
+			String f_gbk = "C:\\Users\\user\\Desktop\\Trans\\Target\\test_GBK.pl";
+			System.out.println(CharsetTool.getCharset(f_utf8).name());
+			System.out.println(CharsetTool.getCharset(f_big5).name());
+			System.out.println(CharsetTool.getCharset(f_gbk).name());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static String str() {
-		String str = "SELECT\r\n" + 
-				"         CARD_NO\r\n" + 
-				"        ,STORE_ID FAVOR_STORE_ID  --最喜歡消費的店\r\n" + 
-				"       FROM SCV_PMART.SCV_ALL_ITEM_TP11\r\n" + 
-				"       QUALIFY ROW_NUMBER() OVER (PARTITION BY CARD_NO\r\n" + 
-				"               ORDER BY STORE_TXN_CNT DESC\r\n" + 
-				"                       ,STORE_TXN_AMT DESC)=1";
-		return str;
-	}
+	
 }
