@@ -240,6 +240,7 @@ public class AssessmentController implements Controller{
 			 * 2024年4月22日 Tim 排除FORMAT語法
 			 * 2024年5月2日	Tim	排除Alias name的語法
 			 * 2024年5月2日	Tim	排除單引號裡的括號
+			 * 2024年5月6日	Tim	排除雙引號裡的括號
 			 * */
 			sql = "SELECT"+sql.split("(?i)\\bSELECT\\b", 2)[1];
 			sql = sql
@@ -247,6 +248,7 @@ public class AssessmentController implements Controller{
 					.replaceAll("(?i)\\(\\s*("+Params.searchFunction.DATA_TYPE_LIST+")(?:\\s*\\([^)]+\\))?\\s*\\)", "")//強制轉換 ex: CURRENT_DATE(VARCHAR(10))
 					.replaceAll("(?i)\\)\\s*\\w+\\s*\\((?!\\s*SELECT\\b)[\\s\\w,]+\\)","")//Alias name ex: join (select aa,trim(bb) from tbl_nm) b (aa,bb_new)
 					.replaceAll("'[^']+'","''")//單引號裡的括號 ex: ,'比例(金額)' as desc_title
+					.replaceAll("\"[^\"]+\"","\"\"")//雙引號裡的括號 
 					;
 			/**
 			 * <p>功能 ：查function</p>
