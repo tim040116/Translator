@@ -2,7 +2,9 @@ package etec.src.file.gp_test.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -52,6 +54,7 @@ public class GreenPlumFileService {
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年03月01日	Tim	建立功能
 	 * <br>2024年04月22日	Tim	修正副檔名有兩個的錯誤
+	 * <br>2024年05月06日	Tim	擴大捕獲SQL的範圍
 	 * @author Tim
 	 * @since 4.0.0.0
 	 * @param context 檔案的內容
@@ -68,10 +71,28 @@ public class GreenPlumFileService {
 			StringBuffer sb = new StringBuffer();
 			try {
 				Log.debug("開始捕獲語法");
-				// DDL
-				String reg = "\\b(?:" + String.join("|", Stream
-						.concat(Arrays.stream(GreenPlumTranslater.arrDDL), Arrays.stream(GreenPlumTranslater.arrDML))
-						.toArray(String[]::new)) + ")\\b[^;]+?;";
+				/**
+				 * <p>功能 ：捕獲SQL語法</p>
+				 * <p>類型 ：搜尋</p>
+				 * <p>修飾詞：gmi</p>
+				 * <p>範圍 ：從 開頭 到 分號</p>
+				 * <h2>群組 ：</h2>
+				 * 	1.
+				 * 	2.
+				 * 	3.
+				 * <h2>備註 ：</h2>
+				 * 	會先將GreenPlumTranslater裡的各類型title用|串接，
+				 *  作為開頭
+				 * <h2>異動紀錄 ：</h2>
+				 * 2024年4月10日	Tim	建立邏輯
+				 * 2024年5月6日	Tim	增加所有類型的title
+				 * */
+				List<String> titleList = new ArrayList<String>();
+				titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDQL));
+				titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDML));
+				titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDDL));
+				titleList.addAll(Arrays.asList(GreenPlumTranslater.arrOther));
+				String reg = "\\b(?:" + String.join("|",titleList) + ")\\b[^;]+?;";
 				Pattern p = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
 				Matcher m = p.matcher(context);
 				while (m.find()) {
