@@ -96,12 +96,13 @@ public class DataTypeService {
 	 * <br>4. 轉換FORMAT 成 YYYYMMDD 後做加減的語法
 	 * <br>		$1 AS DATE FORMAT 'YYYYMMDD')+1 轉成 $1 AS DATE)+1
 	 * <br>5. TRUNC(aa, 'MONTH') 轉成  CAST(DATE_TRUNC('MONTH',aa)AS DATE)
+	 * <br>6. DATEADD(day, 45, a.Quta_StartDate) 轉成 a.Quta_StartDate + INTERVAL'45 day'
 	 * 
-	 * 
+	 * <h2>異動紀錄</h2>
 	 * <p>2023/12/06	Tim	因涉及邏輯問題暫時廢棄</p>
 	 * <p>2023/12/12	Tim 重啟功能，分層處理</p>
 	 * <p>2024年2月5日	Tim	為求穩定性，Jason 要求第二項改為SUBSTR(TO_CHAR($1,'YYYY-MM-DD'),9,2)</p>
-	 * 		
+	 * <br>2024年5月7日	Tim	增加5,6邏輯
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * */
@@ -153,6 +154,8 @@ public class DataTypeService {
 				.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT\\s+'YYYYMMDD'\\s*\\)\\s*([\\+\\-]\\d+)", "AS DATE\\)$1")
 				//5
 				.replaceAll("(?i)\\bTRUNC\\s*\\(([^,]+),\\s*('YEAR|MONTH|DAY')\\s*\\)", "CAST\\(DATE_TRUNC\\($2,$1\\) AS DATE\\)")
+				//6
+				.replaceAll("(?i)\\bDATEADD\\s*\\(([^,]+),\\s*(-?\\d+)\\s*,([^)]+)\\)", "$3 + INTERVAL'$2 $1'")
 			;
 			//清除重複的CAST
 			t = t
@@ -257,6 +260,42 @@ public class DataTypeService {
 				m.appendReplacement(sb, "TO_CHAR("+col+",'"+sb2+"')");
 			}
 			return m.appendTail(sb).toString();
+		});
+		return res;
+	}
+	
+	/**
+	 * <h1>轉換next_day</h1>
+	 * <p></p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年5月7日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	enclosing_method_arguments
+	 * @throws	e
+	 * @see		
+	 * @return	return_type
+			 */
+	public static String changeNextDay(String sql) {
+		Map<String,String> mapWeek = new HashMap<String,String>();
+		mapWeek.put("MON","1");
+		String res = "";
+		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
+		res = cff.savelyConvert(sql, (String t)->{
+			StringBuffer sb = new StringBuffer();
+			Pattern p = Pattern.compile("(?i)\\bNEXT_DAY\\s*\\(([^,]+),\\s*'(\\w+)'\\s*\\)");
+			Matcher m = p.matcher(t);
+			while (m.find()) {
+				String col  = m.group(1);
+				String week = mapWeek.get(m.group(2).toUpperCase());
+				String newsql = col + "((7 - EXTRACT(DOW FROM " + col + ") + " + week + ")::int%7)";
+				m.appendReplacement(sb, newsql);
+			}
+			m.appendTail(sb);
+			return sb.toString();
 		});
 		return res;
 	}
