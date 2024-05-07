@@ -21,6 +21,7 @@ import etec.common.utils.param.Params;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.az.service.IOpathSettingService;
 import etec.src.sql.az.service.SearchFunctionService;
+import etec.src.sql.az.service.TransduceStoreFunctionService;
 import etec.src.sql.azure.service.CreateSDIService;
 import etec.view.panel.SearchFunctionPnl;
 
@@ -81,7 +82,8 @@ public class AssessmentController implements Controller{
 
 			// 清除註解
 			content= TransduceTool.cleanRemark(content);
-			
+			//拆除SQLSTR
+			content = TransduceStoreFunctionService.findSQLSTR(content);
 			/* Generate SDI file */
 			SearchSDIList(f.getName(),content);
 			
