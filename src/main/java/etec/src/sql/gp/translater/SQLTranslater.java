@@ -39,6 +39,10 @@ public class SQLTranslater {
 	 * <br>ZEROIFNULL改成COALESCE
 	 * <br>IN後面一定要有括號
 	 * <br>NullIfZero改成NULLIF
+	 * <br>average改成AVG
+	 * <br>Character改成CHARACTER_LENGTH
+	 * <br>INSTR改成POSITION
+	 * <br>ISNULL改成COALESCE
 	 * <br>LIKE ANY('','','') 轉成 LIKE ANY(ARRAY['','',''])	
 	 * <br>日期運算轉換 
 	 * <br> {@link DataTypeService#changeAddMonths(String)}
@@ -51,6 +55,7 @@ public class SQLTranslater {
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年5月2日	Tim	建立功能
 	 * <br>2024年5月2日	Tim	開通轉換日期 6 CURRENT_DATE
+	 * <br>2024年5月7日	Tim	增加AVG,Character,INSTR,ISNULL
 	 * @author	Tim
 	 * @throws SQLFormatException 
 	 * @since	4.0.0.0
@@ -64,9 +69,12 @@ public class SQLTranslater {
 				.replaceAll("(?i)\\bMINUS\\b", "EXCEPT")//MINUS
 				.replaceAll("(?i)\\bSEL\\b", "SELECT")//SEL
 				.replaceAll("(?i)\\bNVL\\b", "COALESCE")//NVL
+				.replaceAll("(?i)\\bISNULL\\s*\\(", "COALESCE\\(")//ISNULL
 				.replaceAll("(?i)\\bOREPLACE\\s*\\(", "REPLACE\\(")//OREPLACE
 				.replaceAll("(?i)\\bSTRTOK\\s*\\(", "SPLIT_PART\\(")//STRTOK
 				.replaceAll("(?i)CHARACTERS\\s*\\(","LENGTH\\(")//CHARACTERS
+				.replaceAll("(?i)\\bAVERAGE\\s*\\(","AVG\\(")//AVERAGE
+				.replaceAll("(?i)\\bCharacter\\s*\\(","CHARACTER_LENGTH\\(")//Character
 				.replaceAll("(?i)\\bAS\\s+FORMAT\\s+'(["+DataTypeService.REG_DATE+"]+)'","AS DATE FORMAT '$1'")//DATE FORMAT 正規化
 				.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT","AS DATE FORMAT")//DATE FORMAT 正規化 多空白為一個空白
 //				.replaceAll("(?i)(\\(\\s*FORMAT\\s+'[^']+'\\s*\\))\\s*\\((VAR)?CHAR\\s*\\(\\s*\\d+\\s*\\)\\s*\\)", "$1")//FORMAT DATE 語法正規化
@@ -80,6 +88,7 @@ public class SQLTranslater {
 				.replaceAll("(?i)ZEROIFNULL\\s*\\(([^\\)]+)\\)", "COALESCE\\($1,0\\)")//ZEROIFNULL改成COALESCE
 				.replaceAll("(?i)\\bIN\\s+(?<n1>'[^']+'(,'[^']+')+)", "IN \\(${n1}\\)")//IN後面一定要有括號
 				.replaceAll("(?i)NULLIFZERO\\s*\\(([^\\)]+)\\)", "NULLIF\\($1,0\\)")//NullIfZero改成NULLIF
+				.replaceAll("(?i)\\bINSTR\\s*\\(([^,]+),([^\\)]+)\\)", "POSITION\\($2 IN $1\\)")//INSTR
 				.replaceAll("(?i)LIKE\\s+ANY\\s*\\(\\s*('[^']+'(\\s*\\,\\s*'[^']+')+)\\s*\\)", "LIKE ANY \\(ARRAY[$1])")//LIKE ANY('','','') >> LIKE ANY(ARRAY['','',''])	
 			;
 			return t;

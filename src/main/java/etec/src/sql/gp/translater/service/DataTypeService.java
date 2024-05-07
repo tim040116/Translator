@@ -95,7 +95,7 @@ public class DataTypeService {
 	 * <br>		3-3. TO_CHAR(CAST($1 AS DATE FORMAT 'YYYY-MM-DD'), 'YYYY-MM') 轉成 TO_CHAR(CAST($1 AS DATE), 'YYYY-MM')
 	 * <br>4. 轉換FORMAT 成 YYYYMMDD 後做加減的語法
 	 * <br>		$1 AS DATE FORMAT 'YYYYMMDD')+1 轉成 $1 AS DATE)+1
-	 * <br>5. 
+	 * <br>5. TRUNC(aa, 'MONTH') 轉成  CAST(DATE_TRUNC('MONTH',aa)AS DATE)
 	 * 
 	 * 
 	 * <p>2023/12/06	Tim	因涉及邏輯問題暫時廢棄</p>
@@ -151,6 +151,8 @@ public class DataTypeService {
 				.replaceAll("(?i)TO_CHAR\\s*\\(\\s*CAST\\s*\\(([^\\(\\)]+)\\s+AS+\\s+DATE\\s*\\)\\s*,\\s*('[^']+')\\s*\\)", "TO_CHAR\\($1,$2\\)")
 				//4
 				.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT\\s+'YYYYMMDD'\\s*\\)\\s*([\\+\\-]\\d+)", "AS DATE\\)$1")
+				//5
+				.replaceAll("(?i)\\bTRUNC\\s*\\(([^,]+),\\s*('YEAR|MONTH|DAY')\\s*\\)", "CAST\\(DATE_TRUNC\\($2,$1\\) AS DATE\\)")
 			;
 			//清除重複的CAST
 			t = t
@@ -205,7 +207,7 @@ public class DataTypeService {
 		String res = sql;
 		res = res
 			.replaceAll("(?i)AS(\\s+)DATE", Mark.MAHJONG_BLACK+"$1"+Mark.MAHJONG_WHITE)
-			.replaceAll("\\bDATE\\b", "CURRENT_DATE")
+			.replaceAll("(?i)\\bDATE\\b", "CURRENT_DATE")
 			.replaceAll(Mark.MAHJONG_BLACK, "AS")
 			.replaceAll(Mark.MAHJONG_WHITE, "DATE")
 		;

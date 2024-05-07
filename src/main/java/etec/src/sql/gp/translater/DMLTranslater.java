@@ -47,7 +47,7 @@ public class DMLTranslater {
 		String insert = arr[0];
 		String select = sql.replace(arr[0],"");
 		select = GreenPlumTranslater.dql.easyReplace(select);
-		res = insert+select;
+ 		res = insert+select;
 		return res;
 	}
 }
