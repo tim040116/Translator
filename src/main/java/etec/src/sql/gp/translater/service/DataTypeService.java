@@ -280,19 +280,62 @@ public class DataTypeService {
 	 * @return	return_type
 			 */
 	public static String changeNextDay(String sql) {
+		if(!sql.toUpperCase().contains("NEXT_DAY")) {
+			return sql;
+		}
+		//week
 		Map<String,String> mapWeek = new HashMap<String,String>();
-		mapWeek.put("MON","1");
+		mapWeek.put("SU","0");
+		mapWeek.put("SUN","0");
+		mapWeek.put("SUNDAY","0");
+		mapWeek.put("M","1");
+		mapWeek.put("MO","1");
+		mapWeek.put("MON","1"); 
+		mapWeek.put("MONDAY","1");
+		mapWeek.put("TU","2");
+		mapWeek.put("TUE","2");
+		mapWeek.put("TUES","2");
+		mapWeek.put("TUESDAY","2");
+		mapWeek.put("W","3");
+		mapWeek.put("WE","3");
+		mapWeek.put("WED","3");
+		mapWeek.put("WEDNESDAY","3");
+		mapWeek.put("TH","4");
+		mapWeek.put("THU","4");
+		mapWeek.put("THURS","4");
+		mapWeek.put("THURSDAY","4");
+		mapWeek.put("F","5");
+		mapWeek.put("FR","5");
+		mapWeek.put("FRI","5");
+		mapWeek.put("FRIDAY","5");
+		mapWeek.put("SA","6");
+		mapWeek.put("SAT","6");
+		mapWeek.put("SATURDAY","6");
 		String res = "";
+		
 		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
 		res = cff.savelyConvert(sql, (String t)->{
+			/**
+			 * <p>功能 ：轉換 NEXT_DAY</p>
+			 * <p>類型 ：搜尋</p>
+			 * <p>修飾詞：i</p>
+			 * <p>範圍 ：從  NEXT_DAY 到 )</p>
+			 * <h2>群組 ：</h2>
+			 * 	1.日期格式的資料
+			 *  2.星期幾，參照上方的mapWeek
+			 * <h2>備註 ：</h2>
+			 * 	
+			 * <h2>異動紀錄 ：</h2>
+			 * 2024年5月8日	Tim	建立邏輯
+			 * */
 			StringBuffer sb = new StringBuffer();
 			Pattern p = Pattern.compile("(?i)\\bNEXT_DAY\\s*\\(([^,]+),\\s*'(\\w+)'\\s*\\)");
 			Matcher m = p.matcher(t);
 			while (m.find()) {
 				String col  = m.group(1);
 				String week = mapWeek.get(m.group(2).toUpperCase());
-				String newsql = col + "((7 - EXTRACT(DOW FROM " + col + ") + " + week + ")::int%7)";
-				m.appendReplacement(sb, newsql);
+				String newsql = col + " + ((7 - EXTRACT(DOW FROM " + col + ") + " + week + ")::int%7)";
+				m.appendReplacement(sb, Matcher.quoteReplacement(newsql));
 			}
 			m.appendTail(sb);
 			return sb.toString();
@@ -300,3 +343,10 @@ public class DataTypeService {
 		return res;
 	}
 }
+
+
+
+
+
+
+

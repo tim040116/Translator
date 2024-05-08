@@ -250,7 +250,7 @@ public class AssessmentController implements Controller{
 					.replaceAll("(?i)\\(\\s*("+Params.searchFunction.DATA_TYPE_LIST+")(?:\\s*\\([^)]+\\))?\\s*\\)", "")//強制轉換 ex: CURRENT_DATE(VARCHAR(10))
 					.replaceAll("(?i)\\)\\s*\\w+\\s*\\((?!\\s*SELECT\\b)[\\s\\w,]+\\)","")//Alias name ex: join (select aa,trim(bb) from tbl_nm) b (aa,bb_new)
 					.replaceAll("'[^']+'","''")//單引號裡的括號 ex: ,'比例(金額)' as desc_title
-					.replaceAll("\"[^\"]+\"","\"\"")//雙引號裡的括號 
+//					.replaceAll("\"[^\"]+\"","\"\"")//雙引號裡的括號 
 					;
 			/**
 			 * <p>功能 ：查function</p>

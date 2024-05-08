@@ -107,6 +107,8 @@ public class SQLTranslater {
 			t = DataTypeService.changeFormatNumber(t);
 			Log.debug("\t轉換日期 6");
 			t = DataTypeService.changeCurrentDate(t);
+			Log.debug("\t轉換日期 7");
+			t = DataTypeService.changeNextDay(t);
 			return t;
 		});
 		Log.debug("第三階段轉換");
