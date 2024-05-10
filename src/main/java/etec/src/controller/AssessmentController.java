@@ -243,6 +243,7 @@ public class AssessmentController implements Controller{
 			 * 2024年5月2日	Tim	排除Alias name的語法
 			 * 2024年5月2日	Tim	排除單引號裡的括號
 			 * 2024年5月6日	Tim	排除雙引號裡的括號
+			 * 2024年5月10日	Tim	排除 CTAS 裡面的 INDEX
 			 * */
 			sql = "SELECT"+sql.split("(?i)\\bSELECT\\b", 2)[1];
 			sql = sql
@@ -251,6 +252,7 @@ public class AssessmentController implements Controller{
 					.replaceAll("(?i)\\)\\s*\\w+\\s*\\((?!\\s*SELECT\\b)[\\s\\w,]+\\)","")//Alias name ex: join (select aa,trim(bb) from tbl_nm) b (aa,bb_new)
 					.replaceAll("'[^']+'","''")//單引號裡的括號 ex: ,'比例(金額)' as desc_title
 //					.replaceAll("\"[^\"]+\"","\"\"")//雙引號裡的括號 
+					.replaceAll("(?i)\\bWith\\s+Data[\\w\\s]+?Index\\s*\\(","")//CTAS的INDEX
 					;
 			/**
 			 * <p>功能 ：查function</p>
