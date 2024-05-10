@@ -98,7 +98,7 @@ public class GreenPlumFileService {
 				titleList.addAll(Arrays.asList(GreenPlumTranslater.arrOther));
 				String reg = "\\b(?:" + String.join("|",titleList) + ")\\b[^;]+?;";
 				Pattern p = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
-				Matcher m = p.matcher(context);
+				Matcher m = p.matcher(t);
 				while (m.find()) {
 					// 處理前後空白
 					String sql = m.group().trim();

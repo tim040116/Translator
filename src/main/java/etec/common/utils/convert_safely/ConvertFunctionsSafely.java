@@ -19,6 +19,10 @@ import java.util.function.Function;
 public class ConvertFunctionsSafely {
 	
 	public int maxCnt = 0;
+	
+	public static int maxObjId = 0;
+	
+	public int objId = 0;
 	/**
 	 * @author	Tim
 	 * @since	2023年11月30日
@@ -26,10 +30,20 @@ public class ConvertFunctionsSafely {
 	 * 會依小括號進行分層
 	 * 避免函式轉換時造成錯位
 	 * */
+	
+	{
+		maxObjId++;
+		objId = maxObjId;
+		
+	}
+	
 	public String savelyConvert(String script,Function<String, String> function) {
 		String res = "";
 		int cntBracket = 0;
 		maxCnt = 0;
+		if(objId==3) {
+			System.out.println("");
+		}
 		//encode
 		for(String c : script.split("")) {
 			if( "(".equals(c)) {
@@ -78,11 +92,14 @@ public class ConvertFunctionsSafely {
 		return (new ConvertFunctionsSafely()).savelyConvert(script, function);
 	}
 	
-	protected static String markName(String type,int i) {
+	protected String markName(String type,int i) {
 		return markName(type,Integer.toString(i));
 	}
-	protected static String markName(String type,String i) {
-		return "<saveTranslateFunctionMark_"+type+"_"+i+">";
+	protected String markName(String type,String i) {
+		return "<saveTranslateFunctionMark_"+objId+"_"+type+"_"+i+">";
+	}
+	protected static String markAllName(String type,String i) {
+		return "<saveTranslateFunctionMark_\\d+_"+type+"_"+i+">";
 	}
 	/**
 	 * @author	Tim
@@ -92,9 +109,9 @@ public class ConvertFunctionsSafely {
 	 * */
 	public static String decodeMark(String script) {
 		String res = script
-			.replaceAll(markName("leftquater","\\d+"), "\\(")
-			.replaceAll(markName("rightquater","\\d+"), "\\)")
-			.replaceAll(markName("comma","\\d+"), ",")
+			.replaceAll(markAllName("leftquater","\\d+"), "\\(")
+			.replaceAll(markAllName("rightquater","\\d+"), "\\)")
+			.replaceAll(markAllName("comma","\\d+"), ",")
 		;
 		return res;
 	}

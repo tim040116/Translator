@@ -36,7 +36,7 @@ public class ConvertRemarkSafely {
 	public static String savelyConvert(String script,Function<String, String> function) {
 		String res = script;
 		Map<String,String> mapRemark = new HashMap<String,String>();
-		Pattern p = Pattern.compile("(?mi)\r?\n?\\s*--.*\r?\n");
+		Pattern p = Pattern.compile("(?mi)\r?\n?\\s*--.*");
 		Matcher m = p.matcher(script);
 		while (m.find()) {
 			String id = markName("dash", idRemarkDash);
