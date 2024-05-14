@@ -2,6 +2,7 @@ package etec.src.file.gp_test.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,7 +69,8 @@ public class GreenPlumFileService {
 		/* 2024/05/06	Tim	強制轉換成指定編碼
 		 * */
 //		String context = FileTool.readFile(f);
-		String context = CharsetTool.readFileInCharset(Params.gp.CHARSET,f.getPath());
+		Charset chs = CharsetTool.getCharset(f.getPath());
+		String context = CharsetTool.readFileInCharset(chs.name(),f.getPath());
 		String newFileName = BasicParams.getTargetFileNm(f.getPath());
 		Log.debug("清理資料");
 		String newContext = ConvertRemarkSafely.savelyConvert(context, (t) -> {
@@ -115,6 +117,6 @@ public class GreenPlumFileService {
 		//將bteq語法清除
 		newContext = newContext.replaceAll("\\r\\n\\..*", "");
 		
-		FileTool.createFile(newFileName, newContext, Params.familyMart.WRITE_FILE_CHARSET);
+		FileTool.createFile(newFileName, newContext, chs);
 	}
 }

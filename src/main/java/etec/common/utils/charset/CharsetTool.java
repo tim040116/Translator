@@ -62,6 +62,9 @@ public class CharsetTool {
 		dtr.add(UnicodeDetector.getInstance());
 		Charset chr = null;
 		chr = dtr.detectCodepage(Paths.get(filePath).toUri().toURL());
+		if("windows-1252".equals(chr.name())) {
+			chr = Charset.forName("BIG5");
+		}
 		return chr;
 	}
 	

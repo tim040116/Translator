@@ -224,7 +224,7 @@ public class AssessmentController implements Controller{
 	public void SearchFunctionList(File f,String content,String category) throws Exception {
 		SearchFunctionPnl.tsLog.setLog("資訊","SearchFunctionList");
 		content = SearchFunctionService.getSqlContent(content);
-		List<String> lstSql = RegexTool.getRegexTarget("[^;]*(?:SELECT)[^;]*", content);
+		List<String> lstSql = RegexTool.getRegexTarget("[^;]*(?:\\bSELECT\\b)[^;]*", content);
 		
 		//每一段sql
 		int j = 1;
