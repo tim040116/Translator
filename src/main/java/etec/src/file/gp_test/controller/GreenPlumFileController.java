@@ -1,7 +1,9 @@
 package etec.src.file.gp_test.controller;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import etec.common.enums.RunStatusEnum;
 import etec.common.interfaces.Controller;
@@ -44,6 +46,7 @@ public class GreenPlumFileController implements Controller {
 		BasicParams.setListFile(lf);
 		SearchFunctionPnl.tsLog.setLog("資訊", "取得檔案清單");
 		SearchFunctionPnl.progressBar.setUnit(lf.size());
+		Date now = new Date();
 		for (File f : lf) {
 			// 讀檔案
 			SearchFunctionPnl.tsLog.setLog("資訊", "讀取檔案：" + f.getPath());
@@ -53,7 +56,8 @@ public class GreenPlumFileController implements Controller {
 			SearchFunctionPnl.tsLog.setLog("資訊", "產製檔案：" + BasicParams.getTargetFileNm(f.getPath()));
 			SearchFunctionPnl.progressBar.plusOne();
 		}
-		SearchFunctionPnl.tsLog.setLog("資訊", "產生完成");
+		long diffInDays = TimeUnit.MILLISECONDS.toSeconds((new Date()).getTime() - now.getTime());
+		SearchFunctionPnl.tsLog.setLog("資訊", "產生完成，共 "+diffInDays+" 秒");
 		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.SUCCESS);
 	}
 

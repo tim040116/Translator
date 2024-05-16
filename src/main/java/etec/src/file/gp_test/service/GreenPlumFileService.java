@@ -65,14 +65,19 @@ public class GreenPlumFileService {
 	 * @throws IOException
 	 */
 	public static void run(File f) throws IOException {
-
+		List<String> titleList = new ArrayList<String>();
+		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDQL));
+		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDML));
+		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDDL));
+		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrOther));
+		String reg = "\\b(?:" + String.join("|",titleList) + ")\\b[^;]+?;";
 		/* 2024/05/06	Tim	強制轉換成指定編碼
 		 * */
 //		String context = FileTool.readFile(f);
 		Charset chs = CharsetTool.getCharset(f.getPath());
 		String context = CharsetTool.readFileInCharset(chs.name(),f.getPath());
 		String newFileName = BasicParams.getTargetFileNm(f.getPath());
-		Log.debug("清理資料");
+		Log.debug("清理註解");
 		String newContext = ConvertRemarkSafely.savelyConvert(context, (t) -> {
 			StringBuffer sb = new StringBuffer();
 			try {
@@ -93,12 +98,6 @@ public class GreenPlumFileService {
 				 * 2024年4月10日	Tim	建立邏輯
 				 * 2024年5月6日	Tim	增加所有類型的title
 				 * */
-				List<String> titleList = new ArrayList<String>();
-				titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDQL));
-				titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDML));
-				titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDDL));
-				titleList.addAll(Arrays.asList(GreenPlumTranslater.arrOther));
-				String reg = "\\b(?:" + String.join("|",titleList) + ")\\b[^;]+?;";
 				Pattern p = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
 				Matcher m = p.matcher(t);
 				while (m.find()) {

@@ -1,14 +1,38 @@
 package etec.src.sql.gp.translater;
 
 import etec.common.exception.sql.SQLTransduceException;
+import etec.common.utils.log.Log;
 
 public class DMLTranslater {
 	
+	/**
+	 * <h1>轉換DML</h1>
+	 * <p>
+	 * <br>轉換 INSERT INTO
+	 * <br>轉換 INSERT SELECT
+	 * <br>轉換 DELETE TABLE
+	 * </p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年5月15日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	
+	 * @throws	e
+	 * @see		
+	 * @return	return_type
+			 */
 	public String easyReplace(String sql) throws SQLTransduceException {
-		if(sql.matches("(?i)\\s*INSERT\\s+INTO\\s+[\\S\\s]+")) {
+		if(sql.matches("(?i)\\s*INSERT\\s+INTO\\s+\\S+\\s+VALUES\\b[\\S\\s]+")) {
+			Log.debug("\t\t細分：INSERT  INTO");
+		}else if(sql.matches("(?i)\\s*INSERT\\s+INTO\\s+[\\S\\s]+")) {
+			Log.debug("\t\t細分：INSERT  SELECT");
 			sql = changeInsertSelect(sql);
+		}else {
+			sql = changeDeleteTableUsing(sql);
 		}
-		sql = changeDeleteTableUsing(sql);
 		return sql;
 	}
 	/**

@@ -41,9 +41,6 @@ public class ConvertFunctionsSafely {
 		String res = "";
 		int cntBracket = 0;
 		maxCnt = 0;
-		if(objId==3) {
-			System.out.println("");
-		}
 		//encode
 		for(String c : script.split("")) {
 			if( "(".equals(c)) {

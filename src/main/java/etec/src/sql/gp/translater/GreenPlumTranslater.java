@@ -76,18 +76,26 @@ public class GreenPlumTranslater {
 	 * @throws UnknowSQLTypeException
 	 */
 	public static String translate(String script) throws SQLTransduceException {
+		if(script.matches("\\s*")) {
+			return script;
+		}
 		String res = "";
-		String title = script.trim().replaceAll("^\\b([\\w]+)\\b[\\S\\s]+", "$1").toUpperCase();
-		Log.debug("開始轉換語法：" + title);
-		if (Arrays.asList(arrDQL).contains(title)) {
+		String title = script.trim().replaceAll("^\\b([\\w]+)\\b[\\S\\s]+","$1").toUpperCase();
+		Log.debug("開始轉換語法："+title);
+		if(Arrays.asList(arrDQL).contains(title)) {
+			Log.debug("\t分類：DQL");
 			res = dql.easyReplace(script);
-		} else if (Arrays.asList(arrDML).contains(title)) {
+		}else if(Arrays.asList(arrDML).contains(title)) {
+			Log.debug("\t分類：DML");
 			res = dml.easyReplace(script);
-		} else if (Arrays.asList(arrDDL).contains(title)) {
+		}else if(Arrays.asList(arrDDL).contains(title)) {
+			Log.debug("\t分類：DDL");
 			res = ddl.easyReplace(script);
-		} else if (Arrays.asList(arrOther).contains(title)) {
+		}else if(Arrays.asList(arrOther).contains(title)) {
+			Log.debug("\t分類：OTHER");
 			res = other.easyReplace(script);
-		} else {
+		}else {
+			Log.debug("\t分類：OTHER");
 			res = script;
 		}
 		Log.debug("轉換完成");

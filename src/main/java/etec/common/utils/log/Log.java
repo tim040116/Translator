@@ -40,11 +40,12 @@ public class Log {
 		System.out.println("------------------------------------------------------------------------------------------------");
 	}
 	private static void send(String color,String level, Object content) {
-		String log = Params.log.sf.format(new Date()) 
-				+ (Params.log.IS_COLOR?" [\033["+color+";4m" + level + "\033[0m] : ":" [" + level + "] : ") 
-				+ content;
-		System.out.println(log);
+		
 		if (Params.log.levelContains(level)) {
+			String log = Params.log.sf.format(new Date()) 
+					+ (Params.log.IS_COLOR?" [\033["+color+";4m" + level + "\033[0m] : ":" [" + level + "] : ") 
+					+ content;
+			System.out.println(log);
 			//寫檔
 			if(Params.log.IS_WRITE_FILE) {
 				File newFile = new File(Params.log.LOG_FILE_NAME);

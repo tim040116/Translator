@@ -25,6 +25,7 @@ public class ConvertRemarkSafely {
 	
 	public static int idRemarkDash = 0;
 	
+	private static Pattern p = Pattern.compile("(?mi)--.*");
 	/**
 	 * <h1>轉換語句時排除註解</h1>
 	 * 
@@ -32,13 +33,14 @@ public class ConvertRemarkSafely {
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * <p>2024年1月3日	Tim	先製作SQL兩槓的轉換</p>
+	 * <br>2024年5月15日	Tim	修改replacement語法
 	 * */
 	public static String savelyConvert(String script,Function<String, String> function) {
 		String res = script;
 		Map<String,String> mapRemark = new HashMap<String,String>();
-		Pattern p = Pattern.compile("(?mi)\r?\n?\\s*--.*");
 		Matcher m = p.matcher(script);
 		while (m.find()) {
+//			Log.debug("找到註解"+idRemarkDash);
 			String id = markName("dash", idRemarkDash);
 			String mark = m.group(0);
 			idRemarkDash++;
@@ -47,11 +49,11 @@ public class ConvertRemarkSafely {
 		}
 		res = function.apply(res);
 		for(Entry<String,String> e : mapRemark.entrySet()) {
-			res = res.replace(e.getKey(), e.getValue());
+			res = res.replaceAll(Pattern.quote(e.getKey())+"(.*)", "$1 "+Matcher.quoteReplacement(e.getValue()));
 		}
-		res = res
-			.replaceAll("(?mi)^((?:\\s*\\+)?\\s*')(\\s*)(--)?", "$2$3 $1 ")
-		;
+//		res = res
+//			.replaceAll("(?mi)^((?:\\s*\\+)?\\s*')(\\s*)(--)?", "$2$3 $1 ")
+//		;
 		return res;
 	}
 	

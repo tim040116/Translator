@@ -91,7 +91,7 @@ FROM T
 	 * @since	4.0.0.0
 	 * @see		#changeUNPIVOT
 	 * */
-	public String changeTD_UNPIVOT(String script) throws SQLFormatException {
+	public static String changeTD_UNPIVOT(String script) throws SQLFormatException {
 		//取得整段TD_UNPIVOT語法
 		Pattern p = Pattern.compile("TD_UNPIVOT\\s*\\(\\s*ON\\s*\\(\\s*SELECT[\\S\\s]+FROM\\s+(\\S+)\\)\\s*USING((?:\\s*[^\\(]+\\([^\\)]+\\))+)\\s*\\)",Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(script);
@@ -235,7 +235,7 @@ JOIN LATERAL(VALUES
 	 * @see		#changeTD_UNPIVOT
 	 * @return	String	轉換後的程式碼
 			 */
-	public String changeUNPIVOT(String script){
+	public static String changeUNPIVOT(String script){
 		/**
 		 * <h1>[搜尋]	整段UNPIVOT語法</h1>
 		 * <p>取得範圍：從 UNPIVOT 到 AS ALIAS_NAME</p>

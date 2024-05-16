@@ -16,14 +16,14 @@ import etec.common.utils.convert_safely.ConvertFunctionsSafely;
  * <p>static String REG_INT : 數字格式會用到的字符</p>
  * <h2>方法</h2>
  * <p>{@link #changeAddMonths(String)}</p>
- * <p>{@link #changeLastDay(String)}</p>
  * <p>{@link #changeDateFormat(String)}</p>
  * <p>{@link #changeTypeConversion(String)}</p>
  * <p>{@link #changeCurrentDate(String)}</p>
  * <p>{@link #changeFormatNumber(String)}</p>
  * <h2>異動紀錄</h2>
  * <br>2024年2月22日	Tim	建立功能
- * 
+ * <br>2024年5月15日	Tim	將changeLastDay合併至changeAddMonths
+ * <br>2024年5月15日	Tim	將LAST_DAY合併到changeAddMonths
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
@@ -42,10 +42,9 @@ public class DataTypeService {
 	 * <br>
 	 * <br>ADD_MONTHS($1,$2) 轉成 CAST($1-INTERVAL'$2 MONTH' AS DATE)
 	 * <br>
-	 * 
+	 * <br>2024年5月15日	Tim	將LAST_DAY合併到changeAddMonths
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * @
 	 * 
 	 * */
 	public static String changeAddMonths(String sql) {
@@ -56,26 +55,20 @@ public class DataTypeService {
 			.replaceAll("(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*(\\d+)\\s*\\)", "CAST\\($2+INTERVAL'$3 $1' AS DATE\\)")//ADD_MONTHS
 			.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT\\s+('[^']+')\\s*\\)\\s*([\\+\\-]\\s*INTERVAL'[^']+'\\s+AS\\s+DATE)\\s*\\)","AS DATE\\)$2 FORMAT $1\\)")//ADD_MONTH(CAST AS DATE
 		;
-		return res;
-	}
-	/**
-	 * 
-	 * <h1>LAST_DAY 取該月的最後一天</h1>
-	 * 
-	 * <br> * 此語法目前只提供參數為DATE使用，若為其他格式則須人工轉換資料型態
-	 * <br>
-	 * <br> 先使用DATE_TRUNC 取該月第一天
-	 * <br> 用 INTERVAL 語法 加一個月後減一天
-	 * <br> 由於 INTERVAL 語法運算後會轉成 timestamp 所以要再轉回 DATE
-	 * @author	Tim
-	 * @since	4.0.0.0
-	 * 
-	 * */
-	public static String changeLastDay(String sql) {
-		String res = sql;
-		res = res
-			.replaceAll("(?i)LAST_DAY\\(([^\\)]+)\\)", "CAST\\(DATE_TRUNC\\('Month',$1\\)+INTERVAL'1MONTH'-INTERVAL'1DAY' AS DATE\\)")
-		;
+		/**
+		 * 
+		 * <h1>LAST_DAY 取該月的最後一天</h1>
+		 * 
+		 * <br> * 此語法目前只提供參數為DATE使用，若為其他格式則須人工轉換資料型態
+		 * <br>
+		 * <br> 先使用DATE_TRUNC 取該月第一天
+		 * <br> 用 INTERVAL 語法 加一個月後減一天
+		 * <br> 由於 INTERVAL 語法運算後會轉成 timestamp 所以要再轉回 DATE
+		 * @author	Tim
+		 * @since	4.0.0.0
+		 * 
+		 * */
+		res = res.replaceAll("(?i)LAST_DAY\\(([^\\)]+)\\)", "CAST\\(DATE_TRUNC\\('Month',$1\\)+INTERVAL'1MONTH'-INTERVAL'1DAY' AS DATE\\)");
 		return res;
 	}
 	
@@ -109,17 +102,13 @@ public class DataTypeService {
 //	@Deprecated
 	public static String changeDateFormat(String sql) {
 		String res = sql;
-		
-		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
-		res = cff.savelyConvert(sql,(String t)->{
-			
-			/**
-			 * substr(cast(as date))改成substr(to_char())
-			 * */
-			t = t
-				//步驟2-1
-				.replaceAll("(?i)(SUBSTR\\s*\\(\\s*)CAST(\\s*\\(\\s*[^\\(\\)]+)\\s+AS\\s+DATE\\s+FORMAT\\s+('[^']+'\\s*\\)\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*\\))", "$1TO_CHAR$2,$3")
-			;
+		/**
+		 * substr(cast(as date))改成substr(to_char())
+		 * */
+		res = res
+			//步驟2-1
+			.replaceAll("(?i)(SUBSTR\\s*\\(\\s*)CAST(\\s*\\(\\s*[^\\(\\)]+)\\s+AS\\s+DATE\\s+FORMAT\\s+('[^']+'\\s*\\)\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*\\))", "$1TO_CHAR$2,$3")
+		;
 //			/**  2.處理日期截取語法
 //			 * 1. 先將SUBSTR(CAST(AS DATE FORMAT語法轉換成TO_CHAR，FORMAT 跟 SUBSTR 合併
 //			 * 	SUBSTR(CAST($1 AS DATE FORMAT $2),$3,$4) 轉成 TO_CHAR(CAST($1 AS DATE),SUBSTR($2,$3,$4))
@@ -140,29 +129,27 @@ public class DataTypeService {
 //				format = "'"+format.substring(substr1, substr2)+"'";
 //				t = t.replace(m.group(0),format);
 //			}
-			//步驟3
-			t = t
-				//3-1  CAST(CAST($1 AS DATE FORMAT '$2') AS VARCHAR(d+))
-				.replaceAll("(?i)CAST\\s*\\(\\s*CAST\\s*\\((\\s*[^\\(\\)]+)\\s+AS\\s+DATE\\s+FORMAT\\s+('[^']+')\\s*\\)\\s+AS\\s+(VAR)?CHAR\\s*\\(\\s*\\d+\\s*\\)\\s*\\)", "TO_CHAR\\(CAST\\($1 AS DATE\\),$2\\)")
-				.replaceAll("(?i)CAST\\s*\\(\\s*CAST\\s*\\((\\s*[^\\(\\)]+)\\s+AS\\s+DATE\\s+FORMAT\\s+('[^']+')\\s*\\)\\s+AS\\s+(VAR)?CHAR[^\\)]+\\)", "TO_CHAR\\(CAST\\($1 AS DATE\\),$2\\)")
-				//3-2  CAST(TO_CHAR($1, 'YYYY-MM') AS CHAR(7))
-				.replaceAll("(?i)CAST\\s*\\(\\s*TO_DATE\\s*\\(\\s*([^\\(\\),]+\\s*,\\s*'[^']+')\\s*\\)\\s*AS\\s+(VAR)?CHAR\\(\\d+\\)\\)", "TO_CHAR\\($1\\)")
-				//3-3  TO_CHAR(CAST($1 AS DATE FORMAT 'YYYY-MM-DD'), 'YYYY-MM')
-				.replaceAll("(?i)(TO_CHAR\\s*\\(\\s*CAST\\([^\\(\\)]+\\s*AS\\s+DATE)\\s+FORMAT\\s+'[^']+'\\s*\\)", "$1\\)")
-				.replaceAll("(?i)TO_CHAR\\s*\\(\\s*CAST\\s*\\(([^\\(\\)]+)\\s+AS+\\s+DATE\\s*\\)\\s*,\\s*('[^']+')\\s*\\)", "TO_CHAR\\($1,$2\\)")
-				//4
-				.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT\\s+'YYYYMMDD'\\s*\\)\\s*([\\+\\-]\\d+)", "AS DATE\\)$1")
-				//5
-				.replaceAll("(?i)\\bTRUNC\\s*\\(([^,]+),\\s*('YEAR|MONTH|DAY')\\s*\\)", "CAST\\(DATE_TRUNC\\($2,$1\\) AS DATE\\)")
-				//6
-				.replaceAll("(?i)\\bDATEADD\\s*\\(([^,]+),\\s*(-?\\d+)\\s*,([^)]+)\\)", "$3 + INTERVAL'$2 $1'")
-			;
-			//清除重複的CAST
-			t = t
-				.replaceAll("(?i)CAST\\s*\\(CAST\\(([^\\(\\)]+)\\s+AS\\s+DATE\\s*\\)(\\s*[\\+\\-]\\s*(\\d+|INTERVAL\\s*'[^']+'))?\\s*AS\\s+DATE\\s*\\)", "CAST\\($1 AS DATE\\)$2")
-			;
-			return t;
-		});
+		//步驟3
+		res = res
+			//3-1  CAST(CAST($1 AS DATE FORMAT '$2') AS VARCHAR(d+))
+			.replaceAll("(?i)CAST\\s*\\(\\s*CAST\\s*\\((\\s*[^\\(\\)]+)\\s+AS\\s+DATE\\s+FORMAT\\s+('[^']+')\\s*\\)\\s+AS\\s+(VAR)?CHAR\\s*\\(\\s*\\d+\\s*\\)\\s*\\)", "TO_CHAR\\(CAST\\($1 AS DATE\\),$2\\)")
+			.replaceAll("(?i)CAST\\s*\\(\\s*CAST\\s*\\((\\s*[^\\(\\)]+)\\s+AS\\s+DATE\\s+FORMAT\\s+('[^']+')\\s*\\)\\s+AS\\s+(VAR)?CHAR[^\\)]+\\)", "TO_CHAR\\(CAST\\($1 AS DATE\\),$2\\)")
+			//3-2  CAST(TO_CHAR($1, 'YYYY-MM') AS CHAR(7))
+			.replaceAll("(?i)CAST\\s*\\(\\s*TO_DATE\\s*\\(\\s*([^\\(\\),]+\\s*,\\s*'[^']+')\\s*\\)\\s*AS\\s+(VAR)?CHAR\\(\\d+\\)\\)", "TO_CHAR\\($1\\)")
+			//3-3  TO_CHAR(CAST($1 AS DATE FORMAT 'YYYY-MM-DD'), 'YYYY-MM')
+			.replaceAll("(?i)(TO_CHAR\\s*\\(\\s*CAST\\([^\\(\\)]+\\s*AS\\s+DATE)\\s+FORMAT\\s+'[^']+'\\s*\\)", "$1\\)")
+			.replaceAll("(?i)TO_CHAR\\s*\\(\\s*CAST\\s*\\(([^\\(\\)]+)\\s+AS+\\s+DATE\\s*\\)\\s*,\\s*('[^']+')\\s*\\)", "TO_CHAR\\($1,$2\\)")
+			//4
+			.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT\\s+'YYYYMMDD'\\s*\\)\\s*([\\+\\-]\\d+)", "AS DATE\\)$1")
+			//5
+			.replaceAll("(?i)\\bTRUNC\\s*\\(([^,]+),\\s*('YEAR|MONTH|DAY')\\s*\\)", "CAST\\(DATE_TRUNC\\($2,$1\\) AS DATE\\)")
+			//6
+			.replaceAll("(?i)\\bDATEADD\\s*\\(([^,]+),\\s*(-?\\d+)\\s*,([^)]+)\\)", "$3 + INTERVAL'$2 $1'")
+		;
+		//清除重複的CAST
+		res = res
+			.replaceAll("(?i)CAST\\s*\\(CAST\\(([^\\(\\)]+)\\s+AS\\s+DATE\\s*\\)(\\s*[\\+\\-]\\s*(\\d+|INTERVAL\\s*'[^']+'))?\\s*AS\\s+DATE\\s*\\)", "CAST\\($1 AS DATE\\)$2")
+		;
 		return res;
 	}
 	/**
@@ -180,23 +167,16 @@ public class DataTypeService {
 	public static String changeTypeConversion(String sql) {
 		
 		String res = sql;
-		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
-		res = cff.savelyConvert(sql, (String t)->{
-			t = t
-				//1-1 (FORMAT 'YYYY-MM-DD')(CHAR(7))
-				.replaceAll("(?i)([.\\w]+)\\s*(\\([^\\)]+\\))?\\s*\\(\\s*FORMAT\\s+('["+REG_DATE+"]+')\\s*\\)\\s*\\(\\s*(VAR)?CHAR\\(\\d+\\)\\s*\\)", "TO_CHAR\\($1$2, $3\\)")
-				//1-2 (FORMAT 'YYYY-MM-DD')
-				.replaceAll("(?i)([.\\w]+)\\s*(\\([^\\)]+\\))?\\s*\\(\\s*FORMAT\\s+('["+REG_DATE+"]+')\\s*\\)", "TO_DATE\\($1$2, $3\\)")
-				//DATE''
-				.replaceAll("(?i)\\bDATE\\s*('[^']+')", "CAST\\($1 AS DATE\\)")
-			;
-			
-			t= t
-				//CHAR
-				.replaceAll("(?i)([\\w\\.]+)(\\([^\\)]+\\))?\\((CHAR<[^>]+>\\d+<[^>]+>)\\)", "CAST\\($1$2 AS $3\\)")
-			;
-			return t;
-		});
+		res = res
+			//1-1 (FORMAT 'YYYY-MM-DD')(CHAR(7))
+//			.replaceAll("(?i)([.\\w]+)\\s*(\\([^\\)]+\\))?\\s*\\(\\s*FORMAT\\s+('["+REG_DATE+"]+')\\s*\\)\\s*\\(\\s*(VAR)?CHAR\\(\\d+\\)\\s*\\)", "TO_CHAR\\($1$2, $3\\)")
+			//1-2 (FORMAT 'YYYY-MM-DD')
+			.replaceAll("(?i)([.\\w]+)\\s*(\\([^\\)]+\\))?\\s*\\(\\s*FORMAT\\s+('["+REG_DATE+"]+')\\s*\\)", "TO_DATE\\($1$2, $3\\)")
+			//DATE''
+			.replaceAll("(?i)\\bDATE\\s*('[^']+')", "CAST\\($1 AS DATE\\)")
+			//CHAR
+			.replaceAll("(?i)([\\w\\.]+)(\\([^\\)]+\\))?\\((CHAR<[^>]+>\\d+<[^>]+>)\\)", "CAST\\($1$2 AS $3\\)")
+		;
 		return res;
 	}
 	/**
@@ -225,42 +205,39 @@ public class DataTypeService {
 	 * */
 	public static String changeFormatNumber(String sql) {
 		String res = sql;
-		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
-		res = cff.savelyConvert(res, (String t)->{
-			Map<String,String> mapIntFormat = new HashMap<String,String>();//需轉換的語法
-			mapIntFormat.put("9", "0");
-			mapIntFormat.put("Z", "9");
-			//先抓出FORMAT語句
-			Matcher m = Pattern.compile("(?i)CAST\\(([^\\(\\)]+)\\s+AS\\s+FORMAT\\s+'([^']+)'\\s*\\)",Pattern.CASE_INSENSITIVE).matcher(t);
-			StringBuffer sb = new StringBuffer();
-			while (m.find()) {
-				String col = m.group(1);//參數
-				String fmt = ConvertFunctionsSafely.decodeMark(m.group(2));//格式
-				if(!fmt.matches("["+REG_INT+"]+")) {//確認是否為數字轉換
-					return sql;
-				}
-				
-				//代碼轉換
-				for (Map.Entry<String, String> e : mapIntFormat.entrySet()) {
-					fmt = fmt.replace(e.getKey(),e.getValue());
-				}
-				//()攤開
-				Matcher m2 = Pattern.compile("(?i)(.)\\((\\d+)\\)",Pattern.CASE_INSENSITIVE).matcher(fmt);
-				StringBuffer sb2 = new StringBuffer();
-				while (m2.find()) {
-					String c = m2.group(1);//字符
-					int cnt = Integer.parseInt(m2.group(2));//數量
-					String newscript2 = "";
-					for(int i = 0;i<cnt;i++) {
-						newscript2+=c;
-					}
-					m2.appendReplacement(sb2, newscript2);
-				}
-				m2.appendTail(sb2);
-				m.appendReplacement(sb, "TO_CHAR("+col+",'"+sb2+"')");
+		Map<String,String> mapIntFormat = new HashMap<String,String>();//需轉換的語法
+		mapIntFormat.put("9", "0");
+		mapIntFormat.put("Z", "9");
+		//先抓出FORMAT語句
+		Matcher m = Pattern.compile("(?i)CAST\\(([^\\(\\)]+)\\s+AS\\s+FORMAT\\s+'([^']+)'\\s*\\)",Pattern.CASE_INSENSITIVE).matcher(res);
+		StringBuffer sb = new StringBuffer();
+		while (m.find()) {
+			String col = m.group(1);//參數
+			String fmt = ConvertFunctionsSafely.decodeMark(m.group(2));//格式
+			if(!fmt.matches("["+REG_INT+"]+")) {//確認是否為數字轉換
+				return sql;
 			}
-			return m.appendTail(sb).toString();
-		});
+			
+			//代碼轉換
+			for (Map.Entry<String, String> e : mapIntFormat.entrySet()) {
+				fmt = fmt.replace(e.getKey(),e.getValue());
+			}
+			//()攤開
+			Matcher m2 = Pattern.compile("(?i)(.)\\((\\d+)\\)",Pattern.CASE_INSENSITIVE).matcher(fmt);
+			StringBuffer sb2 = new StringBuffer();
+			while (m2.find()) {
+				String c = m2.group(1);//字符
+				int cnt = Integer.parseInt(m2.group(2));//數量
+				String newscript2 = "";
+				for(int i = 0;i<cnt;i++) {
+					newscript2+=c;
+				}
+				m2.appendReplacement(sb2, newscript2);
+			}
+			m2.appendTail(sb2);
+			m.appendReplacement(sb, "TO_CHAR("+col+",'"+sb2+"')");
+		}
+		res =  m.appendTail(sb).toString();
 		return res;
 	}
 	
@@ -313,33 +290,30 @@ public class DataTypeService {
 		mapWeek.put("SATURDAY","6");
 		String res = "";
 		
-		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
-		res = cff.savelyConvert(sql, (String t)->{
-			/**
-			 * <p>功能 ：轉換 NEXT_DAY</p>
-			 * <p>類型 ：搜尋</p>
-			 * <p>修飾詞：i</p>
-			 * <p>範圍 ：從  NEXT_DAY 到 )</p>
-			 * <h2>群組 ：</h2>
-			 * 	1.日期格式的資料
-			 *  2.星期幾，參照上方的mapWeek
-			 * <h2>備註 ：</h2>
-			 * 	
-			 * <h2>異動紀錄 ：</h2>
-			 * 2024年5月8日	Tim	建立邏輯
-			 * */
-			StringBuffer sb = new StringBuffer();
-			Pattern p = Pattern.compile("(?i)\\bNEXT_DAY\\s*\\(([^,]+),\\s*'(\\w+)'\\s*\\)");
-			Matcher m = p.matcher(t);
-			while (m.find()) {
-				String col  = m.group(1);
-				String week = mapWeek.get(m.group(2).toUpperCase());
-				String newsql = col + " + ((7 - EXTRACT(DOW FROM " + col + ") + " + week + ")::int%7)";
-				m.appendReplacement(sb, Matcher.quoteReplacement(newsql));
-			}
-			m.appendTail(sb);
-			return sb.toString();
-		});
+		/**
+		 * <p>功能 ：轉換 NEXT_DAY</p>
+		 * <p>類型 ：搜尋</p>
+		 * <p>修飾詞：i</p>
+		 * <p>範圍 ：從  NEXT_DAY 到 )</p>
+		 * <h2>群組 ：</h2>
+		 * 	1.日期格式的資料
+		 *  2.星期幾，參照上方的mapWeek
+		 * <h2>備註 ：</h2>
+		 * 	
+		 * <h2>異動紀錄 ：</h2>
+		 * 2024年5月8日	Tim	建立邏輯
+		 * */
+		StringBuffer sb = new StringBuffer();
+		Pattern p = Pattern.compile("(?i)\\bNEXT_DAY\\s*\\(([^,]+),\\s*'(\\w+)'\\s*\\)");
+		Matcher m = p.matcher(sql);
+		while (m.find()) {
+			String col  = m.group(1);
+			String week = mapWeek.get(m.group(2).toUpperCase());
+			String newsql = col + " + ((7 - EXTRACT(DOW FROM " + col + ") + " + week + ")::int%7)";
+			m.appendReplacement(sb, Matcher.quoteReplacement(newsql));
+		}
+		m.appendTail(sb);
+		res =  sb.toString();
 		return res;
 	}
 }

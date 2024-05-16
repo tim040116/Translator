@@ -149,10 +149,14 @@ public class TestGPTranslater {
 //				+ "TO_CHAR(CAST('${TXDATE}' AS DATE)- 20,'YYYY-MM')||'-01' \r\n"
 //				+ "AND\r\n"
 //				+ "TO_CHAR(DATE_TRUNC('Month',CAST('${TXDATE}' AS DATE)-1)+INTERVAL'1MONTH'-INTERVAL'1DAY','YYYY-MM-DD')";
+//		String a12 = "WHERE CLNDR_DT BETWEEN \r\n" + 
+//				"SUBSTR(TO_CHAR(CAST('${TXDATE}' AS DATE)- 20,'YYYY-MM-DD'),1,7)||'-01' \r\n" + 
+//				"AND\r\n" + 
+//				"SUBSTR(TO_CHAR(CAST(DATE_TRUNC('Month',CAST('${TXDATE}' AS DATE)+INTERVAL'1MONTH'-INTERVAL'1DAY' AS DATE)-1),'YYYY-MM-DD'),1,10)";
 		String a12 = "WHERE CLNDR_DT BETWEEN \r\n" + 
 				"SUBSTR(TO_CHAR(CAST('${TXDATE}' AS DATE)- 20,'YYYY-MM-DD'),1,7)||'-01' \r\n" + 
 				"AND\r\n" + 
-				"SUBSTR(TO_CHAR(CAST(DATE_TRUNC('Month',CAST('${TXDATE}' AS DATE)+INTERVAL'1MONTH'-INTERVAL'1DAY' AS DATE)-1),'YYYY-MM-DD'),1,10)";
+				"SUBSTR(TO_CHAR(DATE_TRUNC('Month',CAST('${TXDATE}' AS DATE)-1)+INTERVAL'1MONTH'-INTERVAL'1DAY','YYYY-MM-DD'),1,10)";
 		String r12 = GreenPlumTranslater.sql.easyReplase(q12);
 		System.out.println("CASE 12 : "+a12.equals(r12));
 		if(!a12.equals(r12))
@@ -525,7 +529,7 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 		String a45 = "CREATE TABLE IF NOT EXISTS ${MART_NCMO_DB}.BI_FM_EXPN_NON_OP_DTL_NEW\r\n" + 
 				"(LIKE <>\r\n" + 
 				"SELECT * FROM ${MART_NCMO_DB}.BI_FM_EXPN_NON_OP_DTL<> )";
-		String r45 = GreenPlumTranslater.ddl.changeCreateTableIfNotExist(q45);
+		String r45 = GreenPlumTranslater.ddl.easyReplace(q45);
 		System.out.println("CASE 45 : "+a45.equals(r45));
 		if(!a45.equals(r45))
 			System.out.println(r45);

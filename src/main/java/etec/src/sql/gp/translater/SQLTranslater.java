@@ -72,7 +72,7 @@ public class SQLTranslater {
 				.replaceAll("(?i)\\bISNULL\\s*\\(", "COALESCE\\(")//ISNULL
 				.replaceAll("(?i)\\bOREPLACE\\s*\\(", "REPLACE\\(")//OREPLACE
 				.replaceAll("(?i)\\bSTRTOK\\s*\\(", "SPLIT_PART\\(")//STRTOK
-				.replaceAll("(?i)CHARACTERS\\s*\\(","LENGTH\\(")//CHARACTERS
+				.replaceAll("(?i)\\bCHARACTERS\\s*\\(","LENGTH\\(")//CHARACTERS
 				.replaceAll("(?i)\\bAVERAGE\\s*\\(","AVG\\(")//AVERAGE
 				.replaceAll("(?i)\\bCharacter\\s*\\(","CHARACTER_LENGTH\\(")//Character
 				.replaceAll("(?i)\\bAS\\s+FORMAT\\s+'(["+DataTypeService.REG_DATE+"]+)'","AS DATE FORMAT '$1'")//DATE FORMAT 正規化
@@ -91,26 +91,35 @@ public class SQLTranslater {
 				.replaceAll("(?i)\\bINSTR\\s*\\(([^,]+),([^\\)]+)\\)", "POSITION\\($2 IN $1\\)")//INSTR
 				.replaceAll("(?i)LIKE\\s+ANY\\s*\\(\\s*('[^']+'(\\s*\\,\\s*'[^']+')+)\\s*\\)", "LIKE ANY \\(ARRAY[$1])")//LIKE ANY('','','') >> LIKE ANY(ARRAY['','',''])	
 			;
-			return t;
-		});
-		Log.debug("第二階段轉換");
-		res = cff.savelyConvert(res, (String t)->{
-			Log.debug("\t轉換日期 1");
+			Log.debug("第二階段轉換：日期及數字轉換");
+			Log.debug("\t轉換日期 1：日期加減");
 			t = DataTypeService.changeAddMonths(t);
-			Log.debug("\t轉換日期 2");
-			t = DataTypeService.changeLastDay(t);
-			Log.debug("\t轉換日期 3");
+			Log.debug("\t轉換日期 2：格式轉換");
 			t = DataTypeService.changeDateFormat(t);
-			Log.debug("\t轉換日期 4");
+			Log.debug("\t轉換日期 3：型態轉換");
 			t = DataTypeService.changeTypeConversion(t);
-			Log.debug("\t轉換日期 5");
-			t = DataTypeService.changeFormatNumber(t);
-			Log.debug("\t轉換日期 6");
-			t = DataTypeService.changeCurrentDate(t);
-			Log.debug("\t轉換日期 7");
+			Log.debug("\t轉換日期 4：下週轉換");
 			t = DataTypeService.changeNextDay(t);
+			Log.debug("\t轉換數字 1：格式轉換");
+			t = DataTypeService.changeFormatNumber(t);
 			return t;
 		});
+//		Log.debug("第二階段轉換：日期及數字轉換");
+//		res = cff.savelyConvert(res, (String t)->{
+//			Log.debug("\t轉換日期 1：日期加減");
+//			t = DataTypeService.changeAddMonths(t);
+//			Log.debug("\t轉換日期 2：格式轉換");
+//			t = DataTypeService.changeDateFormat(t);
+//			Log.debug("\t轉換日期 3：型態轉換");
+//			t = DataTypeService.changeTypeConversion(t);
+//			Log.debug("\t轉換日期 4：當日轉換");
+//			t = DataTypeService.changeCurrentDate(t);
+//			Log.debug("\t轉換日期 5：下週轉換");
+//			t = DataTypeService.changeNextDay(t);
+//			Log.debug("\t轉換數字 1：格式轉換");
+//			t = DataTypeService.changeFormatNumber(t);
+//			return t;
+//		});
 		Log.debug("第三階段轉換");
 		//須隔離處裡的項目
 		res = cff.savelyConvert(res, (String t)->{
@@ -122,9 +131,8 @@ public class SQLTranslater {
 		});
 		Log.debug("第四階段轉換");
 		res = DataTypeService.changeCurrentDate(res);
-		UnpivotService us = new UnpivotService();
-		res = us.changeTD_UNPIVOT(res);
-		res = us.changeUNPIVOT(res);
+		res = UnpivotService.changeTD_UNPIVOT(res);
+		res = UnpivotService.changeUNPIVOT(res);
 		return res;
 	}
 	

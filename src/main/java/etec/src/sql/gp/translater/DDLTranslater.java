@@ -5,13 +5,16 @@ import java.util.regex.Pattern;
 
 import etec.common.exception.sql.SQLFormatException;
 import etec.common.exception.sql.UnknowSQLTypeException;
-import etec.common.utils.convert_safely.ConvertFunctionsSafely;
+import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 
 public class DDLTranslater {
 	
 	public String easyReplace(String sql) throws UnknowSQLTypeException, SQLFormatException {
 		if(sql.matches("(?i)\\s*CREATE\\s+[\\S\\s]+")) {
+			if(sql.matches("(?i)\\s*Create\\s+Table\\s+\\S+\\s+As\\s+\\([\\S\\s]+")) {
+				sql = easyReplaceCTAS(sql);
+			}
 			sql = easyReplaceCreateTable(sql);
 		}
 		sql = changeReplaceView(sql);
@@ -76,23 +79,42 @@ public class DDLTranslater {
 	 * */
 	public String easyReplaceCreateTable(String sql) {
 		String res = sql.replaceAll("(?i)\\bSEL\\b", "SELECT");//SEL
-		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
-		res = cff.savelyConvert(res, (String t)->{
-			t = changeCreateTableIfNotExist(t);
-			return t;
-		});
-//		res = changeTypeConversion(res);
+		res = res.replaceAll("(?i)CREATE\\s+TABLE\\s+(\\S+)\\s+AS\\s*([\\S\\s]+)\\s*WITH\\s+NO\\s+DATA", "CREATE TABLE IF NOT EXISTS $1\r\n\\(LIKE $2\\)")
+				;
+//		res = changeTypeConversion(res); 
 		return res;
 	}
-	/** 
-	 * CREATE TABLE 要加上 if not exist
-	 * @author	Tim
-	 * @since	4.0.0.0
-	 * */
-	public String changeCreateTableIfNotExist(String sql) {
-		String res = sql
-			.replaceAll("(?i)CREATE\\s+TABLE\\s+(\\S+)\\s+AS\\s*([\\S\\s]+)\\s*WITH\\s+NO\\s+DATA", "CREATE TABLE IF NOT EXISTS $1\r\n\\(LIKE $2\\)")
-			;
+	
+	public String easyReplaceCTAS(String sql) throws UnknowSQLTypeException, SQLFormatException {
+		String res = sql;
+		Log.debug("\t\t細分：CTAS");
+		/**
+		 * <p>功能 ：CTAS</p>
+		 * <p>類型 ：搜尋</p>
+		 * <p>修飾詞：i</p>
+		 * <p>範圍 ：從 CREATE 到 with data</p>
+		 * <h2>群組 ：</h2>
+		 * <br>	1.create table
+		 * <br>	2.select
+		 * <h2>備註 ：</h2>
+		 * <p>
+		 * </p>
+		 * <h2>異動紀錄 ：</h2>
+		 * <br>2024年5月16日	Tim	建立邏輯
+		 * */
+		StringBuffer sb = new StringBuffer();
+		Pattern p = Pattern.compile("(?i)CREATE\\s+TABLE\\s+(\\S+)\\s+AS\\s+\\(\\s*+([\\S\\s]+)\\)\\s*WITH(\\s+NO)?\\s+DATA");
+		Matcher m = p.matcher(res);
+		while (m.find()) {
+			String table = m.group(1);
+			String sel   = m.group(2);
+			
+			String title = "CREATE TABLE IF NOT EXIST " + table + " ( like\r\n\t";
+			String select = GreenPlumTranslater.dql.easyReplace(sel)+"\r\n)";
+			m.appendReplacement(sb, title+select);
+		}
+		m.appendTail(sb);
+		res = sb.toString();
 		return res;
 	}
 	/**
