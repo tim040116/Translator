@@ -13,9 +13,11 @@ public class DDLTranslater {
 	public String easyReplace(String sql) throws UnknowSQLTypeException, SQLFormatException {
 		if(sql.matches("(?i)\\s*CREATE\\s+[\\S\\s]+")) {
 			if(sql.matches("(?i)\\s*Create\\s+Table\\s+\\S+\\s+As\\s+\\([\\S\\s]+")) {
+				Log.debug("\t\t細分：CTAS");
 				sql = easyReplaceCTAS(sql);
+			}else{
+				sql = easyReplaceCreateTable(sql);
 			}
-			sql = easyReplaceCreateTable(sql);
 		}
 		sql = changeReplaceView(sql);
 		sql = changeDropTableIfExist(sql);
@@ -87,7 +89,7 @@ public class DDLTranslater {
 	
 	public String easyReplaceCTAS(String sql) throws UnknowSQLTypeException, SQLFormatException {
 		String res = sql;
-		Log.debug("\t\t細分：CTAS");
+		
 		/**
 		 * <p>功能 ：CTAS</p>
 		 * <p>類型 ：搜尋</p>
