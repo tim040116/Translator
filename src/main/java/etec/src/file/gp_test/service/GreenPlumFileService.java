@@ -17,6 +17,7 @@ import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.gp.translater.GreenPlumTranslater;
+import etec.view.panel.SearchFunctionPnl;
 
 /**
  * <h1>測試GP功能</h1>
@@ -105,6 +106,7 @@ public class GreenPlumFileService {
 					String sql = m.group().trim();
 					sql = GreenPlumTranslater.translate(sql);
 					m.appendReplacement(sb, Matcher.quoteReplacement(sql + "\r\n"));
+					
 				}
 				m.appendTail(sb);
 			} catch (SQLTransduceException e) {
