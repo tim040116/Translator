@@ -121,9 +121,21 @@ public class ConvertSubQuerySafely {
 //		if(script.matches("(?i).*\\bUNION\\b.*")) {
 //			return function.apply(script);
 //		}
+		/**
+		 * <p>功能 ：</p>
+		 * <p>類型 ：切分|搜尋</p>
+		 * <p>修飾詞：i</p>
+		 * <p>範圍 ：從  到 </p>
+		 * <h2>備註 ：</h2>
+		 * <br>切分union前面的\b
+		 * <br>捕獲UNION |UNION ALL
+		 * <br>捕獲UNION後面的select語法
+		 * <h2>異動紀錄 ：</h2>
+		 * 2024年5月20日	Tim	建立邏輯
+		 * */
 		for(String sub : script.split("(?i)\\b(?=union\\b)")){
-			res += RegexTool.getRegexTargetFirst("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", sub);
-			String subq = sub.replaceAll("(?i)^\\s+UNION(?:\\s+ALL)?\\s+", "");
+			res += RegexTool.getRegexTargetFirst("(?i)^\\s*UNION(?:\\s+ALL)?\\s+", sub);
+			String subq = sub.replaceAll("(?i)^\\s*UNION(?:\\s+ALL)?\\s+", "");
 			res += function.apply(subq);
 		}
 		return res;

@@ -81,7 +81,7 @@ public class DDLTranslater {
 	 * */
 	public String easyReplaceCreateTable(String sql) {
 		String res = sql.replaceAll("(?i)\\bSEL\\b", "SELECT");//SEL
-		res = res.replaceAll("(?i)CREATE\\s+TABLE\\s+(\\S+)\\s+AS\\s*([\\S\\s]+)\\s*WITH\\s+NO\\s+DATA", "CREATE TABLE IF NOT EXISTS $1\r\n\\(LIKE $2\\)")
+		res = res.replaceAll("(?i)CREATE\\s+TABLE\\s+", "CREATE TABLE IF NOT EXISTS ")
 				;
 //		res = changeTypeConversion(res); 
 		return res;
@@ -98,6 +98,8 @@ public class DDLTranslater {
 		 * <h2>群組 ：</h2>
 		 * <br>	1.create table
 		 * <br>	2.select
+		 * <br> 3.with no data
+		 * <br> 4.other
 		 * <h2>備註 ：</h2>
 		 * <p>
 		 * <br>1.要加上 if not exist
@@ -107,21 +109,66 @@ public class DDLTranslater {
 		 * {@link : https://docs-cn.greenplum.org/v6/ref_guide/sql_commands/CREATE_TABLE_AS.html}
 		 * <h2>異動紀錄 ：</h2>
 		 * <br>2024年5月16日	Tim	建立邏輯
+		 * <br>2024年5月20日	Tim	經Jason測試，like不能用，limit可以，但是not exist 跟CTAS衝突
+		 * <br>					改用判別
 		 * */
 		StringBuffer sb = new StringBuffer();
-		String reg = "(?i)CREATE\\s+TABLE\\s+(\\S+)\\s+AS\\s*\\(\\s*+([\\S\\s]+)\\)\\s*WITH(\\s+NO)?\\s+DATA([^;]+)";
+		String reg = "(?i)CREATE\\s+TABLE\\s+(\\S+)\\s+AS\\s*\\(\\s*+([\\S\\s]+)\\)\\s*(WITH\\s+NO\\s+DATA)?([^;]+)";
 		Pattern p = Pattern.compile(reg);
 		Matcher m = p.matcher(res);
 		while (m.find()) {
 			String table = m.group(1);
+			String dbNm = null;
+			String tblNm = "";
+			String[] arrTbl = table.split("\\.");
+			if(arrTbl.length==2) {
+				dbNm  = arrTbl[0].replaceAll("[{}$]", "");
+				tblNm = arrTbl[1];
+			}else {
+				tblNm = table;
+			}
 			String sel   = m.group(2);
 			boolean noData= m.group(3)==null;
 			String other = m.group(4);
-			String title = "CREATE TABLE IF NOT EXIST " + table + " AS ( \r\n\t";
-			String select = GreenPlumTranslater.dql.easyReplace(sel)+"\r\n"
-					+ (noData?"LIMIT 0 \r\n":"")
-					+ ")\r\n";
-			m.appendReplacement(sb, Matcher.quoteReplacement(title+select+other+"\r\n;"));
+			String ctas = "";
+			String select = GreenPlumTranslater.dql.easyReplace(sel);
+			
+			/**2024年5月20日	Tim	CTAS 與IF NOT EXIST 不相容
+			 * */
+//			String title = "CREATE TABLE IF NOT EXIST " + table + " AS ( \r\n\t";
+//			ctas = title
+//					+select+"\r\n"+ (noData?"LIMIT 0 \r\n":"")
+//					+ ")\r\n"+other+"\r\n;";
+
+			/**
+			 * <p>功能 ：將sql 語法轉成varchar</p>
+			 * <p>類型 ：取代</p>
+			 * <p>修飾詞：</p>
+			 * <h2>群組 ：</h2>
+			 * <h2>備註 ：</h2>
+			 * <br>1.sql加上 limit 0
+			 * <br>2.單引號跳脫
+			 * <br>3.加上'' || 
+			 * <br>4.把最後一個 || 改成 ;
+			 * <h2>異動紀錄 ：</h2>
+			 * 2024年5月20日	Tim	建立邏輯
+			 * */
+			String excute = "\t\t\t\tEXECUTE "
+					+(select.replaceAll(";\\s*$","")+"\r\n"	+ (noData?"LIMIT 0 \r\n;":""))
+						.replaceAll("'", "''")
+						.replaceAll(".++", "'$0' || ")
+						.replaceAll("\\|\\|\\s*$", ";")
+						.replaceAll("\\s*\\|\\| '' \\|\\|\\s*", " \\|\\| ")
+				;
+			ctas =    "DO $$\r\n"
+					+ "BEGIN\r\n"
+					+ "    IF NOT EXISTS (SELECT 1 FROM pg_tables WHERE tablename = '"+tblNm+"'"
+					+ (dbNm != null ? " AND schemaname = '"+dbNm+"' " : "")
+					+ " ) THEN \r\n"
+					+ excute + "\r\n"
+					+ "    END IF;\r\n"
+					+ "END $$;";
+			m.appendReplacement(sb, Matcher.quoteReplacement(ctas));
 		}
 		m.appendTail(sb);
 		res = sb.toString();
