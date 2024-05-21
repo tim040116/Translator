@@ -113,7 +113,7 @@ public class DDLTranslater {
 		 * <br>					改用判別
 		 * */
 		StringBuffer sb = new StringBuffer();
-		String reg = "(?i)CREATE\\s+TABLE\\s+(\\S+)\\s+AS\\s*\\(\\s*+([\\S\\s]+)\\)\\s*(WITH\\s+NO\\s+DATA)?([^;]+)";
+		String reg = "(?i)CREATE\\s+TABLE\\s+(\\S+)\\s+AS\\s*\\(\\s*+([\\S\\s]+?)\\)\\s*(WITH\\s+(?:NO\\s+)?DATA)?([^;]+)";
 		Pattern p = Pattern.compile(reg);
 		Matcher m = p.matcher(res);
 		while (m.find()) {
@@ -128,18 +128,21 @@ public class DDLTranslater {
 				tblNm = table;
 			}
 			String sel   = m.group(2);
-			boolean noData= m.group(3)==null;
+			String withData = m.group(3)!=null?m.group(3):"";
+			boolean noData = withData.matches("(?i)with\\s+no\\s+data");
 			String other = m.group(4);
 			String ctas = "";
 			String select = GreenPlumTranslater.dql.easyReplace(sel);
 			
 			/**2024年5月20日	Tim	CTAS 與IF NOT EXIST 不相容
 			 * */
-//			String title = "CREATE TABLE IF NOT EXIST " + table + " AS ( \r\n\t";
-//			ctas = title
-//					+select+"\r\n"+ (noData?"LIMIT 0 \r\n":"")
-//					+ ")\r\n"+other+"\r\n;";
-
+			String title = "CREATE TABLE IF NOT EXIST " + table + " AS ( \r\n\t";
+			ctas = title
+					+select+"\r\n"+ (noData?"LIMIT 0 \r\n":"")
+					+ ")\r\n"+other+"\r\n;";
+			if(noData) {
+				System.out.println("");
+			}
 			/**
 			 * <p>功能 ：將sql 語法轉成varchar</p>
 			 * <p>類型 ：取代</p>
@@ -154,21 +157,21 @@ public class DDLTranslater {
 			 * 2024年5月20日	Tim	建立邏輯
 			 * */
 			String excute = "\t\t\t\tEXECUTE "
-					+(select.replaceAll(";\\s*$","")+"\r\n"	+ (noData?"LIMIT 0 \r\n;":""))
+					+(ctas.replaceAll(";\\s*$","")+"\r\n")
 						.replaceAll("'", "''")
 						.replaceAll(".++", "'$0' || ")
 						.replaceAll("\\|\\|\\s*$", ";")
 						.replaceAll("\\s*\\|\\| '' \\|\\|\\s*", " \\|\\| ")
 				;
-			ctas =    "DO $$\r\n"
+			String script =    "DO $$\r\n"
 					+ "BEGIN\r\n"
 					+ "    IF NOT EXISTS (SELECT 1 FROM pg_tables WHERE tablename = '"+tblNm+"'"
 					+ (dbNm != null ? " AND schemaname = '"+dbNm+"' " : "")
 					+ " ) THEN \r\n"
 					+ excute + "\r\n"
 					+ "    END IF;\r\n"
-					+ "END $$;";
-			m.appendReplacement(sb, Matcher.quoteReplacement(ctas));
+					+ "END $$";
+			m.appendReplacement(sb, Matcher.quoteReplacement(script));
 		}
 		m.appendTail(sb);
 		res = sb.toString();

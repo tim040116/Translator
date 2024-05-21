@@ -1,4 +1,4 @@
-PRINT_LEVEL=info
+PRINT_LEVEL=debug
 IS_WRITE_FILE=false
 TIME_FORMAT=YYYY-MM-dd HH:mm:ss
 IS_COLOR=false
