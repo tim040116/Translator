@@ -122,7 +122,7 @@ public class DDLTranslater {
 			String tblNm = "";
 			String[] arrTbl = table.split("\\.");
 			if(arrTbl.length==2) {
-				dbNm  = arrTbl[0].replaceAll("[{}$]", "");
+				dbNm  = arrTbl[0];
 				tblNm = arrTbl[1];
 			}else {
 				tblNm = table;
@@ -136,7 +136,7 @@ public class DDLTranslater {
 			
 			/**2024年5月20日	Tim	CTAS 與IF NOT EXIST 不相容
 			 * */
-			String title = "CREATE TABLE IF NOT EXIST " + table + " AS ( \r\n\t";
+			String title = "CREATE TABLE " + table + " AS ( \r\n\t";
 			ctas = title
 					+select+"\r\n"+ (noData?"LIMIT 0 \r\n":"")
 					+ ")\r\n"+other+"\r\n;";
