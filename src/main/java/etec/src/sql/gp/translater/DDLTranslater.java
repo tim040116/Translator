@@ -113,7 +113,7 @@ public class DDLTranslater {
 		 * <br>					改用判別
 		 * */
 		StringBuffer sb = new StringBuffer();
-		String reg = "(?i)CREATE\\s+TABLE\\s+(\\S+)\\s+AS\\s*\\(\\s*+([\\S\\s]+?)\\)\\s*(WITH\\s+(?:NO\\s+)?DATA)?([^;]+)";
+		String reg = "(?i)CREATE\\s+TABLE\\s+(\\S+)\\s+AS\\s*\\(\\s*+([\\S\\s]+)\\)\\s*(WITH\\s+(?:NO\\s+)?DATA)?(?=\\b)([^;]+)";
 		Pattern p = Pattern.compile(reg);
 		Matcher m = p.matcher(res);
 		while (m.find()) {
@@ -140,9 +140,6 @@ public class DDLTranslater {
 			ctas = title
 					+select+"\r\n"+ (noData?"LIMIT 0 \r\n":"")
 					+ ")\r\n"+other+"\r\n;";
-			if(noData) {
-				System.out.println("");
-			}
 			/**
 			 * <p>功能 ：將sql 語法轉成varchar</p>
 			 * <p>類型 ：取代</p>

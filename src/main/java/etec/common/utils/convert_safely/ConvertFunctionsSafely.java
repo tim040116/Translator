@@ -1,6 +1,8 @@
 package etec.common.utils.convert_safely;
 
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -42,6 +44,7 @@ public class ConvertFunctionsSafely {
 		int cntBracket = 0;
 		maxCnt = 0;
 		//encode
+		//準備廢棄
 		for(String c : script.split("")) {
 			if( "(".equals(c)) {
 				cntBracket++;
@@ -59,6 +62,37 @@ public class ConvertFunctionsSafely {
 			}
 			res+=c;
 		}
+		
+//		/**施工中
+//		 * <p>功能 ：</p>
+//		 * <p>類型 ：搜尋</p>
+//		 * <p>修飾詞：i</p>
+//		 * <p>範圍 ：從  到 </p>
+//		 * <h2>群組 ：</h2>
+//		 * 	1.
+//		 * <h2>備註 ：</h2>
+//		 * <p>
+//		 * </p>
+//		 * <h2>異動紀錄 ：</h2>
+//		 * 2024年5月22日	Tim	建立邏輯
+//		 * */
+//		while(res.contains("(")) {
+//			cntBracket++;
+//			maxCnt++;
+//			StringBuffer sb = new StringBuffer();
+//			String regex = "\\(([^()]+)\\)";
+//			Pattern p = Pattern.compile(regex);
+//			Matcher m = p.matcher(script);
+//			while (m.find()) {
+//				String str = markName("leftquater", cntBracket)
+//						+m.group(1).replaceAll(",", markName("comma", cntBracket))
+//						+markName("rightquater", cntBracket);
+//				m.appendReplacement(sb, str);
+//			}
+//			m.appendTail(sb);
+//			res = sb.toString();
+//		}
+		
 		//decode
 		for(int i = 0;i<=maxCnt+1;i++) {
 			String leftQuaterMark = markName("leftquater", i);
