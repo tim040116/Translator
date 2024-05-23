@@ -76,6 +76,7 @@ public class SQLTranslater {
 				.replaceAll("(?i)\\bAVERAGE\\s*\\(","AVG\\(")//AVERAGE
 				.replaceAll("(?i)\\bAS\\s+FORMAT\\s+'(["+DataTypeService.REG_DATE+"]+)'","AS DATE FORMAT '$1'")//DATE FORMAT 正規化
 				.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT","AS DATE FORMAT")//DATE FORMAT 正規化 多空白為一個空白
+				.replaceAll("(?i)ADD_MONTHS", "ADD_MONTH")//ADD_MONTHS
 //				.replaceAll("(?i)(\\(\\s*FORMAT\\s+'[^']+'\\s*\\))\\s*\\((VAR)?CHAR\\s*\\(\\s*\\d+\\s*\\)\\s*\\)", "$1")//FORMAT DATE 語法正規化
 //				.replaceAll("(?<!')0\\d+(?!'|\\d)", "'$0'")//0字頭的數字要包在字串裡
 				;
