@@ -32,7 +32,7 @@ public class OtherTranslater {
 	 * */
 	public String changeLockingTable(String sql) {
 		String res = sql
-			.replaceAll("(?i)LOCKING\\s+TABLE\\s+\\S+\\s+FOR\\s+ACCESS", "/*$0*/")//Locking
+			.replaceAll("(?i)LOCKING\\b.*?FOR\\s+ACCESS\\b", "/*$0*/")//Locking
 			;
 		return res;
 	}

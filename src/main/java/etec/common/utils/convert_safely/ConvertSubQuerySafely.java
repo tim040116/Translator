@@ -70,7 +70,7 @@ public class ConvertSubQuerySafely {
 				}
 			}else if(")".equals(ch)) {
 				intq--;
-				if(issub==2) {
+				if(issub==2&&intq==0) {
 					mapSub.put(subId, subSrc);
 					subSrc = "";
 					issub = 0;
@@ -99,6 +99,7 @@ public class ConvertSubQuerySafely {
 			}else {
 				fthSrc += ch;
 			}
+			
 		}
 		//處理父查詢
 		fthSrc = savelyConvertUnion(fthSrc,function);
@@ -118,9 +119,9 @@ public class ConvertSubQuerySafely {
 	 * */
 	private String savelyConvertUnion(String script,Function<String, String> function) {
 		String res = "";
-//		if(script.matches("(?i).*\\bUNION\\b.*")) {
-//			return function.apply(script);
-//		}
+		if(script.matches("(?i).*\\bUNION\\b.*")) {
+			return function.apply(script);
+		}
 		/**
 		 * <p>功能 ：</p>
 		 * <p>類型 ：切分|搜尋</p>
@@ -135,7 +136,7 @@ public class ConvertSubQuerySafely {
 		 * */
 		for(String sub : script.split("(?i)\\b(?=union\\b)")){
 			res += RegexTool.getRegexTargetFirst("(?i)^\\s*UNION(?:\\s+ALL)?\\s+", sub);
-			String subq = sub.replaceAll("(?i)^\\s*UNION(?:\\s+ALL)?\\s+", "");
+			String subq = sub.replaceAll("(?i)^\\s*UNION(?:\\s+ALL)?\\s*", "");
 			res += function.apply(subq);
 		}
 		return res;

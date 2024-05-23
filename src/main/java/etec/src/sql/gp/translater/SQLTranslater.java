@@ -40,7 +40,7 @@ public class SQLTranslater {
 	 * <br>IN後面一定要有括號
 	 * <br>NullIfZero改成NULLIF
 	 * <br>average改成AVG
-	 * <br>Character改成CHARACTER_LENGTH
+	 * <br>CHARACTERS|CHAR|CHARACTER_LENGTH|LENGTH改成LENGTH
 	 * <br>INSTR改成POSITION
 	 * <br>ISNULL改成COALESCE
 	 * <br>LIKE ANY('','','') 轉成 LIKE ANY(ARRAY['','',''])	
@@ -72,9 +72,8 @@ public class SQLTranslater {
 				.replaceAll("(?i)\\bISNULL\\s*\\(", "COALESCE\\(")//ISNULL
 				.replaceAll("(?i)\\bOREPLACE\\s*\\(", "REPLACE\\(")//OREPLACE
 				.replaceAll("(?i)\\bSTRTOK\\s*\\(", "SPLIT_PART\\(")//STRTOK
-				.replaceAll("(?i)\\bCHARACTERS\\s*\\(","LENGTH\\(")//CHARACTERS
+				.replaceAll("(?i)\\b(?:CHARACTERS|CHAR|CHARACTER_LENGTH|LENGTH)\\s*\\(\\s*+(?!\\d)","LENGTH\\(")//LENGTH
 				.replaceAll("(?i)\\bAVERAGE\\s*\\(","AVG\\(")//AVERAGE
-				.replaceAll("(?i)\\bCharacter\\s*\\(","CHARACTER_LENGTH\\(")//Character
 				.replaceAll("(?i)\\bAS\\s+FORMAT\\s+'(["+DataTypeService.REG_DATE+"]+)'","AS DATE FORMAT '$1'")//DATE FORMAT 正規化
 				.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT","AS DATE FORMAT")//DATE FORMAT 正規化 多空白為一個空白
 //				.replaceAll("(?i)(\\(\\s*FORMAT\\s+'[^']+'\\s*\\))\\s*\\((VAR)?CHAR\\s*\\(\\s*\\d+\\s*\\)\\s*\\)", "$1")//FORMAT DATE 語法正規化

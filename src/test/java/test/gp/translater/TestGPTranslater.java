@@ -524,11 +524,11 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 		System.out.println("CASE 44 : skip");
 //CASE45 : 
 		String q45 = "CREATE TABLE ${MART_NCMO_DB}.BI_FM_EXPN_NON_OP_DTL_NEW\r\n" + 
-				"		  AS <>\r\n" + 
-				"SELECT * FROM ${MART_NCMO_DB}.BI_FM_EXPN_NON_OP_DTL<> WITH NO DATA";
+				"		  AS \r\n" + 
+				"SELECT * FROM ${MART_NCMO_DB}.BI_FM_EXPN_NON_OP_DTL WITH NO DATA";
 		String a45 = "CREATE TABLE IF NOT EXISTS ${MART_NCMO_DB}.BI_FM_EXPN_NON_OP_DTL_NEW\r\n" + 
-				"(LIKE <>\r\n" + 
-				"SELECT * FROM ${MART_NCMO_DB}.BI_FM_EXPN_NON_OP_DTL<> )";
+				"		  AS \r\n" + 
+				"SELECT * FROM ${MART_NCMO_DB}.BI_FM_EXPN_NON_OP_DTL WITH NO DATA";
 		String r45 = GreenPlumTranslater.ddl.easyReplace(q45);
 		System.out.println("CASE 45 : "+a45.equals(r45));
 		if(!a45.equals(r45))
@@ -582,8 +582,11 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 				"		   ,${TEMP_DB}.LCD6 B\r\n" + 
 				" WHERE A.LCD_LEVEL > B.LCD_LEVEL";
 		String a50 = "DELETE FROM ${TEMP_DB}.LCD6 A\r\n" + 
-				" USING ${TEMP_DB}.LCD6 B\r\n" + 
-				" WHERE A.LCD_LEVEL > B.LCD_LEVEL";
+				"USING ${TEMP_DB}.LCD6 B\r\n" + 
+				" \r\n" + 
+				"WHERE\r\n" + 
+				"	 A.LCD_LEVEL > B.LCD_LEVEL\r\n" + 
+				";";
 		String r50 = GreenPlumTranslater.translate(q50);
 		System.out.println("CASE 50 : "+a50.equals(r50));
 		if(!a50.equals(r50))
@@ -593,10 +596,7 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 //		String a51 = "";
 //		System.out.println("CASE 51 : "+a51.equals(GreemPlumTranslater.sql.easyReplase(q51)));
 //CASE52 : DROP TABLE
-		String q52 = "DROP TABLE ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1\r\n" + 
-				";\r\n" + 
-				"\r\n" + 
-				"CREATE TABLE ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1(\r\n" + 
+		String q52 = "CREATE TABLE ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1(\r\n" + 
 				"	 REVSN_NUM						VARCHAR(20)\r\n" + 
 				"	,BM_CNFM_CD						VARCHAR(6)\r\n" + 
 				"	,CNTR_BU_DEPT_PARTY_ID			VARCHAR(50)\r\n" + 
@@ -610,9 +610,7 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 				"	,GLBL_CRNCY_AMT					DECIMAL(30,4)\r\n" + 
 				")PRIMARY INDEX(REVSN_NUM,BM_CNFM_CD,CNTR_BU_DEPT_PARTY_ID,CNTR_BU_DEPT_PARTY_NAME,DVSN_GRP_DEPT_PARTY_ID)\r\n" + 
 				";";
-		String a52 = "DROP TABLE IF EXISTS ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1 CASCADE;\r\n" + 
-				"\r\n" + 
-				"CREATE TABLE ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1(\r\n" + 
+		String a52 = "CREATE TABLE IF NOT EXISTS ${TEMP_DB}.BI_FM_EXPN_JE_LN_ALC_TP1(\r\n" + 
 				"	 REVSN_NUM						VARCHAR(20)\r\n" + 
 				"	,BM_CNFM_CD						VARCHAR(6)\r\n" + 
 				"	,CNTR_BU_DEPT_PARTY_ID			VARCHAR(50)\r\n" + 

@@ -80,7 +80,9 @@ public class DDLTranslater {
 	 * @since	4.0.0.0
 	 * */
 	public String easyReplaceCreateTable(String sql) {
-		String res = sql.replaceAll("(?i)\\bSEL\\b", "SELECT");//SEL
+		String res = sql
+//				.replaceAll("(?i)\\bSEL\\b", "SELECT")//SEL
+			;
 		res = res.replaceAll("(?i)CREATE\\s+TABLE\\s+", "CREATE TABLE IF NOT EXISTS ")
 				;
 //		res = changeTypeConversion(res); 

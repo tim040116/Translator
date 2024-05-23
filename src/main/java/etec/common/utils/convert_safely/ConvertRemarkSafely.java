@@ -25,7 +25,7 @@ public class ConvertRemarkSafely {
 	
 	public static int idRemarkDash = 0;
 	
-	private static Pattern p = Pattern.compile("(?mi)--.*");
+	private static Pattern p = Pattern.compile("(?mi)--.*|\\/\\*[\\S\\s]+?\\*\\/");
 	/**
 	 * <h1>轉換語句時排除註解</h1>
 	 * 
@@ -34,9 +34,34 @@ public class ConvertRemarkSafely {
 	 * @since	4.0.0.0
 	 * <p>2024年1月3日	Tim	先製作SQL兩槓的轉換</p>
 	 * <br>2024年5月15日	Tim	修改replacement語法
+	 * <br>2024年5月23日	Tim	先排除語法最前端的註解
 	 * */
 	public static String savelyConvert(String script,Function<String, String> function) {
 		String res = script;
+		
+		String title = "";
+		
+		/**
+		 * <p>功能 ：先排除最前端的註解</p>
+		 * <p>類型 ：搜尋</p>
+		 * <p>修飾詞：i</p>
+		 * <p>範圍 ：從  最前端 到 語法開始</p>
+		 * <h2>群組 ：</h2>
+		 * 	1.
+		 * <h2>備註 ：</h2>
+		 * <p>
+		 * </p>
+		 * <h2>異動紀錄 ：</h2>
+		 * 2024年5月23日	Tim	建立邏輯
+		 * */
+		String regt = "^(?:(?:\\s*--.*|\\/\\*[\\S\\s]+?\\*\\/))+\\s*";
+		Matcher mt = Pattern.compile(regt).matcher(res);
+		if(mt.find()) {
+			title = mt.group(0);
+			res = res.replace(mt.group(0), "");
+		}
+		
+		
 		Map<String,String> mapRemark = new HashMap<String,String>();
 		Matcher m = p.matcher(script);
 		while (m.find()) {
@@ -54,7 +79,7 @@ public class ConvertRemarkSafely {
 //		res = res
 //			.replaceAll("(?mi)^((?:\\s*\\+)?\\s*')(\\s*)(--)?", "$2$3 $1 ")
 //		;
-		return res;
+		return title+res;
 	}
 	
 	public static String markName(String type,int i) {

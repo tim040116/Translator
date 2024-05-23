@@ -58,23 +58,24 @@ public class DMLTranslater {
 		 * <p>範圍 ：從 DELETE 到 ;</p>
 		 * <h2>群組 ：</h2>
 		 * <br>	1.table name
-		 * <br> 2.alias
+		 * <br> 2.usingTable
 		 * <br>	3.where
 		 * <h2>備註 ：</h2>
 		 * <p>index 還沒處理
 		 * </p>with data 的部分也要再確認
 		 * <h2>異動紀錄 ：</h2>
 		 * <br>2024年5月16日	Tim	建立邏輯
+		 * <br>2024年5月23日	Tim	
 		 * */
 		StringBuffer sb = new StringBuffer();
-		Pattern p = Pattern.compile("(?i)DELETE\\s+FROM\\s+(\\S+)(\\s+\\S+)?\\s+WHERE\\s+([^;]+);?");
-		Matcher m = p.matcher(res);
+		String reg = "(?i)DELETE\\s+FROM\\s+(?<tableNm>\\S+(?:\\s+\\w+)?)(?:\\s*,(?<usingTable>[^;]+))?\\s*WHERE(?<where>[^;]+)";
+		Matcher m = Pattern.compile(reg).matcher(res);
 		while (m.find()) {
-			String table = m.group(1);
-			String alias   = m.group(2);
-			String where   = m.group(3);
-			String delete = "DELETE FROM "+table+" USING "+table+alias
-					+"\r\nWHERE\r\n"+GreenPlumTranslater.sql.easyReplase(where)+"\r\n;"
+			String table   = m.group("tableNm") != null ? m.group("tableNm") : "";
+			String using   = m.group("usingTable") != null ? m.group("usingTable") : "";
+			String where   = m.group("where") != null ? m.group("where") : "";
+			String delete  = "DELETE FROM "+table+"\r\nUSING "+using
+					+"\r\nWHERE\r\n\t"+GreenPlumTranslater.sql.easyReplase(where)+"\r\n;"
 					; 
 			m.appendReplacement(sb, Matcher.quoteReplacement(delete));
 		}

@@ -81,13 +81,12 @@ public class ConvertFunctionsSafely {
 //			maxCnt++;
 //			StringBuffer sb = new StringBuffer();
 //			String regex = "\\(([^()]+)\\)";
-//			Pattern p = Pattern.compile(regex);
-//			Matcher m = p.matcher(script);
+//			Matcher m = Pattern.compile(regex).matcher(res);
 //			while (m.find()) {
 //				String str = markName("leftquater", cntBracket)
 //						+m.group(1).replaceAll(",", markName("comma", cntBracket))
 //						+markName("rightquater", cntBracket);
-//				m.appendReplacement(sb, str);
+//				m.appendReplacement(sb, Matcher.quoteReplacement(str));
 //			}
 //			m.appendTail(sb);
 //			res = sb.toString();
