@@ -12,6 +12,7 @@ public class DDLTranslater {
 	
 	public String easyReplace(String sql) throws UnknowSQLTypeException, SQLFormatException {
 		if(sql.matches("(?i)\\s*CREATE\\s+[\\S\\s]+")) {
+			sql = changePrimaryIndex(sql);
 			if(sql.matches("(?i)\\s*Create\\s+Table\\s+\\S+\\s+As\\s*\\([\\S\\s]+")) {
 				Log.debug("\t\t細分：CTAS");
 				sql = easyReplaceCTAS(sql);
@@ -24,7 +25,6 @@ public class DDLTranslater {
 		sql = changeRenameTable(sql);
 		sql = changeCreateVolaTileTable(sql);
 		sql = changeIntegerGeneratedAlwaysAsIdentity(sql);
-		sql = changePrimaryIndex(sql);
 		return sql;
 	}
 	/**
@@ -138,7 +138,7 @@ public class DDLTranslater {
 			 * */
 			String title = "CREATE TABLE " + table + " AS ( \r\n\t";
 			ctas = title
-					+select+"\r\n"+ (noData?"LIMIT 0 \r\n":"")
+					+select+"\r\n"+ (noData?" LIMIT 0 \r\n":"")
 					+ ")\r\n"+other+"\r\n;";
 			/**
 			 * <p>功能 ：將sql 語法轉成varchar</p>
