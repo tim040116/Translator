@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import etec.common.enums.RunStatusEnum;
 import etec.common.interfaces.Controller;
 import etec.common.utils.file.FileTool;
+import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 import etec.src.file.gp_test.service.GreenPlumFileService;
 import etec.src.file.model.BasicParams;
@@ -58,6 +59,7 @@ public class GreenPlumFileController implements Controller {
 		}
 		long diffInDays = TimeUnit.MILLISECONDS.toSeconds((new Date()).getTime() - now.getTime());
 		SearchFunctionPnl.tsLog.setLog("資訊", "產生完成，共 "+diffInDays+" 秒");
+		Log.info("產生完成，共 "+diffInDays+" 秒");
 		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.SUCCESS);
 	}
 

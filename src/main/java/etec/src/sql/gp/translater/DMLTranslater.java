@@ -31,7 +31,7 @@ public class DMLTranslater {
 	public String easyReplace(String sql) throws SQLTransduceException {
 		if(sql.matches("(?i)\\s*INSERT\\s+INTO\\s+\\S+\\s+VALUES\\b[\\S\\s]+")) {
 			Log.debug("\t\t細分：INSERT  INTO");
-		}else if(sql.matches("(?i)\\s*INSERT\\s+INTO\\s+[\\S\\s]+")) {
+		}else if(sql.matches("(?i)\\s*INSERT\\s+(?:INTO\\s+)?[\\S\\s]+")) {
 			Log.debug("\t\t細分：INSERT  SELECT");
 			sql = changeInsertSelect(sql);
 		}else if(sql.matches("(?i)\\s*DELETE\\s+[\\S\\s]+")) {
@@ -39,7 +39,7 @@ public class DMLTranslater {
 			sql = changeDeleteTableUsing(sql);
 		}else {
 		}
-		return sql;
+  		return sql;
 	}
 	/**
 	 * 

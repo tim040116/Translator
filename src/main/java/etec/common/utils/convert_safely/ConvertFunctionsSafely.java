@@ -43,9 +43,21 @@ public class ConvertFunctionsSafely {
 		String res = "";
 		int cntBracket = 0;
 		maxCnt = 0;
+		//排除字串內的括號
+		StringBuffer sb = new StringBuffer();
+		String regvc = "'[^']*'";
+		Matcher mvc = Pattern.compile(regvc).matcher(script);
+		while(mvc.find()) {
+			String tmp = mvc.group(0)
+					.replaceAll("\\(", markName("vc_l",-1))
+					.replaceAll("\\)", markName("vc_r",-1))
+					.replaceAll(",", markName("vc_c",-1))
+				;
+			mvc.appendReplacement(sb, Matcher.quoteReplacement(tmp));
+		}
+		mvc.appendTail(sb);
 		//encode
-		//準備廢棄
-		for(String c : script.split("")) {
+		for(String c : sb.toString().split("")) {
 			if( "(".equals(c)) {
 				cntBracket++;
 				c = markName("leftquater", cntBracket);
@@ -63,35 +75,6 @@ public class ConvertFunctionsSafely {
 			res+=c;
 		}
 		
-//		/**施工中
-//		 * <p>功能 ：</p>
-//		 * <p>類型 ：搜尋</p>
-//		 * <p>修飾詞：i</p>
-//		 * <p>範圍 ：從  到 </p>
-//		 * <h2>群組 ：</h2>
-//		 * 	1.
-//		 * <h2>備註 ：</h2>
-//		 * <p>
-//		 * </p>
-//		 * <h2>異動紀錄 ：</h2>
-//		 * 2024年5月22日	Tim	建立邏輯
-//		 * */
-//		while(res.contains("(")) {
-//			cntBracket++;
-//			maxCnt++;
-//			StringBuffer sb = new StringBuffer();
-//			String regex = "\\(([^()]+)\\)";
-//			Matcher m = Pattern.compile(regex).matcher(res);
-//			while (m.find()) {
-//				String str = markName("leftquater", cntBracket)
-//						+m.group(1).replaceAll(",", markName("comma", cntBracket))
-//						+markName("rightquater", cntBracket);
-//				m.appendReplacement(sb, Matcher.quoteReplacement(str));
-//			}
-//			m.appendTail(sb);
-//			res = sb.toString();
-//		}
-		
 		//decode
 		for(int i = 0;i<=maxCnt+1;i++) {
 			String leftQuaterMark = markName("leftquater", i);
@@ -105,6 +88,14 @@ public class ConvertFunctionsSafely {
 					;
 			
 		}
+		
+		//解編字串裡的括號
+		res = res
+				.replaceAll(markName("vc_l",-1),"\\(")
+				.replaceAll(markName("vc_r",-1),"\\)")
+				.replaceAll(markName("vc_c",-1),",")
+			;
+		
 		if(!res.equals(script)) {
 			res = savelyConvert(res,function);
 		}

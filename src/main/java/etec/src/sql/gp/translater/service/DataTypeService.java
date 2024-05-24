@@ -51,7 +51,7 @@ public class DataTypeService {
 		String res = sql;
 		res = res
 			
-			.replaceAll("(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*\\-\\s*(\\d+)\\s*\\)", "CAST\\($2-INTERVAL'$3 $1' AS DATE\\)")//ADD_MONTHS
+			.replaceAll("(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*([+-])\\s*(\\d+)\\s*\\)", "CAST\\($2 $3 INTERVAL'$4 $1' AS DATE\\)")//ADD_MONTHS
 			.replaceAll("(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*(\\d+)\\s*\\)", "CAST\\($2+INTERVAL'$3 $1' AS DATE\\)")//ADD_MONTHS
 			.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT\\s+('[^']+')\\s*\\)\\s*([\\+\\-]\\s*INTERVAL'[^']+'\\s+AS\\s+DATE)\\s*\\)","AS DATE\\)$2 FORMAT $1\\)")//ADD_MONTH(CAST AS DATE
 		;
