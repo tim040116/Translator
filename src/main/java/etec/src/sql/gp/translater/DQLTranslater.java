@@ -278,4 +278,13 @@ public class DQLTranslater {
 		Log.debug("結束 AliasName");
 		return res;
 	}
+	
+	public String changeMultAnalyze(String script) {
+		if(!script.toUpperCase().contains("ANALYZE")) {
+			return script;
+		}
+		String res = script
+				.replaceFirst("(?i)ANALYZE\\s+([^\\s;]+)\\s*;(?:\\s*ANALYZE\\s+\\1\\s*;)+", "ANALYZE $1;");
+		return res;
+	}
 }

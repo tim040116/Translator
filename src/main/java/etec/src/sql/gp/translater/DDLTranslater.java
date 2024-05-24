@@ -11,9 +11,10 @@ import etec.common.utils.param.Params;
 public class DDLTranslater {
 	
 	public String easyReplace(String sql) throws UnknowSQLTypeException, SQLFormatException {
+		sql = sql.replaceAll("(?i)IF\\s+NOT\\s+EXISTS\\s+", "");//解決已經有IF NOT EXISTS的問題
 		if(sql.matches("(?i)\\s*CREATE\\s+[\\S\\s]+")) {
 			sql = changePrimaryIndex(sql);
-			if(sql.matches("(?i)\\s*Create\\s+Table\\s+\\S+\\s+As\\s*\\([\\S\\s]+")) {
+			if(sql.matches("(?i)\\s*Create\\s+Table\\s+\\S+\\s+As\\s*[\\S\\s]+")) {
 				Log.debug("\t\t細分：CTAS");
 				sql = easyReplaceCTAS(sql);
 			}else{

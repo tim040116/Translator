@@ -81,8 +81,9 @@ public class GreenPlumTranslater {
 		}
 		String res = "";
 		String title = script.trim().replaceAll("^\\b([\\w]+)\\b[\\S\\s]+","$1").toUpperCase();
+		script = script.replaceAll("([${}\\w]+)\\s*\\.\\s*([\\w-]+)", "$1.$2");
 		Log.debug("開始轉換語法："+title);
-		if(Arrays.asList(arrDQL).contains(title)) {
+                 		if(Arrays.asList(arrDQL).contains(title)) {
 			Log.debug("\t分類：DQL");
 			res = dql.easyReplace(script);
 		}else if(Arrays.asList(arrDML).contains(title)) {

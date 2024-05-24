@@ -112,12 +112,13 @@ public class GreenPlumFileService {
 			} catch (SQLTransduceException e) {
 				e.printStackTrace();
 			}
+			
 			return sb.toString();
 		});
 		
 		//將bteq語法清除
 		newContext = newContext.replaceAll("\\r\\n\\..*", "");
-		
+		newContext = GreenPlumTranslater.dql.changeMultAnalyze(newContext);
 		FileTool.createFile(newFileName, newContext, chs);
 	}
 }
