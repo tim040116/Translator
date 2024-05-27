@@ -12,9 +12,10 @@ public class DDLTranslater {
 	
 	public String easyReplace(String sql) throws UnknowSQLTypeException, SQLFormatException {
 		sql = sql.replaceAll("(?i)IF\\s+NOT\\s+EXISTS\\s+", "");//解決已經有IF NOT EXISTS的問題
+		sql = changeCreateVolaTileTable(sql);//temp table
 		if(sql.matches("(?i)\\s*CREATE\\s+[\\S\\s]+")) {
 			sql = changePrimaryIndex(sql);
-			if(sql.matches("(?i)\\s*Create\\s+Table\\s+\\S+\\s+As\\s*[\\S\\s]+")) {
+			if(sql.matches("(?i)\\s*Create(?:\\s+TEMP)?\\s+Table\\s+\\S+\\s+As\\s*[\\S\\s]+")) {
 				Log.debug("\t\t細分：CTAS");
 				sql = easyReplaceCTAS(sql);
 			}else{
@@ -24,7 +25,6 @@ public class DDLTranslater {
 		sql = changeReplaceView(sql);
 		sql = changeDropTableIfExist(sql);
 		sql = changeRenameTable(sql);
-		sql = changeCreateVolaTileTable(sql);
 		sql = changeIntegerGeneratedAlwaysAsIdentity(sql);
 		return sql;
 	}
@@ -84,7 +84,7 @@ public class DDLTranslater {
 		String res = sql
 //				.replaceAll("(?i)\\bSEL\\b", "SELECT")//SEL
 			;
-		res = res.replaceAll("(?i)CREATE\\s+TABLE\\s+", "CREATE TABLE IF NOT EXISTS ")
+		res = res.replaceAll("(?i)CREATE(\\s+TEMP)?\\s+TABLE\\s+", "CREATE$1 TABLE IF NOT EXISTS ")
 				;
 //		res = changeTypeConversion(res); 
 		return res;
@@ -116,11 +116,12 @@ public class DDLTranslater {
 		 * <br>					改用判別
 		 * */
 		StringBuffer sb = new StringBuffer();
-		String reg = "(?i)CREATE\\s+TABLE\\s+(\\S+)\\s+AS\\s*\\(\\s*+([\\S\\s]+)\\)\\s*(WITH\\s+(?:NO\\s+)?DATA)?(?=\\b)([^;]+)";
+		String reg = "(?i)CREATE(\\s+TEMP)?\\s+TABLE\\s+(\\S+)\\s+AS\\s*\\(\\s*+([\\S\\s]+)\\)\\s*(WITH\\s+(?:NO\\s+)?DATA)?(?=\\b)([^;]+)";
 		Pattern p = Pattern.compile(reg);
 		Matcher m = p.matcher(res);
 		while (m.find()) {
-			String table = m.group(1);
+			String temptable = m.group(1)!=null?m.group(1):"";
+			String table = m.group(2);
 			String dbNm = null;
 			String tblNm = "";
 			String[] arrTbl = table.split("\\.");
@@ -130,16 +131,16 @@ public class DDLTranslater {
 			}else {
 				tblNm = table;
 			}
-			String sel   = m.group(2);
-			String withData = m.group(3)!=null?m.group(3):"";
+			String sel   = m.group(3);
+			String withData = m.group(4)!=null?m.group(4):"";
 			boolean noData = withData.matches("(?i)with\\s+no\\s+data");
-			String other = m.group(4);
+			String other = m.group(5);
 			String ctas = "";
 			String select = GreenPlumTranslater.dql.easyReplace(sel);
 			
 			/**2024年5月20日	Tim	CTAS 與IF NOT EXIST 不相容
 			 * */
-			String title = "CREATE TABLE " + table + " AS ( \r\n\t";
+			String title = "CREATE"+temptable+" TABLE " + table + " AS ( \r\n\t";
 			ctas = title
 					+select+"\r\n"+ (noData?" LIMIT 0 \r\n":"")
 					+ ")\r\n"+other+"\r\n;";
