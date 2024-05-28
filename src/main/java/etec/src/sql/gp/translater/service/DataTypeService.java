@@ -51,7 +51,7 @@ public class DataTypeService {
 		String res = sql;
 		res = res
 			
-			.replaceAll("(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*([+-])\\s*(\\d+)\\s*\\)", "CAST\\($2 $3 INTERVAL'$4 $1' AS DATE\\)")//ADD_MONTHS
+			.replaceAll("(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*([+-])\\s*(\\d+)\\s*\\)", " CAST\\($2 $3 INTERVAL'$4 $1' AS DATE\\)")//ADD_MONTHS
 			.replaceAll("(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*(\\d+)\\s*\\)", "CAST\\($2+INTERVAL'$3 $1' AS DATE\\)")//ADD_MONTHS
 			.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT\\s+('[^']+')\\s*\\)\\s*([\\+\\-]\\s*INTERVAL'[^']+'\\s+AS\\s+DATE)\\s*\\)","AS DATE\\)$2 FORMAT $1\\)")//ADD_MONTH(CAST AS DATE
 		;
@@ -144,9 +144,9 @@ public class DataTypeService {
 			//5
 			.replaceAll("(?i)\\bTRUNC\\s*\\(([^,]+),\\s*('YEAR|MONTH|DAY')\\s*\\)", "CAST\\(DATE_TRUNC\\($2,$1\\) AS DATE\\)")
 			//6
-			.replaceAll("(?i)\\bDATEADD\\s*\\(([^,]+),\\s*(-?\\d+)\\s*,([^)]+)\\)", "$3 + INTERVAL'$2 $1'")
+			.replaceAll("(?i)\\bDATEADD\\s*\\(([^,]+),\\s*(-?\\d+)\\s*,([^)]+)\\)", "CAST\\($3 + INTERVAL'$2 $1' AS DATE\\)")
 		;
-		//清除重複的CAST
+//		//清除重複的CAST
 		res = res
 			.replaceAll("(?i)CAST\\s*\\(CAST\\(([^\\(\\)]+)\\s+AS\\s+DATE\\s*\\)(\\s*[\\+\\-]\\s*(\\d+|INTERVAL\\s*'[^']+'))?\\s*AS\\s+DATE\\s*\\)", "CAST\\($1 AS DATE\\)$2")
 		;

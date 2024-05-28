@@ -90,7 +90,8 @@ public class SQLTranslater {
 				.replaceAll("(?i)ZEROIFNULL\\s*\\(([^\\)]+)\\)", "COALESCE\\($1,0\\)")//ZEROIFNULL改成COALESCE
 				.replaceAll("(?i)NULLIFZERO\\s*\\(([^\\)]+)\\)", "NULLIF\\($1,0\\)")//NullIfZero改成NULLIF
 				.replaceAll("(?i)\\bINSTR\\s*\\(([^,]+),([^\\)]+)\\)", "POSITION\\($2 IN $1\\)")//INSTR
-				.replaceAll("(?i)LIKE\\s+(ANY|ALL)\\s*\\(\\s*('[^']+'(\\s*\\,\\s*'[^']+')+)\\s*\\)", "LIKE $1 \\(ARRAY[$2])")//LIKE ANY('','','') >> LIKE ANY(ARRAY['','',''])	
+				.replaceAll("(?i)\\bLIKE\\s+(ANY|ALL)\\s*\\(\\s*('[^']+'(\\s*\\,\\s*'[^']+')+)\\s*\\)", "LIKE $1 \\(ARRAY[$2])")//LIKE ANY('','','') >> LIKE ANY(ARRAY['','',''])	
+				.replaceAll("(?i)\\bEXTRACT\\([^()]+\\)(?!\)", "CAST\\($0 AS INT\\)")
 			;
 			Log.debug("第二階段轉換：日期及數字轉換");
 			Log.debug("\t轉換日期 1：日期加減");
