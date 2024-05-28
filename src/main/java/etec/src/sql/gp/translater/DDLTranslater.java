@@ -13,11 +13,14 @@ public class DDLTranslater {
 	public String easyReplace(String sql) throws UnknowSQLTypeException, SQLFormatException {
 		sql = sql.replaceAll("(?i)IF\\s+NOT\\s+EXISTS\\s+", "");//解決已經有IF NOT EXISTS的問題
 		sql = changeCreateVolaTileTable(sql);//temp table
-		if(sql.matches("(?i)\\s*CREATE\\s+[\\S\\s]+")) {
+		if(sql.matches("(?i)\\s*CREATE(?:\\s+TEMP)?\\s+[\\S\\s]+")) {
 			sql = changePrimaryIndex(sql);
-			if(sql.matches("(?i)\\s*Create(?:\\s+TEMP)?\\s+Table\\s+\\S+\\s+As\\s*[\\S\\s]+")) {
+			if(sql.matches("(?i)\\s*Create\\s+Table\\s+\\S+\\s+As\\s*[\\S\\s]+")) {
 				Log.debug("\t\t細分：CTAS");
 				sql = easyReplaceCTAS(sql);
+			}else if(sql.matches("(?i)\\s*Create\\s+TEMP\\s+Table\\s+\\S+\\s+As\\s*[\\S\\s]+")) {
+				Log.debug("\t\t細分：CTAS TEMP TABLE");
+				sql = easyReplaceCTASTemp(sql);
 			}else{
 				sql = easyReplaceCreateTable(sql);
 			}
@@ -74,8 +77,8 @@ public class DDLTranslater {
 	}
 	/**
 	 * <h1>Create Table 的轉換</h1>
-	 * <li>SEL改成SELECT
 	 * <li>if not exist的功能
+	 * <li>date format
 	 * 
 	 * @author	Tim
 	 * @since	4.0.0.0
@@ -84,12 +87,32 @@ public class DDLTranslater {
 		String res = sql
 //				.replaceAll("(?i)\\bSEL\\b", "SELECT")//SEL
 			;
-		res = res.replaceAll("(?i)CREATE(\\s+TEMP)?\\s+TABLE\\s+", "CREATE$1 TABLE IF NOT EXISTS ")
-				;
+		res = res
+			.replaceAll("(?i)CREATE(\\s+TEMP)?\\s+TABLE\\s+", "CREATE$1 TABLE IF NOT EXISTS ")
+			.replaceAll("(?i)\\bDATE\\s+FORMAT\\s+'[^']+'", "DATE")
+		;
 //		res = changeTypeConversion(res); 
 		return res;
 	}
-	
+	/**
+	 * <h1>轉換CTAS</h1>
+	 * <p>
+	 * </p>
+	 * <p>
+	 * </p>
+	 * 
+	 * <h2>異動紀錄</h2> <br>
+	 * <br>2024年5月27日 Tim 建立功能
+	 * 
+	 * @author Tim
+	 * @since 4.0.0.0
+	 * @param
+	 * @throws
+	 * @see
+	 * @return
+	 * @throws SQLFormatException
+	 * @throws UnknowSQLTypeException
+	 */
 	public String easyReplaceCTAS(String sql) throws UnknowSQLTypeException, SQLFormatException {
 		String res = sql;
 		
@@ -116,12 +139,11 @@ public class DDLTranslater {
 		 * <br>					改用判別
 		 * */
 		StringBuffer sb = new StringBuffer();
-		String reg = "(?i)CREATE(\\s+TEMP)?\\s+TABLE\\s+(\\S+)\\s+AS\\s*\\(\\s*+([\\S\\s]+)\\)\\s*(WITH\\s+(?:NO\\s+)?DATA)?(?=\\b)([^;]+)";
+		String reg = "(?i)CREATE\\s+TABLE\\s+(\\S+)\\s+AS\\s*\\(\\s*+([\\S\\s]+)\\)\\s*(WITH\\s+(?:NO\\s+)?DATA)?(?=\\b)([^;]+)";
 		Pattern p = Pattern.compile(reg);
 		Matcher m = p.matcher(res);
 		while (m.find()) {
-			String temptable = m.group(1)!=null?m.group(1):"";
-			String table = m.group(2);
+			String table = m.group(1);
 			String dbNm = null;
 			String tblNm = "";
 			String[] arrTbl = table.split("\\.");
@@ -131,16 +153,16 @@ public class DDLTranslater {
 			}else {
 				tblNm = table;
 			}
-			String sel   = m.group(3);
-			String withData = m.group(4)!=null?m.group(4):"";
+			String sel   = m.group(2);
+			String withData = m.group(3)!=null?m.group(3):"";
 			boolean noData = withData.matches("(?i)with\\s+no\\s+data");
-			String other = m.group(5);
+			String other = m.group(4);
 			String ctas = "";
 			String select = GreenPlumTranslater.dql.easyReplace(sel);
 			
 			/**2024年5月20日	Tim	CTAS 與IF NOT EXIST 不相容
 			 * */
-			String title = "CREATE"+temptable+" TABLE " + table + " AS ( \r\n\t";
+			String title = "CREATE TABLE " + table + " AS ( \r\n\t";
 			ctas = title
 					+select+"\r\n"+ (noData?" LIMIT 0 \r\n":"")
 					+ ")\r\n"+other+"\r\n;";
@@ -178,6 +200,77 @@ public class DDLTranslater {
 		res = sb.toString();
 		return res;
 	}
+	/**
+	 * <h1>轉換CTAS temp table</h1>
+	 * <p>CTAS temp table 不需要加if not exists
+	 * </p>
+	 * <p>
+	 * </p>
+	 * 
+	 * <h2>異動紀錄</h2> <br>
+	 * 2024年3月1日 Tim 建立功能 <br>
+	 * 2024年5月2日 Tim 增加Other類別
+	 * 
+	 * @author Tim
+	 * @since 4.0.0.0
+	 * @param
+	 * @throws
+	 * @see
+	 * @return
+	 * @throws SQLFormatException
+	 * @throws UnknowSQLTypeException
+	 */
+	public String easyReplaceCTASTemp(String sql) throws UnknowSQLTypeException, SQLFormatException {
+		String res = sql;
+		
+		/**
+		 * <p>功能 ：CTAS</p>
+		 * <p>類型 ：搜尋</p>
+		 * <p>修飾詞：i</p>
+		 * <p>範圍 ：從 CREATE 到 with data</p>
+		 * <h2>群組 ：</h2>
+		 * <br>	1.create table name
+		 * <br>	2.select
+		 * <br> 3.with no data
+		 * <br> 4.other
+		 * <h2>備註 ：</h2>
+		 * <p>
+		 * <br>1.要加上 if not exist
+		 * <br>--2.with no data的情況下要加like ????
+		 * <br>postgress定義了with no data 的功能，Greenplum数据库当前未实现此功能
+		 * </p>
+		 * {@link : https://docs-cn.greenplum.org/v6/ref_guide/sql_commands/CREATE_TABLE_AS.html}
+		 * <h2>異動紀錄 ：</h2>
+		 * <br>2024年5月16日	Tim	建立邏輯
+		 * <br>2024年5月20日	Tim	經Jason測試，like不能用，limit可以，但是not exist 跟CTAS衝突
+		 * <br>					改用判別
+		 * */
+		StringBuffer sb = new StringBuffer();
+		String reg = "(?i)CREATE\\s+TEMP\\s+TABLE\\s+(\\S+)\\s+AS\\s*\\(\\s*+([\\S\\s]+)\\)\\s*(WITH\\s+(?:NO\\s+)?DATA)?(?=\\b)([^;]+)";
+		Pattern p = Pattern.compile(reg);
+		Matcher m = p.matcher(res);
+		while (m.find()) {
+			String table = m.group(1).replaceAll("#", "");
+			String sel   = m.group(2);
+			String withData = m.group(3)!=null?m.group(3):"";
+			boolean noData = withData.matches("(?i)with\\s+no\\s+data");
+			String other = m.group(4);
+			String ctas = "";
+			String select = GreenPlumTranslater.dql.easyReplace(sel);
+			
+			/**2024年5月20日	Tim	CTAS 與IF NOT EXIST 不相容
+			 * */
+			String title = "CREATE TEMP TABLE " + table + " AS ( \r\n\t";
+			ctas = title
+					+select+"\r\n"+ (noData?" LIMIT 0 \r\n":"")
+					+ ")\r\n"+other+"\r\n";
+			m.appendReplacement(sb, Matcher.quoteReplacement(ctas));
+		}
+		m.appendTail(sb);
+		res = sb.toString();
+		return res;
+	}
+	
 	/**
 	 * DROP TABLE 要加上 if exist
 	 * 

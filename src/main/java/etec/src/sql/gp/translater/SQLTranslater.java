@@ -1,6 +1,7 @@
 package etec.src.sql.gp.translater;
 
 import etec.common.exception.sql.SQLFormatException;
+import etec.common.utils.Mark;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 import etec.common.utils.log.Log;
 import etec.src.sql.gp.translater.service.DataTypeService;
@@ -80,16 +81,16 @@ public class SQLTranslater {
 //				.replaceAll("(?i)(\\(\\s*FORMAT\\s+'[^']+'\\s*\\))\\s*\\((VAR)?CHAR\\s*\\(\\s*\\d+\\s*\\)\\s*\\)", "$1")//FORMAT DATE 語法正規化
 //				.replaceAll("(?<!')0\\d+(?!'|\\d)", "'$0'")//0字頭的數字要包在字串裡
 				;
+		res = changeIn(res);
 		Log.debug("第一階段轉換");
 		ConvertFunctionsSafely cff = new ConvertFunctionsSafely();
 		res = cff.savelyConvert(res, (String t)->{
 			t = t
 				.replaceAll("(?i)INDEX\\s*\\(([^,]+),([^\\)]+)\\)", "POSITION\\($2 IN $1\\)")//INDEX改成POSITION
 				.replaceAll("(?i)ZEROIFNULL\\s*\\(([^\\)]+)\\)", "COALESCE\\($1,0\\)")//ZEROIFNULL改成COALESCE
-				.replaceAll("(?i)\\bIN\\s+(?<n1>'[^']+'(,'[^']+')+)", "IN \\(${n1}\\)")//IN後面一定要有括號
 				.replaceAll("(?i)NULLIFZERO\\s*\\(([^\\)]+)\\)", "NULLIF\\($1,0\\)")//NullIfZero改成NULLIF
 				.replaceAll("(?i)\\bINSTR\\s*\\(([^,]+),([^\\)]+)\\)", "POSITION\\($2 IN $1\\)")//INSTR
-				.replaceAll("(?i)LIKE\\s+ANY\\s*\\(\\s*('[^']+'(\\s*\\,\\s*'[^']+')+)\\s*\\)", "LIKE ANY \\(ARRAY[$1])")//LIKE ANY('','','') >> LIKE ANY(ARRAY['','',''])	
+				.replaceAll("(?i)LIKE\\s+(ANY|ALL)\\s*\\(\\s*('[^']+'(\\s*\\,\\s*'[^']+')+)\\s*\\)", "LIKE $1 \\(ARRAY[$2])")//LIKE ANY('','','') >> LIKE ANY(ARRAY['','',''])	
 			;
 			Log.debug("第二階段轉換：日期及數字轉換");
 			Log.debug("\t轉換日期 1：日期加減");
@@ -135,6 +136,28 @@ public class SQLTranslater {
 		res = UnpivotService.changeUNPIVOT(res);
 		return res;
 	}
-	
+	/**
+	 * <h1>IN語法轉換</h1>
+	 * <p>僅限單一值的情況下，IN語法可以省略括號</p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年5月28日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	
+	 * @throws	
+	 * @see		
+	 * @return	String
+	 */
+	public String changeIn(String sql){
+		String res = sql.replaceAll("''", Mark.MAHJONG_BLACK+Mark.MAHJONG_BLACK+Mark.MAHJONG_BLACK);
+		res = res.replaceAll("(?i)\\bIN\\s*([^\\s(']\\S+|'[^']+')", "IN \\($1\\)");
+		res = res.replaceAll(Mark.MAHJONG_BLACK+Mark.MAHJONG_BLACK+Mark.MAHJONG_BLACK, "''")
+		;
+		
+		return res;
+	}
 
 }
