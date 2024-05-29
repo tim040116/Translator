@@ -146,10 +146,10 @@ public class DataTypeService {
 			//6
 			.replaceAll("(?i)\\bDATEADD\\s*\\(([^,]+),\\s*(-?\\d+)\\s*,([^)]+)\\)", "CAST\\($3 + INTERVAL'$2 $1' AS DATE\\)")
 		;
-//		//清除重複的CAST
-		res = res
-			.replaceAll("(?i)CAST\\s*\\(CAST\\(([^\\(\\)]+)\\s+AS\\s+DATE\\s*\\)(\\s*[\\+\\-]\\s*(\\d+|INTERVAL\\s*'[^']+'))?\\s*AS\\s+DATE\\s*\\)", "CAST\\($1 AS DATE\\)$2")
-		;
+////		//清除重複的CAST
+//		res = res
+//			.replaceAll("(?i)CAST\\s*\\(CAST\\(([^\\(\\)]+)\\s+AS\\s+DATE\\s*\\)(\\s*[\\+\\-]\\s*(\\d+|INTERVAL\\s*'[^']+'))?\\s*AS\\s+DATE\\s*\\)", "CAST\\($1 AS DATE\\)$2")
+//		;
 		return res;
 	}
 	/**

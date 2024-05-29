@@ -106,6 +106,7 @@ public class DMLTranslater {
 		String insert = arr[0];
 		String select = sql.replace(arr[0],"");
 		select = GreenPlumTranslater.dql.easyReplace(select);
+		select = select.replaceAll("(?i)^\\s*SELECT(?:\\s+DISTINCT\\b)?", "SELECT DISTINCT\r\n");
  		res = insert+select;
 		return res;
 	}

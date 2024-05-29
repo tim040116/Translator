@@ -13,7 +13,7 @@ public class DDLTranslater {
 	public String easyReplace(String sql) throws UnknowSQLTypeException, SQLFormatException {
 		sql = sql.replaceAll("(?i)IF\\s+NOT\\s+EXISTS\\s+", "");//解決已經有IF NOT EXISTS的問題
 		sql = changeCreateVolaTileTable(sql);//temp table
-		if(sql.matches("(?i)\\s*CREATE(?:\\s+TEMP)?\\s+[\\S\\s]+")) {
+		if(sql.matches("(?i)\\s*CREATE(?:\\s+(?:TEMP|SET|MULTISET))?\\s+[\\S\\s]+")) {
 			sql = changePrimaryIndex(sql);
 			if(sql.matches("(?i)\\s*Create\\s+Table\\s+\\S+\\s+As\\s*[\\S\\s]+")) {
 				Log.debug("\t\t細分：CTAS");
@@ -87,6 +87,25 @@ public class DDLTranslater {
 		String res = sql
 //				.replaceAll("(?i)\\bSEL\\b", "SELECT")//SEL
 			;
+		//清除Create table 的設定
+		res = res
+			.replaceAll("(?i)\\s*,\\s*NO\\s*FALLBACK\\s*", " ")
+			.replaceAll("(?i)\\s*,\\s*NO\\s*[A-Za-z]+\\s*JOURNAL\\s*", " ")
+			.replaceAll("(?i)\\s*,\\s*CHECKSUM\\s*=\\s*[A-Za-z]+\\s*", " ")
+			.replaceAll("(?i)\\s*,\\s*DEFAULT\\s*MERGEBLOCKRATIO\\s*", " ")
+			.replaceAll("(?i)CHARACTER\\s+SET\\s+\\S+", " ")
+			.replaceAll("(?i)(NOT\\s+)?CASESPECIFIC", " ")
+			.replaceAll("(?i)TITLE\\s+'[^']+'", " ")
+		;
+		res = res
+			.replaceAll("(?i)CHARACTER\\s+SET\\s+\\S+", " ")
+			.replaceAll("(?i)NOT\\s+CASESPECIFIC", " ")
+			.replaceAll("(?i)TITLE\\s+'[^']+'", " ")
+			.replaceAll("(?i)\\s*FORMAT\\s+'[^']+'\\s*", " ")
+			.replaceAll("(?i)TIMESTAMP\\s*\\(\\s*[0-9]+\\s*\\)", "DATETIME")
+			.replaceAll("(?i)VARBYTE", "VARBINARY")
+//			.replaceAll(" +,", ",")
+		;
 		res = res
 			.replaceAll("(?i)CREATE(\\s+TEMP)?\\s+TABLE\\s+", "CREATE$1 TABLE IF NOT EXISTS ")
 			.replaceAll("(?i)\\bDATE\\s+FORMAT\\s+'[^']+'", "DATE")

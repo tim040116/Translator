@@ -91,7 +91,8 @@ public class SQLTranslater {
 				.replaceAll("(?i)NULLIFZERO\\s*\\(([^\\)]+)\\)", "NULLIF\\($1,0\\)")//NullIfZero改成NULLIF
 				.replaceAll("(?i)\\bINSTR\\s*\\(([^,]+),([^\\)]+)\\)", "POSITION\\($2 IN $1\\)")//INSTR
 				.replaceAll("(?i)\\bLIKE\\s+(ANY|ALL)\\s*\\(\\s*('[^']+'(\\s*\\,\\s*'[^']+')+)\\s*\\)", "LIKE $1 \\(ARRAY[$2])")//LIKE ANY('','','') >> LIKE ANY(ARRAY['','',''])	
-				.replaceAll("(?i)\\bEXTRACT\\([^()]+\\)(?!\)", "CAST\\($0 AS INT\\)")
+				.replaceAll("(?i)\\bEXTRACT\\s*\\([^()]+\\)", "CAST\\($0 AS INT\\)")
+				.replaceAll("(?i)CAST\\((CAST\\(EXTRACT\\s*\\([^()]+\\) AS INT\\)) AS INT\\)", "$1")
 			;
 			Log.debug("第二階段轉換：日期及數字轉換");
 			Log.debug("\t轉換日期 1：日期加減");
@@ -154,7 +155,7 @@ public class SQLTranslater {
 	 */
 	public String changeIn(String sql){
 		String res = sql.replaceAll("''", Mark.MAHJONG_BLACK+Mark.MAHJONG_BLACK+Mark.MAHJONG_BLACK);
-		res = res.replaceAll("(?i)\\bIN\\s*([^\\s(']\\S+|'[^']+')", "IN \\($1\\)");
+		res = res.replaceAll("(?i)\\bIN\\s+([^\\s(']\\S+|'[^']+')", "IN \\($1\\)");
 		res = res.replaceAll(Mark.MAHJONG_BLACK+Mark.MAHJONG_BLACK+Mark.MAHJONG_BLACK, "''")
 		;
 		
