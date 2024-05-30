@@ -1,6 +1,6 @@
 package etec.view.application;
 
-import etec.src.controller.AssessmentController;
+import etec.src.file.assignment.AssessmentController;
 import etec.view.frame.SearchFunctionFrame;
 
 public class AssessmentApplication {

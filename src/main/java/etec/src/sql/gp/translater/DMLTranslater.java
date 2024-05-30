@@ -74,8 +74,10 @@ public class DMLTranslater {
 			String table   = m.group("tableNm") != null ? m.group("tableNm") : "";
 			String using   = m.group("usingTable") != null ? m.group("usingTable") : "";
 			String where   = m.group("where") != null ? m.group("where") : "";
-			String delete  = "DELETE FROM "+table+"\r\nUSING "+using
-					+"\r\nWHERE\r\n\t"+GreenPlumTranslater.sql.easyReplase(where)+"\r\n;"
+			String delete  = "DELETE FROM "+table.trim()+"\r\nUSING "+using.trim()
+					+"\r\nWHERE\r\n\t"
+					+GreenPlumTranslater.sql.easyReplase(where).trim().replaceAll("\\s*;$","")
+					+"\r\n;"
 					; 
 			m.appendReplacement(sb, Matcher.quoteReplacement(delete));
 		}

@@ -1,4 +1,4 @@
-package etec.src.controller;
+package etec.src.file.assignment;
 
 import java.io.File;
 import java.util.Arrays;
@@ -18,11 +18,12 @@ import etec.common.utils.file.BigFileSplitTool;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
+import etec.src.file.assignment.service.create_file.CreateMultisetList;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.az.service.IOpathSettingService;
 import etec.src.sql.az.service.SearchFunctionService;
 import etec.src.sql.az.service.TransduceStoreFunctionService;
-import etec.src.sql.azure.service.CreateSDIService;
+import etec.src.sql.azure.create_file.CreateSDIService;
 import etec.view.panel.SearchFunctionPnl;
 
 public class AssessmentController implements Controller{
@@ -67,7 +68,7 @@ public class AssessmentController implements Controller{
 		for (File f : lf) {
 			
 			SearchFunctionPnl.tsLog.setLog("資訊","讀取檔案：" + f.getPath());
-			
+			CreateMultisetList.CreateList(BasicParams.getInputPath(), f);
 			// 讀取檔案
 			//String content = FileTool.readFile(f,Charset.forName("utf-8"));
 			String content = CharsetTool.readFileInCharset("UTF-8", f.getPath());

@@ -96,12 +96,13 @@ public class DDLTranslater {
 			.replaceAll("(?i)CHARACTER\\s+SET\\s+\\S+", " ")
 			.replaceAll("(?i)(NOT\\s+)?CASESPECIFIC", " ")
 			.replaceAll("(?i)TITLE\\s+'[^']+'", " ")
+			.replaceAll("(?i)\\bNO\\s+PRIMARY\\s+INDEX","")
 		;
 		res = res
 			.replaceAll("(?i)CHARACTER\\s+SET\\s+\\S+", " ")
 			.replaceAll("(?i)NOT\\s+CASESPECIFIC", " ")
 			.replaceAll("(?i)TITLE\\s+'[^']+'", " ")
-			.replaceAll("(?i)\\s*FORMAT\\s+'[^']+'\\s*", " ")
+			.replaceAll("(?i)\\s*FORMAT\\s+'[^']+'", " ")
 			.replaceAll("(?i)TIMESTAMP\\s*\\(\\s*[0-9]+\\s*\\)", "DATETIME")
 			.replaceAll("(?i)VARBYTE", "VARBINARY")
 //			.replaceAll(" +,", ",")

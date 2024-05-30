@@ -5,9 +5,11 @@ Assignment 加上 multiset table list  : path,script,tablename,
 
 merge into 
 
+int format
+
+TRIM(TO_CHAR(aaa,'00'))
 
 做一個依據multiset table list 來處理distinct問題的功能
 insert select ,update merge into屬於SET或沒有設定的加distinct
 create 的 set multiset 一律清掉
-		
-先只列清單就好
+ 
