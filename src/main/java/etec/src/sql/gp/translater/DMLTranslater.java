@@ -9,6 +9,7 @@ import etec.common.exception.sql.SQLTransduceException;
 import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.utils.convert_safely.SplitCommaSafely;
 import etec.common.utils.log.Log;
+import etec.src.sql.gp.translater.service.MergeIntoService;
 
 public class DMLTranslater {
 	
@@ -31,19 +32,28 @@ public class DMLTranslater {
 	 * @see		
 	 * @return	return_type
 			 */
-	public String easyReplace(String sql) throws SQLTransduceException {
-		if(sql.matches("(?i)\\s*INSERT\\s+INTO\\s+\\S+\\s+VALUES\\b[\\S\\s]+")) {
-			Log.debug("\t\t細分：INSERT  INTO");
-		}else if(sql.matches("(?i)\\s*INSERT\\s+(?:INTO\\s+)?[\\S\\s]+")) {
-			Log.debug("\t\t細分：INSERT  SELECT");
-			sql = changeInsertSelect(sql);
-		}else if(sql.matches("(?i)\\s*DELETE\\s+[\\S\\s]+")) {
-			Log.debug("\t\t細分：DELETE TABLE");
+	public String easyReplace(String title,String sql) throws SQLTransduceException {
+		switch(title) {
+		case "INSERT":
+			if(sql.matches("(?i)\\s*INSERT\\s+INTO\\s+\\S+\\s+VALUES\\b[\\S\\s]+")) {
+				Log.debug("\t細分：INSERT  INTO");
+			}else if(sql.matches("(?i)\\s*INSERT\\s+(?:INTO\\s+)?[\\S\\s]+")) {
+				Log.debug("\t細分：INSERT  SELECT");
+				sql = changeInsertSelect(sql);
+			}
+			break;
+		case "DELETE":
+			Log.debug("\t細分：DELETE TABLE");
 			sql = changeDeleteTableUsing(sql);
-		}else if(sql.matches("(?i)\\s*UPDATE\\s+[\\S\\s]+")) {
-			Log.debug("\t\t細分：UPDATE TABLE");
+			break;
+		case "UPDATE":
+			Log.debug("\t細分：UPDATE TABLE");
 			sql = changeUpdateTable(sql);
-		}else {
+			break;
+		case "MERGE":
+			Log.debug("\t細分：MERGE INTO");
+			sql = changeMergeInto(sql);
+			break;
 		}
   		return sql;
 	}
@@ -210,6 +220,72 @@ public class DMLTranslater {
 		
 		res = sb.toString();
 		
+		return res;
+	}
+	
+	
+	/**
+	 * <h1>Merge into語法轉換</h1>
+	 * <p>
+	 * <br>GP不存在MERGE INTO語法，
+	 * <br>要將語法拆成insert update語法
+	 * <br>然後將條件塞在where裡面
+	 * </p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年6月3日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	enclosing_method_arguments
+	 * @throws	SQLTransduceException
+	 * @see		
+	 * @return	String
+	 * @throws UnknowSQLTypeException 
+	 */
+	public String changeMergeInto(String sql) throws SQLTransduceException {
+		String res = "";
+		/**
+		 * <p>功能 ：第一步拆解merge into 語法</p>
+		 * <p>類型 ：搜尋</p>
+		 * <p>修飾詞：is</p>
+		 * <p>範圍 ：從 merge 到 ;</p>
+		 * <h2>群組 ：</h2>
+		 * tableNm. table name
+		 * using. 	using
+		 * when1. 	第一段是否MATCH
+		 * sql1. 	第一段SQL
+		 * when2. 	第二段when
+		 * sql2.	第二段SQL
+		 * <h2>備註 ：</h2>
+		 * <p>
+		 * </p>
+		 * <h2>異動紀錄 ：</h2>
+		 * 2024年5月31日	Tim	建立邏輯
+		 * */
+		StringBuffer sb = new StringBuffer();
+		String reg = "(?is)"
+				+ "MERGE\\s+INTO\\s+(?<tableNm>.*?)USING(?<using>.*?)WHEN\\s+(?<when1>(?:NOT\\s+)?MATCHED)\\s+THEN\\s+(?<type1>\\w+)(?<sql1>[^;]+?)WHEN\\s+(?<when2>(?:NOT\\s+)?MATCHED)\\s+THEN\\s+(?<type2>\\w+)(?<sql2>[^;]+);?";
+		Matcher m = Pattern.compile(reg).matcher(sql);
+		while (m.find()) {
+			String merge = "";
+			String tableNm = m.group("tableNm").trim().replaceAll("^#", "");
+			String using = m.group("using").trim();
+			String sql1  = m.group("sql1");
+			String sql2  = m.group("sql2");
+			//處理WHEN 1
+			sql1 = MergeIntoService.convert(m.group("type1"), tableNm, using, m.group("sql1").trim());
+			sql1 = GreenPlumTranslater.translate(sql1);
+			//處理WHEN 2
+			sql2 = MergeIntoService.convert(m.group("type2"), tableNm, using, m.group("sql2").trim());
+			sql2 = GreenPlumTranslater.translate(sql2);
+			
+			merge = sql1+"\r\n\r\n"+sql2;
+			m.appendReplacement(sb,Matcher.quoteReplacement(merge));
+		}
+		m.appendTail(sb);
+		res = sb.toString();
 		return res;
 	}
 }

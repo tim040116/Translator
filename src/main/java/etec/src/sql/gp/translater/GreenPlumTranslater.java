@@ -50,7 +50,7 @@ public class GreenPlumTranslater {
 	 * @since 4.0.0.0
 	 */
 	public static String[] arrDQL = { "WITH", "SELECT" };
-	public static String[] arrDML = { "INSERT", "DELETE", "UPDATE" };
+	public static String[] arrDML = { "INSERT", "DELETE", "UPDATE","MERGE"};
 	public static String[] arrDDL = { "CREATE", "TRUNCAT", "DROP", "RENAME", "REPLACE" };
 	public static String[] arrOther = { "CALL", "COLLECT", "LOCKING" };
 
@@ -83,12 +83,12 @@ public class GreenPlumTranslater {
 		String title = script.trim().replaceAll("^\\b([\\w]+)\\b[\\S\\s]+","$1").toUpperCase();
 		script = script.replaceAll("([${}\\w]+)\\s*\\.\\s*([\\w-]+)", "$1.$2");
 		Log.debug("開始轉換語法："+title);
-                 		if(Arrays.asList(arrDQL).contains(title)) {
+ 		if(Arrays.asList(arrDQL).contains(title)) {
 			Log.debug("\t分類：DQL");
 			res = dql.easyReplace(script);
 		}else if(Arrays.asList(arrDML).contains(title)) {
 			Log.debug("\t分類：DML");
-			res = dml.easyReplace(script);
+			res = dml.easyReplace(title,script);
 		}else if(Arrays.asList(arrDDL).contains(title)) {
 			Log.debug("\t分類：DDL");
 			res = ddl.easyReplace(script);
