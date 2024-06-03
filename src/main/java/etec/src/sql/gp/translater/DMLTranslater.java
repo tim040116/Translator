@@ -266,7 +266,10 @@ public class DMLTranslater {
 		 * */
 		StringBuffer sb = new StringBuffer();
 		String reg = "(?is)"
-				+ "MERGE\\s+INTO\\s+(?<tableNm>.*?)USING(?<using>.*?)WHEN\\s+(?<when1>(?:NOT\\s+)?MATCHED)\\s+THEN\\s+(?<type1>\\w+)(?<sql1>[^;]+?)WHEN\\s+(?<when2>(?:NOT\\s+)?MATCHED)\\s+THEN\\s+(?<type2>\\w+)(?<sql2>[^;]+);?";
+				+ "MERGE\\s+INTO\\s+(?<tableNm>.*?)"
+				+ "USING(?<using>.*?)"
+				+ "WHEN\\s+(?<when1>(?:NOT\\s+)?MATCHED)\\s+THEN\\s+(?<type1>\\w+)(?<sql1>[^;]+?)"
+				+ "WHEN\\s+(?<when2>(?:NOT\\s+)?MATCHED)\\s+THEN\\s+(?<type2>\\w+)(?<sql2>[^;]+);?";
 		Matcher m = Pattern.compile(reg).matcher(sql);
 		while (m.find()) {
 			String merge = "";
