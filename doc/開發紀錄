@@ -1,7 +1,5 @@
 2024/05/29 Tim:
 
-merge into 
-
 int format
 
 TRIM(TO_CHAR(aaa,'00'))

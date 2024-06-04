@@ -1,5 +1,7 @@
 package etec.src.sql.gp.translater.service;
 
+import java.util.regex.Matcher;
+
 public class MergeIntoService {
 	
 	public static String convert(String type,String tableNm,String using,String sql) {
@@ -17,24 +19,25 @@ public class MergeIntoService {
 	
 	
 	public static String insert(String tableNm,String using,String sql) {
-		String alias = sql.replaceAll("\\S+\\s+(\\S+)\\s*", "$1");
-		String table = sql.replaceAll("(\\S+)\\s+\\S+\\s*", "$1");
+		String alias = tableNm.replaceAll("\\S+\\s+(\\S+)\\s*", "$1");
+		String table = tableNm.replaceAll("(\\S+)\\s+\\S+\\s*", "$1");
 		/**
 		 * 1.using table
 		 * 2.on
 		 * */
 		String reg = "(?is)(.*)on\\s*(?!.*on.*)(.*)";
 		String rpm = "FROM $1"
-				+ "\\r\\nWHERE NOT EXISTS \\("
-				+ "\\r\\n\\tSELECT '*'"
-				+ "\\r\\n\\tFROM " + table
-				+ "\\r\\n\\tWHERE $2"
-				+ "\\r\\n\\)";
+				+ "\r\nWHERE NOT EXISTS \\("
+				+ "\r\n\tSELECT '*'"
+				+ "\r\n\tFROM " + Matcher.quoteReplacement(table)
+				+ "\r\n\tWHERE $2"
+				+ "\r\n\\)";
 		String from  = using
-				.replaceAll("\\b"+alias+"\\.", "")
+				.replaceAll("\\b"+Matcher.quoteReplacement(alias)+"\\.", "")
 				.replaceAll(reg,rpm);
 		String res = "INSERT INTO " + table
-				+ "\r\n" + from
+				+ "\r\nSELECT "+sql.replaceAll("(mis).*\\)\\s*VALUES\\s*\\((.*)\\)", "$1")
+				+ "\r\n" + from.trim()
 				+ "\r\n;"
 				;
 		return res;
