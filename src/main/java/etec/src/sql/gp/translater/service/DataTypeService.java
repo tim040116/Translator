@@ -90,7 +90,7 @@ public class DataTypeService {
 	 * <br>		$1 AS DATE FORMAT 'YYYYMMDD')+1 轉成 $1 AS DATE)+1
 	 * <br>5. TRUNC(aa, 'MONTH') 轉成  CAST(DATE_TRUNC('MONTH',aa)AS DATE)
 	 * <br>6. DATEADD(day, 45, a.Quta_StartDate) 轉成 a.Quta_StartDate + INTERVAL'45 day'
-	 * 
+	 * <br>7. CAST(aaa as smallint format '99') -> TRIM(TO_CHAR(aaa,'00'))
 	 * <h2>異動紀錄</h2>
 	 * <p>2023/12/06	Tim	因涉及邏輯問題暫時廢棄</p>
 	 * <p>2023/12/12	Tim 重啟功能，分層處理</p>
@@ -198,8 +198,9 @@ public class DataTypeService {
 	}
 	/**
 	 * <h1>轉換CAST轉換數字的語法</h1>
-	 * <br>CAST($1 AS FORMAT '9(12)') -> TO_CHAR($1,'000000000000')
+	 * <br>CAST($1 AS FORMAT '9(12)') -> TRIM(TO_CHAR($1,'000000000000'))
 	 * 
+	 * 2024年6月4日	Tim	加上TRIM
 	 * @author	Tim
 	 * @since	2023年12月20日
 	 * */
@@ -209,7 +210,8 @@ public class DataTypeService {
 		mapIntFormat.put("9", "0");
 		mapIntFormat.put("Z", "9");
 		//先抓出FORMAT語句
-		Matcher m = Pattern.compile("(?i)CAST\\(([^\\(\\)]+)\\s+AS\\s+FORMAT\\s+'([^']+)'\\s*\\)",Pattern.CASE_INSENSITIVE).matcher(res);
+		String reg = "(?i)CAST\\(([^\\(\\)]+)\\s+AS\\s+(?:[\\w+,()]+\\s+)?FORMAT\\s+'([^']+)'\\s*\\)";
+		Matcher m = Pattern.compile(reg,Pattern.CASE_INSENSITIVE).matcher(res);
 		StringBuffer sb = new StringBuffer();
 		while (m.find()) {
 			String col = m.group(1);//參數
@@ -217,11 +219,8 @@ public class DataTypeService {
 			if(!fmt.matches("["+REG_INT+"]+")) {//確認是否為數字轉換
 				return sql;
 			}
-			
 			//代碼轉換
-			for (Map.Entry<String, String> e : mapIntFormat.entrySet()) {
-				fmt = fmt.replace(e.getKey(),e.getValue());
-			}
+			fmt = formatConvert(fmt);
 			//()攤開
 			Matcher m2 = Pattern.compile("(?i)(.)\\((\\d+)\\)",Pattern.CASE_INSENSITIVE).matcher(fmt);
 			StringBuffer sb2 = new StringBuffer();
@@ -235,7 +234,7 @@ public class DataTypeService {
 				m2.appendReplacement(sb2, newscript2);
 			}
 			m2.appendTail(sb2);
-			m.appendReplacement(sb, "TO_CHAR("+col+",'"+sb2+"')");
+			m.appendReplacement(sb, Matcher.quoteReplacement("TRIM(TO_CHAR("+col+",'"+sb2+"'))"));
 		}
 		res =  m.appendTail(sb).toString();
 		return res;
@@ -315,6 +314,16 @@ public class DataTypeService {
 		m.appendTail(sb);
 		res =  sb.toString();
 		return res;
+	}
+	
+	private static String formatConvert(String format) {
+		Map<String,String> mapIntFormat = new HashMap<String,String>();//需轉換的語法
+		mapIntFormat.put("9", "0");
+		mapIntFormat.put("Z", "9");
+		for (Map.Entry<String, String> e : mapIntFormat.entrySet()) {
+			format = format.replace(e.getKey(),e.getValue());
+		}
+		return format;
 	}
 }
 

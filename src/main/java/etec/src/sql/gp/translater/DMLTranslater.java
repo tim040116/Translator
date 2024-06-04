@@ -84,15 +84,16 @@ public class DMLTranslater {
 		 * <br>2024年5月23日	Tim	
 		 * */
 		StringBuffer sb = new StringBuffer();
-		String reg = "(?i)DELETE\\s+FROM\\s+(?<tableNm>\\S+(?:\\s+\\w+)?)(?:\\s*,(?<usingTable>[^;]+))?\\s*WHERE(?<where>[^;]+)";
+		String reg = "(?i)DELETE\\s+FROM\\s+(?<tableNm>\\S+(?:\\s+\\w+)?)(?:\\s*,(?<usingTable>[^;]+))?\\s*WHERE(?<where>[^;]+);?";
 		Matcher m = Pattern.compile(reg).matcher(res);
 		while (m.find()) {
 			String table   = m.group("tableNm") != null ? m.group("tableNm") : "";
 			String using   = m.group("usingTable") != null ? m.group("usingTable") : "";
 			String where   = m.group("where") != null ? m.group("where") : "";
-			String delete  = "DELETE FROM "+table.trim()+"\r\nUSING "+using.trim()
+			String delete  = "DELETE FROM "+table.trim()
+					+(m.group("usingTable")!=null?"\r\nUSING "+using.trim():"")
 					+"\r\nWHERE\r\n\t"
-					+GreenPlumTranslater.sql.easyReplase(where).trim().replaceAll("\\s*;$","")
+					+GreenPlumTranslater.sql.easyReplase(where).trim().replaceAll("\\s*;\\s*$","")
 					+"\r\n;"
 					; 
 			m.appendReplacement(sb, Matcher.quoteReplacement(delete));
