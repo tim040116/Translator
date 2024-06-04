@@ -36,7 +36,7 @@ public class MergeIntoService {
 				.replaceAll("\\b"+Matcher.quoteReplacement(alias)+"\\.", "")
 				.replaceAll(reg,rpm);
 		String res = "INSERT INTO " + table
-				+ "\r\nSELECT "+sql.replaceAll("(mis).*\\)\\s*VALUES\\s*\\((.*)\\)", "$1")
+				+ "\r\nSELECT "+sql.replaceAll("(?is).*\\)\\s*VALUES\\s*\\((.*)\\)", "$1")
 				+ "\r\n" + from.trim()
 				+ "\r\n;"
 				;
