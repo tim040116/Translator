@@ -88,10 +88,10 @@ public class DMLTranslater {
 		Matcher m = Pattern.compile(reg).matcher(res);
 		while (m.find()) {
 			String table   = m.group("tableNm") != null ? m.group("tableNm") : "";
-			String using   = m.group("usingTable") != null ? m.group("usingTable") : "";
+			String using   = m.group("usingTable") != null ? "\r\nUSING "+m.group("usingTable") : "";
 			String where   = m.group("where") != null ? m.group("where") : "";
 			String delete  = "DELETE FROM "+table.trim()
-					+(m.group("usingTable")!=null?"\r\nUSING "+using.trim():"")
+					+(m.group("usingTable")!=null?using.trim():"")
 					+"\r\nWHERE\r\n\t"
 					+GreenPlumTranslater.sql.easyReplase(where).trim().replaceAll("\\s*;\\s*$","")
 					+"\r\n;"
