@@ -61,7 +61,7 @@ public class DDLTranslater {
 			Matcher m = p.matcher(sql);
 			while(m.find()) {
 				String select = m.group(2);
-				select = GreenPlumTranslater.other.easyReplace(select);
+				select = GreenPlumTranslater.other.easyReplace("",select);
 				select = GreenPlumTranslater.dql.easyReplace(select);
 				res = "DROP VIEW IF EXISTS "+m.group(1)+";"
 						+ "\r\nCREATE VIEW "+m.group(1)+" AS \r\n"

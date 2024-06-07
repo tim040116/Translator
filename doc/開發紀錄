@@ -1,5 +1,9 @@
 2024/05/29 Tim:
 
-int format
 
-TRIM(TO_CHAR(aaa,'00'))
+merge
+
+#沒在字串裡的
+
+
+call sp 要列清單

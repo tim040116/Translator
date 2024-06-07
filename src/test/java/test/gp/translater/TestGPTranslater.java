@@ -435,14 +435,14 @@ SELECT B.*, '金額' AS RM_FLAG FROM ${BIMART_DB}.BI_FM_EXPN_JE_LN_ALC B
 //CASE32.1 : 
 		String q32_1 = "COLLECT STATISTICS ON ${BIMART_DB}.BI_ACTUAL_IMP_SUM_TW;";
 		String a32_1 = "ANALYZE ${BIMART_DB}.BI_ACTUAL_IMP_SUM_TW;";
-		String r32_1 = GreenPlumTranslater.other.easyReplace(q32_1);
+		String r32_1 = GreenPlumTranslater.other.easyReplace("",q32_1);
 		System.out.println("CASE 32 : "+a32_1.equals(r32_1));
 		if(!a32_1.equals(r32_1))
 		System.out.println(r32_1);
 //CASE32.2 : 
 		String q32_2 = "INDEX ( PLANT_LOC_ID,MFG_DT,MFG_SHIFT_ID,MFG_ORD_ID);";
 		String a32_2 ="/*INDEX ( PLANT_LOC_ID,MFG_DT,MFG_SHIFT_ID,MFG_ORD_ID);*/";
-		String r32_2 = GreenPlumTranslater.other.easyReplace(q32_2);
+		String r32_2 = GreenPlumTranslater.other.easyReplace("",q32_2);
 		System.out.println("CASE 32 : "+a32_2.equals(r32_2));
 		if(!a32_2.equals(r32_2))
 		System.out.println(r32_2);

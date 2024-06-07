@@ -15,8 +15,13 @@ public class OtherTranslater {
 	 * @since	2023年12月20日
 	 * 
 	 * */
-	public String easyReplace(String script) {
+	public String easyReplace(String title,String script) {
 		String res = script;
+		switch(title) {
+			case "CALL":
+				res = changeCall(script);
+				break;
+		}
 		res = changeLockingTable(res);
 		res = changeCollectStatistics(res);
 		res = changeIndex(res);
@@ -60,6 +65,20 @@ public class OtherTranslater {
 	public String changeIndex(String sql) {
 		String res = sql
 			.replaceAll("(?i)((UNIQUE|PRIMARY)\\s+)*INDEX\\s*\\(\\s*[\\w\\.\\s,]+\\)\\s*;", "/*$0*/")
+			;
+		return res;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2024年6月7日
+	 * 
+	 * INDEX要註解掉，
+	 * <br>UNIQUE 跟 PRIMARY 也要
+	 * 
+	 * */
+	public String changeCall(String sql) {
+		String res = sql
+			.replaceAll("#","TEMP_TABLE.")
 			;
 		return res;
 	}

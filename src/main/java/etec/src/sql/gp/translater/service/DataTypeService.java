@@ -210,7 +210,8 @@ public class DataTypeService {
 		mapIntFormat.put("9", "0");
 		mapIntFormat.put("Z", "9");
 		//先抓出FORMAT語句
-		String reg = "(?i)CAST\\(([^\\(\\)]+)\\s+AS\\s+(?:[\\w+,()]+\\s+)?FORMAT\\s+'([^']+)'\\s*\\)";
+//		String reg = "(?i)CAST\\(([^\\(\\)]+)\\s+AS\\s+(?:[\\w+,()]+\\s+)?FORMAT\\s+'([^']+)'\\s*\\)";
+		String reg = "(?i)CAST\\(([^\\(\\)]+)\\s+AS\\s+FORMAT\\s+'([^']+)'\\s*\\)";
 		Matcher m = Pattern.compile(reg,Pattern.CASE_INSENSITIVE).matcher(res);
 		StringBuffer sb = new StringBuffer();
 		while (m.find()) {
@@ -234,7 +235,8 @@ public class DataTypeService {
 				m2.appendReplacement(sb2, newscript2);
 			}
 			m2.appendTail(sb2);
-			m.appendReplacement(sb, Matcher.quoteReplacement("TRIM(TO_CHAR("+col+",'"+sb2+"'))"));
+			m.appendReplacement(sb, "TO_CHAR("+col+",'"+sb2+"')");
+//			m.appendReplacement(sb, Matcher.quoteReplacement("TRIM(TO_CHAR("+col+",'"+sb2+"'))"));
 		}
 		res =  m.appendTail(sb).toString();
 		return res;

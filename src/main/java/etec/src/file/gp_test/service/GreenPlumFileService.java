@@ -116,8 +116,8 @@ public class GreenPlumFileService {
 			return sb.toString();
 		});
 		
-		//將bteq語法清除
-		newContext = newContext.replaceAll("\\r\\n\\..*", "");
+		/*將bteq語法清除*/
+		//newContext = newContext.replaceAll("\\r\\n\\..*", "");
 		newContext = GreenPlumTranslater.dql.changeMultAnalyze(newContext);
 		FileTool.createFile(newFileName, newContext, chs);
 	}

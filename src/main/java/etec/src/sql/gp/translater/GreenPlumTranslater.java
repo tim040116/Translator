@@ -6,6 +6,7 @@ import etec.common.exception.sql.SQLFormatException;
 import etec.common.exception.sql.SQLTransduceException;
 import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.utils.convert_safely.ConvertRemarkSafely;
+import etec.common.utils.convert_safely.ConvertVarcharSafely;
 import etec.common.utils.log.Log;
 
 /**
@@ -94,11 +95,15 @@ public class GreenPlumTranslater {
 			res = ddl.easyReplace(script);
 		}else if(Arrays.asList(arrOther).contains(title)) {
 			Log.debug("\t分類：OTHER");
-			res = other.easyReplace(script);
+			res = other.easyReplace(title,script);
 		}else {
 			Log.debug("\t分類：OTHER");
 			res = script;
 		}
+ 		//額外處理
+ 		res = ConvertVarcharSafely.savelyConvert(res, (t)->{
+ 			return t.replaceAll("#", "TEMP_TABLE.");
+ 		});
 		Log.debug("轉換完成");
 		return res;
 	}
