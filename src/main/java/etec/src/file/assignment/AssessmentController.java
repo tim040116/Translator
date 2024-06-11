@@ -18,7 +18,8 @@ import etec.common.utils.file.BigFileSplitTool;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
-import etec.src.file.assignment.service.create_file.CreateMultisetList;
+import etec.src.file.assignment.service.create_list.CreateCallSPList;
+import etec.src.file.assignment.service.create_list.CreateMultisetList;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.az.service.IOpathSettingService;
 import etec.src.sql.az.service.SearchFunctionService;
@@ -77,7 +78,7 @@ public class AssessmentController implements Controller{
 			.replace(f.getName(), "")
 			.replaceAll("\\\\$", "")
 			;
-
+			
 			/* Generate file List */
 //			SearchFileList(f,content,category);
 
@@ -87,8 +88,8 @@ public class AssessmentController implements Controller{
 			content = TransduceStoreFunctionService.findSQLSTR(content);
 			/* Generate SDI file */
 			SearchSDIList(f.getName(),content);
-			
-			
+			/* call store porsidure*/
+			CreateCallSPList.createCallList(category, f.getName(), content);
 			/* Generate function List */
 			SearchFunctionList(f,content,category);
 			
