@@ -63,13 +63,13 @@ public class CreateCallSPList {
 		while (m.find()) {
 			String str = m.group(0);
 			//寫入總表
-			FileTool.addFile(detlListNm,
-					    "\"" + category
-					+"\",\"" + f.getName()
-					+"\",\"" + j
-					+"\",\"" + func
-					+"\",\"" + m.group(0)
-					+"\"");
+//			FileTool.addFile(detlListNm,
+//					    "\"" + category
+//					+"\",\"" + f.getName()
+//					+"\",\"" + j
+//					+"\",\"" + func
+//					+"\",\"" + m.group(0)
+//					+"\"");
 		}
 		
 	}
