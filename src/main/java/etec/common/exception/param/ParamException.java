@@ -12,8 +12,8 @@ package etec.common.exception.param;
  */
 public class ParamException extends RuntimeException{
 
-	public ParamException(String script) {
-		super(script);
+	public ParamException(String className) {
+		super("Missing annotation : "+className);
 	}
 
 	private static final long serialVersionUID = 1L;
