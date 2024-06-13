@@ -25,7 +25,11 @@ public class ConvertRemarkSafely {
 	
 	public static int idRemarkDash = 0;
 	
-	private static Pattern p = Pattern.compile("(?mi)--.*|\\/\\*[\\S\\s]+?\\*\\/");
+//	String regt = "^(?:\\s*--.*|\\/\\*[\\S\\s]+?\\*\\/)+\\s*";
+	
+	private static Pattern p = Pattern.compile("(?mi)(?:^\\s*\\#.*)|--.*|\\/\\*[\\S\\s]+?\\*\\/");
+	
+	
 	/**
 	 * <h1>轉換語句時排除註解</h1>
 	 * 
@@ -54,12 +58,12 @@ public class ConvertRemarkSafely {
 		 * <h2>異動紀錄 ：</h2>
 		 * 2024年5月23日	Tim	建立邏輯
 		 * */
-		String regt = "^(?:(?:\\s*--.*|\\/\\*[\\S\\s]+?\\*\\/))+\\s*";
-		Matcher mt = Pattern.compile(regt).matcher(res);
-		if(mt.find()) {
-			title = mt.group(0);
-			res = res.replace(mt.group(0), "");
-		}
+		
+//		Matcher mt = Pattern.compile(regt).matcher(res);
+//		if(mt.find()) {
+//			title = mt.group(0);
+//			res = res.replace(mt.group(0), "");
+//		}
 		
 		
 		Map<String,String> mapRemark = new HashMap<String,String>();
