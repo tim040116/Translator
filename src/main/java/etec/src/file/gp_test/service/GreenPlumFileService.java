@@ -71,7 +71,7 @@ public class GreenPlumFileService {
 		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDML));
 		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDDL));
 		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrOther));
-		String reg = "\\b(?:" + String.join("|",titleList) + ")\\b[^;]+?;";
+		
 		/* 2024/05/06	Tim	強制轉換成指定編碼
 		 * */
 //		String context = FileTool.readFile(f);
@@ -99,6 +99,7 @@ public class GreenPlumFileService {
 				 * 2024年4月10日	Tim	建立邏輯
 				 * 2024年5月6日	Tim	增加所有類型的title
 				 * */
+				String reg = "(#\\*s)?\\b(?:" + String.join("|",titleList) + ")\\b[^;]+?;";
 				Pattern p = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
 				Matcher m = p.matcher(t);
 				while (m.find()) {
