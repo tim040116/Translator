@@ -92,8 +92,7 @@ public class SQLTranslater {
 	public static String convertDecode(String sql){
 		String res = sql;
 		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
-		ConvertRemarkSafely crs = new ConvertRemarkSafely();
-		res = crs.savelyConvert(res, (t0)->{
+		res = ConvertRemarkSafely.savelyConvert(res, (t0)->{
 			String rescrs = t0;
 			rescrs = cfs.savelyConvert(rescrs, (t1)->{
 				String r = t1;
@@ -105,10 +104,24 @@ public class SQLTranslater {
 //					//other
 //					.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*\\)","CASE WHEN $1 = $2 THEN $3 ELSE $4 END")
 //				;
-				Pattern p = Pattern.compile("(?i)DECODE\\s*\\(\\s*([^\\(\\),]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*\\)",Pattern.CASE_INSENSITIVE);
-				Matcher m = p.matcher(r);
+				/**
+				 * <p>功能 ：取得DECODE語法</p>
+				 * <p>類型 ：搜尋</p>
+				 * <p>修飾詞：i</p>
+				 * <p>範圍 ：從 DECODE( 到 )</p>
+				 * <h2>群組 ：</h2>
+				 * 	1.
+				 * 	2.
+				 * 	3.
+				 * <h2>備註 ：</h2>
+				 * 	
+				 * <h2>異動紀錄 ：</h2>
+				 * 2024年6月14日	Tim	建立邏輯
+				 * */
+				StringBuffer sb = new StringBuffer();
+				String reg = "(?i)DECODE\\s*\\(\\s*([^\\(\\),]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*\\)";
+				Matcher m = (Pattern.compile(reg)).matcher(r);
 				while (m.find()) {
-					String p0 = m.group(0);
 					String p1 = m.group(1);
 					String p2 = m.group(2);
 					String p3 = m.group(3);
@@ -125,11 +138,10 @@ public class SQLTranslater {
 					}else {
 						rpm = "CASE WHEN "+p1+" = "+p2+" THEN "+p3+" ELSE "+p4+" END";
 					}
-					r = t1
-						.replace(p0,rpm)
-					;
+					m.appendReplacement(sb, rpm);
 				}
-				return r;
+				m.appendTail(sb);
+				return sb.toString();
 			});
 			return rescrs;
 		});

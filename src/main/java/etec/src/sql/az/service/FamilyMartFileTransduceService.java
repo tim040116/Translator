@@ -9,6 +9,7 @@ import etec.common.enums.SQLTypeEnum;
 import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
+import etec.common.utils.charset.CharsetTool;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
@@ -44,10 +45,10 @@ public class FamilyMartFileTransduceService {
 		String newFileName = BasicParams.getTargetFileNm(f.getPath());
 		String newFileText = "";
 		//取得內文
-		//String charsetName = Params.familyMart.LIST_FILE_TYPE_BIG5.contains(fileType)?"big5":"utf-8";
-		String charsetName = "utf-8";
-		String ofc = FileTool.readFile(f,Charset.forName(charsetName))
-				.replaceAll("\uFEFF", "").toUpperCase();
+		/** 20240614 Tim 增加自動取得編碼的功能
+		 * */
+		Charset chs = CharsetTool.getCharset(f.getPath());
+		String ofc = CharsetTool.readFileInCharset(chs.name(),f.getPath());
 		newFileText = ofc.replaceAll("\\(", " ( ")
 				.replaceAll("\\)", " ) ")
 				;
@@ -78,7 +79,7 @@ public class FamilyMartFileTransduceService {
 		}catch (UnknowSQLTypeException e) {
 			//無法轉換的檔案
 			newFileName = newFileName.replaceAll("\\\\src", "\\err");
-			newFileText = FileTool.readFile(f,Charset.forName(charsetName));
+			newFileText = FileTool.readFile(f,chs);
 			result = "SKIP";
 		}
 		//產檔
