@@ -1,8 +1,8 @@
 package etec.src.sql.td.classifier;
 
-import etec.common.enums.SQLTypeEnum;
 import etec.common.utils.TransduceTool;
 import etec.common.utils.log.Log;
+import etec.framework.translater.enums.SQLTypeEnum;
 
 /**
  * @author	Tim

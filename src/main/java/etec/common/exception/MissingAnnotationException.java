@@ -1,4 +1,4 @@
-package etec.common.csv_maker.annotation.exception;
+package etec.common.exception;
 
 /**
  * <h1>缺少註解</h1>

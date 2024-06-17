@@ -1,13 +1,15 @@
-package etec.src.sql.gp.translater;
+package etec.src.sql.az.translater;
 
 import java.util.Arrays;
 
+import etec.common.model.SQLTypeModel;
 import etec.common.utils.convert_safely.ConvertRemarkSafely;
 import etec.common.utils.convert_safely.ConvertVarcharSafely;
 import etec.common.utils.log.Log;
 import etec.framework.translater.exception.SQLFormatException;
 import etec.framework.translater.exception.SQLTranslateException;
 import etec.framework.translater.exception.UnknowSQLTypeException;
+import etec.framework.translater.interfaces.TranslaterService;
 
 /**
  * <h1>GreenPlumn轉換</h1>
@@ -18,7 +20,7 @@ import etec.framework.translater.exception.UnknowSQLTypeException;
  * @since 4.0.0.0
  * @version 4.0.0.0
  */
-public class GreenPlumTranslater {
+public class AzTranslater extends TranslaterService{
 	/**
 	 * <h1>ddl : 資料定義語言轉換</h1> <br>
 	 * 提供語法轉換：
@@ -76,29 +78,33 @@ public class GreenPlumTranslater {
 	 * @throws SQLFormatException
 	 * @throws UnknowSQLTypeException
 	 */
-	public static String translate(String script) throws SQLTranslateException {
+	public String translate(String script) throws SQLTranslateException {
 		if(script.matches("\\s*")) {
 			return script;
 		}
 		String res = "";
-		String title = script.trim().replaceAll("^\\b([\\w]+)\\b[\\S\\s]+","$1").toUpperCase();
 		script = script.replaceAll("([${}\\w]+)\\s*\\.\\s*([\\w-]+)", "$1.$2");
-		Log.debug("開始轉換語法："+title);
- 		if(Arrays.asList(arrDQL).contains(title)) {
-			Log.debug("\t分類：DQL");
-			res = dql.easyReplace(script);
-		}else if(Arrays.asList(arrDML).contains(title)) {
-			Log.debug("\t分類：DML");
-			res = dml.easyReplace(title,script);
-		}else if(Arrays.asList(arrDDL).contains(title)) {
-			Log.debug("\t分類：DDL");
-			res = ddl.easyReplace(script);
-		}else if(Arrays.asList(arrOther).contains(title)) {
-			Log.debug("\t分類：OTHER");
-			res = other.easyReplace(title,script);
-		}else {
-			Log.debug("\t分類：OTHER");
-			res = script;
+		SQLTypeModel m = getType(script);
+		switch(m.getType()) {
+			case DQL:
+				Log.debug("\t分類：DQL");
+				res = dql.easyReplace(script);
+				break;
+			case DML:
+				Log.debug("\t分類：DML");
+				res = dml.easyReplace(m.getTitle(),script);
+				break;
+			case DDL:
+				Log.debug("\t分類：DDL");
+				res = ddl.easyReplace(script);
+				break;
+			case OTHER:
+				Log.debug("\t分類：OTHER");
+				res = other.easyReplace(m.getTitle(),script);
+				break;
+			default:
+				Log.debug("\t分類：其他");
+				res = script;
 		}
  		//額外處理
  		res = ConvertVarcharSafely.savelyConvert(res, (t)->{

@@ -1,9 +1,9 @@
 package etec.src.file.assignment.service.create_list;
 
-import etec.common.csv_maker.annotation.CSVModel;
-import etec.common.csv_maker.annotation.Column;
+import etec.framework.excel_maker.annotation.Column;
+import etec.framework.excel_maker.model.ExcelModel;
 
-@CSVModel(fileName = "call_sp_list")
+@ExcelModel(fileName = "call_sp_list")
 public class CallListModel {
 	
 	@Column(name="PATH_NAME")

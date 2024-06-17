@@ -1,4 +1,4 @@
-package etec.common.enums;
+package etec.framework.translater.enums;
 /**
  * @author	Tim
  * @since	2023年12月25日

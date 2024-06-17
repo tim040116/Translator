@@ -1,4 +1,4 @@
-package etec.common.csv_maker.annotation;
+package etec.framework.excel_maker.model;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -6,13 +6,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import etec.framework.excel_maker.annotation.Column;
+
 
 /**
  * <h1>CSV容器</h1>
  * <p>
  * <br>形容此物件為CSV格式的容器
  * <br>配合{@link Column} 使用
- * <br>{@link CSVModel#fileName()}為此檔案的檔名
+ * <br>{@link ExcelModel#fileName()}為此檔案的檔名
  * </p>或著xls檔的頁籤名
  * <h2>屬性</h2>
  * 	<br>static String {@link #}
@@ -29,7 +31,7 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CSVModel {
+public @interface ExcelModel {
 	
 	/**
 	 * 頁簽名或檔名

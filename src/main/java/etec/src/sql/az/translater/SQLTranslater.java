@@ -4,10 +4,11 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.exception.sql.SQLFormatException;
 import etec.common.utils.RegexTool;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 import etec.common.utils.convert_safely.ConvertRemarkSafely;
+import etec.framework.translater.exception.SQLFormatException;
+import etec.framework.translater.exception.SQLTranslateException;
 
 public class SQLTranslater {
 	
@@ -21,7 +22,7 @@ public class SQLTranslater {
 	 * @return	String	轉換後的SQL語句
 	 * @throws SQLFormatException 
 	 * */
-	public static String easyReplaceSelect(String sql) throws IOException {
+	public static String easyReplaceSelect(String sql) throws SQLTranslateException {
 		String res = sql;
 		res = res
 				.replaceAll("(?i)\\bSEL\\b", "SELECT")// SEL
@@ -91,63 +92,48 @@ public class SQLTranslater {
 	 * */
 	public static String convertDecode(String sql){
 		String res = sql;
-		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
-		res = ConvertRemarkSafely.savelyConvert(res, (t0)->{
-			String rescrs = t0;
-			rescrs = cfs.savelyConvert(rescrs, (t1)->{
-				String r = t1;
-//				r = t
-//					//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
-//					.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*(\\d+)\\s*,\\s*NULL\\s*,\\s*\\1\\s*\\)", "NULLIF\\($1,$2\\)")
-//					//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
-//					.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*NULL\\s*,\\s*(\\d+)\\s*,\\s*\\1\\s*\\)","COALESCE\\($1,$2\\)")
-//					//other
-//					.replaceAll("(?i)DECODE\\s*\\(\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*,\\s*([^,]+)\\s*\\)","CASE WHEN $1 = $2 THEN $3 ELSE $4 END")
-//				;
-				/**
-				 * <p>功能 ：取得DECODE語法</p>
-				 * <p>類型 ：搜尋</p>
-				 * <p>修飾詞：i</p>
-				 * <p>範圍 ：從 DECODE( 到 )</p>
-				 * <h2>群組 ：</h2>
-				 * 	1.參數1
-				 * 	2.參數2
-				 * 	3.參數3
-				 *  4.參數4
-				 * <h2>備註 ：</h2>
-				 * 	
-				 * <h2>異動紀錄 ：</h2>
-				 * 2024年6月14日	Tim	建立邏輯
-				 * */
-				StringBuffer sb = new StringBuffer();
-				String reg = "(?i)DECODE\\s*\\(\\s*([^\\(\\),]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*\\)";
-				Matcher m = (Pattern.compile(reg)).matcher(r);
-				while (m.find()) {
-					String p1 = m.group(1);
-					String p2 = m.group(2);
-					String p3 = m.group(3);
-					String p4 = m.group(4);
-					String rpm = "";
-					//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
-					boolean ismatch = ConvertRemarkSafely.equals(p1,p4,(eq)->{
-						return eq.replaceAll("\\w+\\.(\\w+)", "$1");
-					});
-					if(ismatch&&ConvertRemarkSafely.match("\\d+",p2)&&ConvertRemarkSafely.match("(?i)NULL",p3)) {//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
-						rpm = "NULLIF("+p1+","+p2+")";
-					}else if(ismatch&&ConvertRemarkSafely.match("(?i)NULL",p2)&&ConvertRemarkSafely.match("\\d+",p3)) {//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
-						rpm = "COALESCE("+p1+","+p3+")";
-					}else {
-						rpm = "CASE WHEN "+p1+" = "+p2+" THEN "+p3+" ELSE "+p4+" END";
-					}
-					m.appendReplacement(sb, rpm);
-				}
-				m.appendTail(sb);
-				return sb.toString();
-			});
-			return rescrs;
-		});
 		
-		return res;
+		
+		/**
+		 * <p>功能 ：取得DECODE語法</p>
+		 * <p>類型 ：搜尋</p>
+		 * <p>修飾詞：i</p>
+		 * <p>範圍 ：從 DECODE( 到 )</p>
+		 * <h2>群組 ：</h2>
+		 * 	1.參數1
+		 * 	2.參數2
+		 * 	3.參數3
+		 *  4.參數4
+		 * <h2>備註 ：</h2>
+		 * 	
+		 * <h2>異動紀錄 ：</h2>
+		 * 2024年6月14日	Tim	建立邏輯
+		 * */
+		StringBuffer sb = new StringBuffer();
+		String reg = "(?i)DECODE\\s*\\(\\s*([^\\(\\),]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*\\)";
+		Matcher m = (Pattern.compile(reg)).matcher(res);
+		while (m.find()) {
+			String p1 = m.group(1);
+			String p2 = m.group(2);
+			String p3 = m.group(3);
+			String p4 = m.group(4);
+			String rpm = "";
+			//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
+			boolean ismatch = ConvertRemarkSafely.equals(p1,p4,(eq)->{
+				return eq.replaceAll("\\w+\\.(\\w+)", "$1");
+			});
+			if(ismatch&&ConvertRemarkSafely.match("\\d+",p2)&&ConvertRemarkSafely.match("(?i)NULL",p3)) {//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
+				rpm = "NULLIF("+p1+","+p2+")";
+			}else if(ismatch&&ConvertRemarkSafely.match("(?i)NULL",p2)&&ConvertRemarkSafely.match("\\d+",p3)) {//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
+				rpm = "COALESCE("+p1+","+p3+")";
+			}else {
+				rpm = "CASE WHEN "+p1+" = "+p2+" THEN "+p3+" ELSE "+p4+" END";
+			}
+			m.appendReplacement(sb, rpm);
+		}
+		m.appendTail(sb);
+		
+		return sb.toString();
 	}
 	
 	/**

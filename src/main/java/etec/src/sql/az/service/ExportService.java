@@ -25,7 +25,7 @@ public class ExportService {
 		List<String> lstSql = RegexTool.getRegexTarget("[Ss][Ee][Ll][Ee][Cc][Tt][^;]*;", fc);
 		String content = "\r\nSET NOCOUNT ON;\r\n\r\n";
 		for(String sql:lstSql) {
-			content += DQLTranslater.transduceSelectSQL(sql);
+			content += DQLTranslater.easyReplace(sql);
 		}
 		//產檔
 		String file = BasicParams.getTargetFileNm(fn);

@@ -1,6 +1,6 @@
 package test.gp.translater;
 
-import etec.common.exception.TransduceException;
+import etec.framework.translater.exception.TranslateException;
 import etec.src.sql.gp.translater.GreenPlumTranslater;
 
 /**
@@ -12,7 +12,7 @@ import etec.src.sql.gp.translater.GreenPlumTranslater;
  * 
  * */
 public class TestGPTranslater {
-	public static String run() throws TransduceException {
+	public static String run() throws TranslateException {
 		String res = "";
 		
 		testAddMonths();
@@ -20,7 +20,7 @@ public class TestGPTranslater {
 		return res;
 	}
 	
-	private static void testAddMonths() throws TransduceException {
+	private static void testAddMonths() throws TranslateException {
 //CASE1 : ADD_MONTHS
 		String q1 = "ADD_MONTHS(a.RPT_DT,-1) = c.RPT_DT";
 		String a1 = "CAST(a.RPT_DT-INTERVAL'1 MONTH' AS DATE) = c.RPT_DT";

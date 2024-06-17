@@ -1,8 +1,9 @@
-package etec.common.csv_maker.annotation;
+package etec.framework.excel_maker.maker;
 
 import java.lang.reflect.ParameterizedType;
 
-import etec.common.csv_maker.annotation.exception.MissingAnnotationException;
+import etec.common.exception.MissingAnnotationException;
+import etec.framework.excel_maker.model.ExcelModel;
 
 /**
  * <h1>將 domain 轉換成 csv</h1>
@@ -33,7 +34,7 @@ public class CSVMaker<T>{
 	 * 
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * @param	domain	包含{@link CSVModel}的物件
+	 * @param	domain	包含{@link ExcelModel}的物件
 	 * @throws	MissingAnnotationException
 	 * @see		
 	 * @return	void
@@ -41,7 +42,7 @@ public class CSVMaker<T>{
 	public void writeCSV(T domain) throws MissingAnnotationException {
 		
 		//取得檔名
-		String fileNm = domain.getClass().getAnnotation(CSVModel.class).fileName()+".csv";
+		String fileNm = domain.getClass().getAnnotation(ExcelModel.class).fileName()+".csv";
 	}
 	
 	public CSVMaker() throws MissingAnnotationException{
@@ -49,8 +50,8 @@ public class CSVMaker<T>{
 		@SuppressWarnings("unchecked")
 		Class<T> ct = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 		//確認是否有註解
-		if(!ct.getClass().isAnnotationPresent(CSVModel.class)) {
-			throw new MissingAnnotationException(CSVModel.class);
+		if(!ct.getClass().isAnnotationPresent(ExcelModel.class)) {
+			throw new MissingAnnotationException(ExcelModel.class);
 		}
 		
 	}

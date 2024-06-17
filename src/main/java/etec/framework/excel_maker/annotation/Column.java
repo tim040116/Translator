@@ -1,4 +1,4 @@
-package etec.common.csv_maker.annotation;
+package etec.framework.excel_maker.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

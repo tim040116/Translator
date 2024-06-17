@@ -3,10 +3,10 @@ package etec.src.sql.gp.translater;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.exception.sql.SQLFormatException;
-import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
+import etec.framework.translater.exception.SQLFormatException;
+import etec.framework.translater.exception.UnknowSQLTypeException;
 
 public class DDLTranslater {
 	

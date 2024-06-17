@@ -1,4 +1,4 @@
-package etec.common.exception;
+package etec.framework.translater.exception;
 
 import java.io.IOException;
 
@@ -12,9 +12,9 @@ import java.io.IOException;
  * @author	Tim
  * @since	1.0.0.0
  */
-public class TransduceException extends IOException{
+public class TranslateException extends IOException{
 
-	public TransduceException(String script) {
+	public TranslateException(String script) {
 		super(script);
 	}
 

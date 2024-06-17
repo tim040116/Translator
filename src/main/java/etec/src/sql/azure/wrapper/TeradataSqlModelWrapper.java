@@ -7,12 +7,12 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.enums.MultiSetEnum;
 import etec.common.model.sql.CreateIndexModel;
 import etec.common.model.sql.CreateTableModel;
 import etec.common.model.sql.SelectTableModel;
 import etec.common.model.sql.TableColumnModel;
 import etec.common.utils.RegexTool;
+import etec.framework.translater.enums.MultiSetEnum;
 
 /**
  * 將 teradata 的語法 包成物件

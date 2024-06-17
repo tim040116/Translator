@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import etec.common.utils.RegexTool;
+import etec.framework.translater.exception.SQLTranslateException;
 
 public class DDLTranslater {
 	// create table
@@ -21,7 +22,7 @@ public class DDLTranslater {
 		create = drop + create+with+"\r\n;";
 		return create;
 	}
-	public static String easyReplace(String sql) throws IOException {
+	public static String easyReplace(String sql) throws SQLTranslateException {
 		String res = sql;
 		res = runDropTable(res);
 		res = runRenameTable(res);
@@ -32,7 +33,7 @@ public class DDLTranslater {
 		return res;
 	}
 	// CTAS
-	public static String runCTAS(String sql) throws IOException {
+	public static String runCTAS(String sql) throws SQLTranslateException {
 		String res = "";
 		String create = "";
 		String select = "";
@@ -69,7 +70,7 @@ public class DDLTranslater {
 				.replaceAll("(?i)\\)\\s*WITH\\s+DATA\\s*[^;]+", "")
 //				.replaceAll("TtEeSsTt", "%;%")
 				.trim();
-		select = DQLTranslater.transduceSelectSQL(oldselect);
+		select = DQLTranslater.easyReplace(oldselect);
 		res = create.trim() + "\r\n" + with.trim() + "\r\nAS\r\n" + select.trim()+"\r\n;";
 		res = res.replaceAll(";\\s*;", ";");
 		return res;
@@ -82,7 +83,7 @@ public class DDLTranslater {
 	 * 會加上if exist的語法
 	 * 
 	 * */
-	public static String runDropTable(String sql) throws IOException {
+	public static String runDropTable(String sql){
 		String res = sql
 				.replaceAll("(?i)DROP\\s+TABLE\\s+([^;]+)", "IF OBJECT_ID(N'$1') IS NOT NULL\r\nDROP TABLE $1");
 		return res;
@@ -94,7 +95,7 @@ public class DDLTranslater {
 	 * rename table 改成rename object
 	 * 新名稱不要加DBname
 	 * */
-	public static String runRenameTable(String sql) throws IOException {
+	public static String runRenameTable(String sql) throws SQLTranslateException {
 		String result = sql;
 		result = result.replaceAll("(?i)RENAME\\s+TABLE\\s+(\\S+)\\s+TO\\s+([^;]+)", "RENAME OBJECT $1 TO $2");
 		return result;
@@ -105,12 +106,12 @@ public class DDLTranslater {
 	 * 
 	 * COLLECT STATISTICS ON 改成 UPDATE STATISTICS
 	 * */
-	public static String runStatistics(String sql) throws IOException {
+	public static String runStatistics(String sql){
 		String result = sql.replaceAll("(?i)\\bCOLLECT\\s+STATISTICS\\s+ON", "UPDATE STATISTICS");
 		return result;
 	}
 	// ReplaceView
-	public static String runReplaceView(String sql) throws IOException {
+	public static String runReplaceView(String sql){
 		String res = "";
 		res = sql.replaceAll("(?i)REPLACE\\s+VIEW", "ALTER VIEW")+ "\r\n;";
 		return res;

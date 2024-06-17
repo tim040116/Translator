@@ -9,12 +9,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.exception.sql.SQLTransduceException;
 import etec.common.utils.charset.CharsetTool;
 import etec.common.utils.convert_safely.ConvertRemarkSafely;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
+import etec.framework.translater.exception.SQLTranslateException;
+import etec.framework.translater.interfaces.TranslaterService;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.gp.translater.GreenPlumTranslater;
 import etec.view.panel.SearchFunctionPnl;
@@ -66,11 +67,6 @@ public class GreenPlumFileService {
 	 * @throws IOException
 	 */
 	public static void run(File f) throws IOException {
-		List<String> titleList = new ArrayList<String>();
-		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDQL));
-		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDML));
-		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDDL));
-		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrOther));
 		
 		/* 2024/05/06	Tim	強制轉換成指定編碼
 		 * */
@@ -99,7 +95,7 @@ public class GreenPlumFileService {
 				 * 2024年4月10日	Tim	建立邏輯
 				 * 2024年5月6日	Tim	增加所有類型的title
 				 * */
-				String reg = "(#\\*s)?\\b(?:" + String.join("|",titleList) + ")\\b[^;]+?;";
+				String reg = "(#\\*s)?\\b(?:" + String.join("|",TranslaterService.getTitleList()) + ")\\b[^;]+?;";
 				Pattern p = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
 				Matcher m = p.matcher(t);
 				while (m.find()) {
@@ -110,7 +106,7 @@ public class GreenPlumFileService {
 					
 				}
 				m.appendTail(sb);
-			} catch (SQLTransduceException e) {
+			} catch (SQLTranslateException e) {
 				e.printStackTrace();
 			}
 			

@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import etec.common.enums.RunStatusEnum;
-import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.interfaces.Controller;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
+import etec.framework.translater.exception.UnknowSQLTypeException;
 import etec.src.file.model.BasicParams;
 import etec.src.file.model.SFSPModel;
 import etec.src.sql.az.service.IOpathSettingService;

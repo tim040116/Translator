@@ -60,7 +60,7 @@ public class TransformService {
 		content = transformSingleSQL(content,fn);
 		//20220613 	//content = TransduceTool.transduceSelectSQLTransduce(content);
 		
-		String tssql = DQLTranslater.transduceSelectSQL(content);
+		String tssql = DQLTranslater.easyReplace(content);
 		content = strTry;
 		int cntarea = 1;
 		for(String div : tssql.split(";")) {
@@ -213,7 +213,7 @@ public class TransformService {
 				newSql = sql;
 				List<String> lstSelect = RegexTool.getRegexTarget("(?i)select", newSql);
 				if(!lstSelect.isEmpty()) {
-					newSql = DQLTranslater.transduceSelectSQL(newSql);
+					newSql = DQLTranslater.easyReplace(newSql);
 				}
 				res += newSql+"\r\n";
 			}
@@ -276,7 +276,7 @@ public class TransformService {
 //			}
 			else {
 				sql = DQLTranslater.changeSample(sql);
-				sql = DQLTranslater.transduceSelectSQL(sql);
+				sql = DQLTranslater.easyReplace(sql);
 				res += sql + "\r\n\r\n";
 			}
 		}

@@ -1,4 +1,4 @@
-package etec.common.enums;
+package etec.framework.translater.enums;
 
 /**
  * @author	Tim
@@ -40,5 +40,9 @@ public enum SQLTypeEnum {
 	,BT
 	,ET
 	,EXIT
+	,DQL
+	,DDL
+	,DML
 	,OTHER
+	,ELSE
 }

@@ -1,8 +1,8 @@
 package etec.app.main;
 
-import etec.common.exception.TransduceException;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
+import etec.framework.translater.exception.TranslateException;
 import etec.src.file.ddim.controller.DDIMWriteFileController;
 import etec.view.application.AssessmentApplication;
 import etec.view.application.FamilyMartApplication;
@@ -46,7 +46,7 @@ public class Main {
 		case "GP_TEST":// 4.0 Green Plum 測試
 			try {
 				TestGPTranslater.run();
-			} catch (TransduceException e) {
+			} catch (TranslateException e) {
 				e.printStackTrace();
 			}
 			break;

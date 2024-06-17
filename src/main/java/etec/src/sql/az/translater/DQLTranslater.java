@@ -5,10 +5,11 @@ import java.util.List;
 
 import etec.common.utils.RegexTool;
 import etec.common.utils.log.Log;
+import etec.framework.translater.exception.SQLTranslateException;
 
 public class DQLTranslater {
 	// select語句轉換
-	public static String transduceSelectSQL(String sql) throws IOException {
+	public static String easyReplace(String sql) throws SQLTranslateException {
 		Log.debug("transduceSelectSQL");
 
 		String txt = sql;

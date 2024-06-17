@@ -3,9 +3,9 @@ package etec.src.sql.az.service;
 import java.io.IOException;
 import java.util.List;
 
-import etec.common.exception.sql.SQLFormatException;
 import etec.common.utils.RegexTool;
 import etec.common.utils.file.FileTool;
+import etec.framework.translater.exception.SQLFormatException;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.az.translater.DDLTranslater;
 import etec.src.sql.az.translater.DMLTranslater;
@@ -108,7 +108,7 @@ public class POCTransduserService {
 		}
 		//SELECR
 		else if (newSql.matches("SELECT\\s+[^;]+")) {
-			res = DQLTranslater.transduceSelectSQL(newSql)+"\r\n;";
+			res = DQLTranslater.easyReplace(newSql)+"\r\n;";
 		}
 		
 		// drop view
@@ -160,7 +160,7 @@ public class POCTransduserService {
 		}
 		// drop table
 		else if (newSql.matches("SELECT.*")) {
-			res = DQLTranslater.transduceSelectSQL(newSql);
+			res = DQLTranslater.easyReplace(newSql);
 		}
 //		res = res.replaceAll("TtEeSsTt", "%;%");
 		return res;

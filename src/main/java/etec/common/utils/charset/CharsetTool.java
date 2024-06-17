@@ -57,9 +57,9 @@ public class CharsetTool {
 	public static Charset getCharset(String filePath) throws MalformedURLException, IOException {
 		CodepageDetectorProxy dtr = CodepageDetectorProxy.getInstance();
 		dtr.add(new ParsingDetector(false));
+		dtr.add(UnicodeDetector.getInstance());
 		dtr.add(JChardetFacade.getInstance());
 		dtr.add(ASCIIDetector.getInstance());
-		dtr.add(UnicodeDetector.getInstance());
 		Charset chr = null;
 		chr = dtr.detectCodepage(Paths.get(filePath).toUri().toURL());
 		if("windows-1252".equals(chr.name())) {

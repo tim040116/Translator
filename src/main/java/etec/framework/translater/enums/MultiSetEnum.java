@@ -1,4 +1,4 @@
-package etec.common.enums;
+package etec.framework.translater.enums;
 
 public enum MultiSetEnum {
 

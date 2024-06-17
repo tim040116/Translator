@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.exception.sql.SQLFormatException;
+import etec.framework.translater.exception.SQLFormatException;
 
 /**
  * <h1>UNVIPOT轉換</h1>

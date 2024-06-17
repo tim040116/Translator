@@ -6,9 +6,9 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.utils.Mark;
 import etec.common.utils.convert_safely.ConvertFunctionsSafely;
+import etec.framework.translater.exception.UnknowSQLTypeException;
 
 /**
  * <h1>將Select部分拆分</h1>

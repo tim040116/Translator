@@ -3,12 +3,12 @@ package etec.src.sql.az.wrapper;
 import java.util.Collections;
 import java.util.Locale;
 
-import etec.common.enums.MultiSetEnum;
 import etec.common.model.sql.CreateIndexModel;
 import etec.common.model.sql.CreateTableModel;
 import etec.common.model.sql.SelectTableModel;
 import etec.common.model.sql.TableColumnModel;
 import etec.common.utils.RegexTool;
+import etec.framework.translater.enums.MultiSetEnum;
 
 /**
  * 將 teradata 的語法 包成物件

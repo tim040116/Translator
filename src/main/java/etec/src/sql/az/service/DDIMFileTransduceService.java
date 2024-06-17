@@ -25,7 +25,8 @@ public class DDIMFileTransduceService {
 			ofc = replaceParams(ofc);
 			ofc = ofc.replaceAll("\\} \\.", "}.");
 			// 清除註解
-			String fc = OtherTranslater.cleanSql(ofc);
+//			String fc = OtherTranslater.cleanSql(ofc);
+			String fc = ofc;
 			// 區分種類
 			// String file = BasicParams.getTargetFileNm(fn);
 			// ReadFileTool.createFile(file,fc);

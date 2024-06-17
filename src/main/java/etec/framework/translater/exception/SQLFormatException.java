@@ -1,4 +1,4 @@
-package etec.common.exception.sql;
+package etec.framework.translater.exception;
 
 /**
  * @author	Tim
@@ -6,7 +6,7 @@ package etec.common.exception.sql;
  * 
  * 程式轉換時發生的問題
  */
-public class SQLFormatException extends SQLTransduceException{
+public class SQLFormatException extends SQLTranslateException{
 
 	
 	private static final long serialVersionUID = 1L;

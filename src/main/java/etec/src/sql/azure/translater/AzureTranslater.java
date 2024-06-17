@@ -2,9 +2,9 @@ package etec.src.sql.azure.translater;
 
 import java.util.Arrays;
 
-import etec.common.exception.sql.SQLFormatException;
-import etec.common.exception.sql.SQLTransduceException;
-import etec.common.exception.sql.UnknowSQLTypeException;
+import etec.framework.translater.exception.SQLFormatException;
+import etec.framework.translater.exception.SQLTranslateException;
+import etec.framework.translater.exception.UnknowSQLTypeException;
 
 /**
  * <h1>GreenPlumn轉換</h1>
@@ -79,7 +79,7 @@ public class AzureTranslater {
 	 * @throws SQLFormatException 
 	 * @throws UnknowSQLTypeException 
 			 */
-	public static String translate(String script) throws SQLTransduceException {
+	public static String translate(String script) throws SQLTranslateException {
 		String res = "";
 		String title = script.trim().replaceAll("^(\\S+)[\\S\\s]+","$1").toUpperCase();
 		

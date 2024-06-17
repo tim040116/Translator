@@ -1,11 +1,11 @@
 package etec.src.sql.azure.translater;
 
-import etec.common.exception.sql.SQLTransduceException;
-import etec.common.exception.sql.UnknowSQLTypeException;
+import etec.framework.translater.exception.SQLTranslateException;
+import etec.framework.translater.exception.UnknowSQLTypeException;
 
 public class DMLTranslater {
 	
-	public String easyReplace(String sql) throws SQLTransduceException {
+	public String easyReplace(String sql) throws SQLTranslateException {
 		if(sql.matches("(?i)\\s*INSERT\\s+INTO\\s+[\\S\\s]+")) {
 			sql = changeInsertSelect(sql);
 		}
@@ -34,7 +34,7 @@ public class DMLTranslater {
 	 * 
 	 * 
 	 * */
-	public String changeInsertSelect(String sql) throws SQLTransduceException {
+	public String changeInsertSelect(String sql) throws SQLTranslateException {
 		String res = "";
 		String insert = sql.replaceAll("(?i)(\\s*INSERT\\s+INTO\\s+\\S+\\s+)[\\S\\s]+", "$1");
 		String select = sql.replaceAll("(?i)\\s*INSERT\\s+INTO\\s+\\S+\\s+", "");

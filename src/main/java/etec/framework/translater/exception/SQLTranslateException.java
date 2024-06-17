@@ -1,6 +1,4 @@
-package etec.common.exception.sql;
-
-import etec.common.exception.TransduceException;
+package etec.framework.translater.exception;
 
 /**
  * <h1>SQL語法轉換的父類別</h1>
@@ -17,10 +15,10 @@ import etec.common.exception.TransduceException;
  * @see
  * @return
 		 */
-public class SQLTransduceException extends TransduceException{
+public class SQLTranslateException extends TranslateException{
 
-	public SQLTransduceException(String script) {
-		super(script);
+	public SQLTranslateException(String script) {
+		super("Translate fail, script : \r\n"+script);
 	}
 
 	/**

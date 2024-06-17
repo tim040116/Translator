@@ -3,7 +3,7 @@ package etec.common.model.sql;
 import java.util.ArrayList;
 import java.util.List;
 
-import etec.common.enums.MultiSetEnum;
+import etec.framework.translater.enums.MultiSetEnum;
 
 /**
  * create table的語法模組

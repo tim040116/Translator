@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.exception.sql.SQLFormatException;
-import etec.common.exception.sql.SQLTransduceException;
-import etec.common.exception.sql.UnknowSQLTypeException;
 import etec.common.utils.convert_safely.SplitCommaSafely;
 import etec.common.utils.log.Log;
+import etec.framework.translater.exception.SQLFormatException;
+import etec.framework.translater.exception.SQLTranslateException;
+import etec.framework.translater.exception.UnknowSQLTypeException;
 import etec.src.sql.gp.translater.service.MergeIntoService;
 
 public class DMLTranslater {
@@ -32,7 +32,7 @@ public class DMLTranslater {
 	 * @see		
 	 * @return	return_type
 			 */
-	public String easyReplace(String title,String sql) throws SQLTransduceException {
+	public String easyReplace(String title,String sql) throws SQLTranslateException {
 		switch(title) {
 		case "INSERT":
 			if(sql.matches("(?i)\\s*INSERT\\s+INTO\\s+\\S+\\s+VALUES\\b[\\S\\s]+")) {
@@ -115,11 +115,11 @@ public class DMLTranslater {
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	enclosing_method_arguments
-	 * @throws	SQLTransduceException
+	 * @throws	SQLTranslateException
 	 * @see		
 	 * @return	String
 	 */
-	public String changeInsertSelect(String sql) throws SQLTransduceException {
+	public String changeInsertSelect(String sql) throws SQLTranslateException {
 		String res = "";
 		String[] arr = sql.split("(?i)\\bSELECT\\b", 2);
 		String insert = arr[0];
@@ -141,7 +141,7 @@ public class DMLTranslater {
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	enclosing_method_arguments
-	 * @throws	SQLTransduceException
+	 * @throws	SQLTranslateException
 	 * @see		
 	 * @return	String
 	 * @throws UnknowSQLTypeException 
@@ -240,12 +240,12 @@ public class DMLTranslater {
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	enclosing_method_arguments
-	 * @throws	SQLTransduceException
+	 * @throws	SQLTranslateException
 	 * @see		
 	 * @return	String
 	 * @throws UnknowSQLTypeException 
 	 */
-	public String changeMergeInto(String sql) throws SQLTransduceException {
+	public String changeMergeInto(String sql) throws SQLTranslateException {
 		String res = "";
 		/**
 		 * <p>功能 ：第一步拆解merge into 語法</p>
