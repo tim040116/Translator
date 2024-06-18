@@ -17,14 +17,13 @@ import etec.common.utils.param.Params;
 import etec.framework.translater.enums.SQLTypeEnum;
 import etec.framework.translater.exception.SQLTranslateException;
 import etec.framework.translater.exception.UnknowSQLTypeException;
-import etec.framework.translater.interfaces.TranslaterService;
+import etec.framework.translater.interfaces.TranslaterFactory;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.az.translater.AzTranslater;
 import etec.src.sql.az.translater.DDLTranslater;
 import etec.src.sql.az.translater.DMLTranslater;
 import etec.src.sql.az.translater.DQLTranslater;
 import etec.src.sql.az.translater.OtherTranslater;
-import etec.src.sql.gp.translater.GreenPlumTranslater;
 import etec.src.sql.td.classifier.TeradataClassifier;
 
 /**
@@ -80,7 +79,7 @@ public class FamilyMartFileTransduceService {
 				 * 2024年4月10日	Tim	建立邏輯
 				 * 2024年5月6日	Tim	增加所有類型的title
 				 * */
-				String reg = "(#\\*s)?\\b(?:" + String.join("|",TranslaterService.getTitleList()) + ")\\b[^;]+?;";
+				String reg = "(#\\*s)?\\b(?:" + String.join("|",TranslaterFactory.getTitleList()) + ")\\b[^;]+?;";
 				Pattern p = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
 				Matcher m = p.matcher(t);
 				while (m.find()) {
@@ -103,7 +102,7 @@ public class FamilyMartFileTransduceService {
 //		newContext = GreenPlumTranslater.dql.changeMultAnalyze(newContext);
 		FileTool.createFile(newFileName, newContext, chs);
 	}
-
+//2024 06 17 改用GP的語法 
 //	/**
 //	 * @author	Tim
 //	 * @since	2023年10月3日
@@ -332,7 +331,7 @@ public class FamilyMartFileTransduceService {
 				result = DDLTranslater.runRenameTable(result);
 				break;
 			case COLLECT_STATISTICS:
-				result = DDLTranslater.runStatistics(result);
+				result = OtherTranslater.runStatistics(result);
 				break;
 			case CREATE_TABLE:
 				result = DDLTranslater.runCreateTable(result);

@@ -78,6 +78,7 @@ public class OtherTranslater {
 				res = transduceCall(script);
 				break;
 		}
+		res = runStatistics(res);
 		res = transduceCursor(res);
 		res = changeIndex(res);
 		return res;
@@ -217,6 +218,16 @@ public class OtherTranslater {
 			result = RegexTool.encodeSQL(result).replaceAll(reg,RegexTool.encodeSQL(index));
 		}
 		result = RegexTool.decodeSQL(result);
+		return result;
+	}
+	/**
+	 * @author	Tim
+	 * @since	2023年10月17日
+	 * 
+	 * COLLECT STATISTICS ON 改成 UPDATE STATISTICS
+	 * */
+	public static String runStatistics(String sql){
+		String result = sql.replaceAll("(?i)\\bCOLLECT\\s+STATISTICS\\s+ON", "UPDATE STATISTICS");
 		return result;
 	}
 }

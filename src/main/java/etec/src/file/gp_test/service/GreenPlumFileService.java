@@ -15,7 +15,7 @@ import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 import etec.framework.translater.exception.SQLTranslateException;
-import etec.framework.translater.interfaces.TranslaterService;
+import etec.framework.translater.interfaces.TranslaterFactory;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.gp.translater.GreenPlumTranslater;
 import etec.view.panel.SearchFunctionPnl;
@@ -95,7 +95,7 @@ public class GreenPlumFileService {
 				 * 2024年4月10日	Tim	建立邏輯
 				 * 2024年5月6日	Tim	增加所有類型的title
 				 * */
-				String reg = "(#\\*s)?\\b(?:" + String.join("|",TranslaterService.getTitleList()) + ")\\b[^;]+?;";
+				String reg = "(#\\*s)?\\b(?:" + String.join("|",TranslaterFactory.getTitleList()) + ")\\b[^;]+?;";
 				Pattern p = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
 				Matcher m = p.matcher(t);
 				while (m.find()) {

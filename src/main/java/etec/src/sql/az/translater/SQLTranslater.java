@@ -56,8 +56,10 @@ public class SQLTranslater {
 				.replaceAll("(?i)TO_NUMBER\\s*\\(\\s*(.*?)\\s*\\)", "CAST($1 AS INTEGER)")
 				//INSTR
 				.replaceAll("(?i)INSTR\\s*\\(([@\\w'\\(\\)]+),('[^']+'+)(,\\d+)?\\)", "CHARINDEX($2,$1 $3)")
-
-			;
+ 			;
+			rt = changeAddMonth(rt);
+			rt = changeZeroifnull(rt);
+			rt = changeCharindex(rt);
 			return rt;
 		});
 		res = convertDecode(res);
@@ -148,4 +150,80 @@ public class SQLTranslater {
 		return res;
 	}
 	
+	// AddMonth修改
+		public static String changeAddMonth(String sql) {
+			if (!sql.toUpperCase().contains("ADD_MONTH")) {
+				return sql;
+			}
+			String res = sql.trim();
+			//預處理
+			res = res.replaceAll("\\bADD_MONTHS\\b","ADD_MONTH");
+			//捕獲
+			/**
+			 * <p>功能 ：轉換ADD_MONTHS</p>
+			 * <p>類型 ：取代</p>
+			 * <p>修飾詞：i</p>
+			 * <p>範圍 ：從  ADD_MONTH 到 )</p>
+			 * <h2>群組 ：</h2>
+			 * 	1.YEAR|MONTH|DAY
+			 *  2.欄位
+			 *  3.數字
+			 * <h2>備註 ：</h2>
+			 * 	ADD_MONTHS(COL_NM,-1)
+			 *  DateAdd(MONTH,-1,COL_NM)
+			 * <h2>異動紀錄 ：</h2>
+			 * 2024年5月8日	Tim	建立邏輯
+			 * */
+			res = res.replaceAll(
+					  "(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*([+-])\\s*(\\d+)\\s*\\)"
+					, "DateAdd\\($1,$3,$2\\)");
+			//20240618 Tim	改用replaceAll
+//			// 20220613 List<String> lst =
+//			// RegexTool.getRegexTarget2("[Aa][Dd]{2}_[Mm][Oo][Nn][Tt][Hh][Ss]\\([^\\)]*\\)
+//			// *,(-?[0-9]*) *\\)",res);
+//			List<String> lst = RegexTool
+//					.getRegexTarget("(?i)ADD_MONTHS\\([^\\)]*\\)?,(-?[0-9]*) *\\)", res);
+//			for (String str : lst) {
+//				String[] param = str.replaceAll("(?i)add_Months\\(|\\)$", "").split(",");
+//				res = RegexTool.encodeSQL(res);
+//				String oldstr = RegexTool.encodeSQL(str);
+//				String newstr = RegexTool.encodeSQL("DateAdd(MONTH," + param[1].trim() + "," + param[0].trim() + ")");
+//				res = res.replaceAll(oldstr, newstr);
+//				res = RegexTool.decodeSQL(res);
+//			}
+	//
+//			// 20220613 return arrangeSQL(res);
+			
+			return res;
+		}
+		// zeroifnull
+		public static String changeZeroifnull(String selectSQL) {
+			String result = selectSQL;
+			// 取得sample
+//			result = result.replaceAll("(?<=zeroifnull\\(.{0,100})\\) +as ", ",0) as ");
+//			result = result.replaceAll(RegexTool.getReg("zeroifnull \\("), "ISNULL(");
+			result = result.replaceAll("(?i)zeroifnull\\s*\\(\\s*([^\\(\\)]+\\([^\\)]+\\))?\\)", "ISNULL($1,0)");
+			return result;
+		}
+		
+		// char index
+		public static String changeCharindex(String sql) {
+//			String result = RegexTool.encodeSQL(sql);
+//			// 取得sample
+//			List<String> lstSQL = RegexTool
+//					.getRegexTarget("(?i)INDEX<encodingCode_ParentBracketLeft>[^,]+, *\\'[^\\']+\\'", result);
+//			for (String data : lstSQL) {
+//				String oldData = data;
+//				String param = data.replaceAll("(?i)INDEX<encodingCode_ParentBracketLeft>", "");
+//				String[] ar = param.split(",");
+//				String newData = "CHARINDEX<encodingCode_ParentBracketLeft>" + ar[1] + "," + ar[0];
+//				result = result.replaceAll(oldData, newData);
+//			}
+//			return RegexTool.decodeSQL(result);
+			
+			//20240618 Tim	優化
+			String res = sql;
+			res = res.replaceAll("(?i)\\bINDEX\\s*\\(([^,]+),([^()]+)\\)","CHARINDEX\\($2,$1\\)");
+			return res;
+		}
 }

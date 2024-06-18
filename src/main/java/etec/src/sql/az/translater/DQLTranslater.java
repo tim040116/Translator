@@ -1,6 +1,5 @@
 package etec.src.sql.az.translater;
 
-import java.io.IOException;
 import java.util.List;
 
 import etec.common.utils.RegexTool;
@@ -19,12 +18,9 @@ public class DQLTranslater {
 		// 整理 如果有註解會被Mark
 		// txt = arrangeSQL(txt);
 //			txt = changeGroupBy(txt);
-		txt = changeAddMonth(txt);
 		txt = changeSample(txt);
-		txt = changeZeroifnull(txt);
-		txt = changeCharindex(txt);
 		txt = changeIndex(txt);
-		txt = txt.replaceAll("\\bINTO\bb", "=");
+		txt = txt.replaceAll("\\bINTO\\b", "=");
 		return txt.trim();
 	}
 
@@ -70,32 +66,7 @@ public class DQLTranslater {
 		return res;
 	}
 
-	// AddMonth修改
-	public static String changeAddMonth(String sql) {
-		if (!sql.contains("ADD_MONTH")) {
-			return sql;
-		}
-		/* 20220613 去除分行符號? */
-		// 20220613 String res = sql.replaceAll("\\s+", " ");
-		String res = sql.trim();
-
-		// 20220613 List<String> lst =
-		// RegexTool.getRegexTarget2("[Aa][Dd]{2}_[Mm][Oo][Nn][Tt][Hh][Ss]\\([^\\)]*\\)
-		// *,(-?[0-9]*) *\\)",res);
-		List<String> lst = RegexTool
-				.getRegexTarget("(?i)ADD_MONTHS\\([^\\)]*\\)?,(-?[0-9]*) *\\)", res);
-		for (String str : lst) {
-			String[] param = str.replaceAll("(?i)add_Months\\(|\\)$", "").split(",");
-			res = RegexTool.encodeSQL(res);
-			String oldstr = RegexTool.encodeSQL(str);
-			String newstr = RegexTool.encodeSQL("DateAdd(MONTH," + param[1].trim() + "," + param[0].trim() + ")");
-			res = res.replaceAll(oldstr, newstr);
-			res = RegexTool.decodeSQL(res);
-		}
-
-		// 20220613 return arrangeSQL(res);
-		return res;
-	}
+	
 
 	// sample
 	public static String changeSample(String selectSQL) {
@@ -112,33 +83,11 @@ public class DQLTranslater {
 		return result;
 	}
 
-	// zeroifnull
-	public static String changeZeroifnull(String selectSQL) {
-		String result = selectSQL;
-		// 取得sample
-//		result = result.replaceAll("(?<=zeroifnull\\(.{0,100})\\) +as ", ",0) as ");
-//		result = result.replaceAll(RegexTool.getReg("zeroifnull \\("), "ISNULL(");
-		result = result.replaceAll("(?i)zeroifnull\\s*\\(\\s*([^\\(\\)]+\\([^\\)]+\\))?\\)", "ISNULL($1,0)");
-		return result;
-	}
+	
 
-	// char index
-	public static String changeCharindex(String selectSQL) {
-		String result = RegexTool.encodeSQL(selectSQL);
-		// 取得sample
-		List<String> lstSQL = RegexTool
-				.getRegexTarget("[Ii][Nn][Dd][Ee][Xx]<encodingCode_ParentBracketLeft>[^,]+, *\\'[^\\']+\\'", result);
-		for (String data : lstSQL) {
-			String oldData = data;
-			String param = data.replaceAll("[Ii][Nn][Dd][Ee][Xx]<encodingCode_ParentBracketLeft>", "");
-			String[] ar = param.split(",");
-			String newData = "CHARINDEX<encodingCode_ParentBracketLeft>" + ar[1] + "," + ar[0];
-			result = result.replaceAll(oldData, newData);
-		}
-		return RegexTool.decodeSQL(result);
-	}
+	
 
-	// index
+	// create... index
 	public static String changeIndex(String sql) {
 		String result = sql;
 		// 取得sample
@@ -178,6 +127,7 @@ public class DQLTranslater {
 	}
 
 	// 註解
+	@Deprecated
 	private static String replaceMark(String content) {
 		String res = content;
 		res = res.replaceAll("--.*", "").replaceAll("\r", "<encodingCode_r>").replaceAll("\n", "<encodingCode_n>")

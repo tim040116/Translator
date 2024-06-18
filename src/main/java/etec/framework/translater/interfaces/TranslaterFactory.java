@@ -26,7 +26,7 @@ import etec.src.sql.gp.translater.GreenPlumTranslater;
  * @since	2024年6月17日
  * @see		
  */
-public abstract class TranslaterService {
+public abstract class TranslaterFactory {
 
 	//
 	public static final String[] AR_DQL = { "WITH", "SELECT" };

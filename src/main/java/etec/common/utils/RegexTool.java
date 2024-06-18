@@ -46,6 +46,9 @@ public class RegexTool {
 		return res;
 	}
 	// 取得符合正規表達式的字串
+	/*
+	 * @Deprecated	考量到group功能無法使用，此功能效能上有待加強，建議改用JAVA原生Matcher語法
+	 * */
 	public static List<String> getRegexTarget(String regex, String content) {
 		List<String> lstRes = new ArrayList<String>();
 		Pattern p = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);

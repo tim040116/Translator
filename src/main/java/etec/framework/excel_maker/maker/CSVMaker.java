@@ -1,9 +1,21 @@
 package etec.framework.excel_maker.maker;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.Map;
 
 import etec.common.exception.MissingAnnotationException;
-import etec.framework.excel_maker.model.ExcelModel;
+import etec.common.utils.log.Log;
+import etec.framework.excel_maker.annotation.ExcelModel;
+import etec.framework.excel_maker.model.Worksheet;
 
 /**
  * <h1>將 domain 轉換成 csv</h1>
@@ -20,9 +32,20 @@ import etec.framework.excel_maker.model.ExcelModel;
  * @since	4.0.0.0
  * @see		
  */
-public class CSVMaker<T>{
+public class CSVMaker{
 
 	private boolean isWriteTitle = true;
+	
+	private Charset charset = Charset.forName("UTF-8"); 
+	
+	private File file;
+	
+	private BufferedWriter bw;
+	
+	@SuppressWarnings("rawtypes")
+	private Map<String,Worksheet> mapSheet = new HashMap<String,Worksheet>();
+	
+	private String sheetName = "";
 	
 	/**
 	 * <h1></h1>
@@ -38,21 +61,48 @@ public class CSVMaker<T>{
 	 * @throws	MissingAnnotationException
 	 * @see		
 	 * @return	void
+	 * @throws IOException 
 			 */
-	public void writeCSV(T domain) throws MissingAnnotationException {
+	public void addLine(Object domain) throws MissingAnnotationException, IOException {
 		
-		//取得檔名
-		String fileNm = domain.getClass().getAnnotation(ExcelModel.class).fileName()+".csv";
+		bw.write("");
 	}
 	
-	public CSVMaker() throws MissingAnnotationException{
+	
+	public CSVMaker(String fileName) throws MissingAnnotationException, IOException{
 		//取得類別
 		@SuppressWarnings("unchecked")
-		Class<T> ct = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+		Class<Object> ct = (Class<Object>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 		//確認是否有註解
 		if(!ct.getClass().isAnnotationPresent(ExcelModel.class)) {
 			throw new MissingAnnotationException(ExcelModel.class);
 		}
-		
+		//沒檔案的話產檔
+		file = new File(fileName);
+		file.getParentFile().mkdirs();
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		bw = Files.newBufferedWriter(Paths.get(fileName), charset, StandardOpenOption.APPEND);
+	}
+	
+	
+	public <T> void addSheet(Class<T> c) throws MissingAnnotationException {
+		Worksheet<T> ws = new Worksheet<T>();
+	}
+	
+	public void close() throws IOException {
+		if (bw == null) {
+            return;
+        }
+		bw.close();
+	}
+	
+	public void setWriteTitle(boolean isWriteTitle) {
+		this.isWriteTitle = isWriteTitle;
+	}
+	
+	public void setCharset(Charset charset) {
+		this.charset = charset;
 	}
 }

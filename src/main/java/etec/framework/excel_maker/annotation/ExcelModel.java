@@ -1,12 +1,10 @@
-package etec.framework.excel_maker.model;
+package etec.framework.excel_maker.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import etec.framework.excel_maker.annotation.Column;
 
 
 /**

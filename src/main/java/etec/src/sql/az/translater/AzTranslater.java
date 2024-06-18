@@ -9,7 +9,7 @@ import etec.common.utils.log.Log;
 import etec.framework.translater.exception.SQLFormatException;
 import etec.framework.translater.exception.SQLTranslateException;
 import etec.framework.translater.exception.UnknowSQLTypeException;
-import etec.framework.translater.interfaces.TranslaterService;
+import etec.framework.translater.interfaces.TranslaterFactory;
 
 /**
  * <h1>GreenPlumn轉換</h1>
@@ -20,7 +20,7 @@ import etec.framework.translater.interfaces.TranslaterService;
  * @since 4.0.0.0
  * @version 4.0.0.0
  */
-public class AzTranslater extends TranslaterService{
+public class AzTranslater extends TranslaterFactory{
 	/**
 	 * <h1>ddl : 資料定義語言轉換</h1> <br>
 	 * 提供語法轉換：
@@ -96,7 +96,7 @@ public class AzTranslater extends TranslaterService{
 				break;
 			case DDL:
 				Log.debug("\t分類：DDL");
-				res = ddl.easyReplace(script);
+				res = ddl.easyReplace(m.getTitle(),script);
 				break;
 			case OTHER:
 				Log.debug("\t分類：OTHER");

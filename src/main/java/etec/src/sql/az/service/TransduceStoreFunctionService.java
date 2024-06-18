@@ -64,9 +64,9 @@ public class TransduceStoreFunctionService {
 			String txtSQL = RegexTool.getRegexTargetFirst("(?i)\\sRETURN\\s+[^;]+;", sf).replaceAll("(?i)\\s*RETURN\\s+", "").trim();
 			//轉換sql
 			txtSQL = DQLTranslater.easyReplaceSelect(txtSQL);
-			txtSQL = DQLTranslater.changeAddMonth(txtSQL);
+//			txtSQL = DQLTranslater.changeAddMonth(txtSQL);
 			txtSQL = TransduceTool.changeSample(txtSQL);
-			txtSQL = DQLTranslater.changeZeroifnull(txtSQL);
+//			txtSQL = DQLTranslater.changeZeroifnull(txtSQL);
 //			txtSQL = TransduceTool.changeCharindex(txtSQL);
 			txtSQL = OtherTranslater.changeIndex(txtSQL);
 			txtSQL = TransduceTool.easyReplaceCreate(txtSQL);
@@ -252,7 +252,7 @@ public class TransduceStoreFunctionService {
 	public static String transformSQL(String txtSQL) throws UnknowSQLTypeException, IOException {
 		//轉換sql
 		txtSQL = DQLTranslater.easyReplaceSelect(txtSQL);
-		txtSQL = DQLTranslater.changeAddMonth(txtSQL);
+//		txtSQL = DQLTranslater.changeAddMonth(txtSQL);
 		txtSQL = TransduceTool.changeSample(txtSQL);
 		txtSQL = TransduceTool.changeCharindex(txtSQL);
 		txtSQL = OtherTranslater.changeIndex(txtSQL);
@@ -260,8 +260,8 @@ public class TransduceStoreFunctionService {
 		txtSQL = OtherTranslater.transduceCursor(txtSQL);
 		txtSQL = OtherTranslater.transduceIF(txtSQL);
 		txtSQL = OtherTranslater.transduceCall(txtSQL);
-		txtSQL = DDLTranslater.easyReplace(txtSQL);
-		txtSQL = DQLTranslater.changeZeroifnull(txtSQL);
+		txtSQL = DDLTranslater.easyReplace("",txtSQL);
+//		txtSQL = DQLTranslater.changeZeroifnull(txtSQL);
 		//CURSOR
 		//IF SQLSTATE <> '00000' THEN LEAVE L1; end if;
 		txtSQL = txtSQL

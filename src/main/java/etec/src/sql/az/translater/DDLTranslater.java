@@ -1,36 +1,47 @@
 package etec.src.sql.az.translater;
 
-import java.io.IOException;
 import java.util.List;
 
 import etec.common.utils.RegexTool;
+import etec.common.utils.log.Log;
 import etec.framework.translater.exception.SQLTranslateException;
 
 public class DDLTranslater {
+	
+	public static String easyReplace(String title,String sql) throws SQLTranslateException {
+		String res = sql;
+		if(sql.matches("(?i)\\s*CREATE(?:\\s+(?:TEMP|SET|MULTISET))?\\s+[\\S\\s]+")) {
+			res = replaceCreateTitle(res);
+			res = replaceTDsql(res);
+			res = replaceColumn(res);
+			if(sql.matches("(?i)\\s*Create\\s+Table\\s+\\S+\\s+As\\s*[\\S\\s]+")) {
+				Log.debug("\t\t細分：CTAS");
+				sql = runCTAS(sql);
+			}else if(sql.matches("(?i)\\s*Create\\s+TEMP\\s+Table\\s+\\S+\\s+As\\s*[\\S\\s]+")) {
+				Log.debug("\t\t細分：CTAS TEMP TABLE");
+				sql = runCreateTable(sql);
+			}else{
+				sql = runCreateTable(sql);
+			}
+		}else if("DROP".equals(title)){
+			res = runDropTable(res);
+		}else if("RENAME".equals(title)){
+			res = runRenameTable(res);
+		}else if("REPLACE".equals(title)){
+			res = runReplaceView(res);
+		}	
+		return res;
+	}
 	// create table
-	public static String runCreateTable(String sql) throws IOException {
+	public static String runCreateTable(String sql) throws SQLTranslateException {
 		// create語法轉換
-		String create = sql.replaceAll(";","");
-		create = replaceCreateTitle(create);
-		create = replaceTDsql(create);
-		create = replaceColumn(create);
-		create = create.trim();
+		String create = sql.replaceAll(";\\s*$","");
 		// Index語法轉換
 		String with = addWith(sql);
 		// drop if exist
 		String drop = "";
 		create = drop + create+with+"\r\n;";
 		return create;
-	}
-	public static String easyReplace(String sql) throws SQLTranslateException {
-		String res = sql;
-		res = runDropTable(res);
-		res = runRenameTable(res);
-		res = runStatistics(res);
-		res = runReplaceView(res);
-		res = replaceCreateTitle(res);
-		res = replaceTDsql(res);
-		return res;
 	}
 	// CTAS
 	public static String runCTAS(String sql) throws SQLTranslateException {
@@ -100,16 +111,7 @@ public class DDLTranslater {
 		result = result.replaceAll("(?i)RENAME\\s+TABLE\\s+(\\S+)\\s+TO\\s+([^;]+)", "RENAME OBJECT $1 TO $2");
 		return result;
 	}
-	/**
-	 * @author	Tim
-	 * @since	2023年10月17日
-	 * 
-	 * COLLECT STATISTICS ON 改成 UPDATE STATISTICS
-	 * */
-	public static String runStatistics(String sql){
-		String result = sql.replaceAll("(?i)\\bCOLLECT\\s+STATISTICS\\s+ON", "UPDATE STATISTICS");
-		return result;
-	}
+	
 	// ReplaceView
 	public static String runReplaceView(String sql){
 		String res = "";

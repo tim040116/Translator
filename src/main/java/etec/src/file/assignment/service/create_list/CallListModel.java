@@ -1,7 +1,7 @@
 package etec.src.file.assignment.service.create_list;
 
 import etec.framework.excel_maker.annotation.Column;
-import etec.framework.excel_maker.model.ExcelModel;
+import etec.framework.excel_maker.annotation.ExcelModel;
 
 @ExcelModel(fileName = "call_sp_list")
 public class CallListModel {
