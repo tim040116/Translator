@@ -1,11 +1,7 @@
 package etec.src.sql.az.translater;
 
-import java.io.IOException;
-
-import etec.common.utils.RegexTool;
 import etec.common.utils.log.Log;
 import etec.framework.translater.exception.SQLTranslateException;
-import etec.src.sql.gp.translater.GreenPlumTranslater;
 
 public class DMLTranslater {
 	

@@ -1,6 +1,9 @@
 package etec.src.sql.az.translater;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import etec.common.utils.RegexTool;
 import etec.common.utils.log.Log;
@@ -35,13 +38,13 @@ public class DDLTranslater {
 	// create table
 	public static String runCreateTable(String sql) throws SQLTranslateException {
 		// create語法轉換
-		String create = sql.replaceAll(";\\s*$","");
+		String res = sql;
 		// Index語法轉換
-		String with = addWith(sql);
+		res = addWith(res);
 		// drop if exist
 		String drop = "";
-		create = drop + create+with+"\r\n;";
-		return create;
+		res = drop + res;
+		return res;
 	}
 	// CTAS
 	public static String runCTAS(String sql) throws SQLTranslateException {
@@ -112,12 +115,27 @@ public class DDLTranslater {
 		return result;
 	}
 	
-	// ReplaceView
+	/**
+	 * <h1>replace view</h1>
+	 * <p>replace view ... </p>
+	 * <p>ALTER VIEW ...</p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年6月19日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	1.0.0.0
+	 * @param	enclosing_method_arguments
+	 * @throws	e
+	 * @see		
+	 * @return	return_type
+			 */
 	public static String runReplaceView(String sql){
 		String res = "";
 		res = sql.replaceAll("(?i)REPLACE\\s+VIEW", "ALTER VIEW")+ "\r\n;";
 		return res;
 	}
+	
 	// 轉換create table
 	private static String replaceCreateTitle(String sql) {
 		String result = sql.replaceAll("(?i)\\s*,\\s*NO\\s*FALLBACK\\s*", " ")
@@ -129,31 +147,84 @@ public class DDLTranslater {
 				.replaceAll("(?i)TITLE\\s+'[^']+'", " ");
 		return result;
 	}
-	// 轉換 index with
+	/**
+	 * <h1>with處理</h1>
+	 * <p>
+	 * <br>首先要清除所有index
+	 * <br>在SQL尾端加上with語法
+	 * <br>如果原本有INDEX,要用HASH
+	 * </p>
+	 * <p>
+	 * with(
+	 * 	CLUSTERED COLUMNSTORE INDEX,
+	 * 	DISTRIBUTION = [ REPLICATE | HASH(...) ]
+	 * )
+	 * </p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年6月19日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	1.0.0.0
+	 * @param	index 的處理
+	 * @throws	e
+	 * @see		
+	 * @return	return_type
+			 */
 	private static String addWith(String sql) {
-		String result = "\r\nWITH (" + "\r\n\tCLUSTERED COLUMNSTORE INDEX,";
-		String temp = sql.toUpperCase();
-		// 取得欄位
-		List<String> lstPrimaryIndex = RegexTool.getRegexTarget("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", temp);
-		temp = temp.replaceAll("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", "");
-		List<String> lstIndex = RegexTool.getRegexTarget("(?i)PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", temp);
-		// 添加欄位
-		String column = "";
-		if (!lstPrimaryIndex.isEmpty()) {
-			String indexCol = lstPrimaryIndex.get(0).replaceAll("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\(", "")
-					.replaceAll("\\)", "").replaceAll("\\s", "").trim();
-			column += indexCol;
+		String result = sql;
+		/**
+		 * <p>功能 ：取得index</p>
+		 * <p>類型 ：搜尋</p>
+		 * <p>修飾詞：gmi</p>
+		 * <p>範圍 ：從  到 </p>
+		 * <h2>群組 ：</h2>
+		 * 	1.修飾詞
+		 * 	2.欄位
+		 * <h2>備註 ：</h2>
+		 * 	
+		 * <h2>異動紀錄 ：</h2>
+		 * 2024年6月19日	Tim	建立邏輯
+		 * */
+		StringBuffer sb = new StringBuffer();
+		List<String> lst = new ArrayList<String>();
+		String reg = "(?i)((?:(?:UNIQUE|PRIMARY)\\s+)*)INDEX\\s*\\(([^()]+)\\)";
+		Matcher m = Pattern.compile(reg).matcher(result);
+		while(m.find()) {
+			lst.add(m.group(2));
+			m.appendReplacement(sb, "");
 		}
-		if (!lstIndex.isEmpty()) {
-			if (!lstPrimaryIndex.isEmpty()) {
-				column += ",";
-			}
-			String indexCol = lstIndex.get(0).replaceAll("(?i)PRIMARY\\s+INDEX\\s+\\(", "").replaceAll("\\)", "")
-					.replaceAll("\\s", "").trim();
-			column += indexCol;
-		}
-		String hash = "\r\n\tDISTRIBUTION = " + ("".equals(column) ? "REPLICATE" : "HASH(" + column + ")");
-		result += hash + "\r\n)";
+		String distribution = "\r\nWITH (" 
+				+ "\r\n\tCLUSTERED COLUMNSTORE INDEX,"
+				+ "\r\n\tDISTRIBUTION = "
+				+ (lst.isEmpty()?"REPLICATE":"HASH( " + String.join(",", lst) + " )")
+				+ "\r\n)"
+				;
+		sb.append(distribution);
+		m.appendTail(sb);
+		result = sb.toString();
+//		
+//		// 取得欄位
+//		List<String> lstPrimaryIndex = RegexTool.getRegexTarget("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", temp);
+//		temp = temp.replaceAll("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", "");
+//		List<String> lstIndex = RegexTool.getRegexTarget("(?i)PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", temp);
+//		// 添加欄位
+//		String column = "";
+//		if (!lstPrimaryIndex.isEmpty()) {
+//			String indexCol = lstPrimaryIndex.get(0).replaceAll("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\(", "")
+//					.replaceAll("\\)", "").replaceAll("\\s", "").trim();
+//			column += indexCol;
+//		}
+//		if (!lstIndex.isEmpty()) {
+//			if (!lstPrimaryIndex.isEmpty()) {
+//				column += ",";
+//			}
+//			String indexCol = lstIndex.get(0).replaceAll("(?i)PRIMARY\\s+INDEX\\s+\\(", "").replaceAll("\\)", "")
+//					.replaceAll("\\s", "").trim();
+//			column += indexCol;
+//		}
+//		String hash = "\r\n\tDISTRIBUTION = " + ("".equals(column) ? "REPLICATE" : "HASH(" + column + ")");
+//		result += hash + "\r\n)";
 		return result;
 	}
 	// 清除TD特有的語法
@@ -166,6 +237,8 @@ public class DDLTranslater {
 				.replaceAll("(?i)NO\\s+PRIMARY\\s+INDEX", "")
 				.replaceAll("(?i)RANGE_N" + "\\s*\\([^\\)]+\\)", " ")// PARTITION BY
 				.replaceAll("(?i)PARTITION\\s+BY\\s*(\\s*\\([^\\)]*\\))?", " ")// PARTITION BY
+				.replaceAll("(?i)\\bON\\s+COMMIT\\b", "") // on commit
+				.replaceAll("(?i)\\bPRESERVE\\s+ROWS\\b","")//PRESERVE ROWS
 		;
 		return result;
 	}
@@ -214,20 +287,6 @@ public class DDLTranslater {
 				+ "\tCLUSTERED COLUMNSTORE INDEX,\r\n"
 				+ "\tDISTRIBUTION = REPLICATE\r\n"
 				+ ")\r\nAS\r\n"+selectSrc
-				;
-		return res;
-	}
-	/**
-	 * @author	Tim
-	 * @since	2023年11月27日
-	 * 
-	 * 去除ms sql 不支援的語法
-	 * */
-	public static String runCreateTableAzToMs(String sql) {
-		String res = "";
-		res = sql
-				.replaceAll("(?i)\\bON\\s+COMMIT.*", "")
-				.replaceAll("(?i)\\bWITH\\s*\\([\\S\\s]+", ";")
 				;
 		return res;
 	}

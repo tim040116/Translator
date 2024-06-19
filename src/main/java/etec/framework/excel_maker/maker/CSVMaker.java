@@ -14,7 +14,7 @@ import java.util.Map;
 
 import etec.common.exception.MissingAnnotationException;
 import etec.common.utils.log.Log;
-import etec.framework.excel_maker.annotation.ExcelModel;
+import etec.framework.excel_maker.annotation.SheetModel;
 import etec.framework.excel_maker.model.Worksheet;
 
 /**
@@ -45,7 +45,10 @@ public class CSVMaker{
 	@SuppressWarnings("rawtypes")
 	private Map<String,Worksheet> mapSheet = new HashMap<String,Worksheet>();
 	
-	private String sheetName = "";
+	/**
+	 * 活躍頁籤
+	 * */
+	private String activeSheetName = "";
 	
 	/**
 	 * <h1></h1>
@@ -57,7 +60,7 @@ public class CSVMaker{
 	 * 
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * @param	domain	包含{@link ExcelModel}的物件
+	 * @param	domain	包含{@link SheetModel}的物件
 	 * @throws	MissingAnnotationException
 	 * @see		
 	 * @return	void
@@ -74,8 +77,8 @@ public class CSVMaker{
 		@SuppressWarnings("unchecked")
 		Class<Object> ct = (Class<Object>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 		//確認是否有註解
-		if(!ct.getClass().isAnnotationPresent(ExcelModel.class)) {
-			throw new MissingAnnotationException(ExcelModel.class);
+		if(!ct.getClass().isAnnotationPresent(SheetModel.class)) {
+			throw new MissingAnnotationException(SheetModel.class);
 		}
 		//沒檔案的話產檔
 		file = new File(fileName);
@@ -86,9 +89,37 @@ public class CSVMaker{
 		bw = Files.newBufferedWriter(Paths.get(fileName), charset, StandardOpenOption.APPEND);
 	}
 	
-	
-	public <T> void addSheet(Class<T> c) throws MissingAnnotationException {
-		Worksheet<T> ws = new Worksheet<T>();
+	/**
+	 * <h1>進入指定活頁簿</h1>
+	 * <p>
+	 * <br>將該頁籤設定為活躍頁籤
+	 * <br>若此頁籤上不存在，則會建立一個新的頁籤
+	 * </p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年6月19日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	1.0.0.0
+	 * @param	enclosing_method_arguments
+	 * @throws	e
+	 * @see		
+	 * @return	return_type
+	 */
+	public <T> void findSheet(Class<T> c) throws MissingAnnotationException, IllegalArgumentException, IllegalAccessException {
+		//確認是否有註解
+		if(!c.getClass().isAnnotationPresent(SheetModel.class)) {
+			throw new MissingAnnotationException(SheetModel.class);
+		}
+		//取得title
+		activeSheetName = c.getAnnotation(SheetModel.class).sheetName();
+		//如果沒有註冊該活頁簿，則新建立一個
+		if(!mapSheet.containsKey(activeSheetName)) {
+			mapSheet.put(activeSheetName, new Worksheet<T>());
+		}
+		
+		
 	}
 	
 	public void close() throws IOException {

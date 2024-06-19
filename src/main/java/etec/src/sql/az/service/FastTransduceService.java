@@ -51,7 +51,7 @@ public class FastTransduceService {
 			if(SQLTypeEnum.CTAS.equals(azType)) {
 				script = DDLTranslater.runCTASToSelectInto(script);
 			}else if(SQLTypeEnum.CREATE_TABLE.equals(azType)) {
-				script = DDLTranslater.runCreateTableAzToMs(script);
+				script = DDLTranslater.easyReplace("CREATE", script);
 			}
 		}
 		//將SQL轉為字串

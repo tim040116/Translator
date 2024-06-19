@@ -10,6 +10,7 @@ import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 
 /**
  * 正則或類正則相關功能
+ * @deprecated	建議改用Matcher
  * @author 	Tim
  * @version	1.2
  * */
