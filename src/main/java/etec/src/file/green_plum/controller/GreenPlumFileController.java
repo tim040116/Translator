@@ -1,4 +1,4 @@
-package etec.src.file.gp_test.controller;
+package etec.src.file.green_plum.controller;
 
 import java.io.File;
 import java.util.Date;
@@ -10,7 +10,7 @@ import etec.common.interfaces.Controller;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
-import etec.src.file.gp_test.service.GreenPlumFileService;
+import etec.src.file.green_plum.service.GreenPlumFileService;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.az.service.IOpathSettingService;
 import etec.view.panel.SearchFunctionPnl;

@@ -62,7 +62,7 @@ public abstract class TranslaterFactory {
 	 * @see		
 	 * @return	return_type
 			 */
-	public abstract String translate(String script) throws SQLTranslateException;
+//	public abstract String translate(String script) throws SQLTranslateException;
 	
 	/**
 	 * <h1>取得該SQL的大類</h1>

@@ -26,7 +26,7 @@ public class TeradataClassifier {
 		if(sql.matches("\\s*;?\\s*")) {
 			res = SQLTypeEnum.EMPTY;
 		}
-		else if (sql.matches("(?i)CREATE\\s*(MULTISET|SET)?(\\s+VOLATILE)?\\s+TABLE\\s+[\\S\\s]+")) {
+		else if (sql.matches("(?i)CREATE\\s*(MULTISET|SET)?(\\s+VOLATILE|\\s+TRMP)?\\s+TABLE\\s+[\\S\\s]+")) {
 			if(sql.matches("[\\S\\s]*\\s+SELECT\\s+[\\S\\s]*")) {
 				if(sql.matches("(?i)CREATE\\s+TABLE\\s+\\S+\\s+WITH\\s*\\([\\S\\s]+")) {
 					res = SQLTypeEnum.CTAS;
@@ -43,8 +43,6 @@ public class TeradataClassifier {
 		else if (sql.matches("(?i)DROP\\s+TABLE\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.DROP_TABLE;
 		}
-		
-		
 		else if(sql.matches("(?i)LOCK\\s+TABLE\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.LOCKING;
 		}
@@ -55,17 +53,17 @@ public class TeradataClassifier {
 			res = SQLTypeEnum.MERGE_INTO;
 		}
 		else if (sql.matches("(?i)UPDATE\\s+[\\S\\s]+")) {
-			res = SQLTypeEnum.UPDATE_TABLE;
+			res = SQLTypeEnum.UPDATE;
 		}
 		else if (sql.matches("(?i)SELECT\\s+[\\S\\s]+")) {
 			if(sql.matches("(?i)[\\S\\s]+INTO\\s+\\S+\\s+FROM\\s*\\([\\S\\s]+")) {
 				res = SQLTypeEnum.SELECT_INTO;
 			}else {
-				res = SQLTypeEnum.SELECT_TABLE;
+				res = SQLTypeEnum.SELECT;
 			}
 		}
 		else if (sql.matches("(?i)DELETE\\s+[\\S\\s]+")) {
-			res = SQLTypeEnum.DELETE_TABLE;
+			res = SQLTypeEnum.DELETE;
 		}
 		else if(sql.matches("(?i)REPLACE\\s+VIEW\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.REPLACE_VIEW; 	

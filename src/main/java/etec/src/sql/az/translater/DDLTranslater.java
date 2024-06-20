@@ -7,30 +7,37 @@ import java.util.regex.Pattern;
 
 import etec.common.utils.RegexTool;
 import etec.common.utils.log.Log;
+import etec.framework.translater.enums.SQLTypeEnum;
 import etec.framework.translater.exception.SQLTranslateException;
+import etec.src.sql.td.classifier.TeradataClassifier;
 
 public class DDLTranslater {
 	
-	public static String easyReplace(String title,String sql) throws SQLTranslateException {
+	public static String easyReplace(String sql) throws SQLTranslateException {
+		SQLTypeEnum type = TeradataClassifier.getSQLType(sql);
 		String res = sql;
-		if(sql.matches("(?i)\\s*CREATE(?:\\s+(?:TEMP|SET|MULTISET))?\\s+[\\S\\s]+")) {
-			
-			if(sql.matches("(?i)\\s*Create\\s+Table\\s+\\S+\\s+As\\s*[\\S\\s]+")) {
-				Log.debug("\t\t細分：CTAS");
-				sql = runCTAS(sql);
-			}else if(sql.matches("(?i)\\s*Create\\s+TEMP\\s+Table\\s+\\S+\\s+As\\s*[\\S\\s]+")) {
-				Log.debug("\t\t細分：CTAS TEMP TABLE");
-				sql = runCreateTable(sql);
-			}else{
-				sql = runCreateTable(sql);
-			}
-		}else if("DROP".equals(title)){
+		switch (type) {
+		case CREATE_TABLE:
+			res = runCreateTable(res);
+			break;
+		case CREATE_INSERT:
+		case CTAS:
+			Log.debug("\t\t細分：CTAS");
+			res = runCTAS(res);
+			break;
+		case DROP_TABLE:
+		case DROP_VIEW:
 			res = runDropTable(res);
-		}else if("RENAME".equals(title)){
+			break;
+		case RENAME_TABLE:
 			res = runRenameTable(res);
-		}else if("REPLACE".equals(title)){
+			break;
+		case REPLACE_VIEW:
 			res = runReplaceView(res);
-		}	
+			break;
+		default:
+			break;
+		}
 		return res;
 	}
 	// create table
@@ -83,6 +90,7 @@ public class DDLTranslater {
 		 *  3.select	: CTAS的sub query
 		 * <h2>備註 ：</h2>
 		 * <p>
+		 * <br>setting暫不處理，需再確認需求
 		 * </p>
 		 * <h2>異動紀錄 ：</h2>
 		 * 2024年6月20日	Tim	建立邏輯
@@ -99,13 +107,9 @@ public class DDLTranslater {
 			String setting = m.group("setting");
 			String tableName = m.group("tableName");
 			String select = m.group("select");
-			
 			select = DQLTranslater.easyReplace(select);
-			
-			
 			newSql = "CREATE TABLE IF NOT EXISTS "+tableName + " (\r\n"
 					+ select+"\r\n)";
-			
 			m.appendReplacement(sb, Matcher.quoteReplacement(newSql));
 		}
 		m.appendTail(sb);
@@ -122,7 +126,7 @@ public class DDLTranslater {
 	 * */
 	public static String runDropTable(String sql){
 		String res = sql
-				.replaceAll("(?i)DROP\\s+TABLE\\s+([^;]+)", "IF OBJECT_ID(N'$1') IS NOT NULL\r\nDROP TABLE $1");
+				.replaceAll("(?i)DROP\\s+(TABLE|VIEW)\\s+([^;]+)", "IF OBJECT_ID(N'$1') IS NOT NULL\r\nDROP $1 $2");
 		return res;
 	}
 	/**
@@ -257,8 +261,7 @@ public class DDLTranslater {
 	
 	// 清除TD特有的語法
 	@Deprecated
-	public
-	static String replaceTDsql(String sql) {
+	public static String replaceTDsql(String sql) {
 		String result = sql
 				.replaceAll("(?i)\\bVOLATILE\\b", "")// VOLATILE
 				.replaceAll("(?i)\\bMULTISET\\b", "")// MULTISET
@@ -284,6 +287,7 @@ public class DDLTranslater {
 	}
 	
 	/**
+	 * 處理Az 跟 mssql之間的轉換
 	 * @author	Tim
 	 * @since	2023年11月17日
 	 * 
@@ -303,6 +307,7 @@ public class DDLTranslater {
 		return res;
 	}
 	/**
+	 * 處理Az 跟 mssql之間的轉換
 	 * @author	Tim
 	 * @since	2023年11月24日
 	 * 

@@ -5,6 +5,7 @@ import etec.common.utils.param.Params;
 import etec.framework.translater.exception.TranslateException;
 import etec.src.file.ddim.controller.DDIMWriteFileController;
 import etec.view.application.AssessmentApplication;
+import etec.view.application.AzureFileApplication;
 import etec.view.application.FamilyMartApplication;
 import etec.view.application.FastTransduceApplication;
 import etec.view.application.GreenPlumFileApplication;
@@ -19,7 +20,7 @@ public class Main {
 		Log.info("執行項目：" + Params.config.APPLICATION_TYPE);
 		switch (Params.config.APPLICATION_TYPE) {
 		case "OLD_TRANSLATOR":// 鼎鼎舊版
-			OldApplication.run(new DDIMWriteFileController());
+			OldApplication.run();
 			break;
 		case "DDIM_TRANSLATOR":// 鼎鼎新板
 			UIApplication.run();
@@ -28,7 +29,7 @@ public class Main {
 			FamilyMartApplication.run();
 			break;
 		case "ASSESSMENT":// 3 執行 Assessment 作業 包含 3.1 、 3.2
-			AssessmentApplication.run("Assessment製作工具");
+			AssessmentApplication.run();
 			break;
 //		case "SEARCH_FUNCTION":// 3.1 分析程式後列出清單
 //			SearchFunctionApplication.run("方法統計");
@@ -43,15 +44,18 @@ public class Main {
 		case "FAST_TRANSDUCE":// 3.4 即時轉換
 			FastTransduceApplication.run();
 			break;
-		case "GP_TEST":// 4.0 Green Plum 測試
-			try {
-				TestGPTranslater.run();
-			} catch (TranslateException e) {
-				e.printStackTrace();
-			}
-			break;
+//		case "GP_TEST":// 4.0 Green Plum 測試
+//			try {
+//				TestGPTranslater.run();
+//			} catch (TranslateException e) {
+//				e.printStackTrace();
+//			}
+//			break;
 		case "GP":// 4.1.0.0 Green Plum 轉換
 			GreenPlumFileApplication.run();
+			break;
+		case "AZ":// 4.1.0.0 azure 轉換
+			AzureFileApplication.run();
 			break;
 		case "UNCOMPRESS":
 			UncompressApplication.run();
@@ -59,10 +63,5 @@ public class Main {
 		default:
 			break;
 		}
-//		List<Class> lst = ClassTool.getClassFromPackage("etec.common.annotation.Application",Application.class);
-//		for(Class  c: lst) {
-//			Application a = (Application)c.getDeclaredAnnotationsByType(Application.class)[0];
-//			System.out.println(a.value());
-//		}
 	}
 }

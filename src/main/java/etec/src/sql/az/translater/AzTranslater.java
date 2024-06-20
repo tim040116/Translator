@@ -78,7 +78,7 @@ public class AzTranslater extends TranslaterFactory{
 	 * @throws SQLFormatException
 	 * @throws UnknowSQLTypeException
 	 */
-	public String translate(String script) throws SQLTranslateException {
+	public static String translate(String script) throws SQLTranslateException {
 		if(script.matches("\\s*")) {
 			return script;
 		}
@@ -96,11 +96,11 @@ public class AzTranslater extends TranslaterFactory{
 				break;
 			case DDL:
 				Log.debug("\t分類：DDL");
-				res = ddl.easyReplace(m.getTitle(),script);
+				res = ddl.easyReplace(script);
 				break;
 			case OTHER:
 				Log.debug("\t分類：OTHER");
-				res = other.easyReplace(m.getTitle(),script);
+				res = other.easyReplace(script);
 				break;
 			default:
 				Log.debug("\t分類：其他");

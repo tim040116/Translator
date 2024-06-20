@@ -9,6 +9,7 @@ import etec.common.utils.log.Log;
 import etec.framework.translater.exception.SQLFormatException;
 import etec.framework.translater.exception.SQLTranslateException;
 import etec.framework.translater.exception.UnknowSQLTypeException;
+import etec.src.sql.az.translater.AzTranslater;
 import etec.src.sql.gp.translater.service.MergeIntoService;
 
 public class DMLTranslater {
@@ -185,8 +186,6 @@ public class DMLTranslater {
 					 * <h2>群組 ：</h2>
 					 * 	1.
 					 * <h2>備註 ：</h2>
-					 * <p>
-					 * </p>
 					 * <h2>異動紀錄 ：</h2>
 					 * 2024年5月31日	Tim	建立邏輯
 					 * */
@@ -280,10 +279,10 @@ public class DMLTranslater {
 			String sql2  = m.group("sql2");
 			//處理WHEN 1
 			sql1 = MergeIntoService.convert(m.group("type1"), tableNm, using, m.group("sql1").trim());
-			sql1 = GreenPlumTranslater.translate(sql1);
+			sql1 = AzTranslater.translate(sql1);
 			//處理WHEN 2
 			sql2 = MergeIntoService.convert(m.group("type2"), tableNm, using, m.group("sql2").trim());
-			sql2 = GreenPlumTranslater.translate(sql2);
+			sql2 = AzTranslater.translate(sql2);
 			
 			merge = sql1+"\r\n\r\n"+sql2;
 			m.appendReplacement(sb,Matcher.quoteReplacement(merge));

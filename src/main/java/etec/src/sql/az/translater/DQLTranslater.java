@@ -87,11 +87,29 @@ public class DQLTranslater {
 
 	
 
-	// create... index
+	/**
+	 * <h1>index</h1>
+	 * <p>
+	 * <br>轉換select語法的index
+	 * <br>要避開create table的index
+	 * <br>
+	 * </p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年6月20日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.1.0.0
+	 * @param	enclosing_method_arguments
+	 * @throws	e
+	 * @see		
+	 * @return	return_type
+			 */
 	public static String changeIndex(String sql) {
 		String result = sql;
 		// 取得sample
-		List<String> lstIndex = RegexTool.getRegexTarget("(?<=[, ])[Ii][Nn][Dd][Ee][Xx][^\\)]+", result);
+		List<String> lstIndex = RegexTool.getRegexTarget("(?i)(?<=[, ])INDEX[^\\)]+", result);
 		// 是否存在sample
 		if (lstIndex.isEmpty()) {
 			return sql;
@@ -101,7 +119,7 @@ public class DQLTranslater {
 			if (upper.contains("COLLECT STATISTICS ON") || upper.contains("PRIMARY") || upper.contains("UNIQUE")) {
 				continue;
 			}
-			List<String> lstP = RegexTool.getRegexTarget("(?<=[Ii][Nn][Dd][Ee][Xx]\\s{0,10}\\()[^\\)]+", data);
+			List<String> lstP = RegexTool.getRegexTarget("(?i)(?<=INDEX\\s{0,10}\\()[^\\)]+", data);
 			if (lstP.isEmpty()) {
 				continue;
 			}
@@ -116,24 +134,6 @@ public class DQLTranslater {
 		}
 		result = RegexTool.decodeSQL(result);
 		return result;
-	}
-
-	//
-	public static String convertRollup(String content) {
-		String res = "";
-		String sql = replaceMark(content);
-
-		return res;
-	}
-
-	// 註解
-	@Deprecated
-	private static String replaceMark(String content) {
-		String res = content;
-		res = res.replaceAll("--.*", "").replaceAll("\r", "<encodingCode_r>").replaceAll("\n", "<encodingCode_n>")
-				.replaceAll("\\/\\*(.*?)\\*\\/", "").replaceAll("<encodingCode_r>", "\r")
-				.replaceAll("<encodingCode_n>", "\n");
-		return res;
 	}
 
 }

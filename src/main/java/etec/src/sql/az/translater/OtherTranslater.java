@@ -5,6 +5,8 @@ import java.util.List;
 import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;
 import etec.common.utils.param.Params;
+import etec.framework.translater.enums.SQLTypeEnum;
+import etec.src.sql.td.classifier.TeradataClassifier;
 
 /**
  * @author	Tim
@@ -16,71 +18,27 @@ import etec.common.utils.param.Params;
  * 
  * */
 public class OtherTranslater {
-//	// 去除註解
-//	@Deprecated
-//	public static String cleanSql(String fc) {
-//		String res = fc;
-//		// #
-////				System.out.println("cleanSql start");
-////				res = res.replaceAll("(?<='[^']{0,10})#(?=[^']{0,10}')", "<encodingCode_HashTag>");
-////				res = res.replaceAll("#.*", "");
-////				res = res.replaceAll("<encodingCode_HashTag>", "#");
-//		// //
-////				res = res.replaceAll("\\/\\/.*", "");
-//		// /**/
-//		res = res.replaceAll("\\/\\*.*\\*\\/", "");
-////					res = res.replaceAll("\\/\\*+([^\\/]|[^\\*]\\/)*\\*+\\/","");
-////					System.out.println("/**/ s");
-//		// --
-//		res = res.replaceAll("--.*", "");
-//		// /* \r\n*/
-////					res = res.replaceAll("(#.*)|(\\/\\*.*\\*\\/)","");
-////					res = res.replaceAll("'#'","QqAaZz").replaceAll("(#.*)|(\\/\\*.*\\*\\/)","");
-////					res = res.replaceAll("QqAaZz","'#'");
-//		String sql = "";
-//		boolean es = false;
-//		for (String line : res.split("\r\n")) {
-//			if (line.trim().equals("")) {
-//				continue;
-//			}
-//			// /* \r\n */
-//			if (line.matches(".*\\/\\*.*")) {
-//				line = line.replaceAll("\\/\\*.*", "");
-//				es = true;
-//			}
-//			if (es) {
-//				if (line.matches(".*\\*\\/.*")) {
-//					line = line.replaceAll(".*\\*\\/", "");
-//					es = false;
-//				} else {
-//					continue;
-//				}
-//			}
-////						if(line.trim().substring(0, 1).equals(".")) {
-////							line = line + ";";
-////						}
-//			sql += line + "\r\n";
-//		}
-//		res = sql;
-//		return res;
-//	}
-	
 	
 	/**
 	 * @author	Tim
 	 * @since	2023年12月20日
 	 * 
 	 * */
-	public String easyReplace(String title,String script) {
+	public String easyReplace(String script) {
 		String res = script;
-		switch(title) {
-			case "CALL":
+		SQLTypeEnum type = TeradataClassifier.getSQLType(script);
+		switch(type) {
+			case CALL:
 				res = transduceCall(script);
 				break;
+			case COLLECT_STATISTICS:
+				res = runStatistics(res);
+				break;
+		default:
+			res = transduceCursor(res);
+			res = changeIndex(res);
 		}
-		res = runStatistics(res);
-		res = transduceCursor(res);
-		res = changeIndex(res);
+		
 		return res;
 	}
 	

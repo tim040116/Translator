@@ -8,7 +8,6 @@ import etec.common.enums.RunStatusEnum;
 import etec.common.interfaces.Controller;
 import etec.common.model.element.WriteFileElement;
 import etec.src.file.model.BasicParams;
-import etec.src.sql.az.service.DDIMFileTransduceService;
 
 public class DDIMWriteFileController implements Controller {
 	public void run() throws IOException {

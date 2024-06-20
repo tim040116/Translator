@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import etec.framework.translater.enums.SQLTypeEnum;
 import etec.framework.translater.exception.UnknowSQLTypeException;
+import etec.src.file.family_mart.service.FamilyMartFileTransduceService;
 import etec.src.sql.az.translater.DDLTranslater;
 import etec.src.sql.td.classifier.TeradataClassifier;
 
@@ -51,7 +52,7 @@ public class FastTransduceService {
 			if(SQLTypeEnum.CTAS.equals(azType)) {
 				script = DDLTranslater.runCTASToSelectInto(script);
 			}else if(SQLTypeEnum.CREATE_TABLE.equals(azType)) {
-				script = DDLTranslater.easyReplace("CREATE", script);
+				script = DDLTranslater.easyReplace(script);
 			}
 		}
 		//將SQL轉為字串

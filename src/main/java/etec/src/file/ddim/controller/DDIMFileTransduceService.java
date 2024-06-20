@@ -1,4 +1,4 @@
-package etec.src.sql.az.service;
+package etec.src.file.ddim.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +9,10 @@ import java.util.Map;
 import etec.common.enums.FileTypeEnum;
 import etec.common.utils.RegexTool;
 import etec.common.utils.file.FileTool;
+import etec.src.file.family_mart.service.POCTransduserService;
+import etec.src.sql.az.service.CreateListService;
+import etec.src.sql.az.service.SQLTextService;
+import etec.src.sql.az.service.TransformService;
 import etec.src.sql.az.translater.OtherTranslater;
 
 public class DDIMFileTransduceService {

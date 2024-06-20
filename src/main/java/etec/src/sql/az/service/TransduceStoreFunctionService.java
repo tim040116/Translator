@@ -260,7 +260,7 @@ public class TransduceStoreFunctionService {
 		txtSQL = OtherTranslater.transduceCursor(txtSQL);
 		txtSQL = OtherTranslater.transduceIF(txtSQL);
 		txtSQL = OtherTranslater.transduceCall(txtSQL);
-		txtSQL = DDLTranslater.easyReplace("",txtSQL);
+		txtSQL = DDLTranslater.easyReplace(txtSQL);
 //		txtSQL = DQLTranslater.changeZeroifnull(txtSQL);
 		//CURSOR
 		//IF SQLSTATE <> '00000' THEN LEAVE L1; end if;
