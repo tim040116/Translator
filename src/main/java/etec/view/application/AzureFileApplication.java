@@ -6,6 +6,6 @@ import etec.view.frame.SearchFunctionFrame;
 
 public class AzureFileApplication {
 	public static void run() {
-		new SearchFunctionFrame("Azure 測試",new AzureController());
+		new SearchFunctionFrame("Azure 轉換",new AzureController());
 	}
 }

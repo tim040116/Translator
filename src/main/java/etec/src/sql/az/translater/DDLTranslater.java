@@ -173,7 +173,9 @@ public class DDLTranslater {
 				.replaceAll("(?i)(NOT\\s+)?CASESPECIFIC", " ")
 				.replaceAll("(?i)\\bON\\s+COMMIT\\b", "") // on commit
 				.replaceAll("(?i)\\bPRESERVE\\s+ROWS\\b","")//PRESERVE ROWS
+				.replaceAll("(?i)\\bNO\\s+PRIMARY\\s+INDEX", "")
 				.replaceAll("(?i)TITLE\\s+'[^']+'", " ");
+				
 		return result;
 	}
 	/**
