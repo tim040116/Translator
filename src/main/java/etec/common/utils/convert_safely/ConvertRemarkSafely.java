@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  * */
 public class ConvertRemarkSafely {
 	
-	public static int idRemarkDash = 0;
+	public static long idRemarkDash = 0;
 	
 //	String regt = "^(?:\\s*--.*|\\/\\*[\\S\\s]+?\\*\\/)+\\s*";
 	
@@ -65,7 +65,7 @@ public class ConvertRemarkSafely {
 //			res = res.replace(mt.group(0), "");
 //		}
 		
-		
+		StringBuffer sb = new StringBuffer();
 		Map<String,String> mapRemark = new HashMap<String,String>();
 		Matcher m = p.matcher(script);
 		while (m.find()) {
@@ -74,9 +74,10 @@ public class ConvertRemarkSafely {
 			String mark = m.group(0);
 			idRemarkDash++;
 			mapRemark.put(id, mark);
-			res = res.replace(mark, id);
+			m.appendReplacement(sb, id);
 		}
-		res = function.apply(res);
+		m.appendTail(sb);
+		res = function.apply(sb.toString());
 		for(Entry<String,String> e : mapRemark.entrySet()) {
 			res = res.replaceAll(Pattern.quote(e.getKey())+"(.*)", "$1 "+Matcher.quoteReplacement(e.getValue()));
 		}
@@ -86,8 +87,8 @@ public class ConvertRemarkSafely {
 		return title+res;
 	}
 	
-	public static String markName(String type,int i) {
-		return markName(type,Integer.toString(i));
+	public static String markName(String type,long i) {
+		return markName(type,Long.toString(i));
 	}
 	public static String markName(String type,String i) {
 		return "<ConvertRemarkSafely_"+type+"_"+i+">";

@@ -48,7 +48,7 @@ public class DMLTranslater {
 			break;
 		case UPDATE:
 			Log.debug("\t細分：UPDATE TABLE");
-//			sql = changeUpdateTable(sql);
+			sql = changeUpdateTable(sql);
 			break;
 		case MERGE_INTO:
 			Log.debug("\t細分：MERGE INTO");
@@ -182,5 +182,88 @@ public class DMLTranslater {
 //		}
 //		res = mergeInto+"\r\nUSING (\r\n"+using.trim()+"\r\n)"+when+"\r\n";
 //		return res;
+	}
+	
+	
+	/**
+	 * <h1></h1>
+	 * <p></p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年6月24日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.1.0.0
+	 * @param	enclosing_method_arguments
+	 * @throws	e
+	 * @see		
+	 * @return	return_type
+			 */
+	public static String changeUpdateTable(String sql) throws SQLTranslateException {
+		String res = sql;
+		
+		/**
+		 * <p>功能 ：UPDATE TABLE 語法轉換</p>
+		 * <p>類型 ：搜尋</p>
+		 * <p>修飾詞：iS</p>
+		 * <p>範圍 ：從 update 到 ;</p>
+		 * <h2>群組 ：</h2>
+		 * 1.targetTable : 要update的table
+		 * 2.alias		 : targetTable的alias name
+		 * 3.joinTable	 : 條件用的 table
+		 * 4.set		 : set的欄位
+		 * 5.where		 : where
+		 * <h2>備註 ：</h2>
+		 * <p>
+			TD :　
+				UPDATE AAA a
+				FROM BBB b
+				SET a.AA = b.BB
+				WHERE a.A = b.B
+			AZ：
+				UPDATE a
+				SET a.AA = b.BB
+				FROM AAA a,BBB b
+				WHERE a.A = b.B
+		 * </p>
+		 * <h2>異動紀錄 ：</h2>
+		 * 2024年6月24日	Tim	建立邏輯
+		 * */
+		StringBuffer sb = new StringBuffer();
+		String reg = "(?is)"
+				+ "\\bUPDATE\\s*(?<targetTable>\\S+)\\s++"
+				+ "(?<alias>\\S+?)?\\s*"
+				+ "(?:FROM\\s*(?<joinTable>.*))?"
+				+ "\\bSET\\b(?<set>[^;]+?)"
+				+ "(?:WHERE(?<where>[^;]*))?"
+				+ ";?\\s*$";
+		Matcher m = Pattern.compile(reg).matcher(res);
+		while (m.find()) {
+			String str = "";
+			String targetTable = m.group("targetTable");
+			String alias = m.group("alias");
+			String joinTable = m.group("joinTable");
+			String set = m.group("set");
+			String where = m.group("where");
+			
+			alias = alias==null?"upd_als_nm":alias;
+			set = set.trim().replaceAll("(?<!\\.)\\b\\w+\\b(?!\\.)", alias+".$0");//欄位加上alias name
+			joinTable = joinTable==null?"":","+SQLTranslater.easyReplaceSelect(joinTable);
+			where = where==null?"":SQLTranslater.easyReplaceSelect(where);
+			where = where
+					.replaceAll("\\Q"+targetTable+".\\E", alias+".") //欄位加上alias name
+					;
+			str = "UPDATE " + alias + "\r\n"
+				+ "SET " + set + "\r\n"
+				+ "FROM " + targetTable + " " + alias + "\r\n"
+				+ joinTable
+				+ "WHERE" + where
+				;
+			m.appendReplacement(sb, Matcher.quoteReplacement(str));
+		}
+		m.appendTail(sb);
+		
+		return res;
 	}
 }

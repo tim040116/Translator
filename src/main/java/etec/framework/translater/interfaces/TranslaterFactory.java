@@ -40,11 +40,11 @@ public abstract class TranslaterFactory {
 	private static List<String> listTitle = new ArrayList<String>();
 	
 	static {
-		List<String> titleList = new ArrayList<String>();
-		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDQL));
-		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDML));
-		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrDDL));
-		titleList.addAll(Arrays.asList(GreenPlumTranslater.arrOther));
+		listTitle = new ArrayList<String>();
+		listTitle.addAll(Arrays.asList(GreenPlumTranslater.arrDQL));
+		listTitle.addAll(Arrays.asList(GreenPlumTranslater.arrDML));
+		listTitle.addAll(Arrays.asList(GreenPlumTranslater.arrDDL));
+		listTitle.addAll(Arrays.asList(GreenPlumTranslater.arrOther));
 	}
 	
 	/**

@@ -14,12 +14,16 @@ public class DQLTranslater {
 		String txt = sql;
 		// 轉換
 		// txt = changeGroupBy(txt);
+		Log.debug("\teasyReplaceSelect");
 		txt = SQLTranslater.easyReplaceSelect(txt);
 		// 整理 如果有註解會被Mark
 		// txt = arrangeSQL(txt);
 //			txt = changeGroupBy(txt);
+		Log.debug("\tchangeSample");
 		txt = changeSample(txt);
+		Log.debug("\teasyReplaceSelect");
 		txt = changeIndex(txt);
+		Log.debug("\tchangeIndex");
 		txt = txt.replaceAll("\\bINTO\\b", "=");
 		return txt.trim();
 	}

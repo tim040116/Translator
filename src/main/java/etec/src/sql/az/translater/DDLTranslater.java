@@ -46,11 +46,11 @@ public class DDLTranslater {
 		String res = sql;
 		res = replaceCreateTitle(res);
 		res = replaceColumn(res);
+		res = replaceTDsql(res);
 		// Index語法轉換
 		res = addWith(res);
 		// drop if exist
-		String drop = "";
-		res = drop + res;
+		res = addDropIfExists(res);
 		return res;
 	}
 	
@@ -114,8 +114,13 @@ public class DDLTranslater {
 		}
 		m.appendTail(sb);
 		res = sb.toString();
+		res = replaceTDsql(res);
+		res = addDropIfExists(res);
 		return res;
 	}
+	
+	
+	
 	/**
 	 * @author	Tim
 	 * @since	2023年10月17日
@@ -173,11 +178,64 @@ public class DDLTranslater {
 				.replaceAll("(?i)(NOT\\s+)?CASESPECIFIC", " ")
 				.replaceAll("(?i)\\bON\\s+COMMIT\\b", "") // on commit
 				.replaceAll("(?i)\\bPRESERVE\\s+ROWS\\b","")//PRESERVE ROWS
-				.replaceAll("(?i)\\bNO\\s+PRIMARY\\s+INDEX", "")
+				.replaceAll("(?i)\\bNO\\s+PRIMARY\\s+INDEX", "")//NO PRIMARY INDEX
 				.replaceAll("(?i)TITLE\\s+'[^']+'", " ");
 				
 		return result;
 	}
+	
+	// 清除TD特有的語法
+		@Deprecated
+		public static String replaceTDsql(String sql) {
+			String result = sql
+					.replaceAll("(?i)\\bVOLATILE\\b", "")// VOLATILE
+					.replaceAll("(?i)\\b(?:MULTI)?SET\\b", "")// MULTISET SET TABLE
+					.replaceAll("(?i)RANGE_N" + "\\s*\\([^\\)]+\\)", " ")// RANGE_N BY
+					.replaceAll("(?i)PARTITION\\s+BY\\s*(\\s*\\([^\\)]*\\))?", " ")// PARTITION BY
+			;
+			return result;
+		}
+		
+		// 清除欄位的多餘設定
+		public static String replaceColumn(String sql) {
+			String result = sql.replaceAll("(?i)CHARACTER\\s+SET\\s+\\S+", " ")
+					.replaceAll("(?i)NOT\\s+CASESPECIFIC", " ")
+					.replaceAll("(?i)TITLE\\s+'[^']+'", " ")
+					.replaceAll("(?i)\\s*FORMAT\\s+'[^']+'\\s*", " ")
+					.replaceAll("(?i)TIMESTAMP\\s*\\(\\s*[0-9]+\\s*\\)", "DATETIME")
+					.replaceAll("(?i)VARBYTE", "VARBINARY")
+					.replaceAll(" +,", ",");
+			return result;
+		}
+	
+	/**
+	 * <h1>CREATE TABLE加上DROP IF EXISTS</h1>
+	 * <p></p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年6月24日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	1.0.0.0
+	 * @param	enclosing_method_arguments
+	 * @throws	e
+	 * @see		
+	 * @return	return_type
+			 */
+	public static String addDropIfExists(String sql) {
+		String rep = "IF OBJECT_ID\\('$1'\\) IS NOT NULL "
+				+ "DROP TABLE $1;\r\n"
+				+ "CREATE TABLE $1";
+		String res = sql
+				.replaceAll("(?i)\\bCREATE\\s+TABLE\\s+([^\\s(]+)", rep)
+				.replaceAll("(?i)(?<=OBJECT_ID\\(')(\\#[^']+)(?='\\))", "tempdb..$0")//temp table
+				;
+		return res;
+
+	}
+		
+		
 	/**
 	 * <h1>with處理</h1>
 	 * <p>
@@ -258,33 +316,6 @@ public class DDLTranslater {
 //		}
 //		String hash = "\r\n\tDISTRIBUTION = " + ("".equals(column) ? "REPLICATE" : "HASH(" + column + ")");
 //		result += hash + "\r\n)";
-		return result;
-	}
-	
-	// 清除TD特有的語法
-	@Deprecated
-	public static String replaceTDsql(String sql) {
-		String result = sql
-				.replaceAll("(?i)\\bVOLATILE\\b", "")// VOLATILE
-				.replaceAll("(?i)\\bMULTISET\\b", "")// MULTISET
-				.replaceAll("(?i)SET\\s+TABLE", "TABLE")// SET TABLE
-				.replaceAll("(?i)(UNIQUE\\s+)?(PRIMARY\\s+)?INDEX\\s+\\([^\\)]+\\)", " ")// UNIQUE PRIMARY INDEX
-				.replaceAll("(?i)NO\\s+PRIMARY\\s+INDEX", "")
-				.replaceAll("(?i)RANGE_N" + "\\s*\\([^\\)]+\\)", " ")// PARTITION BY
-				.replaceAll("(?i)PARTITION\\s+BY\\s*(\\s*\\([^\\)]*\\))?", " ")// PARTITION BY
-		;
-		return result;
-	}
-	
-	// 清除欄位的多餘設定
-	public static String replaceColumn(String sql) {
-		String result = sql.replaceAll("(?i)CHARACTER\\s+SET\\s+\\S+", " ")
-				.replaceAll("(?i)NOT\\s+CASESPECIFIC", " ")
-				.replaceAll("(?i)TITLE\\s+'[^']+'", " ")
-				.replaceAll("(?i)\\s*FORMAT\\s+'[^']+'\\s*", " ")
-				.replaceAll("(?i)TIMESTAMP\\s*\\(\\s*[0-9]+\\s*\\)", "DATETIME")
-				.replaceAll("(?i)VARBYTE", "VARBINARY")
-				.replaceAll(" +,", ",");
 		return result;
 	}
 	

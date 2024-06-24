@@ -36,7 +36,6 @@ public class OtherTranslater {
 				break;
 		default:
 			res = transduceCursor(res);
-			res = changeIndex(res);
 		}
 		
 		return res;
@@ -145,39 +144,39 @@ public class OtherTranslater {
 		return res;
 	}
 	
-	// index
-	public static String changeIndex(String sql) {
-		String result = sql;
-		//取得sample
-		List<String> lstIndex = RegexTool.getRegexTarget("(?i)(?<=[, ])INDEX[^\\);]+",result);
-		//是否存在sample
-		if(lstIndex.isEmpty()) {
-			return sql;
-		}
-		for(String data : lstIndex) {
-			String upper = data.toUpperCase();
-			if(upper.contains("COLLECT STATISTICS ON")
-					||upper.contains("PRIMARY")
-					||upper.contains("UNIQUE")) {
-				continue;
-			}
-			List<String>lstP = RegexTool.getRegexTarget("(?i)(?<=INDEX\\s{0,10}\\()[^\\)]+",data);
-			if(lstP.isEmpty()) {
-				continue;
-			}
-			String params = lstP.get(0);
-			String[] arp = params.split(",");
-			if(arp.length!=2) {
-				continue;
-			}
-//			String index = " CHARINDEX("+arp[1]+","+arp[0];
-			String index = " INDEX("+arp[1]+","+arp[0];
-			String reg = RegexTool.encodeSQL(data);
-			result = RegexTool.encodeSQL(result).replaceAll(reg,RegexTool.encodeSQL(index));
-		}
-		result = RegexTool.decodeSQL(result);
-		return result;
-	}
+//	// index
+//	public static String changeIndex(String sql) {
+//		String result = sql;
+//		//取得sample
+//		List<String> lstIndex = RegexTool.getRegexTarget("(?i)(?<=[, ])INDEX[^\\);]+",result);
+//		//是否存在sample
+//		if(lstIndex.isEmpty()) {
+//			return sql;
+//		}
+//		for(String data : lstIndex) {
+//			String upper = data.toUpperCase();
+//			if(upper.contains("COLLECT STATISTICS ON")
+//					||upper.contains("PRIMARY")
+//					||upper.contains("UNIQUE")) {
+//				continue;
+//			}
+//			List<String>lstP = RegexTool.getRegexTarget("(?i)(?<=INDEX\\s{0,10}\\()[^\\)]+",data);
+//			if(lstP.isEmpty()) {
+//				continue;
+//			}
+//			String params = lstP.get(0);
+//			String[] arp = params.split(",");
+//			if(arp.length!=2) {
+//				continue;
+//			}
+////			String index = " CHARINDEX("+arp[1]+","+arp[0];
+//			String index = " INDEX("+arp[1]+","+arp[0];
+//			String reg = RegexTool.encodeSQL(data);
+//			result = RegexTool.encodeSQL(result).replaceAll(reg,RegexTool.encodeSQL(index));
+//		}
+//		result = RegexTool.decodeSQL(result);
+//		return result;
+//	}
 	/**
 	 * @author	Tim
 	 * @since	2023年10月17日
