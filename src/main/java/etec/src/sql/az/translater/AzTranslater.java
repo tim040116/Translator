@@ -12,7 +12,7 @@ import etec.framework.translater.exception.UnknowSQLTypeException;
 import etec.framework.translater.interfaces.TranslaterFactory;
 
 /**
- * <h1>GreenPlumn轉換</h1>
+ * <h1>Azsure轉換</h1>
  * 
  * 統整
  * 

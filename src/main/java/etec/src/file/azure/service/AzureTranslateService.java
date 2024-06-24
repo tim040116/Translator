@@ -54,7 +54,6 @@ public class AzureTranslateService {
 	 * @throws IOException
 	 */
 	public static void run(File f) throws IOException {
-		AzTranslater az = new AzTranslater();
 		/* 2024/05/06	Tim	強制轉換成指定編碼
 		 * */
 //		String context = FileTool.readFile(f);
