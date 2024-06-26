@@ -1,6 +1,6 @@
 package etec.src.sql.td.classifier;
 
-import etec.common.utils.TransduceTool;
+import etec.common.utils.convert_safely.ConvertRemarkSafely;
 import etec.common.utils.log.Log;
 import etec.framework.translater.enums.SQLTypeEnum;
 
@@ -20,7 +20,7 @@ public class TeradataClassifier {
 	 * 
 	 * */
 	public static SQLTypeEnum getSQLType(String sql) {
-		sql = TransduceTool.cleanRemark(sql).toUpperCase().trim();
+ 		sql = ConvertRemarkSafely.clean(sql).trim();
 		SQLTypeEnum res = SQLTypeEnum.OTHER;
 		
 		if(sql.matches("\\s*;?\\s*")) {
@@ -37,10 +37,13 @@ public class TeradataClassifier {
 				res = SQLTypeEnum.CREATE_TABLE;
 			}
 		}
-		else if(sql.matches("(?i)RENAME\\s+TABLE\\s+[\\S\\s]+")) {
+		else if(sql.matches("(?i)\\bCREATE\\s+VIEW\\s+[\\S\\s]+")) {
+			res = SQLTypeEnum.CREATE_VIEW;
+		}
+		else if(sql.matches("(?i)RENAME\\s+(?:OBJECT|TABLE)\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.RENAME_TABLE;
 		}
-		else if (sql.matches("(?i)DROP\\s+TABLE\\s+[\\S\\s]+")) {
+		else if (sql.matches("(?i)DROP\\s+(?:TABLE\\s+)?[\\S\\s]+")) {
 			res = SQLTypeEnum.DROP_TABLE;
 		}
 		else if(sql.matches("(?i)LOCK\\s+TABLE\\s+[\\S\\s]+")) {
@@ -49,7 +52,7 @@ public class TeradataClassifier {
 		else if(sql.matches("(?i)TRUNCATE\\s+TABLE\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.TRUNCATE_TABLE;
 		}
-		else if (sql.matches("(?i)MERGE\\s+INTO\\s+[\\S\\s]+")) {
+		else if (sql.matches("(?i)MERGE\\s+(?:INTO\\s+)?[\\S\\s]+")) {
 			res = SQLTypeEnum.MERGE_INTO;
 		}
 		else if (sql.matches("(?i)UPDATE\\s+[\\S\\s]+")) {
@@ -74,7 +77,7 @@ public class TeradataClassifier {
 		else if(sql.matches("(?i)COMMENT\\s+ON\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.COMMENT_ON;
 		}
-		else if(sql.matches("(?i)INSERT\\s+INTO\\s+[\\S\\s]+")) {
+		else if(sql.matches("(?i)\\bINS(?:ERT)\\s+(?:INTO\\s+)?[\\S\\s]+")) {
 			res = sql.matches("(?i)[\\S\\s]*\\s+SELECT\\s+[\\S\\s]*")?SQLTypeEnum.INSERT_SELECT:SQLTypeEnum.INSERT_TABLE;
 		}
 		else if(sql.matches("(?i)DROP\\s+VIEW\\s+[\\S\\s]+")) {
@@ -108,8 +111,8 @@ public class TeradataClassifier {
 			res = SQLTypeEnum.OTHER;
 		}
 		if(res.equals(SQLTypeEnum.OTHER)) {
-			Log.warn("出現無法處理的SQL語句");
 			System.out.println(sql+"\r\n");
+ 			Log.warn("出現無法辨識的SQL語句");
 		}
 		return res;
 		

@@ -86,7 +86,6 @@ public class AzureTranslateService {
 					String sql = m.group().trim();
 					sql = AzTranslater.translate(sql);
 					m.appendReplacement(sb, Matcher.quoteReplacement(sql + "\r\n"));
-					
 				}
 				m.appendTail(sb);
 			} catch (SQLTranslateException e) {

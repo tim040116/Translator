@@ -12,6 +12,7 @@ public enum SQLTypeEnum {
 		//DDL
 		 CREATE_TABLE
 		,CREATE_INSERT
+		,CREATE_VIEW
 		,CTAS
 		,SELECT_INTO
 		,RENAME_TABLE

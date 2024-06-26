@@ -103,4 +103,8 @@ public class ConvertRemarkSafely {
 	public static boolean match(String reg,String str) {
 		return str.replaceAll(markName("\\w+","\\d+"), "").trim().matches(reg);
 	}
+	
+	public static String clean(String script) {
+		return script.replaceAll(markName("[^_>]+","[^_>]+"), "");
+	}
 }

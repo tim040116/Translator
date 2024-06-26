@@ -48,7 +48,7 @@ public class SQLTranslater {
 				
 		;
 		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
-		cfs.savelyConvert(res, (t)->{
+		res = cfs.savelyConvert(res, (t)->{
 			String rt = t
 				//truncCAST(A.TIME_RANGE/10000 AS INTEGER)
 				.replaceAll("(?i)TRUNC\\((.*?)(?:,\\s*0)?\\)", "CAST($1 AS INTEGER)")
@@ -60,6 +60,7 @@ public class SQLTranslater {
 			rt = changeAddMonth(rt);
 			rt = changeZeroifnull(rt);
 			rt = changeCharindex(rt);
+			rt = replaceToChar(rt);
 			return rt;
 		});
 		res = convertDecode(res);
@@ -146,18 +147,15 @@ public class SQLTranslater {
 	 * */
 	public static String replaceToChar(String sql) {
 		String res = sql;
-		RegexTool.getRegexTarget("(?i)TO_CHAR\\s*\\(\\s*([^,]+\\))\\s*,\\s*([^\\)]+)\\s*\\)", "");
+		res = res.replaceAll("(?i)TO_CHAR\\s*\\(([^()]+)\\)", "CAST\\($1 AS VARCHAR\\)");
 		return res;
 	}
 	
 	// AddMonth修改
 		public static String changeAddMonth(String sql) {
-			if (!sql.toUpperCase().contains("ADD_MONTH")) {
-				return sql;
-			}
-			String res = sql.trim();
+			String res = sql;
 			//預處理
-			res = res.replaceAll("\\bADD_MONTHS\\b","ADD_MONTH");
+			res = res.replaceAll("(?i)\\bADD_MONTHS\\b","ADD_MONTH");
 			//捕獲
 			/**
 			 * <p>功能 ：轉換ADD_MONTHS</p>
@@ -175,25 +173,8 @@ public class SQLTranslater {
 			 * 2024年5月8日	Tim	建立邏輯
 			 * */
 			res = res.replaceAll(
-					  "(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*([+-])\\s*(\\d+)\\s*\\)"
+					  "(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*([+-]?\\s*\\d+)\\s*\\)"
 					, "DateAdd\\($1,$3,$2\\)");
-			//20240618 Tim	改用replaceAll
-//			// 20220613 List<String> lst =
-//			// RegexTool.getRegexTarget2("[Aa][Dd]{2}_[Mm][Oo][Nn][Tt][Hh][Ss]\\([^\\)]*\\)
-//			// *,(-?[0-9]*) *\\)",res);
-//			List<String> lst = RegexTool
-//					.getRegexTarget("(?i)ADD_MONTHS\\([^\\)]*\\)?,(-?[0-9]*) *\\)", res);
-//			for (String str : lst) {
-//				String[] param = str.replaceAll("(?i)add_Months\\(|\\)$", "").split(",");
-//				res = RegexTool.encodeSQL(res);
-//				String oldstr = RegexTool.encodeSQL(str);
-//				String newstr = RegexTool.encodeSQL("DateAdd(MONTH," + param[1].trim() + "," + param[0].trim() + ")");
-//				res = res.replaceAll(oldstr, newstr);
-//				res = RegexTool.decodeSQL(res);
-//			}
-	//
-//			// 20220613 return arrangeSQL(res);
-			
 			return res;
 		}
 		// zeroifnull
