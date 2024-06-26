@@ -3,29 +3,36 @@ package etec.src.sql.az.translater;
 import java.util.List;
 
 import etec.common.utils.RegexTool;
+import etec.common.utils.convert_safely.ConvertSubQuerySafely;
 import etec.common.utils.log.Log;
 import etec.framework.translater.exception.SQLTranslateException;
+import etec.framework.translater.exception.UnknowSQLTypeException;
 
 public class DQLTranslater {
 	// select語句轉換
 	public static String easyReplace(String sql) throws SQLTranslateException {
 		Log.debug("transduceSelectSQL");
-
-		String txt = sql;
-		// 轉換
-		// txt = changeGroupBy(txt);
 		Log.debug("\teasyReplaceSelect");
-		txt = SQLTranslater.easyReplaceSelect(txt);
-		// 整理 如果有註解會被Mark
-		// txt = arrangeSQL(txt);
-//			txt = changeGroupBy(txt);
-		Log.debug("\tchangeSample");
-		txt = changeSample(txt);
-		Log.debug("\teasyReplaceSelect");
-		txt = changeIndex(txt);
-		Log.debug("\tchangeIndex");
-		txt = txt.replaceAll("\\bINTO\\b", "=");
-		return txt.trim();
+		String res  = SQLTranslater.easyReplaceSelect(sql);
+		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
+		res = csqs.savelyConvert(res, (t)->{
+			String txt = t;
+			// 轉換
+			// txt = changeGroupBy(txt);
+			
+			// 整理 如果有註解會被Mark
+			// txt = arrangeSQL(txt);
+//					txt = changeGroupBy(txt);
+			Log.debug("\tchangeSample");
+			txt = changeSample(txt);
+			Log.debug("\teasyReplaceSelect");
+			txt = changeIndex(txt);
+			Log.debug("\tchangeIndex");
+			txt = txt.replaceAll("\\bINTO\\b", "=");
+			return txt;
+		});
+		
+		return res.trim();
 	}
 
 	// select單純的置換

@@ -44,7 +44,7 @@ public class DMLTranslater {
 			break;
 		case DELETE:
 			Log.debug("\t細分：DELETE TABLE");
-//			sql = changeDeleteTableUsing(sql);
+			sql = SQLTranslater.easyReplaceSelect(sql);
 			break;
 		case UPDATE:
 			Log.debug("\t細分：UPDATE TABLE");
@@ -263,7 +263,7 @@ public class DMLTranslater {
 			m.appendReplacement(sb, Matcher.quoteReplacement(str));
 		}
 		m.appendTail(sb);
-		
+		res = sb.toString();
 		return res;
 	}
 }

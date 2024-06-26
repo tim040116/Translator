@@ -18,6 +18,7 @@ import etec.framework.translater.enums.SQLTypeEnum;
 import etec.framework.translater.exception.SQLTranslateException;
 import etec.framework.translater.exception.UnknowSQLTypeException;
 import etec.framework.translater.interfaces.TranslaterFactory;
+import etec.src.file.azure.service.AzureTranslateService;
 import etec.src.file.model.BasicParams;
 import etec.src.sql.az.translater.AzTranslater;
 import etec.src.sql.az.translater.DDLTranslater;
@@ -123,6 +124,38 @@ public class FamilyMartFileTransduceService {
 		 * */
 		Charset chs = CharsetTool.getCharset(f.getPath());
 		String ofc = CharsetTool.readFileInCharset(chs.name(),f.getPath());
+		ofc = ConvertRemarkSafely.savelyConvert(ofc, (t) -> {
+			StringBuffer sb = new StringBuffer();
+			try {
+				Log.debug("開始捕獲語法");
+				/**
+				 * <p>功能 ：捕獲SQL語法</p>
+				 * <p>類型 ：搜尋</p>
+				 * <p>修飾詞：gmi</p>
+				 * <p>範圍 ：從 開頭 到 分號</p>
+				 * <h2>群組 ：</h2>
+				 * <h2>備註 ：</h2>
+				 * 	會先將TranslaterService裡的各類型title用|串接，
+				 *  作為開頭
+				 * <h2>異動紀錄 ：</h2>
+				 * 2024年4月10日	Tim	建立邏輯
+				 * 2024年5月6日	Tim	增加所有類型的title
+				 * */
+				String reg = "(#\\*s)?\\b(?:" + String.join("|",TranslaterFactory.getTitleList()) + ")\\b[^;]+?;";
+				Pattern p = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
+				Matcher m = p.matcher(t);
+				while (m.find()) {
+					// 處理前後空白
+					String sql = m.group().trim();
+					sql = AzTranslater.translate(sql);
+					m.appendReplacement(sb, Matcher.quoteReplacement(sql + "\r\n"));
+				}
+				m.appendTail(sb);
+			} catch (SQLTranslateException e) {
+				e.printStackTrace();
+			}
+			return sb.toString();
+		});
 		newFileText = ofc.replaceAll("\\(", " ( ")
 				.replaceAll("\\)", " ) ")
 				;
@@ -136,10 +169,10 @@ public class FamilyMartFileTransduceService {
 				newFileText = ofc;
 			}else if("btq".equals(fileType)) {
 				newFileText = transduceFileBTQ(newFileText);
-				newFileName = newFileName.replaceAll("\\.[Bb][Tt][Qq]", ".sql");
+				newFileName = newFileName.replaceAll("(?i)\\.btq", ".sql");
 			}else if("pl".equals(fileType)) {
 				newFileText = transduceFilePL(newFileText);
-				newFileName = newFileName.replaceAll("\\.[Pp][Ll]", ".sql");
+				newFileName = newFileName.replaceAll("(?i)\\.pl", ".sql");
 			}else if("sql".equals(fileType)) {
 				/*	2023/10/20	Tim
 				 * .sql的檔案裏面是oracle所以不用轉換

@@ -84,6 +84,7 @@ public class AzTranslater extends TranslaterFactory{
 		}
 		String res = "";
 		script = script.replaceAll("([${}\\w]+)\\s*\\.\\s*([\\w-]+)", "$1.$2");
+		script = regular(script);
 		SQLTypeModel m = getType(script);
 		switch(m.getType()) {
 			case DQL:
@@ -113,5 +114,15 @@ public class AzTranslater extends TranslaterFactory{
 		Log.debug("轉換完成");
 		return res;
 	}
-
+	
+	
+	public static String regular(String script) {
+		String res = script;
+		res = res
+				.replaceAll("(?i)\\bSEL\\b", "SELECT")
+//				.replaceAll("(?i)\\bINS\\b", "INSERT")
+				
+			;
+		return res;
+	}
 }
