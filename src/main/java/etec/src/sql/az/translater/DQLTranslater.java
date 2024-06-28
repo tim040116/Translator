@@ -12,7 +12,6 @@ public class DQLTranslater {
 	// select語句轉換
 	public static String easyReplace(String sql) throws SQLTranslateException {
 		Log.debug("transduceSelectSQL");
-		Log.debug("\teasyReplaceSelect");
 		String res  = SQLTranslater.easyReplaceSelect(sql);
 		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
 		res = csqs.savelyConvert(res, (t)->{
@@ -82,12 +81,11 @@ public class DQLTranslater {
 	// sample
 	public static String changeSample(String selectSQL) {
 		String result = selectSQL;
-		// 取得sample
-		List<String> lstSample = RegexTool.getRegexTarget("(?i)SAMPLE\\s+\\d+\\s*;", selectSQL);
-		// 是否存在sample
-		if (lstSample.isEmpty()) {
+		if(!selectSQL.matches("(?i)[\\S\\s]*\\bSAMPLE\\b[\\S\\s]+")) {
 			return selectSQL;
 		}
+		// 取得sample
+		List<String> lstSample = RegexTool.getRegexTarget("(?i)SAMPLE\\s+\\d+\\s*;", selectSQL);
 		String sample = " SELECT TOP " + RegexTool.getRegexTarget("\\d+", lstSample.get(0)).get(0) + " ";
 		result = result.replaceFirst("(?i)SELECT", sample)
 				.replaceAll("(?i)SAMPLE\\s+\\d+\\s*;", ";");

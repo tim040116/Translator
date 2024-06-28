@@ -20,10 +20,10 @@ import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 import etec.src.file.assignment.service.create_list.CreateCallSPList;
 import etec.src.file.assignment.service.create_list.CreateMultisetList;
+import etec.src.file.azure.service.IOpathSettingService;
+import etec.src.file.azure.service.SearchFunctionService;
+import etec.src.file.azure.service.TransduceStoreFunctionService;
 import etec.src.file.model.BasicParams;
-import etec.src.sql.az.service.IOpathSettingService;
-import etec.src.sql.az.service.SearchFunctionService;
-import etec.src.sql.az.service.TransduceStoreFunctionService;
 import etec.src.sql.azure.create_file.CreateSDIService;
 import etec.view.panel.SearchFunctionPnl;
 

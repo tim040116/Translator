@@ -33,16 +33,12 @@ public class SQLTranslater {
 				.replaceAll("(?i)NVL\\s*\\(", "ISNULL(")//NVL
 				.replaceAll("(?i)Character\\s*\\(", "LEN(")//Character
 				.replaceAll("(?i)\\bMINUS\\b", "EXCEPT")//MINUS
-				//TO_DATE
-				.replaceAll("(?i)TO_DATE\\s*\\(\\s*(.*?)\\s*,\\s*\\S+\\s*\\)", "CAST($1 AS DATETIME)")
-				//TO_CHAR
-//				.replaceAll("TO_CHAR\\s*\\(\\s*([^,\\(\\)]+)\\s*\\)", "CAST($1 AS VARCHAR)")
 				// rank over
 				.replaceAll("(?i)\\bRANK\\(?:(?! |\\))", "RANK ( ) OVER ( order by ")// all
 				// extract
 				.replaceAll("(?i)EXTRACT\\s*\\(\\s*(DAY|MONTH|YEAR)\\s*FROM", "DatePart($1,")// all
 				.replaceAll("(?i)WITH\\s*COUNT\\s*\\(\\*\\)\\s*BY\\s*\\w*", "")
-				.replaceAll("(?i)DATE\\s*FORMAT\\s+'[YMDHS/\\-]*'", "DATE")
+				.replaceAll("(?i)\\bDATE\\s*FORMAT\\s+'[YMDHS/\\-]*'", "DATE")
 //				.replaceAll(RegexTool.getReg(" +[Dd][Aa][Tt][Ee] +'"), " '")
 				.replaceAll("(?i)length\\s*\\(", "LEN(")//length
 				
@@ -50,17 +46,20 @@ public class SQLTranslater {
 		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
 		res = cfs.savelyConvert(res, (t)->{
 			String rt = t
-				//truncCAST(A.TIME_RANGE/10000 AS INTEGER)
-				.replaceAll("(?i)TRUNC\\((.*?)(?:,\\s*0)?\\)", "CAST($1 AS INTEGER)")
+				//trunc CAST(A.TIME_RANGE/10000 AS INTEGER)
+				.replaceAll("(?i)\\bTRUNC\\(([^(),]*?)(?:,\\s*0\\s*)?\\)", "CAST($1 AS INTEGER)")
 				//TO_NUMBER
-				.replaceAll("(?i)TO_NUMBER\\s*\\(\\s*(.*?)\\s*\\)", "CAST($1 AS INTEGER)")
+				.replaceAll("(?i)TO_NUMBER\\s*\\(\\s*([^(),]*?)\\s*\\)", "CAST($1 AS INTEGER)")
+				//TO_DATE
+				.replaceAll("(?i)TO_DATE\\s*\\(\\s*([^(),]*?)\\s*,\\s*\\S+\\s*\\)", "CAST($1 AS DATETIME)")
+				//TO_CHAR
+				.replaceAll("(?i)TO_CHAR\\s*\\(([^,()]+)(?:,[^()]+)?\\)", "CAST\\($1 AS VARCHAR\\)")
 				//INSTR
 				.replaceAll("(?i)INSTR\\s*\\(([@\\w'\\(\\)]+),('[^']+'+)(,\\d+)?\\)", "CHARINDEX($2,$1 $3)")
  			;
 			rt = changeAddMonth(rt);
 			rt = changeZeroifnull(rt);
 			rt = changeCharindex(rt);
-			rt = replaceToChar(rt);
 			return rt;
 		});
 		res = convertDecode(res);
@@ -139,17 +138,6 @@ public class SQLTranslater {
 		return sb.toString();
 	}
 	
-	/**
-	 * @author	Tim
-	 * @since	3.3.0.0
-	 * @param	String	sql
-	 * 
-	 * */
-	public static String replaceToChar(String sql) {
-		String res = sql;
-		res = res.replaceAll("(?i)TO_CHAR\\s*\\(([^()]+)\\)", "CAST\\($1 AS VARCHAR\\)");
-		return res;
-	}
 	
 	// AddMonth修改
 		public static String changeAddMonth(String sql) {

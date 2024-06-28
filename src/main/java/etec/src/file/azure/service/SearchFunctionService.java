@@ -1,4 +1,4 @@
-package etec.src.sql.az.service;
+package etec.src.file.azure.service;
 
 import java.io.IOException;
 import java.util.ArrayList;

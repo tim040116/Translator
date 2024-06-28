@@ -21,14 +21,16 @@ public class TeradataClassifier {
 	 * */
 	public static SQLTypeEnum getSQLType(String sql) {
  		sql = ConvertRemarkSafely.clean(sql).trim();
+ 		//清除修飾詞
+ 		sql = sql.replaceAll("(?i)\\b(MULTISET|SET|VOLATILE|TEMP)\\b", "");
 		SQLTypeEnum res = SQLTypeEnum.OTHER;
 		
 		if(sql.matches("\\s*;?\\s*")) {
 			res = SQLTypeEnum.EMPTY;
 		}
-		else if (sql.matches("(?i)CREATE\\s*(MULTISET|SET)?(\\s+VOLATILE|\\s+TRMP)?\\s+TABLE\\s+[\\S\\s]+")) {
-			if(sql.matches("[\\S\\s]*\\s+SELECT\\s+[\\S\\s]*")) {
-				if(sql.matches("(?i)CREATE\\s+TABLE\\s+\\S+\\s+WITH\\s*\\([\\S\\s]+")) {
+		else if (sql.matches("(?i)CREATE\\s+TABLE\\s+[\\S\\s]+")) {
+			if(sql.matches("(?i)[\\S\\s]*\\bSELECT\\b[\\S\\s]*")) {
+				if(sql.matches("(?i)CREATE\\s+[\\S\\s]*?\\bTABLE\\s+[\\S\\s]*?\\b(?:WITH|AS)\\s*\\([\\S\\s]+")) {
 					res = SQLTypeEnum.CTAS;
 				}else {
 					res = SQLTypeEnum.CREATE_INSERT;
@@ -103,6 +105,9 @@ public class TeradataClassifier {
 		}
 		else if(sql.matches("(?i)EXIT\\s*;")) {
 			res = SQLTypeEnum.EXIT;
+		}
+		else if(sql.matches("(?i)\\bEXEC\\s*;")) {
+			res = SQLTypeEnum.EXEC;
 		}
 		else if(sql.matches("(?i)WITH\\s+\\S+\\s+AS\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.WITH;

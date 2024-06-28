@@ -1,6 +1,6 @@
 package etec.view.application;
 
-import etec.src.file.azure.service.AzureController;
+import etec.src.controller.AzureController;
 import etec.src.file.green_plum.controller.GreenPlumFileController;
 import etec.view.frame.SearchFunctionFrame;
 

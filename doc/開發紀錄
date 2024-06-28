@@ -1,10 +1,8 @@
 2024/05/29 Tim:
 
 
-format 要列清單
+ADD_MONTH修好了
 
-SP 轉換要處理
+TO_CHAR還沒
 
-unique primary index
-
-az 要增加編碼功能
+UPDATE SET跟WHERE相反的時候會出問題

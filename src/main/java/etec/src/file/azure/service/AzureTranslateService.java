@@ -59,6 +59,13 @@ public class AzureTranslateService {
 //		String context = FileTool.readFile(f);
 		Charset chs = CharsetTool.getCharset(f.getPath());
 		String context = CharsetTool.readFileInCharset(chs.name(),f.getPath());
+		context = context
+				//locking
+				.replaceAll("(?i)\\bFOR\\s+ACCESS(?!\\s*;)", "$0;")
+				//.
+				.replaceAll("\\n\\s*\\..*", "$0;")
+				.replaceAll(";\\s*;", ";")
+			;
 		String newFileName = BasicParams.getTargetFileNm(f.getPath());
 		Log.debug("清理註解");
 		String newContext = ConvertRemarkSafely.savelyConvert(context, (t) -> {

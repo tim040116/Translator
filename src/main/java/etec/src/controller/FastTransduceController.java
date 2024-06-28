@@ -2,7 +2,7 @@ package etec.src.controller;
 
 import etec.common.enums.RunStatusEnum;
 import etec.common.interfaces.Controller;
-import etec.src.sql.az.service.FastTransduceService;
+import etec.src.file.azure.service.FastTransduceService;
 import etec.src.sql.gp.translater.GreenPlumTranslater;
 import etec.view.frame.FastTransduceFrame;
 

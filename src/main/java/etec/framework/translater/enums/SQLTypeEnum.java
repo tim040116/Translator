@@ -41,6 +41,7 @@ public enum SQLTypeEnum {
 	,BT
 	,ET
 	,EXIT
+	,EXEC
 	,DQL
 	,DDL
 	,DML

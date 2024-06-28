@@ -1,4 +1,4 @@
-package etec.src.sql.az.translater;
+ package etec.src.sql.az.translater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,10 +97,10 @@ public class DDLTranslater {
 		 * */
 		StringBuffer sb = new StringBuffer();
 		String reg = "(?is)"
-				+ "CREATE\\s+(?<setting>.*?)\\s+"
+				+ "CREATE\\s+(?<setting>.*?)\\b"
 				+ "TABLE\\s+(?<tableName>[^,\\s()]+)\\s+"
-				+ "AS\\s*\\(\\s*(?<select>SELECT.*)?"
-				+ "\\)(?=.*WITH\\s*\\()";
+				+ "(?:AS\\s*)?\\(\\s*(?<select>.*)?"
+				+ "\\)(?=\\s*WITH\\s*\\()";
 		Matcher m = Pattern.compile(reg).matcher(res);
 		while (m.find()) {
 			String newSql = "";
@@ -263,6 +263,7 @@ public class DDLTranslater {
 			 */
 	public static String addWith(String sql) {
 		String result = sql;
+		result = result.replaceAll("(?i)\\bwith\\s+(no\\s+)?DATA\\b", "");
 		/**
 		 * <p>功能 ：取得index</p>
 		 * <p>類型 ：搜尋</p>

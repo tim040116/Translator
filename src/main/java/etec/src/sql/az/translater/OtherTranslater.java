@@ -6,6 +6,7 @@ import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;
 import etec.common.utils.param.Params;
 import etec.framework.translater.enums.SQLTypeEnum;
+import etec.framework.translater.exception.SQLTranslateException;
 import etec.src.sql.td.classifier.TeradataClassifier;
 
 /**
@@ -21,10 +22,11 @@ public class OtherTranslater {
 	
 	/**
 	 * @author	Tim
+	 * @throws SQLTranslateException 
 	 * @since	2023年12月20日
 	 * 
 	 * */
-	public String easyReplace(String script) {
+	public String easyReplace(String script) throws SQLTranslateException {
 		String res = script;
 		SQLTypeEnum type = TeradataClassifier.getSQLType(script);
 		switch(type) {
@@ -33,6 +35,9 @@ public class OtherTranslater {
 				break;
 			case COLLECT_STATISTICS:
 				res = runStatistics(res);
+				break;
+			case EXEC:
+				res = SQLTranslater.easyReplaceSelect(res);
 				break;
 		default:
 			res = transduceCursor(res);

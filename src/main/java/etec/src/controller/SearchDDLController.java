@@ -15,9 +15,9 @@ import etec.common.utils.RegexTool;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
+import etec.src.file.azure.service.IOpathSettingService;
+import etec.src.file.azure.service.SearchFunctionService;
 import etec.src.file.model.BasicParams;
-import etec.src.sql.az.service.IOpathSettingService;
-import etec.src.sql.az.service.SearchFunctionService;
 import etec.view.panel.SearchFunctionPnl;
 
 public class SearchDDLController implements Controller{

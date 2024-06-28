@@ -11,10 +11,10 @@ import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
 import etec.framework.translater.exception.UnknowSQLTypeException;
+import etec.src.file.azure.service.IOpathSettingService;
+import etec.src.file.azure.service.TransduceStoreFunctionService;
 import etec.src.file.model.BasicParams;
 import etec.src.file.model.SFSPModel;
-import etec.src.sql.az.service.IOpathSettingService;
-import etec.src.sql.az.service.TransduceStoreFunctionService;
 import etec.view.panel.SearchFunctionPnl;
 
 /**

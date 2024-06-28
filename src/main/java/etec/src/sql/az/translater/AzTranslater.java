@@ -55,7 +55,7 @@ public class AzTranslater extends TranslaterFactory{
 	public static String[] arrDQL = { "WITH", "SELECT" };
 	public static String[] arrDML = { "INSERT", "DELETE", "UPDATE","MERGE"};
 	public static String[] arrDDL = { "CREATE", "TRUNCAT", "DROP", "RENAME", "REPLACE" };
-	public static String[] arrOther = { "CALL", "COLLECT", "LOCKING" };
+	public static String[] arrOther = { "CALL", "COLLECT", "LOCKING","EXEC" };
 
 	/**
 	 * <h1>區分並轉換</h1>
@@ -83,7 +83,10 @@ public class AzTranslater extends TranslaterFactory{
 			return script;
 		}
 		String res = "";
-		script = script.replaceAll("([${}\\w]+)\\s*\\.\\s*([\\w-]+)", "$1.$2");
+		script = script
+				.replaceAll("([${}\\w]+)\\s*\\.\\s*([\\w-]+)", "$1.$2")
+				.replaceAll("(?i)\\bFOR\\s+ACCESS(?!\\s*;)", "$0;")
+		;
 		script = regular(script);
 		SQLTypeModel m = getType(script);
 		switch(m.getType()) {

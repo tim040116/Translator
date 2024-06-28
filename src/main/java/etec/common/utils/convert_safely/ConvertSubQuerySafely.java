@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;
@@ -46,7 +48,8 @@ public class ConvertSubQuerySafely {
 	 *
 	 * */
 	public String savelyConvert(String script,Function<String, String> function) {
-		if(RegexTool.getRegexTarget("(?i)\\(\\s*SEL(?:ECT)?", script).isEmpty()) {
+		//如果沒有子查詢的話直接進到下一段
+		if(Pattern.compile("(?i)\\(\\s*SEL(?:ECT)?").matcher(script).find()) {
 			return savelyConvertUnion(script, function);
 		}
 		String res = ConvertFunctionsSafely.decodeMark(script)

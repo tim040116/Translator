@@ -6,8 +6,7 @@ import java.util.regex.Pattern;
 import etec.common.utils.log.Log;
 import etec.framework.translater.enums.SQLTypeEnum;
 import etec.framework.translater.exception.SQLTranslateException;
-import etec.src.sql.gp.translater.GreenPlumTranslater;
-import etec.src.sql.gp.translater.service.MergeIntoService;
+import etec.src.sql.az.translater.service.MergeIntoService;
 import etec.src.sql.td.classifier.TeradataClassifier;
 
 public class DMLTranslater {
@@ -126,7 +125,8 @@ public class DMLTranslater {
 				+ "MERGE\\s+INTO\\s+(?<tableNm>.*?)"
 				+ "USING(?<using>.*?)"
 				+ "WHEN\\s+(?<when1>(?:NOT\\s+)?MATCHED)\\s+THEN\\s+(?<type1>\\w+)(?<sql1>[^;]+?)"
-				+ "WHEN\\s+(?<when2>(?:NOT\\s+)?MATCHED)\\s+THEN\\s+(?<type2>\\w+)(?<sql2>[^;]+);?";
+				+ "(?:WHEN\\s+(?<when2>(?:NOT\\s+)?MATCHED)\\s+THEN\\s+(?<type2>\\w+)(?<sql2>[^;]+))?"
+				+ ";?\\s*$";
 		Matcher m = Pattern.compile(reg).matcher(sql);
 		while (m.find()) {
 			String merge = "";
@@ -136,11 +136,14 @@ public class DMLTranslater {
 			String sql2  = m.group("sql2");
 			//處理WHEN 1
 			sql1 = MergeIntoService.convert(m.group("type1"), tableNm, using, m.group("sql1").trim());
-			sql1 = GreenPlumTranslater.translate(sql1);
+			sql1 = AzTranslater.translate(sql1);
 			//處理WHEN 2
-			sql2 = MergeIntoService.convert(m.group("type2"), tableNm, using, m.group("sql2").trim());
-			sql2 = GreenPlumTranslater.translate(sql2);
-			
+			if(sql2!=null) {
+				sql2 = MergeIntoService.convert(m.group("type2"), tableNm, using, m.group("sql2").trim());
+				sql2 = AzTranslater.translate(sql2);
+			}else {
+				sql2 = "";
+			}
 			merge = sql1+"\r\n\r\n"+sql2;
 			m.appendReplacement(sb,Matcher.quoteReplacement(merge));
 		}
@@ -232,8 +235,8 @@ public class DMLTranslater {
 		 * */
 		StringBuffer sb = new StringBuffer();
 		String reg = "(?is)"
-				+ "\\bUPDATE\\s*(?<targetTable>\\S+)\\s++"
-				+ "(?<alias>\\S+?)?\\s*"
+				+ "\\bUPDATE\\s*(?<targetTable>\\S+)\\s++(?:AS\\s+)?"
+				+ "(?<alias>\\w+?)?\\s*"
 				+ "(?:FROM\\s*(?<joinTable>.*))?"
 				+ "\\bSET\\b(?<set>[^;]+?)"
 				+ "(?:WHERE(?<where>[^;]*))?"

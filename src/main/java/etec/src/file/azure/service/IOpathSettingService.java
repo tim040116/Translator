@@ -1,4 +1,4 @@
-package etec.src.sql.az.service;
+package etec.src.file.azure.service;
 
 import etec.src.file.model.BasicParams;
 

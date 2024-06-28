@@ -9,10 +9,10 @@ import java.util.Map;
 import etec.common.enums.FileTypeEnum;
 import etec.common.utils.RegexTool;
 import etec.common.utils.file.FileTool;
+import etec.src.file.azure.service.CreateListService;
+import etec.src.file.azure.service.SQLTextService;
+import etec.src.file.azure.service.TransformService;
 import etec.src.file.family_mart.service.POCTransduserService;
-import etec.src.sql.az.service.CreateListService;
-import etec.src.sql.az.service.SQLTextService;
-import etec.src.sql.az.service.TransformService;
 import etec.src.sql.az.translater.OtherTranslater;
 
 public class DDIMFileTransduceService {

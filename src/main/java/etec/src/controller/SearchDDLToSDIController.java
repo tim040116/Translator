@@ -12,8 +12,8 @@ import etec.common.utils.TransduceTool;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
+import etec.src.file.azure.service.IOpathSettingService;
 import etec.src.file.model.BasicParams;
-import etec.src.sql.az.service.IOpathSettingService;
 import etec.src.sql.azure.create_file.CreateSDIService;
 import etec.view.panel.SearchFunctionPnl;
 

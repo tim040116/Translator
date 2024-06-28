@@ -1,4 +1,4 @@
-package etec.src.file.azure.service;
+package etec.src.controller;
 
 import java.io.File;
 import java.util.List;
@@ -7,10 +7,11 @@ import etec.common.enums.RunStatusEnum;
 import etec.common.interfaces.Controller;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.param.Params;
+import etec.src.file.azure.service.AzureTranslateService;
+import etec.src.file.azure.service.CreateListService;
+import etec.src.file.azure.service.IOpathSettingService;
 import etec.src.file.family_mart.service.FamilyMartFileTransduceService;
 import etec.src.file.model.BasicParams;
-import etec.src.sql.az.service.CreateListService;
-import etec.src.sql.az.service.IOpathSettingService;
 import etec.view.panel.SearchFunctionPnl;
 
 public class AzureController implements Controller {
