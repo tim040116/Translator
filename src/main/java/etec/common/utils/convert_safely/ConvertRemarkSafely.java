@@ -77,9 +77,17 @@ public class ConvertRemarkSafely {
 		}
 		m.appendTail(sb);
 		res = function.apply(sb.toString());
-		for(Entry<String,String> e : mapRemark.entrySet()) {
-			res = res.replaceAll(Pattern.quote(e.getKey())+"(.*)", "$1 "+Matcher.quoteReplacement(e.getValue()));
+		
+		StringBuffer sb2 = new StringBuffer();
+		Matcher m2 = Pattern.compile("<ConvertRemarkSafely_[^>]+?>").matcher(res);
+		while(m2.find()) {
+			m2.appendReplacement(sb2, Matcher.quoteReplacement(mapRemark.get(m2.group(0))));
 		}
+		m2.appendTail(sb2);
+		res = sb2.toString();
+//		for(Entry<String,String> e : mapRemark.entrySet()) {
+//			res = res.replaceAll(Pattern.quote(e.getKey())+"(.*)", "$1 "+Matcher.quoteReplacement(e.getValue()));
+//		}
 //		res = res
 //			.replaceAll("(?mi)^((?:\\s*\\+)?\\s*')(\\s*)(--)?", "$2$3 $1 ")
 //		;
