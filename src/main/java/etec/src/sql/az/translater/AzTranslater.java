@@ -89,7 +89,7 @@ public class AzTranslater extends TranslaterFactory{
 		;
 		script = regular(script);
 		SQLTypeModel m = getType(script);
-		switch(m.getType()) {
+ 		switch(m.getType()) {
 			case DQL:
 				Log.debug("\t分類：DQL");
 				res = dql.easyReplace(script);

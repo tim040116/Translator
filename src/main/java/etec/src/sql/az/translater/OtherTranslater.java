@@ -139,12 +139,13 @@ public class OtherTranslater {
 	}
 	/**
 	 * @author	Tim
+	 * @throws SQLTranslateException 
 	 * @since	2023年11月13日
 	 * 
 	 * Call 語法轉成EXEC
 	 * */
-	public static String transduceCall(String script) {
-		String res = script;
+	public static String transduceCall(String script) throws SQLTranslateException {
+		String res = SQLTranslater.easyReplaceSelect(script);
 		res = res.replaceAll("(?i)CALL\\s+(\\S+)\\s*\\(([^\\)]+)\\)", "EXEC $1 $2");
 		return res;
 	}

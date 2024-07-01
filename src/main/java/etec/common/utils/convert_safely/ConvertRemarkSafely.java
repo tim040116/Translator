@@ -42,7 +42,6 @@ public class ConvertRemarkSafely {
 	 * */
 	public static String savelyConvert(String script,Function<String, String> function) {
 		String res = script;
-		
 		String title = "";
 		
 		/**

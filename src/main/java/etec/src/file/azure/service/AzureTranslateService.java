@@ -86,8 +86,7 @@ public class AzureTranslateService {
 				 * 2024年5月6日	Tim	增加所有類型的title
 				 * */
 				String reg = "(#\\*s)?\\b(?:" + String.join("|",TranslaterFactory.getTitleList()) + ")\\b[^;]+?;";
-				Pattern p = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
-				Matcher m = p.matcher(t);
+				Matcher m = Pattern.compile(reg, Pattern.CASE_INSENSITIVE).matcher(t);
 				while (m.find()) {
 					// 處理前後空白
 					String sql = m.group().trim();

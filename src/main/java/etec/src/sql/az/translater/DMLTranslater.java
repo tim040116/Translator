@@ -251,7 +251,7 @@ public class DMLTranslater {
 			String where = m.group("where");
 			
 			alias = alias==null?"upd_als_nm":alias;
-			set = set.trim().replaceAll("(?<!\\.)\\b\\w+\\b(?!\\.)", alias+".$0");//欄位加上alias name
+			set = SQLTranslater.easyReplaceSelect(set).trim().replaceAll("(?)(?<!\\.)\\b\\w+\\b(?<!DATE|AS)(?![.('])", alias+".$0");//欄位加上alias name
 			joinTable = joinTable==null?"":","+SQLTranslater.easyReplaceSelect(joinTable);
 			where = where==null?"":SQLTranslater.easyReplaceSelect(where);
 			where = where
