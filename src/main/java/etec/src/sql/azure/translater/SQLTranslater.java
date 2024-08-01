@@ -1,6 +1,6 @@
 package etec.src.sql.azure.translater;
 
-import etec.common.utils.convert_safely.ConvertFunctionsSafely;
+import etec.framework.convert_safely.ConvertFunctionsSafely;
 import etec.framework.translater.exception.SQLFormatException;
 import etec.src.sql.azure.translater.service.DataTypeService;
 import etec.src.sql.azure.translater.service.UnpivotService;

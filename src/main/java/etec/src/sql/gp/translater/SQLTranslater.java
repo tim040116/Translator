@@ -1,8 +1,8 @@
 package etec.src.sql.gp.translater;
 
 import etec.common.utils.Mark;
-import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 import etec.common.utils.log.Log;
+import etec.framework.convert_safely.ConvertFunctionsSafely;
 import etec.framework.translater.exception.SQLFormatException;
 import etec.src.sql.gp.translater.service.DataTypeService;
 import etec.src.sql.gp.translater.service.UnpivotService;

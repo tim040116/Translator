@@ -5,8 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import etec.common.utils.RegexTool;
-import etec.common.utils.convert_safely.ConvertFunctionsSafely;
-import etec.common.utils.convert_safely.ConvertRemarkSafely;
+import etec.framework.convert_safely.ConvertFunctionsSafely;
+import etec.framework.convert_safely.ConvertRemarkSafely;
 import etec.framework.translater.exception.SQLFormatException;
 import etec.framework.translater.exception.SQLTranslateException;
 

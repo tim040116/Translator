@@ -9,11 +9,11 @@ import java.util.regex.Pattern;
 
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
-import etec.common.utils.charset.CharsetTool;
-import etec.common.utils.convert_safely.ConvertRemarkSafely;
+import etec.common.utils.file.CharsetTool;
 import etec.common.utils.file.FileTool;
 import etec.common.utils.log.Log;
 import etec.common.utils.param.Params;
+import etec.framework.convert_safely.ConvertRemarkSafely;
 import etec.framework.translater.enums.SQLTypeEnum;
 import etec.framework.translater.exception.SQLTranslateException;
 import etec.framework.translater.exception.UnknowSQLTypeException;

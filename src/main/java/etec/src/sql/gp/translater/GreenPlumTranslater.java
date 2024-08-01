@@ -2,9 +2,9 @@ package etec.src.sql.gp.translater;
 
 import java.util.Arrays;
 
-import etec.common.utils.convert_safely.ConvertRemarkSafely;
-import etec.common.utils.convert_safely.ConvertVarcharSafely;
 import etec.common.utils.log.Log;
+import etec.framework.convert_safely.ConvertRemarkSafely;
+import etec.framework.convert_safely.ConvertVarcharSafely;
 import etec.framework.translater.exception.SQLFormatException;
 import etec.framework.translater.exception.SQLTranslateException;
 import etec.framework.translater.exception.UnknowSQLTypeException;
