@@ -1,7 +1,10 @@
 package etec.src.sql.az.translater;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;
 import etec.common.utils.log.Log;
 import etec.framework.convert_safely.ConvertSubQuerySafely;
@@ -155,7 +158,18 @@ public class DQLTranslater {
 	 * @return	return_type
 			 */
 	public static String changeRollUp(String sql) {
-		String res = "";
+		String res = sql;
+		//找到group by
+		String temp = sql.replaceAll("(?i)\\b\\w+\\s+BY\\s", Mark.MAHJONG_GREEN+"$0");
+		Matcher m = Pattern.compile("(?i)"+Mark.MAHJONG_GREEN+"\\bGROUP\\s+BY\\s+([^"+Mark.MAHJONG_GREEN+"]++)").matcher(sql);
+		if(m.find()) {
+			//確認rollup
+			if(!m.group(1).toUpperCase().contains("ROLLUP(")) {
+				return sql;
+			}
+			String groupBy = m.group(1);
+			
+		}
 		
 		return res;
 	}
