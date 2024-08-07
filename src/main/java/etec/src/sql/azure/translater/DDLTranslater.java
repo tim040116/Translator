@@ -1,7 +1,7 @@
 package etec.src.sql.azure.translater;
 
-import etec.common.utils.convert_safely.ConvertFunctionsSafely;
 import etec.common.utils.param.Params;
+import etec.framework.convert_safely.ConvertFunctionsSafely;
 
 public class DDLTranslater {
 	

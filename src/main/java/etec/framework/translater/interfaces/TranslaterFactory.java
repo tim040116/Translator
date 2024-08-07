@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import etec.common.model.SQLTypeModel;
-import etec.common.utils.convert_safely.ConvertVarcharSafely;
 import etec.common.utils.log.Log;
+import etec.framework.convert_safely.ConvertVarcharSafely;
 import etec.framework.translater.exception.SQLTranslateException;
 import etec.src.sql.az.translater.DDLTranslater;
 import etec.src.sql.gp.translater.GreenPlumTranslater;

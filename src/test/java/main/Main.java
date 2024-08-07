@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.utils.charset.CharsetTool;
+import etec.common.utils.file.CharsetTool;
 import etec.src.sql.az.translater.DDLTranslater;
 import etec.src.sql.az.translater.DMLTranslater;
 

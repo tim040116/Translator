@@ -1,7 +1,7 @@
 package etec.src.sql.td.classifier;
 
-import etec.common.utils.convert_safely.ConvertRemarkSafely;
 import etec.common.utils.log.Log;
+import etec.framework.convert_safely.ConvertRemarkSafely;
 import etec.framework.translater.enums.SQLTypeEnum;
 
 /**

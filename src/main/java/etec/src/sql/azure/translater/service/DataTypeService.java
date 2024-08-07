@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import etec.common.utils.Mark;
-import etec.common.utils.convert_safely.ConvertFunctionsSafely;
+import etec.framework.convert_safely.ConvertFunctionsSafely;
 
 /**
  * <h1>轉換改變資料型態與法</h1>

@@ -1,4 +1,4 @@
-package etec.common.utils.convert_safely;
+package etec.framework.convert_safely;
 
 import java.util.HashMap;
 import java.util.Map;

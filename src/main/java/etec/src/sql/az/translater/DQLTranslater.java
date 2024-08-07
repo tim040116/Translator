@@ -1,10 +1,13 @@
 package etec.src.sql.az.translater;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import etec.common.utils.Mark;
 import etec.common.utils.RegexTool;
-import etec.common.utils.convert_safely.ConvertSubQuerySafely;
 import etec.common.utils.log.Log;
+import etec.framework.convert_safely.ConvertSubQuerySafely;
 import etec.framework.translater.exception.SQLTranslateException;
 import etec.framework.translater.exception.UnknowSQLTypeException;
 
@@ -76,8 +79,6 @@ public class DQLTranslater {
 		return res;
 	}
 
-	
-
 	// sample
 	public static String changeSample(String selectSQL) {
 		String result = selectSQL;
@@ -91,10 +92,6 @@ public class DQLTranslater {
 				.replaceAll("(?i)SAMPLE\\s+\\d+\\s*;", ";");
 		return result;
 	}
-
-	
-
-	
 
 	/**
 	 * <h1>index</h1>
@@ -145,4 +142,35 @@ public class DQLTranslater {
 		return result;
 	}
 
+	/**
+	 * <h1>rollup</h1>
+	 * <p></p>
+	 * <p></p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年7月31日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	1.0.0.0
+	 * @param	enclosing_method_arguments
+	 * @throws	e
+	 * @see		
+	 * @return	return_type
+			 */
+	public static String changeRollUp(String sql) {
+		String res = sql;
+		//找到group by
+		String temp = sql.replaceAll("(?i)\\b\\w+\\s+BY\\s", Mark.MAHJONG_GREEN+"$0");
+		Matcher m = Pattern.compile("(?i)"+Mark.MAHJONG_GREEN+"\\bGROUP\\s+BY\\s+([^"+Mark.MAHJONG_GREEN+"]++)").matcher(sql);
+		if(m.find()) {
+			//確認rollup
+			if(!m.group(1).toUpperCase().contains("ROLLUP(")) {
+				return sql;
+			}
+			String groupBy = m.group(1);
+			
+		}
+		
+		return res;
+	}
 }

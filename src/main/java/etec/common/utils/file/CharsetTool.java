@@ -1,4 +1,4 @@
-package etec.common.utils.charset;
+package etec.common.utils.file;
 
 import java.io.File;
 import java.io.IOException;

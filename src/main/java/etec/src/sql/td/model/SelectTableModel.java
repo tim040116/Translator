@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import etec.common.utils.Mark;
-import etec.common.utils.convert_safely.ConvertFunctionsSafely;
+import etec.framework.convert_safely.ConvertFunctionsSafely;
 import etec.framework.translater.exception.UnknowSQLTypeException;
 
 /**
