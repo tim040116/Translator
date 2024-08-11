@@ -14,5 +14,11 @@
 	<classpathentry kind="lib" path="bin/org.mozilla.intl.chardet-1.1.jar"/>
 	<classpathentry kind="lib" path="bin/cpdetector-1.0.10.jar"/>
 	<classpathentry kind="lib" path="bin/commons-io-2.15.1.jar"/>
+	<classpathentry kind="lib" path="bin/commons-collections4-4.4.jar"/>
+	<classpathentry kind="lib" path="bin/poi-5.2.5.jar"/>
+	<classpathentry kind="lib" path="bin/poi-ooxml-5.2.5.jar"/>
+	<classpathentry kind="lib" path="bin/org.osgi.core-6.0.0.jar"/>
+	<classpathentry kind="lib" path="bin/log4j-api-2.21.1.jar"/>
+	<classpathentry kind="lib" path="bin/log4j-core-2.21.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
