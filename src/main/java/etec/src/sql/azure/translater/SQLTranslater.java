@@ -71,7 +71,7 @@ public class SQLTranslater {
 		res = cff.savelyConvert(res, (String t)->{
 			t = t
 				.replaceAll("(?i)INDEX\\s*\\(([^,]+),([^\\)]+)\\)", "POSITION\\($2 IN $1\\)")//INDEX改成POSITION
-				.replaceAll("(?i)ZEROIFNULL\\s*\\(([^\\)]+)\\)", "COALESCE\\($1,0\\)")//ZEROIFNULL改成COALESCE
+				.replaceAll("(?i)ZEROIFNULL\\s*\\(([^)]+)\\)", "COALESCE\\($1,0\\)")//ZEROIFNULL改成COALESCE
 				.replaceAll("(?i)\\bIN\\s+(?<n1>'[^']+'(,'[^']+')+)", "IN \\(${n1}\\)")//IN後面一定要有括號
 				.replaceAll("(?i)NULLIFZERO\\s*\\(([^\\)]+)\\)", "NULLIF\\($1,0\\)")//NullIfZero改成NULLIF
 				.replaceAll("(?i)LIKE\\s+ANY\\s*\\(\\s*('[^']+'(\\s*\\,\\s*'[^']+')+)\\s*\\)", "LIKE ANY \\(ARRAY[$1])")//LIKE ANY('','','') >> LIKE ANY(ARRAY['','',''])	
