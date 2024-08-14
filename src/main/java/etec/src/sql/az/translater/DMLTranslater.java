@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import etec.common.utils.log.Log;
+import etec.common.utils.param.Params;
 import etec.framework.translater.enums.SQLTypeEnum;
 import etec.framework.translater.exception.SQLTranslateException;
 import etec.src.sql.az.translater.service.MergeIntoService;
@@ -101,6 +102,9 @@ public class DMLTranslater {
 	 * @return	return_type
 			 */
 	public static String runMergeInto(String sql) throws SQLTranslateException {
+		if(!Params.familyMart.MERGE_INTO) {
+			return SQLTranslater.easyReplaceSelect(sql);
+		}
 		String res = "";
 		/**
 		 * <p>功能 ：第一步拆解merge into 語法</p>

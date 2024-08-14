@@ -1,10 +1,8 @@
 package main;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import etec.framework.encryption.factory.EncryptionFactory;
 import etec.src.security.encryption.DatetimeCondition;
+import etec.view.frame.LoginFrame;
 
 /**
  * @author	Tim
@@ -18,10 +16,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		try {
-			DatetimeCondition dc = new DatetimeCondition();
-			dc.check(null);
-			System.out.println(EncryptionFactory.base64.encode("權限已過期，請聯絡工程師"));
-			System.out.println(EncryptionFactory.base64.encode("2026/12/31"));
+			new LoginFrame();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

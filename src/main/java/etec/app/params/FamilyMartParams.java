@@ -16,7 +16,12 @@ public class FamilyMartParams {
 	 * Perl檔的參數要不要置換
 	 * */
 	public final boolean IS_REPLACE_PARAMS_IN_PERL;
-	
+	/**
+	 * @author	Tim
+	 * @since	2024年08月14日
+	 * MERGE INTO要不要置換
+	 * */
+	public final boolean MERGE_INTO;
 	/**
 	 * @author	Tim
 	 * @since	2023年10月3日
@@ -36,5 +41,8 @@ public class FamilyMartParams {
 		this.IS_REPLACE_PARAMS_IN_PERL = "TRUE".equals(map.get("IS_REPLACE_PARAMS_IN_PERL").toUpperCase());
 		this.WRITE_FILE_CHARSET = Charset.forName(map.get("WRITE_FILE_CHARSET"));
 		this.LIST_FILE_TYPE_BIG5 = Arrays.asList(map.get("LIST_FILE_TYPE_BIG5").split(","));
+		this.MERGE_INTO = "TRUE".equals(map.get("IS_REPLACE_PARAMS_IN_PERL").toUpperCase());
+
+		
 	}
 }

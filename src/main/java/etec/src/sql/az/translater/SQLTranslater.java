@@ -62,7 +62,12 @@ public class SQLTranslater {
 			rt = changeCharindex(rt);
 			return rt;
 		});
-		res = convertDecode(res);
+		ConvertFunctionsSafely cfs2 = new ConvertFunctionsSafely();
+		res = cfs2.savelyConvert(res, (t)->{
+			String rt = convertDecode(t);
+			return rt;
+		});
+		
 		return res;
 	}
 	/**	

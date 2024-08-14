@@ -20,7 +20,7 @@ public class LoginFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtId;
 	private JTextField txtPass;
-	private Button btnLogin = new Button("登入");
+	private Button btnLogin = new Button("Log in");
 	/**
 	 * Launch the application.
 	 */
@@ -63,33 +63,33 @@ public class LoginFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(83, 73, 268, 35);
-		contentPane.add(panel);
-		panel.setLayout(null);
+		JPanel pnlId = new JPanel();
+		pnlId.setBounds(83, 73, 268, 35);
+		contentPane.add(pnlId);
+		pnlId.setLayout(null);
 		
-		Label label = new Label("帳號：");
-		label.setBounds(10, 5, 52, 22);
-		panel.add(label);
+		Label lblId = new Label("ID：");
+		lblId.setBounds(10, 5, 80, 30);
+		pnlId.add(lblId);
 		
 		txtId = new JTextField();
-		txtId.setBounds(68, 5, 190, 21);
-		panel.add(txtId);
+		txtId.setBounds(90, 5, 150, 30);
+		pnlId.add(txtId);
 		txtId.setColumns(10);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setLayout(null);
-		panel_1.setBounds(83, 126, 268, 35);
-		contentPane.add(panel_1);
+		JPanel pnlPass = new JPanel();
+		pnlPass.setLayout(null);
+		pnlPass.setBounds(83, 126, 268, 35);
+		contentPane.add(pnlPass);
 		
-		Label label_1 = new Label("密碼：");
-		label_1.setBounds(10, 5, 52, 22);
-		panel_1.add(label_1);
+		Label lblPass = new Label("Password：");
+		lblPass.setBounds(10, 5, 80, 30);
+		pnlPass.add(lblPass);
 		
 		txtPass = new JTextField();
 		txtPass.setColumns(10);
-		txtPass.setBounds(68, 5, 190, 21);
-		panel_1.add(txtPass);
+		txtPass.setBounds(90, 5, 150, 30);
+		pnlPass.add(txtPass);
 		
 		btnLogin.setBounds(279, 167, 72, 22);
 		contentPane.add(btnLogin);
