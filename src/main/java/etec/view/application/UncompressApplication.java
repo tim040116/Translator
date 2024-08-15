@@ -1,12 +1,11 @@
 package etec.view.application;
 
-import etec.common.annotation.Application;
+import etec.common.interfaces.Application;
 import etec.src.controller.UncompressController;
 
-@Application("UNCOMPRESS")
-public class UncompressApplication {
+public class UncompressApplication implements Application {
 
-	public static void run() {
+	public void run() {
 		try {
 			(new UncompressController()).run();
 		} catch (Exception e) {

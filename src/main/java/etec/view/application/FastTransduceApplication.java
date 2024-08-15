@@ -1,6 +1,6 @@
 package etec.view.application;
 
-import etec.common.annotation.Application;
+import etec.common.interfaces.Application;
 import etec.src.controller.FastTransduceController;
 import etec.view.frame.FastTransduceFrame;
 /**
@@ -22,9 +22,8 @@ import etec.view.frame.FastTransduceFrame;
  * @see		FastTransduceFrame
  * @see		FastTransduceController
  */
-@Application("FAST_TRANSDUCE")
-public class FastTransduceApplication {
-	public static void run() {
+public class FastTransduceApplication  implements Application{
+	public void run() {
 		new FastTransduceFrame("即時轉換",new FastTransduceController());
 		//設定SQL語言的選項
 		FastTransduceFrame.pnl.addLanguageRadio("ms", "MS SQL");

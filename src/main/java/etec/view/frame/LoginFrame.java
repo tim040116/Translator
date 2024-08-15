@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import etec.common.interfaces.Application;
 import etec.view.application.AzureFileApplication;
 
 import javax.swing.JTextField;
@@ -21,6 +22,8 @@ public class LoginFrame extends JFrame {
 	private JTextField txtId;
 	private JTextField txtPass;
 	private Button btnLogin = new Button("Log in");
+	
+	private Application app;
 	/**
 	 * Launch the application.
 	 */
@@ -28,8 +31,8 @@ public class LoginFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoginFrame frame = new LoginFrame();
-					frame.setVisible(true);
+//					LoginFrame frame = new LoginFrame();
+//					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -40,12 +43,14 @@ public class LoginFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LoginFrame() {
+	public LoginFrame(Application application) {
+		
+		this.app = application;
+		
 		style();
 		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				AzureFileApplication.run();
 				setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
 		});
