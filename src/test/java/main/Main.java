@@ -1,6 +1,8 @@
 package main;
 
-import etec.view.frame.LoginFrame;
+import etec.src.login.review.LoginReviewer;
+import etec.src.login.view.LoginFrame;
+import etec.src.translator.view.application.FamilyMartApplication;
 
 /**
  * @author	Tim
@@ -14,7 +16,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		try {
-			LoginFrame frame = new LoginFrame();
+			LoginFrame frame = new LoginFrame(new FamilyMartApplication(),new LoginReviewer());
 			frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();

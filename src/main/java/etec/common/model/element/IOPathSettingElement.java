@@ -5,7 +5,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import etec.common.utils.param.Params;
+import etec.common.factory.Params;
 
 
 

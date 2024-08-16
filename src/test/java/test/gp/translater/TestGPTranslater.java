@@ -1,7 +1,7 @@
 package test.gp.translater;
 
-import etec.framework.translater.exception.TranslateException;
-import etec.src.sql.gp.translater.GreenPlumTranslater;
+import etec.framework.context.translater.exception.TranslateException;
+import etec.src.translator.sql.gp.translater.GreenPlumTranslater;
 
 /**
  * @author	Tim

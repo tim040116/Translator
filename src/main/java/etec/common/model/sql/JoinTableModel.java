@@ -2,7 +2,7 @@ package etec.common.model.sql;
 
 import java.util.List;
 
-import etec.framework.translater.enums.JoinTypeEnum;
+import etec.framework.context.translater.enums.JoinTypeEnum;
 
 public class JoinTableModel {
 

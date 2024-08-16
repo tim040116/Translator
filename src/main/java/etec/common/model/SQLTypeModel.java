@@ -1,6 +1,6 @@
 package etec.common.model;
 
-import etec.framework.translater.enums.SQLTypeEnum;
+import etec.framework.context.translater.enums.SQLTypeEnum;
 
 public class SQLTypeModel {
 

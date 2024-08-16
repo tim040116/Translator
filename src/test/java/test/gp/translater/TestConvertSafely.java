@@ -1,6 +1,6 @@
 package test.gp.translater;
 
-import etec.framework.convert_safely.ConvertSubQuerySafely;
+import etec.framework.context.convert_safely.service.ConvertSubQuerySafely;
 
 public class TestConvertSafely {
 	

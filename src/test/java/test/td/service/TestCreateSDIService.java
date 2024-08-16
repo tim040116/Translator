@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import etec.common.utils.file.FileTool;
-import etec.src.sql.td.service.CreateSDIService;
+import etec.framework.file.readfile.service.FileTool;
+import etec.src.translator.sql.td.service.CreateSDIService;
 
 public class TestCreateSDIService {
 	

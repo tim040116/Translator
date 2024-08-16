@@ -1,19 +1,19 @@
 package etec.app.main;
 
+import etec.common.factory.Params;
 import etec.common.interfaces.Application;
-import etec.common.utils.log.Log;
-import etec.common.utils.param.Params;
-import etec.framework.translater.exception.TranslateException;
-import etec.src.file.ddim.controller.DDIMWriteFileController;
-import etec.view.application.AssessmentApplication;
-import etec.view.application.AzureFileApplication;
-import etec.view.application.FamilyMartApplication;
-import etec.view.application.FastTransduceApplication;
-import etec.view.application.GreenPlumFileApplication;
-import etec.view.application.OldApplication;
-import etec.view.application.TranslateStoreFunctionApplication;
-import etec.view.application.UIApplication;
-import etec.view.application.UncompressApplication;
+import etec.framework.context.translater.exception.TranslateException;
+import etec.framework.security.log.service.Log;
+import etec.src.translator.file.ddim.controller.DDIMWriteFileController;
+import etec.src.translator.view.application.AssessmentApplication;
+import etec.src.translator.view.application.AzureFileApplication;
+import etec.src.translator.view.application.FamilyMartApplication;
+import etec.src.translator.view.application.FastTransduceApplication;
+import etec.src.translator.view.application.GreenPlumFileApplication;
+import etec.src.translator.view.application.OldApplication;
+import etec.src.translator.view.application.TranslateStoreFunctionApplication;
+import etec.src.translator.view.application.UIApplication;
+import etec.src.translator.view.application.UncompressApplication;
 import test.gp.translater.TestGPTranslater;
 
 public class Main {
