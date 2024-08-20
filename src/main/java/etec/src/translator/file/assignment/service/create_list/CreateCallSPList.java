@@ -39,7 +39,7 @@ public class CreateCallSPList {
 	 */
 	public static void createCallList(String category,String fileNm,String content) throws Exception {
 		SearchFunctionPnl.tsLog.setLog("資訊","CreateCallSPList");
-		
+		IS_TITLE = true;
 		//建立清單檔
 		String detlListNm = BasicParams.getOutputPath()+"\\list\\call_sp_list.csv";//列出所有檔案用到的方法
 		if(IS_TITLE) {

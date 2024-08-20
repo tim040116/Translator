@@ -28,6 +28,7 @@ public class CreateMultisetList {
 	
 	public static String CreateList(String rootPath, File f) throws IOException {
 		String result = "Success";
+		isFileExist = false;
 		//設定檔案路徑名稱與表頭
 		if(!isFileExist) {
 			sdMainFileName = BasicParams.getOutputPath()+"list\\MultisetList.csv";//列出所有檔案

@@ -14,6 +14,7 @@ import etec.common.factory.Params;
 import etec.common.interfaces.Controller;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
+import etec.framework.context.translater.interfaces.TranslaterFactory;
 import etec.framework.file.readfile.service.BigFileSplitTool;
 import etec.framework.file.readfile.service.CharsetTool;
 import etec.framework.file.readfile.service.FileTool;
@@ -24,16 +25,17 @@ import etec.src.translator.file.azure.service.IOpathSettingService;
 import etec.src.translator.file.azure.service.SearchFunctionService;
 import etec.src.translator.file.azure.service.TransduceStoreFunctionService;
 import etec.src.translator.file.model.BasicParams;
+import etec.src.translator.sql.az.translater.AzTranslater;
 import etec.src.translator.sql.azure.create_file.CreateSDIService;
 import etec.src.translator.view.panel.SearchFunctionPnl;
 
 public class AssessmentController implements Controller{
-	public static Map<String,Integer> mapFunc = new HashMap<String,Integer>();
+	public static Map<String,Integer> mapFunc;
 	public static List<String> lstSkip = Arrays.asList(Params.searchFunction.SKIP_LIST);
 	
 	@Override
 	public void run() throws Exception {
-
+		mapFunc = new HashMap<String,Integer>();
 		
 		/*
 		 SearchDDLToSDIController.run(); 
@@ -226,8 +228,6 @@ public class AssessmentController implements Controller{
 	public void SearchFunctionList(File f,String content,String category) throws Exception {
 		SearchFunctionPnl.tsLog.setLog("資訊","SearchFunctionList");
 		content = SearchFunctionService.getSqlContent(content);
-		List<String> lstSql = RegexTool.getRegexTarget("[^;]*(?:\\bSELECT\\b)[^;]*", content);
-		
 		//每一段sql
 		int j = 1;
 		String temp = "";
@@ -236,8 +236,24 @@ public class AssessmentController implements Controller{
 		if(Params.searchFunction.IS_TITLE) {
 			FileTool.addFile(detlListNm,"\"FILE_PATH\",\"FILE_NAME\",\"PART_ID\",\"FUNCTION_NAME\"");//路徑,檔名,段落,方法名
 		}
-
-		for(String sql : lstSql) {
+		/**
+		 * <p>功能 ：捕獲SQL語法</p>
+		 * <p>類型 ：搜尋</p>
+		 * <p>修飾詞：gmi</p>
+		 * <p>範圍 ：從 開頭 到 分號</p>
+		 * <h2>群組 ：</h2>
+		 * <h2>備註 ：</h2>
+		 * 	會先將TranslaterService裡的各類型title用|串接，
+		 *  作為開頭
+		 * <h2>異動紀錄 ：</h2>
+		 * 2024年4月10日	Tim	建立邏輯
+		 * 2024年5月6日	Tim	增加所有類型的title
+		 * */
+		String regm = "(#\\*s)?\\b(?:SELECT|UPDATE|MERGE|WHERE)\\b[^;]+?;";
+		Matcher mm = Pattern.compile(regm, Pattern.CASE_INSENSITIVE).matcher(content);
+		while (mm.find()) {
+			// 處理前後空白
+			String sql = mm.group().trim();
 			/**初步排除
 			 * 2024年4月17日	Tim	增加排除資料型態強制轉換的功能
 			 * 2024年4月22日 Tim 增加只查詢SELECT語法的功能
@@ -246,8 +262,9 @@ public class AssessmentController implements Controller{
 			 * 2024年5月2日	Tim	排除單引號裡的括號
 			 * 2024年5月6日	Tim	排除雙引號裡的括號
 			 * 2024年5月10日	Tim	排除 CTAS 裡面的 INDEX
+			 * 2024年8月20日	Tim	刪除只查詢SELECT語法的功能
 			 * */
-			sql = "SELECT"+sql.split("(?i)\\bSELECT\\b", 2)[1];
+//			sql = "SELECT"+sql.split("(?i)\\bSELECT\\b", 2)[1];
 			sql = sql
 					.replaceAll("(?i)\\(\\s*FORMAT\\b", "")//FORMAT語法   ex: CURRENT_DATE(FORMAT 'YYYY-MM-DD')
 					.replaceAll("(?i)\\(\\s*("+Params.searchFunction.DATA_TYPE_LIST+")(?:\\s*\\([^)]+\\))?\\s*\\)", "")//強制轉換 ex: CURRENT_DATE(VARCHAR(10))
@@ -332,8 +349,5 @@ public class AssessmentController implements Controller{
 		}
 	}
 	
-	public void createCallList(String category,String fileNm,String content) {
-		
-	}
 	
 }
