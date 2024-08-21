@@ -37,6 +37,7 @@ public class SQLTranslater {
 				.replaceAll("(?i)\\bRANK\\(?:(?! |\\))", "RANK ( ) OVER ( order by ")// all
 				// extract
 				.replaceAll("(?i)EXTRACT\\s*\\(\\s*(DAY|MONTH|YEAR)\\s*FROM", "DatePart($1,")// all
+				.replaceAll("(?i)EXTRACT\\s*\\(\\s*(HOUR|MINUTE|SECOND)\\s*FROM", "DatePart($1,")// all
 				.replaceAll("(?i)WITH\\s*COUNT\\s*\\(\\*\\)\\s*BY\\s*\\w*", "")
 				.replaceAll("(?i)\\bDATE\\s*FORMAT\\s+'[YMDHS/\\-]*'", "DATE")
 //				.replaceAll(RegexTool.getReg(" +[Dd][Aa][Tt][Ee] +'"), " '")
@@ -96,9 +97,51 @@ public class SQLTranslater {
 	 * 
 	 * <br>2023/12/28	Tim	改使用 ConvertFunctionsSafely 處理
 	 * <br>2024/01/02	Tim	解決空白造成的誤判，改用Matcher處理
+	 * <br>2024/08/21	Tim	增加超過4個參數的情境
 	 * */
 	public static String convertDecode(String sql){
 		String res = sql;
+		
+		
+//		/**
+//		 * <p>功能 ：取得DECODE語法</p>
+//		 * <p>類型 ：搜尋</p>
+//		 * <p>修飾詞：i</p>
+//		 * <p>範圍 ：從 DECODE( 到 )</p>
+//		 * <h2>群組 ：</h2>
+//		 * 	1.參數1
+//		 * 	2.參數2
+//		 * 	3.參數3
+//		 *  4.參數4
+//		 * <h2>備註 ：</h2>
+//		 * 	
+//		 * <h2>異動紀錄 ：</h2>
+//		 * 2024年6月14日	Tim	建立邏輯
+//		 * */
+//		StringBuffer sb = new StringBuffer();
+//		String reg = "(?i)DECODE\\s*\\(\\s*([^\\(\\),]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*\\)";
+//		Matcher m = (Pattern.compile(reg)).matcher(res);
+//		while (m.find()) {
+//			String p1 = m.group(1);
+//			String p2 = m.group(2);
+//			String p3 = m.group(3);
+//			String p4 = m.group(4);
+//			String rpm = "";
+//			//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
+//			boolean ismatch = ConvertRemarkSafely.equals(p1,p4,(eq)->{
+//				return eq.replaceAll("\\w+\\.(\\w+)", "$1");
+//			});
+//			if(ismatch&&ConvertRemarkSafely.match("\\d+",p2)&&ConvertRemarkSafely.match("(?i)NULL",p3)) {//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
+//				rpm = "NULLIF("+p1+","+p2+")";
+//			}else if(ismatch&&ConvertRemarkSafely.match("(?i)NULL",p2)&&ConvertRemarkSafely.match("\\d+",p3)) {//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
+//				rpm = "COALESCE("+p1+","+p3+")";
+//			}else {
+//				rpm = "CASE WHEN "+p1+" = "+p2+" THEN "+p3+" ELSE "+p4+" END";
+//			}
+//			m.appendReplacement(sb, rpm);
+//		}
+//		m.appendTail(sb);
+		
 		
 		
 		/**
@@ -116,29 +159,29 @@ public class SQLTranslater {
 		 * <h2>異動紀錄 ：</h2>
 		 * 2024年6月14日	Tim	建立邏輯
 		 * */
+//		res = sb.toString();
 		StringBuffer sb = new StringBuffer();
-		String reg = "(?i)DECODE\\s*\\(\\s*([^\\(\\),]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*\\)";
+		String reg = "(?i)DECODE\\s*\\(([^(),]+),((?:,?[^,()]+,[^,()]+)+)(?:,([^(),]+))?\\)";
 		Matcher m = (Pattern.compile(reg)).matcher(res);
 		while (m.find()) {
-			String p1 = m.group(1);
-			String p2 = m.group(2);
-			String p3 = m.group(3);
-			String p4 = m.group(4);
-			String rpm = "";
-			//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
-			boolean ismatch = ConvertRemarkSafely.equals(p1,p4,(eq)->{
-				return eq.replaceAll("\\w+\\.(\\w+)", "$1");
-			});
-			if(ismatch&&ConvertRemarkSafely.match("\\d+",p2)&&ConvertRemarkSafely.match("(?i)NULL",p3)) {//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
-				rpm = "NULLIF("+p1+","+p2+")";
-			}else if(ismatch&&ConvertRemarkSafely.match("(?i)NULL",p2)&&ConvertRemarkSafely.match("\\d+",p3)) {//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
-				rpm = "COALESCE("+p1+","+p3+")";
-			}else {
-				rpm = "CASE WHEN "+p1+" = "+p2+" THEN "+p3+" ELSE "+p4+" END";
+			String rpm = "CASE";
+			String targetCol = m.group(1);
+			String[] arrParam = m.group(2).split("\\s*,\\s*");
+			String strElse = m.group(3);
+			for (int i = 0; i < arrParam.length; i+=2) {
+				rpm += "\r\n\tWHEN "+targetCol+" = "+arrParam[i]+" THEN "+arrParam[i+1]; 
 			}
+			if(strElse!=null) {
+				rpm += "\r\n\tELSE "+strElse;
+			}
+			rpm += "\r\nEND ";
 			m.appendReplacement(sb, rpm);
 		}
 		m.appendTail(sb);
+		
+		
+		
+		
 		
 		return sb.toString();
 	}

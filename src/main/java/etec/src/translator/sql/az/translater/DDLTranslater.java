@@ -102,7 +102,7 @@ public class DDLTranslater {
 				+ "(?:AS\\s*)?\\(\\s*(?<select>.*)?"
 				+ "\\)(?=\\s*WITH\\s*\\()";
 		Matcher m = Pattern.compile(reg).matcher(res);
-		while (m.find()) {
+ 		while (m.find()) {
 			String newSql = "";
 			String setting = m.group("setting");
 			String tableName = m.group("tableName");
@@ -180,7 +180,11 @@ public class DDLTranslater {
 				.replaceAll("(?i)\\bPRESERVE\\s+ROWS\\b","")//PRESERVE ROWS
 				.replaceAll("(?i)\\bNO\\s+PRIMARY\\s+INDEX", "")//NO PRIMARY INDEX
 				.replaceAll("(?i)TITLE\\s+'[^']+'", " ");
-				
+		/**
+		 * 2024年8月21日	Tim	直接用位置來刪除 CREATE TABLE 的多餘設定
+		 * 
+		 * */		
+		result = result.replaceAll("(?is)CREATE\\b.*?\\bTABLE\\s+(?<tableName>[^,\\s()]+)\\s+.*?(?:AS\\s*)?\\(", "CREATE TABLE $1 AS (");
 		return result;
 	}
 	

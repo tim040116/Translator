@@ -51,7 +51,7 @@ public class DQLTranslater {
 		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
 		res = csqs.savelyConvert(res, (t)->{
 			try {
-				t = changeQualifaRank(t);//Qualify Row Number
+				t = changeRowNumber(t);//Qualify Row Number
 			} catch (UnknowSQLTypeException e) {
 				e.printStackTrace();
 			}
@@ -69,7 +69,7 @@ public class DQLTranslater {
 	 * <h1>QUALIFY ROW_NUMBER()語法轉換</h1>
 	 * 
 	 * */
-	public String changeQualifaRank(String sql) throws UnknowSQLTypeException {
+	public String changeRowNumber(String sql) throws UnknowSQLTypeException {
 		if(!RegexTool.contains("(?i)QUALIFY\\s+ROW_NUMBER",sql)) {
 			return sql;
 		}
