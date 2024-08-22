@@ -175,7 +175,7 @@ public class SQLTranslater {
 				rpm += "\r\n\tELSE "+strElse;
 			}
 			rpm += "\r\nEND ";
-			m.appendReplacement(sb, rpm);
+			m.appendReplacement(sb,Matcher.quoteReplacement(rpm));
 		}
 		m.appendTail(sb);
 		
@@ -219,7 +219,7 @@ public class SQLTranslater {
 			// 取得sample
 //			result = result.replaceAll("(?<=zeroifnull\\(.{0,100})\\) +as ", ",0) as ");
 //			result = result.replaceAll(RegexTool.getReg("zeroifnull \\("), "ISNULL(");
-			result = result.replaceAll("(?i)zeroifnull\\s*\\(\\s*([^\\(\\)]+\\([^\\)]+\\))?\\)", "ISNULL($1,0)");
+			result = result.replaceAll("(?i)zeroifnull\\s*\\(([^()]+)?\\)", "ISNULL($1,0)");
 			return result;
 		}
 		
