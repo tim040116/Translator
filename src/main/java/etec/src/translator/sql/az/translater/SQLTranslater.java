@@ -9,6 +9,7 @@ import etec.framework.context.convert_safely.service.ConvertFunctionsSafely;
 import etec.framework.context.convert_safely.service.ConvertRemarkSafely;
 import etec.framework.context.translater.exception.SQLFormatException;
 import etec.framework.context.translater.exception.SQLTranslateException;
+import etec.src.translator.sql.az.translater.service.DataTypeService;
 
 public class SQLTranslater {
 	
@@ -42,13 +43,11 @@ public class SQLTranslater {
 				.replaceAll("(?i)\\bDATE\\s*FORMAT\\s+'[YMDHS/\\-]*'", "DATE")
 //				.replaceAll(RegexTool.getReg(" +[Dd][Aa][Tt][Ee] +'"), " '")
 				.replaceAll("(?i)length\\s*\\(", "LEN(")//length
-				
 		;
+		res = DataTypeService.changeTypeConversion(res);
 		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
 		res = cfs.savelyConvert(res, (t)->{
 			String rt = t
-				//trunc CAST(A.TIME_RANGE/10000 AS INTEGER)
-				.replaceAll("(?i)\\bTRUNC\\(([^(),]*?)(?:,\\s*0\\s*)?\\)", "CAST($1 AS INTEGER)")
 				//TO_NUMBER
 				.replaceAll("(?i)TO_NUMBER\\s*\\(\\s*([^(),]*?)\\s*\\)", "CAST($1 AS INTEGER)")
 				//TO_DATE
@@ -58,7 +57,8 @@ public class SQLTranslater {
 				//INSTR
 				.replaceAll("(?i)INSTR\\s*\\(([@\\w'\\(\\)]+),('[^']+'+)(,\\d+)?\\)", "CHARINDEX($2,$1 $3)")
  			;
-			rt = changeAddMonth(rt);
+			
+			rt = changeTrunc(rt);
 			rt = changeZeroifnull(rt);
 			rt = changeCharindex(rt);
 			return rt;
@@ -101,49 +101,6 @@ public class SQLTranslater {
 	 * */
 	public static String convertDecode(String sql){
 		String res = sql;
-		
-		
-//		/**
-//		 * <p>功能 ：取得DECODE語法</p>
-//		 * <p>類型 ：搜尋</p>
-//		 * <p>修飾詞：i</p>
-//		 * <p>範圍 ：從 DECODE( 到 )</p>
-//		 * <h2>群組 ：</h2>
-//		 * 	1.參數1
-//		 * 	2.參數2
-//		 * 	3.參數3
-//		 *  4.參數4
-//		 * <h2>備註 ：</h2>
-//		 * 	
-//		 * <h2>異動紀錄 ：</h2>
-//		 * 2024年6月14日	Tim	建立邏輯
-//		 * */
-//		StringBuffer sb = new StringBuffer();
-//		String reg = "(?i)DECODE\\s*\\(\\s*([^\\(\\),]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*,\\s*([^,\\(\\)]+)\\s*\\)";
-//		Matcher m = (Pattern.compile(reg)).matcher(res);
-//		while (m.find()) {
-//			String p1 = m.group(1);
-//			String p2 = m.group(2);
-//			String p3 = m.group(3);
-//			String p4 = m.group(4);
-//			String rpm = "";
-//			//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
-//			boolean ismatch = ConvertRemarkSafely.equals(p1,p4,(eq)->{
-//				return eq.replaceAll("\\w+\\.(\\w+)", "$1");
-//			});
-//			if(ismatch&&ConvertRemarkSafely.match("\\d+",p2)&&ConvertRemarkSafely.match("(?i)NULL",p3)) {//DECODE($1,\d,null,$1) -> NULLIF($1,\d)
-//				rpm = "NULLIF("+p1+","+p2+")";
-//			}else if(ismatch&&ConvertRemarkSafely.match("(?i)NULL",p2)&&ConvertRemarkSafely.match("\\d+",p3)) {//DECODE($1,null,\d,$1) -> COALESCE($1,\d)
-//				rpm = "COALESCE("+p1+","+p3+")";
-//			}else {
-//				rpm = "CASE WHEN "+p1+" = "+p2+" THEN "+p3+" ELSE "+p4+" END";
-//			}
-//			m.appendReplacement(sb, rpm);
-//		}
-//		m.appendTail(sb);
-		
-		
-		
 		/**
 		 * <p>功能 ：取得DECODE語法</p>
 		 * <p>類型 ：搜尋</p>
@@ -178,69 +135,63 @@ public class SQLTranslater {
 			m.appendReplacement(sb,Matcher.quoteReplacement(rpm));
 		}
 		m.appendTail(sb);
-		
-		
-		
-		
-		
 		return sb.toString();
 	}
 	
 	
-	// AddMonth修改
-		public static String changeAddMonth(String sql) {
-			String res = sql;
-			//預處理
-			res = res.replaceAll("(?i)\\bADD_MONTHS\\b","ADD_MONTH");
-			//捕獲
-			/**
-			 * <p>功能 ：轉換ADD_MONTHS</p>
-			 * <p>類型 ：取代</p>
-			 * <p>修飾詞：i</p>
-			 * <p>範圍 ：從  ADD_MONTH 到 )</p>
-			 * <h2>群組 ：</h2>
-			 * 	1.YEAR|MONTH|DAY
-			 *  2.欄位
-			 *  3.數字
-			 * <h2>備註 ：</h2>
-			 * 	ADD_MONTHS(COL_NM,-1)
-			 *  DateAdd(MONTH,-1,COL_NM)
-			 * <h2>異動紀錄 ：</h2>
-			 * 2024年5月8日	Tim	建立邏輯
-			 * */
-			res = res.replaceAll(
-					  "(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*([+-]?\\s*\\d+)\\s*\\)"
-					, "DateAdd\\($1,$3,$2\\)");
-			return res;
-		}
-		// zeroifnull
-		public static String changeZeroifnull(String selectSQL) {
-			String result = selectSQL;
-			// 取得sample
+	// zeroifnull
+	public static String changeZeroifnull(String selectSQL) {
+		String result = selectSQL;
+		// 取得sample
 //			result = result.replaceAll("(?<=zeroifnull\\(.{0,100})\\) +as ", ",0) as ");
 //			result = result.replaceAll(RegexTool.getReg("zeroifnull \\("), "ISNULL(");
-			result = result.replaceAll("(?i)zeroifnull\\s*\\(([^()]+)?\\)", "ISNULL($1,0)");
-			return result;
-		}
+		result = result.replaceAll("(?i)zeroifnull\\s*\\(([^()]+)?\\)", "ISNULL($1,0)");
+		return result;
+	}
 		
-		// char index
-		public static String changeCharindex(String sql) {
-//			String result = RegexTool.encodeSQL(sql);
-//			// 取得sample
-//			List<String> lstSQL = RegexTool
-//					.getRegexTarget("(?i)INDEX<encodingCode_ParentBracketLeft>[^,]+, *\\'[^\\']+\\'", result);
-//			for (String data : lstSQL) {
-//				String oldData = data;
-//				String param = data.replaceAll("(?i)INDEX<encodingCode_ParentBracketLeft>", "");
-//				String[] ar = param.split(",");
-//				String newData = "CHARINDEX<encodingCode_ParentBracketLeft>" + ar[1] + "," + ar[0];
-//				result = result.replaceAll(oldData, newData);
-//			}
-//			return RegexTool.decodeSQL(result);
-			
-			//20240618 Tim	優化
-			String res = sql;
-			res = res.replaceAll("(?i)\\bINDEX\\s*\\(([^,]+),([^()]+)\\)","CHARINDEX\\($2,$1\\)");
-			return res;
-		}
+	// char index
+	public static String changeCharindex(String sql) {
+		//20240618 Tim	優化
+		String res = sql;
+		res = res.replaceAll("(?i)\\bINDEX\\s*\\(([^,]+),([^()]+)\\)","CHARINDEX\\($2,$1\\)");
+		return res;
+	}
+		
+	/**
+	 * <h1>TRUNC</h1>
+	 * <p>功能說明
+	 * <br>TRUNC負責處理截斷的功能，
+	 * <br>有分日期截斷跟數字截斷
+	 * </p>
+	 * <p>數字截斷
+	 * <br>TRUNC(A.BDATE,\d+) -> ROUND(COL_NM, \d+, 1)
+	 * <br>若只有一個參數則\d+ = 0
+	 * </p>
+	 * <p>日期截斷
+	 * <br>TRUNC(A.BDATE,\d+) -> ROUND(COL_NM, \d+, 1)
+	 * <br>若只有一個參數則\d+ = 0
+	 * </p>
+	 * 
+	 * <h2>異動紀錄</h2>
+	 * <br>2024年8月26日	Tim	建立功能
+	 * 
+	 * @author	Tim
+	 * @since	4.0.0.0
+	 * @param	sql
+	 * @throws	e
+	 * @see		
+	 * @return	return_type
+			 */
+	public static String changeTrunc(String sql) {
+		String res = sql;
+		res = res
+			//trunc CAST(A.TIME_RANGE/10000 AS INTEGER)
+			//數字截斷
+			.replaceAll("(?i)\\bTRUNC\\(([^()]+)\\)", "ROUND\\($1,0,1\\)")	
+			.replaceAll("(?i)\\bTRUNC\\(([^()]+),\\s*(\\d+)\\s*\\)", "ROUND\\($1,$2,1\\)")
+			//日期截斷
+			.replaceAll("(?i)\\bTRUNC\\s*\\(([^,]+),\\s*'(YEAR|MONTH|DAY)'\\s*\\)", "DATEADD\\($2, DATEDIFF\\(MONTH, 0, $1\\), 0\\)")
+		;
+		return res;
+	}
 }
