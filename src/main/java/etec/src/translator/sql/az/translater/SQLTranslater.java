@@ -44,7 +44,7 @@ public class SQLTranslater {
 //				.replaceAll(RegexTool.getReg(" +[Dd][Aa][Tt][Ee] +'"), " '")
 				.replaceAll("(?i)length\\s*\\(", "LEN(")//length
 		;
-		res = DataTypeService.changeTypeConversion(res);
+//		res = DataTypeService.changeTypeConversion(res);
 		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
 		res = cfs.savelyConvert(res, (t)->{
 			String rt = t
@@ -61,6 +61,8 @@ public class SQLTranslater {
 			rt = changeTrunc(rt);
 			rt = changeZeroifnull(rt);
 			rt = changeCharindex(rt);
+			rt = DataTypeService.changeAddMonths(rt);
+			rt = DataTypeService.changeLastDay(rt);
 			return rt;
 		});
 		ConvertFunctionsSafely cfs2 = new ConvertFunctionsSafely();
@@ -187,10 +189,10 @@ public class SQLTranslater {
 		res = res
 			//trunc CAST(A.TIME_RANGE/10000 AS INTEGER)
 			//數字截斷
-			.replaceAll("(?i)\\bTRUNC\\(([^()]+)\\)", "ROUND\\($1,0,1\\)")	
-			.replaceAll("(?i)\\bTRUNC\\(([^()]+),\\s*(\\d+)\\s*\\)", "ROUND\\($1,$2,1\\)")
+			.replaceAll("(?i)\\bTRUNC\\(([^(),]+)\\)", "ROUND\\($1,0,1\\)")	
+			.replaceAll("(?i)\\bTRUNC\\(([^(),]+),([\\s\\d.]+)\\)", "ROUND\\($1,$2,1\\)")
 			//日期截斷
-			.replaceAll("(?i)\\bTRUNC\\s*\\(([^,]+),\\s*'(YEAR|MONTH|DAY)'\\s*\\)", "DATEADD\\($2, DATEDIFF\\(MONTH, 0, $1\\), 0\\)")
+			.replaceAll("(?i)\\bTRUNC\\s*\\(([^,()]+),\\s*'(YEAR|MONTH|DAY)'\\s*\\)", "DATEADD\\($2, DATEDIFF\\(MONTH, 0, $1\\), 0\\)")
 		;
 		return res;
 	}
