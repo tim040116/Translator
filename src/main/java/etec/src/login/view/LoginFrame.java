@@ -4,6 +4,8 @@ import java.awt.Button;
 import java.awt.Label;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -44,12 +46,25 @@ public class LoginFrame extends JFrame {
 		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String[] args = {};
-				if(reviewer.check(args)==0) {
+				Map<String,String> args = new HashMap<String,String>();
+				args.put("id", txtId.getText());
+				args.put("pass", txtPass.getText());
+				int rsp = reviewer.check(args);
+				if(rsp==1) {
 					application.run();
 					dispose();
-				}else {cntFail++;}
-				if(cntFail>=3) {dispose();}
+					return;
+				}else if(rsp==-1){
+					txtId.setText("權限過期");
+					cntFail+=2;
+				}else if(rsp==-2){
+					txtId.setText("帳密錯誤");
+					cntFail++;
+				}else{
+					txtId.setText("程式錯誤");
+					cntFail+=2;
+				}
+				if(cntFail>3) {dispose();}
 			}
 		});
 	}

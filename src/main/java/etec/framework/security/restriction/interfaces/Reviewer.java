@@ -1,5 +1,7 @@
 package etec.framework.security.restriction.interfaces;
 
+import java.util.Map;
+
 import etec.framework.security.restriction.exception.PermissionDeniedException;
 
 /**權限條件*/
@@ -7,6 +9,6 @@ import etec.framework.security.restriction.exception.PermissionDeniedException;
 public interface Reviewer {
 
 	//return 0 為通過
-	public int check(String[] args) throws PermissionDeniedException;
+	public int check(Map<String,String> args) throws PermissionDeniedException;
 	
 }

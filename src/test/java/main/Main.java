@@ -1,5 +1,6 @@
 package main;
 
+import etec.framework.security.encryption.factory.EncryptionFactory;
 import etec.src.login.review.LoginReviewer;
 import etec.src.login.view.LoginFrame;
 import etec.src.translator.sql.az.translater.SQLTranslater;
@@ -19,9 +20,10 @@ public class Main {
 		try {
 //			LoginFrame frame = new LoginFrame(new FamilyMartApplication(),new LoginReviewer());
 //			frame.setVisible(true);
-			String res = SQLTranslater.easyReplaceSelect("DECODE(CS_CR_FEE,'05',1,'06',-1) as FG_ADD_TYPE\r\n" + 
-					",DECODE(CS_CR_FEE,'05',1,'06',-1,asd) as FG_ADD_TYPE");
+			String hash = EncryptionFactory.base64.encode("etec/abc123");
+			String res = EncryptionFactory.base64.encode("fmi_i/p-eps_abc123-fmd_yyyy/mm/dd_ei_etec-md_2026/12/31-hash_"+hash);
 			System.out.println(res);
+			System.out.println(EncryptionFactory.base64.decode("eXl5eS9NTS9kZA"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -2,9 +2,10 @@ package etec.app.main;
 
 import etec.common.factory.Params;
 import etec.common.interfaces.Application;
-import etec.framework.context.translater.exception.TranslateException;
 import etec.framework.security.log.service.Log;
-import etec.src.translator.file.ddim.controller.DDIMWriteFileController;
+import etec.src.login.review.InitReviewer;
+import etec.src.login.review.LoginReviewer;
+import etec.src.login.view.LoginFrame;
 import etec.src.translator.view.application.AssessmentApplication;
 import etec.src.translator.view.application.AzureFileApplication;
 import etec.src.translator.view.application.FamilyMartApplication;
@@ -14,7 +15,6 @@ import etec.src.translator.view.application.OldApplication;
 import etec.src.translator.view.application.TranslateStoreFunctionApplication;
 import etec.src.translator.view.application.UIApplication;
 import etec.src.translator.view.application.UncompressApplication;
-import test.gp.translater.TestGPTranslater;
 
 public class Main {
 	public static void main(String[] args) {
@@ -65,7 +65,7 @@ public class Main {
 		default:
 			break;
 		}
-		
-		app.run();
+		LoginFrame frame = new LoginFrame(app,new LoginReviewer());
+		frame.setVisible(true);
 	}
 }

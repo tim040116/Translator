@@ -1,4 +1,4 @@
-package etec.src.login.review.encryption;
+package etec.src.login.review.Checker;
 
 /**
  * 使用期限
