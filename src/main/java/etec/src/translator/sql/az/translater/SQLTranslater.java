@@ -1,15 +1,11 @@
 package etec.src.translator.sql.az.translater;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.utils.RegexTool;
 import etec.framework.context.convert_safely.service.ConvertFunctionsSafely;
-import etec.framework.context.convert_safely.service.ConvertRemarkSafely;
 import etec.framework.context.translater.exception.SQLFormatException;
 import etec.framework.context.translater.exception.SQLTranslateException;
-import etec.src.translator.sql.az.translater.service.DataTypeService;
 
 public class SQLTranslater {
 	
@@ -26,6 +22,7 @@ public class SQLTranslater {
 	public static String easyReplaceSelect(String sql) throws SQLTranslateException {
 		String res = sql;
 		res = res
+				.replaceAll("(?i)ADD_MONTHS", "ADD_MONTH")//ADD_MONTHS
 				.replaceAll("(?i)\\bSEL\\b", "SELECT")// SEL
 				.replaceAll("\\|\\|", "+")// ||
 				.replaceAll("(?i)\\bSUBSTR\\b", "SUBSTRING")// SUBSTR
@@ -56,13 +53,14 @@ public class SQLTranslater {
 				.replaceAll("(?i)TO_CHAR\\s*\\(([^,()]+)(?:,[^()]+)?\\)", "CAST\\($1 AS VARCHAR\\)")
 				//INSTR
 				.replaceAll("(?i)INSTR\\s*\\(([@\\w'\\(\\)]+),('[^']+'+)(,\\d+)?\\)", "CHARINDEX($2,$1 $3)")
+				.replaceAll(
+						  "(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*([+-]?\\s*\\d+)\\s*\\)"
+						, "DateAdd\\($1,$3,$2\\)")
  			;
 			
 			rt = changeTrunc(rt);
 			rt = changeZeroifnull(rt);
 			rt = changeCharindex(rt);
-			rt = DataTypeService.changeAddMonths(rt);
-			rt = DataTypeService.changeLastDay(rt);
 			return rt;
 		});
 		ConvertFunctionsSafely cfs2 = new ConvertFunctionsSafely();
