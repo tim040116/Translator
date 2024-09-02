@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import etec.framework.context.translater.enums.SQLTypeEnum;
 import etec.framework.context.translater.exception.UnknowSQLTypeException;
-import etec.src.translator.file.family_mart.service.FamilyMartFileTransduceService;
+import etec.src.translator.file.fm_poc.service.FamilyMartFileTransduceService;
 import etec.src.translator.sql.az.translater.DDLTranslater;
 import etec.src.translator.sql.td.classifier.TeradataClassifier;
 

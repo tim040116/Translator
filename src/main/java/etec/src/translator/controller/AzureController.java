@@ -10,7 +10,7 @@ import etec.framework.file.readfile.service.FileTool;
 import etec.src.translator.file.azure.service.AzureTranslateService;
 import etec.src.translator.file.azure.service.CreateListService;
 import etec.src.translator.file.azure.service.IOpathSettingService;
-import etec.src.translator.file.family_mart.service.FamilyMartFileTransduceService;
+import etec.src.translator.file.fm_poc.service.FamilyMartFileTransduceService;
 import etec.src.translator.file.model.BasicParams;
 import etec.src.translator.view.panel.SearchFunctionPnl;
 

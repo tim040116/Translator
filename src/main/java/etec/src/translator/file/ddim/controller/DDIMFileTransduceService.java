@@ -12,7 +12,7 @@ import etec.src.translator.enums.FileTypeEnum;
 import etec.src.translator.file.azure.service.CreateListService;
 import etec.src.translator.file.azure.service.SQLTextService;
 import etec.src.translator.file.azure.service.TransformService;
-import etec.src.translator.file.family_mart.service.POCTransduserService;
+import etec.src.translator.file.fm_poc.service.POCTransduserService;
 import etec.src.translator.sql.az.translater.OtherTranslater;
 
 public class DDIMFileTransduceService {

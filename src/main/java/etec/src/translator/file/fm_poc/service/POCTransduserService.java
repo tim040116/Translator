@@ -1,4 +1,4 @@
-package etec.src.translator.file.family_mart.service;
+package etec.src.translator.file.fm_poc.service;
 
 import java.io.IOException;
 import java.util.List;
