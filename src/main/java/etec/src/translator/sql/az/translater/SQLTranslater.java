@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import etec.framework.context.convert_safely.service.ConvertFunctionsSafely;
 import etec.framework.context.translater.exception.SQLFormatException;
 import etec.framework.context.translater.exception.SQLTranslateException;
+import etec.src.translator.sql.az.translater.service.DataTypeService;
 
 public class SQLTranslater {
 	
@@ -57,7 +58,7 @@ public class SQLTranslater {
 						  "(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*([+-]?\\s*\\d+)\\s*\\)"
 						, "DateAdd\\($1,$3,$2\\)")
  			;
-			
+			rt = DataTypeService.changeStrongConvert(rt);
 			rt = changeTrunc(rt);
 			rt = changeZeroifnull(rt);
 			rt = changeCharindex(rt);

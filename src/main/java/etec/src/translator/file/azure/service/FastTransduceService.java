@@ -46,7 +46,7 @@ public class FastTransduceService {
 				.replaceAll("'\\s*\\+\\s*","'+")
 				.replaceAll("\\s*\\+\\s*'","+'")
 				;
-		script = FamilyMartFileTransduceService.transduceSQLScript(script);
+//		script = FamilyMartFileTransduceService.transduceSQLScript(script);
 		SQLTypeEnum azType = TeradataClassifier.getSQLType(script);
 		if("ms".equals(sqlType)) {
 			if(SQLTypeEnum.CTAS.equals(azType)) {

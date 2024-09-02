@@ -82,7 +82,7 @@ public class DQLTranslater {
 	// sample
 	public static String changeSample(String selectSQL) {
 		String result = selectSQL;
-		if(!selectSQL.matches("(?i)[\\S\\s]*\\bSAMPLE\\b[\\S\\s]+")) {
+		if(!selectSQL.matches("(?i)[\\S\\s]*\\bSAMPLE\\s+\\d+\\b[\\S\\s]+")) {
 			return selectSQL;
 		}
 		// 取得sample

@@ -27,7 +27,7 @@ public class Main {
 		case "DDIM_TRANSLATOR":// 鼎鼎新板
 			app = new UIApplication();
 			break;
-		case "FAMILY_MART_TRANSLATOR":// 全家
+		case "FM":// 全家
 			app = new FamilyMartApplication();
 			break;
 		case "ASSESSMENT":// 3 執行 Assessment 作業 包含 3.1 、 3.2

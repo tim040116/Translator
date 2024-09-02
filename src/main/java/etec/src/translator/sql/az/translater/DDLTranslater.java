@@ -100,22 +100,29 @@ public class DDLTranslater {
 				+ "CREATE\\s+(?<setting>.*?)\\b"
 				+ "TABLE\\s+(?<tableName>[^,\\s()]+)\\s+"
 				+ "(?:AS\\s*)?\\(\\s*(?<select>.*)?"
-				+ "\\)(?=\\s*WITH\\s*\\()";
+				+ "\\)(?<with>\\s*WITH\\s*\\([^;]+)";
 		Matcher m = Pattern.compile(reg).matcher(res);
  		while (m.find()) {
 			String newSql = "";
 			String setting = m.group("setting");
 			String tableName = m.group("tableName");
 			String select = m.group("select");
+			String with = m.group("with");
+			
 			select = DQLTranslater.easyReplace(select);
-			newSql = "CREATE TABLE IF NOT EXISTS "+tableName + " (\r\n"
-					+ select+"\r\n)";
+			newSql =  "IF OBJECT_ID('"
+					+ tableName.replaceAll("#","tempdb..") 
+					+ "') IS NOT NULL DROP TABLE " + tableName + "\r\n"
+					+ "CREATE TABLE IF NOT EXISTS "+tableName 
+					+ with
+					+ "AS \r\n"
+					+ select+"\r\n";
 			m.appendReplacement(sb, Matcher.quoteReplacement(newSql));
 		}
 		m.appendTail(sb);
 		res = sb.toString();
 		res = replaceTDsql(res);
-		res = addDropIfExists(res);
+//		res = addDropIfExists(res);
 		return res;
 	}
 	
