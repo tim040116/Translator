@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -20,7 +21,7 @@ public class LoginFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtId;
-	private JTextField txtPass;
+	private JPasswordField txtPass;
 	private Button btnLogin = new Button("Log in");
 	
 	private static int cntFail = 0;
@@ -104,7 +105,7 @@ public class LoginFrame extends JFrame {
 		lblPass.setBounds(10, 5, 80, 30);
 		pnlPass.add(lblPass);
 		
-		txtPass = new JTextField();
+		txtPass = new JPasswordField();
 		txtPass.setColumns(10);
 		txtPass.setBounds(90, 5, 150, 30);
 		pnlPass.add(txtPass);
