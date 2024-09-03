@@ -109,8 +109,7 @@ public class FamilyMartFileTransduceService {
 	
 	private static String fmOnly(String content) {
 		String res = content;
-		res = FmSqlService.replaceTempTableName(res);
-		res = FmSqlService.toLowerCase(res);
+		res = FmSqlService.easyReplace(res);
 		return res;
 	}
 }
