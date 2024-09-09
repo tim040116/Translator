@@ -101,6 +101,7 @@ public class FamilyMartFileTransduceService {
 		
 		//全家客製化項目
 		newContext = fmOnly(newContext);
+		newFileName = newFileName.replaceAll("(?i)\\.btq.*", ".sql");
 		/*將bteq語法清除*/
 		//newContext = newContext.replaceAll("\\r\\n\\..*", "");
 //		newContext = GreenPlumTranslater.dql.changeMultAnalyze(newContext);

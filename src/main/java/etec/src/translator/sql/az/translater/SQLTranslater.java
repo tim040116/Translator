@@ -7,6 +7,7 @@ import etec.framework.context.convert_safely.service.ConvertFunctionsSafely;
 import etec.framework.context.translater.exception.SQLFormatException;
 import etec.framework.context.translater.exception.SQLTranslateException;
 import etec.src.translator.sql.az.translater.service.DataTypeService;
+import etec.src.translator.sql.az.translater.service.TxdateService;
 
 public class SQLTranslater {
 	
@@ -23,6 +24,7 @@ public class SQLTranslater {
 	public static String easyReplaceSelect(String sql) throws SQLTranslateException {
 		String res = sql;
 		res = res
+				.replaceAll("(?i)\\bCURRENT_DATE\\b", "getDate\\(\\)")//CURRENT_DATE
 				.replaceAll("(?i)ADD_MONTHS", "ADD_MONTH")//ADD_MONTHS
 				.replaceAll("(?i)\\bSEL\\b", "SELECT")// SEL
 				.replaceAll("\\|\\|", "+")// ||
@@ -42,6 +44,7 @@ public class SQLTranslater {
 //				.replaceAll(RegexTool.getReg(" +[Dd][Aa][Tt][Ee] +'"), " '")
 				.replaceAll("(?i)length\\s*\\(", "LEN(")//length
 		;
+		res = TxdateService.easyReplace(res);
 //		res = DataTypeService.changeTypeConversion(res);
 		ConvertFunctionsSafely cfs = new ConvertFunctionsSafely();
 		res = cfs.savelyConvert(res, (t)->{

@@ -12,7 +12,7 @@ public class DataTypeService {
 		lstType.add("BIGINT");
 		lstType.add("CHAR\\(\\d+\\)");
 		lstType.add("VARCHAR\\(\\d+\\)");
-		reg = "(?i)(\\w+(?:\\([^)]+\\))?)\\s*\\(\\s*("+String.join("|", lstType)+")\\s*\\)";
+		reg = "(?i)([.\\w]+(?:\\([^)]+\\))?)\\s*\\(\\s*("+String.join("|", lstType)+")\\s*\\)";
 	}
 	public static String changeStrongConvert(String sql) {
 		String res = sql;

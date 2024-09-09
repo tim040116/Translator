@@ -113,7 +113,7 @@ public class DDLTranslater {
 			newSql =  "IF OBJECT_ID('"
 					+ tableName.replaceAll("#","tempdb..") 
 					+ "') IS NOT NULL DROP TABLE " + tableName + "\r\n"
-					+ "CREATE TABLE IF NOT EXISTS "+tableName 
+					+ "CREATE TABLE "+tableName 
 					+ with
 					+ "AS \r\n"
 					+ select+"\r\n";

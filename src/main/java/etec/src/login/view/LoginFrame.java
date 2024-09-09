@@ -23,7 +23,6 @@ public class LoginFrame extends JFrame {
 	private JTextField txtId;
 	private JPasswordField txtPass;
 	private Button btnLogin = new Button("Log in");
-	
 	private static int cntFail = 0;
 	
 	/**
@@ -42,7 +41,8 @@ public class LoginFrame extends JFrame {
 	 * @see		
 	 * @return	return_type
 			 */
-	public LoginFrame(Application application,Reviewer reviewer) {
+	public LoginFrame(String title,Application application,Reviewer reviewer) {
+		setTitle(title);
 		style();
 		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override

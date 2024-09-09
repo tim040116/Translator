@@ -40,12 +40,24 @@ public class CreateSourceTargetService {
 	}
 	
 	private void mappingCreateTable(String sql) {
-		Matcher m = Pattern.compile("(?i)\\bCREATE.*?(?:TABLE|VIEW)\\s+([\\w#${}.]+)").matcher(sql);
+		Matcher m = Pattern.compile("(?i)\\bCREATE.*?(?:TABLE|VIEW)\\s+([\\w#${}.]+)([^;]+)").matcher(sql);
 		if (m.find()) {
+			String target = m.group(1);
+			String content = m.group(2);
 			
 		}
 	}
 
+	private void getSourceTable(String sql) {
+		Matcher m = Pattern.compile("(?i)(?:FROM|JOIN|USING)").matcher(sql);
+		if (m.find()) {
+			String target = m.group(1);
+			String content = m.group(2);
+			
+		}
+	}
+	
+	
 	/**
 	 * <h1>清理語句</h1>
 	 * <p>

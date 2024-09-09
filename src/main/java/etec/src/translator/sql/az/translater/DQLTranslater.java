@@ -31,6 +31,8 @@ public class DQLTranslater {
 			txt = changeIndex(txt);
 			Log.debug("\tchangeIndex");
 			txt = txt.replaceAll("\\bINTO\\b", "=");
+			Log.debug("\tchangeRollUp");
+			txt = changeRollUp(txt);
 			return txt;
 		});
 		
@@ -159,18 +161,25 @@ public class DQLTranslater {
 			 */
 	public static String changeRollUp(String sql) {
 		String res = sql;
-		//找到group by
-		String temp = sql.replaceAll("(?i)\\b\\w+\\s+BY\\s", Mark.MAHJONG_GREEN+"$0");
-		Matcher m = Pattern.compile("(?i)"+Mark.MAHJONG_GREEN+"\\bGROUP\\s+BY\\s+([^"+Mark.MAHJONG_GREEN+"]++)").matcher(sql);
-		if(m.find()) {
-			//確認rollup
-			if(!m.group(1).toUpperCase().contains("ROLLUP(")) {
-				return sql;
-			}
-			String groupBy = m.group(1);
-			
+		res = res
+			.replaceAll("(?i),\\s*ROLLUP\\s*\\(",",ROLLUP\\(")
+			.replaceAll("(?i)(,ROLLUP\\([^)]+\\))\\s*((?:,\\s*[\\w.]+\\s*)+)","$2$1")
+			.replaceAll("(?i)GROUP\\s+BY\\s+(ROLLUP\\([^)]+\\))\\s*,\\s*([\\w.]+\\s*(?:,\\s*[\\w.]+\\s*)+)","GROUP BY $2,$1")
+		;
+		StringBuffer sb = new StringBuffer();
+		Matcher m = Pattern.compile("(?i)([ \\t]*)GROUP\\s+BY\\s+([\\w.,\\s]+),ROLLUP\\s*\\(([^)]+)\\)").matcher(res);
+		while(m.find()) {
+			String tab = m.group(1);
+			String groupby = m.group(2).replaceAll("\\s+", "");
+			String rollup = m.group(3).replaceAll("\\s+", "");
+			String having = "having " + groupby.trim().replaceAll("\\s*,\\s*"," is not null\r\n  and ") + " is not null";
+			String rpm = tab+"GROUP BY ROLLUP("
+				+ groupby + "," + rollup + ")"
+				+ "\r\n" + tab + having
+			;
+			m.appendReplacement(sb, rpm);
 		}
-		
-		return res;
+		m.appendTail(sb);
+		return sb.toString();
 	}
 }
