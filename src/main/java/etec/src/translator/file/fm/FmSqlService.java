@@ -65,9 +65,15 @@ public class FmSqlService {
 	 */
 	public static String addSP(String content) {
 		String res = content;
-		res = res.replaceAll(Pattern.quote("${TXDATE1}"), "@YYYYMMDD");
+		
 		res = "CREATE PROCEDURE dev.sp__ldtf\r\n\t" + "@YYYYMMDD INT\r\n" + "AS BEGIN\r\n\r\n"
 				+ res.trim().replaceAll("\n", "\n\t") + "\r\n\r\nEND";
+		//TXDATE處理
+		res = res
+			.replaceAll(Pattern.quote("${TXDATE1}"), "@YYYYMMDD")
+			.replaceAll("(?i)CAST\\s*\\(\\s*'\\$\\{TXDATE\\}'\\s*AS\\s*DATE\\s*\\)",Matcher.quoteReplacement("cast(cast(@YYYYMMDD as varchar) as date)"))
+			.replaceAll("'\\$\\{TXDATE\\}'", "convert(varchar,cast(cast(@YYYYMMDD as varchar) as date),23)")
+		;
 		return res;
 	}
 

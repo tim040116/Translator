@@ -161,21 +161,21 @@ public class DQLTranslater {
 			 */
 	public static String changeRollUp(String sql) {
 		String res = sql;
-		res = res
-			.replaceAll("(?i),\\s*ROLLUP\\s*\\(",",ROLLUP\\(")
-			.replaceAll("(?i)(,ROLLUP\\([^)]+\\))\\s*((?:,\\s*[\\w.]+\\s*)+)","$2$1")
-			.replaceAll("(?i)GROUP\\s+BY\\s+(ROLLUP\\([^)]+\\))\\s*,\\s*([\\w.]+\\s*(?:,\\s*[\\w.]+\\s*)+)","GROUP BY $2,$1")
-		;
+		res = res.replaceAll("(?i),\\s*ROLLUP\\s*\\(",",ROLLUP\\(");
+		res = res.replaceAll("(?i)(,ROLLUP\\([^)]+\\))\\s*((?:,\\s*[\\w.]+\\s*)+)","$2$1");
+		res = res.replaceAll("(?i)GROUP\\s+BY\\s+(ROLLUP\\([^)]+\\))\\s*,\\s*([\\w.]+\\s*(?:,\\s*[\\w.]+\\s*)+)(,ROLLUP\\([^);]+\\))","GROUP BY $2,$1$3");
+		res = res.replaceAll("(?i)GROUP\\s+BY\\s+(ROLLUP\\([^)]+\\))\\s*,\\s*([\\w.]+\\s*(?:,\\s*[\\w.]+\\s*)+)","GROUP BY $2,$1");
 		StringBuffer sb = new StringBuffer();
-		Matcher m = Pattern.compile("(?i)([ \\t]*)GROUP\\s+BY\\s+([\\w.,\\s]+),ROLLUP\\s*\\(([^)]+)\\)").matcher(res);
+		Matcher m = Pattern.compile("(?i)([ \\t]*)GROUP\\s+BY\\s+([\\w.,\\s]+),ROLLUP\\s*\\(([^)]+)\\)(\\s*,\\s*ROLLUP\\s*\\([^)]+\\))?").matcher(res);
 		while(m.find()) {
 			String tab = m.group(1);
 			String groupby = m.group(2).replaceAll("\\s+", "");
-			String rollup = m.group(3).replaceAll("\\s+", "");
-			String having = "having " + groupby.trim().replaceAll("\\s*,\\s*"," is not null\r\n  and ") + " is not null";
+			String rollup = m.group(3).replaceAll("\\s+", "");	
+			String rollup2 = m.group(4)==null?"":m.group(4);
+			String having = "having " + groupby.trim().replaceAll("\\s*,\\s*"," is not null\r\n" + tab + "   and ") + " is not null";
 			String rpm = tab+"GROUP BY ROLLUP("
-				+ groupby + "," + rollup + ")"
-				+ "\r\n" + tab + having
+				+ groupby + "," + rollup + ")"+rollup2
+				+ "\r\n" + tab + having + "\r\n"
 			;
 			m.appendReplacement(sb, rpm);
 		}

@@ -1,6 +1,6 @@
 package etec.src.translator.view.application;
 
-import etec.common.interfaces.Application;
+import etec.common.interfaces.TranslatorApplication;
 import etec.src.translator.controller.TranslateStoreFunctionController;
 import etec.src.translator.view.frame.SearchFunctionFrame;
 /**
@@ -12,7 +12,7 @@ import etec.src.translator.view.frame.SearchFunctionFrame;
  * 		
  * 
  * */
-public class TranslateStoreFunctionApplication  implements Application{
+public class TranslateStoreFunctionApplication  implements TranslatorApplication{
 	public void run() {
 		new SearchFunctionFrame("SP SF 轉換",new TranslateStoreFunctionController());
 	}

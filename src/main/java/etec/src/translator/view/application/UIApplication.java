@@ -1,10 +1,10 @@
 package etec.src.translator.view.application;
 
 import etec.common.factory.UIPanelFactory;
-import etec.common.interfaces.Application;
+import etec.common.interfaces.TranslatorApplication;
 import etec.src.translator.view.frame.BaseFrame;
 
-public class UIApplication implements Application{
+public class UIApplication implements TranslatorApplication{
 
 	public void run() {
 		//新增視窗

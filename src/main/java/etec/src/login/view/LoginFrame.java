@@ -13,7 +13,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import etec.common.interfaces.Application;
+import etec.common.interfaces.TranslatorApplication;
 import etec.framework.security.restriction.interfaces.Reviewer;
 
 public class LoginFrame extends JFrame {
@@ -41,7 +41,7 @@ public class LoginFrame extends JFrame {
 	 * @see		
 	 * @return	return_type
 			 */
-	public LoginFrame(String title,Application application,Reviewer reviewer) {
+	public LoginFrame(String title,TranslatorApplication application,Reviewer reviewer) {
 		setTitle(title);
 		style();
 		btnLogin.addMouseListener(new MouseAdapter() {

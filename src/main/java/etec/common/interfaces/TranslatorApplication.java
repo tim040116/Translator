@@ -1,6 +1,6 @@
 package etec.common.interfaces;
 
-public interface Application {
+public interface TranslatorApplication {
 
 	void run();
 }

@@ -1,7 +1,7 @@
 package etec.app.main;
 
 import etec.common.factory.Params;
-import etec.common.interfaces.Application;
+import etec.common.interfaces.TranslatorApplication;
 import etec.framework.security.log.service.Log;
 import etec.src.login.review.InitReviewer;
 import etec.src.login.review.LoginReviewer;
@@ -22,7 +22,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Log.info("執行項目：" + Params.config.APPLICATION_TYPE);
-		Application app = null;
+		TranslatorApplication app = null;
 		switch (Params.config.APPLICATION_TYPE) {
 		case "OLD_TRANSLATOR":// 鼎鼎舊版
 			app = new OldApplication();

@@ -1,4 +1,4 @@
-package etec.common.annotation;
+package etec.framework.ui.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
