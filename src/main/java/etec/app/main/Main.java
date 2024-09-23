@@ -18,7 +18,7 @@ import etec.src.translator.view.application.UncompressApplication;
 
 public class Main {
 	
-	public static final String VERSION = "5.1.1.3";
+	public static final String VERSION = "5.1.2.2";
 	
 	public static void main(String[] args) {
 		Log.info("執行項目：" + Params.config.APPLICATION_TYPE);

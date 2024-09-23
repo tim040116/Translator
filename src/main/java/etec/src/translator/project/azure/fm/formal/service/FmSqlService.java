@@ -199,8 +199,8 @@ public class FmSqlService {
 	public static String fdpUpt(String content) {
 		String res = content;
 		res = res
-			.replaceAll("(?i)(when\\s+matched\\s+then\\s+[\\S\\s]+?)(\\s+when\\s*not\\s*matched|;)", "$1\\r\\n\t\t\t,fdp_upt = dateadd\\(hour,8,getdate\\(\\)\\)$2")
-			.replaceAll("(?i)(when\\s*not\\s*matched\\s*then\\s*insert\\s*\\([^)]+?)(\\s*\\)\\s*values\\s*\\([^;]+?)(\\s*\\)\\s*;)", "$1\\r\\n\t\t\t,fdp_upt$2\\r\\n\\t\\t\\t,dateadd\\(hour,8,getdate\\(\\)\\)$3")
+			.replaceAll("(?i)(when\\s+matched\\s+then\\s+[\\S\\s]+?)(\\s+when\\s*not\\s*matched|;)", "$1\r\n\t\t\t,fdp_upt = dateadd\\(hour,8,getdate\\(\\)\\)$2")
+			.replaceAll("(?i)(when\\s*not\\s*matched\\s*then\\s*insert\\s*\\([^)]+?)(\\s*\\)\\s*values\\s*\\([^;]+?)(\\s*\\)\\s*;)", "$1\r\n\t\t\t,fdp_upt$2\r\n\t\t\t,dateadd\\(hour,8,getdate\\(\\)\\)$3")
 		;
 		return res;
 	}

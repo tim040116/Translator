@@ -32,7 +32,7 @@ public class RollupService {
 		Matcher m = Pattern.compile(reg).matcher(res);
 		while(m.find()) {
 			if(!m.group(0).toUpperCase().contains("ROLLUP")) {
-				m.appendReplacement(sb, m.group(0));
+				m.appendReplacement(sb, Matcher.quoteReplacement(m.group(0)));
 				continue;
 			}
 			//轉換程式以註解的方式保留
