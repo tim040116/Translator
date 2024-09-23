@@ -9,9 +9,9 @@ import javax.swing.DefaultListModel;
 
 import etec.common.model.element.FileListSelectElement;
 import etec.common.model.element.IOPathSettingElement;
-import etec.src.translator.file.azure.service.FileListSelectService;
-import etec.src.translator.file.azure.service.IOpathSettingService;
-import etec.src.translator.file.model.BasicParams;
+import etec.src.translator.common.model.BasicParams;
+import etec.src.translator.common.service.FileListSelectService;
+import etec.src.translator.common.service.IOpathSettingService;
 
 public class IOPathSettingListener implements ActionListener {
 

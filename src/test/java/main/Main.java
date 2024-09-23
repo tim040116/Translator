@@ -1,8 +1,8 @@
 package main;
 
 import etec.framework.security.encryption.factory.EncryptionFactory;
-import etec.src.login.review.LoginReviewer;
-import etec.src.login.view.LoginFrame;
+import etec.src.security.login.review.LoginReviewer;
+import etec.src.security.login.view.LoginFrame;
 import etec.src.translator.sql.az.translater.SQLTranslater;
 import etec.src.translator.view.application.FamilyMartApplication;
 

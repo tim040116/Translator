@@ -12,10 +12,10 @@ public class Main {
 	
 	public static void main(String[] args) {
 		try {
-			//GP
-			TestGPTranslater.run();
-			//Convert Safely
-//			TestConvertSafely.run();
+			
+//			TestGPTranslater.run();//GP
+//			TestConvertSafely.run();//Convert Safely
+			TestBitFunctionService.run();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

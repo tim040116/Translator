@@ -1,7 +1,7 @@
 package etec.src.translator.view.application;
 
 import etec.common.interfaces.TranslatorApplication;
-import etec.src.translator.file.ddim.controller.DDIMWriteFileController;
+import etec.src.translator.project.azure.ddim.controller.DDIMWriteFileController;
 import etec.src.translator.view.frame.IndexFrame;
 import etec.src.translator.view.listener.WriteFileListener;
 

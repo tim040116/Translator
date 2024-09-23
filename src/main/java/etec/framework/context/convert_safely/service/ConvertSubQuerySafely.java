@@ -49,7 +49,7 @@ public class ConvertSubQuerySafely {
 	 * */
 	public String savelyConvert(String script,Function<String, String> function) {
 		//如果沒有子查詢的話直接進到下一段
-		if(Pattern.compile("(?i)\\(\\s*SEL(?:ECT)?").matcher(script).find()) {
+		if(!Pattern.compile("(?i)\\(\\s*SEL(?:ECT)?").matcher(script).find()) {
 			return savelyConvertUnion(script, function);
 		}
 		String res = ConvertFunctionsSafely.decodeMark(script)

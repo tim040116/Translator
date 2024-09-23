@@ -1,6 +1,6 @@
 package etec.src.translator.view.application;
 
-import etec.src.translator.controller.SearchFunctionController;
+import etec.src.assignment.project.sd.controller.SearchFunctionController;
 import etec.src.translator.view.frame.SearchFunctionFrame;
 
 public class SearchFunctionApplication {

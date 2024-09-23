@@ -1,7 +1,7 @@
 package etec.src.translator.view.application;
 
 import etec.common.interfaces.TranslatorApplication;
-import etec.src.translator.controller.FastTransduceController;
+import etec.src.translator.project.azure.fm.poc.controller.FastTransduceController;
 import etec.src.translator.view.frame.FastTransduceFrame;
 /**
  * <h1>即時轉換功能</h1>

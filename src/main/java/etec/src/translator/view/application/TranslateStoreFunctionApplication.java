@@ -1,7 +1,7 @@
 package etec.src.translator.view.application;
 
 import etec.common.interfaces.TranslatorApplication;
-import etec.src.translator.controller.TranslateStoreFunctionController;
+import etec.src.translator.project.azure.fm.poc.controller.TranslateStoreFunctionController;
 import etec.src.translator.view.frame.SearchFunctionFrame;
 /**
  * @version	3.3.1.0

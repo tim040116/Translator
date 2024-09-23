@@ -8,7 +8,7 @@ import java.io.IOException;
 import javax.swing.DefaultListModel;
 
 import etec.common.model.element.FileListSelectElement;
-import etec.src.translator.file.azure.service.FileListSelectService;
+import etec.src.translator.common.service.FileListSelectService;
 
 public class FileListSelectListener implements ActionListener {
 

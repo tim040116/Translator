@@ -3,9 +3,9 @@ package etec.app.main;
 import etec.common.factory.Params;
 import etec.common.interfaces.TranslatorApplication;
 import etec.framework.security.log.service.Log;
-import etec.src.login.review.InitReviewer;
-import etec.src.login.review.LoginReviewer;
-import etec.src.login.view.LoginFrame;
+import etec.src.security.login.review.InitReviewer;
+import etec.src.security.login.review.LoginReviewer;
+import etec.src.security.login.view.LoginFrame;
 import etec.src.translator.view.application.AssessmentApplication;
 import etec.src.translator.view.application.AzureFileApplication;
 import etec.src.translator.view.application.FamilyMartApplication;
@@ -18,7 +18,7 @@ import etec.src.translator.view.application.UncompressApplication;
 
 public class Main {
 	
-	public static final String VERSION = "5.1.1.1";
+	public static final String VERSION = "5.1.1.3";
 	
 	public static void main(String[] args) {
 		Log.info("執行項目：" + Params.config.APPLICATION_TYPE);
@@ -69,6 +69,7 @@ public class Main {
 			break;
 		}
 		LoginFrame frame = new LoginFrame(VERSION,app,new LoginReviewer());
+//		app.run();
 		frame.setVisible(true);
 	}
 }
