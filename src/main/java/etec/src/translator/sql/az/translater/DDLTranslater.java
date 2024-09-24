@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.utils.RegexTool;
 import etec.framework.context.translater.enums.SQLTypeEnum;
 import etec.framework.context.translater.exception.SQLTranslateException;
 import etec.framework.security.log.service.Log;

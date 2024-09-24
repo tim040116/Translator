@@ -1,6 +1,5 @@
 package etec.src.assignment.project.detail.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

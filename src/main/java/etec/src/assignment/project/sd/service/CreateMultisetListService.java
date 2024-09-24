@@ -5,12 +5,8 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.factory.Params;
-import etec.common.model.sql.CreateIndexModel;
-import etec.common.model.sql.CreateTableModel;
 import etec.framework.file.readfile.service.FileTool;
 import etec.src.translator.common.model.BasicParams;
-import etec.src.translator.sql.az.wrapper.TeradataSqlModelWrapper;
 
 /**
  * 

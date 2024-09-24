@@ -1,22 +1,19 @@
 package etec.common.model;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import etec.framework.file.readfile.service.FileTool;
+import etec.framework.file.params.service.ResourceTool;
 
 /**
  * 從版本紀錄取得版本資訊
  * */
 public class VersionModel {
 
+	public static final String ALL_LOG;
+	
 	public static final String VERSION;
 	
 	public static final Date VERSION_DATE;
@@ -30,31 +27,25 @@ public class VersionModel {
 		Date vsDate = new Date();
 		String member = "王小明";
 		String versionName = "Hello World";
+		String allLog="";
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy/mm/dd",Locale.TAIWAN);
-		try (
-				FileInputStream fis = new FileInputStream(new File("doc\\版本紀錄"));
-				InputStreamReader isr = new InputStreamReader(fis);
-				BufferedReader br = new BufferedReader(isr);
-		){
+	
+		try {
+			String str = ResourceTool.readFile("doc\\版本紀錄");
 			String[] arr = null;
-			while(br.ready()) {
-				String line = br.readLine();
-				if(line.matches("\\s*")){continue;}
-				arr = line.trim().split("\\s+", 4);
-				break;
-			}
+			arr = str.trim().split("\\s+", 5);
 			version = arr[0];
 			vsDate = sf.parse(arr[1]);
 			member = arr[2];
 			versionName = arr[3];
-		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
 		VERSION = version;
 		VERSION_DATE = vsDate;
 		LAST_UPDATE_MEMBER = member;
 		VERSION_NAME = versionName;
+		ALL_LOG = allLog;
 	}
 }

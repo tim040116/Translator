@@ -11,7 +11,6 @@ import etec.src.translator.common.model.BasicParams;
 import etec.src.translator.common.service.IOpathSettingService;
 import etec.src.translator.project.azure.az.service.AzureTranslateService;
 import etec.src.translator.project.azure.ddim.service.CreateListService;
-import etec.src.translator.project.azure.fm.poc.service.FamilyMartFileTransduceService;
 import etec.src.translator.view.panel.SearchFunctionPnl;
 
 public class AzureController implements Controller {

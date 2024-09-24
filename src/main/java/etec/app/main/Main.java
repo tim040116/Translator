@@ -2,9 +2,7 @@ package etec.app.main;
 
 import etec.common.factory.Params;
 import etec.common.interfaces.TranslatorApplication;
-import etec.common.model.VersionModel;
 import etec.framework.security.log.service.Log;
-import etec.src.security.login.review.InitReviewer;
 import etec.src.security.login.review.LoginReviewer;
 import etec.src.security.login.view.LoginFrame;
 import etec.src.translator.view.application.AssessmentApplication;

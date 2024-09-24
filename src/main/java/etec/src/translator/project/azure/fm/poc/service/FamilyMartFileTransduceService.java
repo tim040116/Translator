@@ -3,30 +3,18 @@
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.factory.Params;
-import etec.common.utils.RegexTool;
-import etec.common.utils.TransduceTool;
 import etec.framework.context.convert_safely.service.ConvertRemarkSafely;
-import etec.framework.context.translater.enums.SQLTypeEnum;
 import etec.framework.context.translater.exception.SQLTranslateException;
-import etec.framework.context.translater.exception.UnknowSQLTypeException;
 import etec.framework.context.translater.interfaces.TranslaterFactory;
 import etec.framework.file.readfile.service.CharsetTool;
 import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;
 import etec.src.translator.common.model.BasicParams;
-import etec.src.translator.project.azure.az.service.AzureTranslateService;
 import etec.src.translator.project.azure.fm.formal.service.FmSqlService;
 import etec.src.translator.sql.az.translater.AzTranslater;
-import etec.src.translator.sql.az.translater.DDLTranslater;
-import etec.src.translator.sql.az.translater.DMLTranslater;
-import etec.src.translator.sql.az.translater.DQLTranslater;
-import etec.src.translator.sql.az.translater.OtherTranslater;
-import etec.src.translator.sql.td.classifier.TeradataClassifier;
 
 /**
  * @author	Tim

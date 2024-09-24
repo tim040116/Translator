@@ -3,7 +3,6 @@ package etec.framework.file.excel_maker.maker;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -15,7 +14,6 @@ import java.util.Map;
 import etec.common.exception.MissingAnnotationException;
 import etec.framework.file.excel_maker.annotation.SheetModel;
 import etec.framework.file.excel_maker.model.Worksheet;
-import etec.framework.security.log.service.Log;
 
 /**
  * <h1>將 domain 轉換成 csv</h1>

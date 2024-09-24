@@ -3,13 +3,9 @@ package etec.src.translator.project.greenplum.gp.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.factory.Params;
 import etec.framework.context.convert_safely.service.ConvertRemarkSafely;
 import etec.framework.context.translater.exception.SQLTranslateException;
 import etec.framework.context.translater.interfaces.TranslaterFactory;
@@ -18,7 +14,6 @@ import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;
 import etec.src.translator.common.model.BasicParams;
 import etec.src.translator.sql.gp.translater.GreenPlumTranslater;
-import etec.src.translator.view.panel.SearchFunctionPnl;
 
 /**
  * <h1>測試GP功能</h1>

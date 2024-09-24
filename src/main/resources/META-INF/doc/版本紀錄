@@ -1,0 +1,130 @@
+5.1.3.1	2024/09/24	Tim	全家專案	資安強化
+	- 將版本搬到resource中，版本號直接讀文件
+5.1.3.0	2024/09/24	Tim	全家專案	資安強化
+	- 檢核加強
+		- 當天日期不可早於最後更新日期
+		- 版本數的key值需一致
+5.1.2.3	2024/09/24	Tim	全家專案	問題修復
+	- 全家問題修復
+		- 修復TXDATE的bug
+5.1.2.2	2024/09/23	Tim	全家專案	同下
+5.1.2.1	2024/09/23	Tim	全家專案	問題修復
+	- 全家問題修復
+		- 修復換行錯誤的bug
+5.1.2.0	2024/09/16	Tim	全家專案	全家bit方法轉換
+	- 全家優化
+		- merge into 自動添加fdp_upt欄位
+	- bit 方法轉換
+		- bit_and,bit_or,bit_extract 直接加dev.
+		- bit_gen_aggt跟bit_or_aggt統一使用bit_gen_aggt
+	- rollup 除錯
+		- 123組都測試正常
+		- 將原語法留著註解
+5.1.1.2	2024/09/13	Tim	全家專案	程式架構優化
+	- 程式架構優化
+		- assignment獨立於轉換器
+		- 轉換器依照 程式類型 > 語言 > 專案 的層級進行分類
+		- login 功能整理
+		- 保存 create key 邏輯
+5.1.1.1	2024/09/11	Tim	全家專案	Az轉換優化
+	- Az轉換優化
+		- 轉換複數ROLLUP
+5.1.1.0	2024/09/09	Tim	全家專案	正式備戰全家專案
+	- 登錄系統及期限控管
+		- 新增帳號密碼功能
+		- 新增使用期限功能
+		- 新增金要檢核功能
+	- 全家客製化轉換
+		- 將檔案轉成.sql
+		- 包成SP語法
+		- 批量轉換table功能
+		- 依開發規範轉換程式
+		- temp table 命名
+		- 清理p_drop_table語法
+		- 移除bteq指令
+	- Az轉換強化
+		- 單一rollup轉換完成
+		- TXDATE轉換
+		- 修復強轉換功能bug
+		- 修正CTAS語法
+4.1.0.0	2024/06/10	Tim	
+	-  將Az語法與GP同步
+	-  廢棄 regextool
+	-  廢棄移除註解語法
+	-  將檔案轉換與SQL轉換分割
+	- 產清單檔功能優化
+3.3.1.6: 2023/12/13 Tim 正則優化
+	- 優化不區分大小寫功能
+	-移除toUpperCase語法
+	- getRegexTarget問題修正與優化 
+4.0.0.0: 2023/11/29	Tim	應Jason要求開發彰化銀行專案要用的轉換器
+	- Teradata 轉換成 green plum
+	- 先準備SQL轉換的部分
+		檔案轉SQL的部分之後在加
+	- 轉換邏輯參考Bill提供的轉換文件
+3.3.1.5: 2023/11/21 Tim 新增邏輯
+	- 最開始的地方增加 USE ${SCHEMA_NAME}\r\nGO\r\n
+	- Schema name拿掉
+	- 轉換DECLARE的DEFAULT語法
+	- 統一縮排
+	- VARCHAR大於8000改成MAX
+	- 修復轉換成字串時註解錯位問題
+	- 新增CREATE TABLE轉換MS SQL
+	- 修復DECODE轉換失敗BUG
+3.3.1.4: 2023/11/17 Tim debug
+	- 修復case when 會有 begin end的問題
+	- Joyce反映，註解應該要保留
+	- 應Jason要求，新增轉換：TO_NUMBER要改成cast as但是TO_NUMBER裡面有substring的就不要轉
+3.4.1.1: 2023/11/16	Tim	新增需求
+	- 介面增加設定欄位
+		- 選擇CTAS要轉換成az還是ms sql
+		- 選擇SET語法是否要還原SET,還是取出裡面的SQL語句
+3.3.1.3: 2023/11/14	Tim	增加置換條件
+	- 增加exec sp_executesql
+	- 增加instr轉換
+3.4.1.0: 2023/11/13	Tim	新增SET excute 轉換功能
+	- SET 功能的轉換
+3.3.1.2: 2023/11/13 Tim 新增Call語法轉換
+	- CALL ${sp_name}(${params}); 轉換成 EXEC $1 $2;
+3.4.0.1: 2023/11/07	Tim	介面物件共用化
+	- 狀態條
+	- 進度條
+	- LOG條
+3.4.0.0: 2023/10/25	Tim	FastTransduce只轉換SQL的工具
+	- 即時轉換工具
+	- 不透過讀檔產檔
+	- 新介面
+3.3.1.1: 2023/10/25 Tim 新增替換參數的功能
+	- SP SF 的DECLARE跟PARAMS替換成@
+	- IF ELSE IF 功能轉換
+	- EXECUTE  後面的字拿掉
+	- FETCH 改成 FETCH NEXT FROM
+	- CLOSE (\S) 改成 CLOSE $1 \r\nDEALLOCATE $1
+3.3.1.0: 2023/10/12 Tim 新增store function的轉換功能
+	- 從系統抓下來的store function
+	- 只有一個檔案多段SQL以雙引號分割
+	- 產檔時一個function產一個檔案，檔名為function name
+	- 以 RETURN 為界線，以上直接保留，以下進行SQL轉換
+3.3.0.0: 2023/10/04 Tim 全家的程式轉換
+3.2.1.1: 2023/09/14 程式優化
+	- 依外部參數選擇功能
+	- 將SD文件功能拆分
+3.2.1.0: 2023/09/04 新增生產SD文件的功能
+	- SD_MAIN,SD_DETAIL兩個檔案 
+3.1: 將輸出路徑改為參數的相對路徑
+	- 新增search_function.txt參數檔
+3.0: 配合全家新增功能
+	- 新增列出所有用到的function的工具
+	- 也會列出所有掃描的檔案
+2.0: 程式優化
+	- 靜態參數移至設定檔
+	- 程式架構規格化
+	- 共用元件獨立化
+	- 增強程式修改彈性
+1.2: 配合全家POC案開發程式
+	- 邏輯修改
+1.0: 配合鼎鼎teradata轉azure的專案進行開發
+	- 提供UI介面
+	- 半自動轉換SQL語法
+	- 無法轉換的項目列清單
+	- 應需求列清單

@@ -1,0 +1,4 @@
+TRANS_PARAMS=true --是否要置換參數
+TRANS_IF_ELSE=true --IF ELSE 的語法要不要轉
+TRANS_Cursor=false
+TRANS_LABEL=false

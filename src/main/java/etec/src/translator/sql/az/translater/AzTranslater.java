@@ -1,9 +1,6 @@
 package etec.src.translator.sql.az.translater;
 
-import java.util.Arrays;
-
 import etec.common.model.SQLTypeModel;
-import etec.framework.context.convert_safely.service.ConvertRemarkSafely;
 import etec.framework.context.convert_safely.service.ConvertVarcharSafely;
 import etec.framework.context.translater.exception.SQLFormatException;
 import etec.framework.context.translater.exception.SQLTranslateException;

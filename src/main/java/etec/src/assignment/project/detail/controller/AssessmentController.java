@@ -12,9 +12,7 @@ import java.util.regex.Pattern;
 import etec.common.enums.RunStatusEnum;
 import etec.common.factory.Params;
 import etec.common.interfaces.Controller;
-import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
-import etec.framework.context.translater.interfaces.TranslaterFactory;
 import etec.framework.file.readfile.service.BigFileSplitTool;
 import etec.framework.file.readfile.service.CharsetTool;
 import etec.framework.file.readfile.service.FileTool;
@@ -26,7 +24,6 @@ import etec.src.assignment.project.sp.service.CreateCallSPList;
 import etec.src.translator.common.model.BasicParams;
 import etec.src.translator.common.service.IOpathSettingService;
 import etec.src.translator.project.azure.fm.poc.service.TransduceStoreFunctionService;
-import etec.src.translator.sql.az.translater.AzTranslater;
 import etec.src.translator.view.panel.SearchFunctionPnl;
 
 public class AssessmentController implements Controller{

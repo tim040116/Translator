@@ -13,7 +13,6 @@ import etec.src.translator.project.azure.ddim.service.CreateListService;
 import etec.src.translator.project.azure.ddim.service.SQLTextService;
 import etec.src.translator.project.azure.ddim.service.TransformService;
 import etec.src.translator.project.azure.fm.poc.service.POCTransduserService;
-import etec.src.translator.sql.az.translater.OtherTranslater;
 
 public class DDIMFileTransduceService {
 	// 依照檔案的種類執行對應的邏輯

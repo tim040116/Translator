@@ -6,7 +6,6 @@ import java.util.Date;
 
 import etec.framework.security.encryption.service.EncryptionService;
 import etec.framework.security.restriction.exception.PermissionDeniedException;
-import etec.framework.security.restriction.interfaces.Reviewer;
 
 /**過期
  * */

@@ -1,13 +1,16 @@
 package etec.framework.file.params.service;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import etec.framework.file.readfile.service.FileTool;
+import main.Main;
 
 /**
  * 讀取靜態資源
@@ -25,11 +28,19 @@ public class ResourceTool {
 	 * @return	String
 	 * @throws	IOException,URISyntaxException
 	 * */
-	public String readFile(String file) throws IOException, URISyntaxException {
-		ClassLoader classLoader = getClass().getClassLoader();
-		URL resourceUrl = classLoader.getResource(file);
-		File resourceDir = new File(resourceUrl.toURI());
-		String res = FileTool.readFile(resourceDir);
+	public static String readFile(String file){
+		String res = "";
+		InputStream in = Main.class.getResourceAsStream("/META-INF/"+file);
+		try (
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		) {
+			while(br.ready()) {
+				String line = br.readLine();
+				res += line;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return res;
 	}
 

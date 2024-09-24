@@ -1,7 +1,9 @@
 package main;
 
-import etec.common.model.VersionModel;
-import etec.framework.file.readfile.service.FileTool;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * @author	Tim
@@ -14,10 +16,17 @@ public class Main {
 	static String folder = "C:\\Users\\User\\Desktop\\Trans\\Target";
 	
 	public static void main(String[] args) {
-		try {
-
-			System.out.println(VersionModel.VERSION);
-		} catch (Exception e) {
+		String fileName = "doc/版本紀錄";
+		InputStream in = Main.class.getResourceAsStream("/META-INF/"+fileName);
+		
+		try (
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		) {
+			while(br.ready()) {
+				String line = br.readLine();
+				System.out.println(line);
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

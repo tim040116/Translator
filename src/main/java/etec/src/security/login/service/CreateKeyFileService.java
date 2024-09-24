@@ -68,13 +68,6 @@ public class CreateKeyFileService {
 			.replace("p", EncryptionFactory.base64.encode(pass))
 			.replace("v", EncryptionFactory.base64.encode(version))
 		;
-//		String res = key
-//			.replace("k", key)
-//			.replace("i", id)
-//			.replace("p", pass)
-//			.replace("v", version)
-//			
-//		;
 		return EncryptionFactory.base64.encode(res);
 	}
 	
