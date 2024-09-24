@@ -1,5 +1,6 @@
 package test;
 
+import test.az.fm.TestBitFunctionService;
 import test.gp.translater.TestGPTranslater;
 
 /**

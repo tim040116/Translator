@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import etec.common.interfaces.Controller;
+import etec.common.model.VersionModel;
 import etec.src.translator.view.panel.SearchFunctionPnl;
 
 public class SearchFunctionFrame extends JFrame{
@@ -26,7 +27,7 @@ public class SearchFunctionFrame extends JFrame{
 	}
 
 	void basicSetting() {
-		setTitle(title);
+		setTitle(title+"  "+VersionModel.VERSION);
 		setIconImage(getToolkit().getImage("test.jpg"));
 		setSize(1330, 540);// 設定視窗大小(長,寬)
 		setLocation(0,0); // --> 設定視窗開啟時左上角的座標，也可帶入Point物件

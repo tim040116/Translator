@@ -2,6 +2,7 @@ package etec.app.main;
 
 import etec.common.factory.Params;
 import etec.common.interfaces.TranslatorApplication;
+import etec.common.model.VersionModel;
 import etec.framework.security.log.service.Log;
 import etec.src.security.login.review.InitReviewer;
 import etec.src.security.login.review.LoginReviewer;
@@ -18,7 +19,6 @@ import etec.src.translator.view.application.UncompressApplication;
 
 public class Main {
 	
-	public static final String VERSION = "5.1.2.2";
 	
 	public static void main(String[] args) {
 		Log.info("執行項目：" + Params.config.APPLICATION_TYPE);
@@ -68,7 +68,7 @@ public class Main {
 		default:
 			break;
 		}
-		LoginFrame frame = new LoginFrame(VERSION,app,new LoginReviewer());
+		LoginFrame frame = new LoginFrame(app,new LoginReviewer());
 //		app.run();
 		frame.setVisible(true);
 	}

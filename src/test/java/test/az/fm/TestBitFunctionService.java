@@ -1,4 +1,4 @@
-package test;
+package test.az.fm;
 
 import etec.src.translator.project.azure.fm.formal.service.BitFunctionService;
 

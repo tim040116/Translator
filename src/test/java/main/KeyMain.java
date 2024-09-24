@@ -1,7 +1,6 @@
 package main;
 
-import etec.common.model.VersionModel;
-import etec.framework.file.readfile.service.FileTool;
+import etec.src.security.login.service.CreateKeyFileService;
 
 /**
  * @author	Tim
@@ -9,14 +8,15 @@ import etec.framework.file.readfile.service.FileTool;
  * 
  * 
  * */
-public class Main {
+public class KeyMain {
 	
 	static String folder = "C:\\Users\\User\\Desktop\\Trans\\Target";
 	
 	public static void main(String[] args) {
 		try {
-
-			System.out.println(VersionModel.VERSION);
+//			LoginFrame frame = new LoginFrame(new FamilyMartApplication(),new LoginReviewer());
+//			frame.setVisible(true);
+			System.out.println(CreateKeyFileService.print());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

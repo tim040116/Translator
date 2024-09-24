@@ -66,14 +66,14 @@ public class FmSqlService {
 	 */
 	public static String addSP(String content) {
 		String res = content;
-		String txdate = "@v_tx_date";
-		String txdate1 = "@tx_date";
+		String txdate = "@tx_date";
+		String txdate1 = "@v_tx_date";
 		res = "CREATE PROCEDURE dev.sp__ldtf\r\n\t" 
-			+ txdate1 + " varchar(10)" 
+			+ txdate + " varchar(10)" 
 			+ "\r\nAS BEGIN"
 			+ IOPTableLog(txdate)
-			+ "\r\n\r\n\tDECLARE " + txdate + " int;"
-			+ "\r\n\tSET " + txdate + " cast(convert(varchar(8),cast(" + txdate1 + " as date),112) as int);\r\n"
+			+ "\r\n\r\n\tDECLARE " + txdate1 + " int;"
+			+ "\r\n\tSET " + txdate1 + " cast(convert(varchar(8),cast(" + txdate + " as date),112) as int);\r\n"
 			+ res.trim().replaceAll("\n", "\n\t") 
 			+ "\r\n\r\nEND";
 		//TXDATE處理

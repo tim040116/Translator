@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import etec.common.interfaces.TranslatorApplication;
+import etec.common.model.VersionModel;
 import etec.framework.security.restriction.interfaces.Reviewer;
 
 public class LoginFrame extends JFrame {
@@ -41,8 +42,8 @@ public class LoginFrame extends JFrame {
 	 * @see		
 	 * @return	return_type
 			 */
-	public LoginFrame(String title,TranslatorApplication application,Reviewer reviewer) {
-		setTitle(title);
+	public LoginFrame(TranslatorApplication application,Reviewer reviewer) {
+		setTitle("登入 - "+VersionModel.VERSION);
 		style();
 		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
@@ -51,6 +52,7 @@ public class LoginFrame extends JFrame {
 				args.put("id", txtId.getText());
 				args.put("pass", txtPass.getText());
 				int rsp = reviewer.check(args);
+				System.out.println(rsp);
 				if(rsp==1) {
 					application.run();
 					dispose();
