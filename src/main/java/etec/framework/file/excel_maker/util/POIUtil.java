@@ -24,11 +24,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * 	<br>static String {@link #}
  * <h2>異動紀錄</h2>
  * <br>2024年7月10日	Tim	建立功能
- * 
+ *
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
- * @see		
+ * @see
  */
 public class POIUtil {
 
@@ -44,14 +44,15 @@ public class POIUtil {
 		}
 		return wb;
 	}
-	
+
 	/**
 	 * @deprecated	POI原生語法夠乾淨了，此段程式僅為了保留產檔語法範本以供日後參考
 	 * */
+	@Deprecated
 	public static void write(String path,SXSSFWorkbook wb) throws FileNotFoundException, IOException {
 		try(FileOutputStream fileOut = new FileOutputStream(path);){
 			// 大量資料用 SXSSFWorkbook
-			
+
 			// 設定幾筆之後，就先寫到硬碟的暫存檔
 			Sheet sheet      = wb.createSheet();
 			Row row   = null;
@@ -67,7 +68,7 @@ public class POIUtil {
 			wb.write(fileOut);
 		}
 	}
-	
+
 	//判斷是否為空行
 	public static boolean hasData(Row row) {
         for (Cell cell : row) {
@@ -77,7 +78,7 @@ public class POIUtil {
         }
         return false;
     }
-	
+
 	//強制轉換資料型態成字串
 	public static String getStringValue(Cell cell) {
 		String res = null;

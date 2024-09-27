@@ -8,15 +8,15 @@ import java.util.regex.Matcher;
 /**
  * @author	Tim
  * @since	2023年11月13日
- * 
+ *
  * 轉換SQL的邏輯 * 應盡速搬遷至Transducer層
- * 
+ *
  * */
 public class TransduceTool {
-	
+
 	//select單純的置換
 	@Deprecated
-	public static String easyReplaceCreate(String sql) {	
+	public static String easyReplaceCreate(String sql) {
 		String res = sql;
 		res = res
 				//compress
@@ -45,7 +45,7 @@ public class TransduceTool {
 //				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Mm][Oo][Nn][Tt][Hh] *[Ff][Rr][Oo][Mm]", "DatePart(month ,")//all
 //				.replaceAll("[Ee][Xx][Tt][Rr][Aa][Cc][Tt] *\\( *[Yy][Ee][Aa][Rr] *[Ff][Rr][Oo][Mm]", "DatePart(year ,")//all
 				;
-		
+
 		return res;
 	}
 	// 置換 group by 語法
@@ -139,7 +139,7 @@ public class TransduceTool {
 		}
 		return res;
 	}
-	
+
 	// sample
 	@Deprecated
 	public static String changeSample(String selectSQL) {
@@ -171,7 +171,7 @@ public class TransduceTool {
 		}
 		return RegexTool.decodeSQL(result);
 	}
-	
+
 	//去除註解
 	public static String cleanSql(String fc) {
 		String res = fc;
@@ -218,7 +218,7 @@ public class TransduceTool {
 		res = sql;
 		return res;
 	}
-	
+
 	/**
 	 * @author	Tim
 	 * @since	2023年10月4日
@@ -228,7 +228,7 @@ public class TransduceTool {
 		String result = RegexTool.encodeSQL(fc);
 		//列出參數清單
 		List<String> paramList = RegexTool.getRegexTarget("(?i)(?<=my\\s{0,10}\\$)[^=\\s]+\\s*=\\s*\\$ENV[^;]+",fc);
-		Map<String,String> paramMap = new HashMap<String,String>();
+		Map<String,String> paramMap = new HashMap<>();
 		//把參數加到map
 		for(String param : paramList) {
 			String[] arparam = param.split("=");
@@ -242,11 +242,11 @@ public class TransduceTool {
 		}
 		return RegexTool.decodeSQL(result);
 	}
-	
+
 	/**
 	 * @author	Tim
 	 * @since	2023年10月4日
-	 * 
+	 *
 	 * 清除註解
 	 * */
 	public static String cleanRemark(String sql) {
@@ -259,7 +259,7 @@ public class TransduceTool {
 				.trim();
 		return res;
 	}
-	
-	
-	
+
+
+
 }

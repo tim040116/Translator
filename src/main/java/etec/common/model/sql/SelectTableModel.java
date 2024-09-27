@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelectTableModel {
-	
+
 	private boolean distinct;
-	
-	private List<String> lstColumn = new ArrayList<String>();
-	
+
+	private List<String> lstColumn = new ArrayList<>();
+
 	private String fromTable = "";
-	
-	private List<String> lstOrderBy = new ArrayList<String>();
-	
-	private List<String> lstGroupBy = new ArrayList<String>();
+
+	private List<String> lstOrderBy = new ArrayList<>();
+
+	private List<String> lstGroupBy = new ArrayList<>();
 
 	public List<String> getLstColumn() {
 		return lstColumn;
@@ -54,5 +54,5 @@ public class SelectTableModel {
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
 	}
-	
+
 }

@@ -6,17 +6,17 @@ import etec.common.model.sql.TableColumnModel;
 
 /**
  * 將TD語法轉換成AZ
- * 
+ *
  * @author Tim
  * @version dev
  * @since 2023/04/06
- * 
+ *
  */
 public class TeradataToAzureSynapseSqlTransformer{
 
 	public String transformCreateTable(CreateTableModel m) {
 		String res = "";
-		
+
 		StringBuffer sb = new StringBuffer();
 		//drop if exist
 		sb.append("\r\nIF OBJECT_ID(N'"+m.getTableName()+"') IS NOT NULL");
@@ -38,7 +38,7 @@ public class TeradataToAzureSynapseSqlTransformer{
 		sb.append("\r\n);");
 		return res;
 	}
-	
+
 	//欄位型態轉換
 	private String replaceColumnType(String sql) {
 		String result = sql.trim()

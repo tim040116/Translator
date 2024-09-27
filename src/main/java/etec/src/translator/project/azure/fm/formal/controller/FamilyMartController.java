@@ -15,6 +15,7 @@ import etec.src.translator.view.panel.SearchFunctionPnl;
 
 public class FamilyMartController implements Controller {
 
+	@Override
 	public void run() throws Exception {
 
 		// 儲存參數

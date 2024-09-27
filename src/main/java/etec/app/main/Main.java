@@ -3,8 +3,6 @@ package etec.app.main;
 import etec.common.factory.Params;
 import etec.common.interfaces.TranslatorApplication;
 import etec.framework.security.log.service.Log;
-import etec.src.security.login.review.LoginReviewer;
-import etec.src.security.login.view.LoginFrame;
 import etec.src.translator.view.application.AssessmentApplication;
 import etec.src.translator.view.application.AzureFileApplication;
 import etec.src.translator.view.application.FamilyMartApplication;
@@ -16,8 +14,8 @@ import etec.src.translator.view.application.UIApplication;
 import etec.src.translator.view.application.UncompressApplication;
 
 public class Main {
-	
-	
+
+
 	public static void main(String[] args) {
 		Log.info("執行項目：" + Params.config.APPLICATION_TYPE);
 		TranslatorApplication app = null;
@@ -66,8 +64,8 @@ public class Main {
 		default:
 			break;
 		}
-		LoginFrame frame = new LoginFrame(app,new LoginReviewer());
-//		app.run();
-		frame.setVisible(true);
+//		LoginFrame frame = new LoginFrame(app,new LoginReviewer());
+//		frame.setVisible(true);
+		app.run();
 	}
 }

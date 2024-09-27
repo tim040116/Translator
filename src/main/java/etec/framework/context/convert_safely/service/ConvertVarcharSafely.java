@@ -19,18 +19,18 @@ import java.util.regex.Pattern;
  * 	<br>static String {@link #}
  * <h2>異動紀錄</h2>
  * <br>2024年6月6日	Tim	建立功能
- * 
+ *
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
- * @see		
+ * @see
  */
 public class ConvertVarcharSafely {
-	
+
 	public static int idRemarkDash = 0;
-	
+
 	private static Pattern p = Pattern.compile("'[^']*?'");
-	
+
 	/**
 	 * <h1>排除字串</h1>
 	 * <p>
@@ -39,18 +39,18 @@ public class ConvertVarcharSafely {
 	 * </p>
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年6月6日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	script, function
 	 * @throws	e
-	 * @see		
+	 * @see
 	 * @return	String
 	 */
 	public static String savelyConvert(String script,Function<String, String> function) {
 		String res = script;
-		
-		Map<String,String> mapChar = new HashMap<String,String>();
+
+		Map<String,String> mapChar = new HashMap<>();
 		Matcher m = p.matcher(script);
 		while (m.find()) {
 			String id = markName("char", idRemarkDash);
@@ -65,7 +65,7 @@ public class ConvertVarcharSafely {
 		}
 		return res;
 	}
-	
+
 	public static String markName(String type,int i) {
 		return markName(type,Integer.toString(i));
 	}

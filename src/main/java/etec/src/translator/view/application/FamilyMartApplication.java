@@ -5,6 +5,7 @@ import etec.src.translator.project.azure.fm.formal.controller.FamilyMartControll
 import etec.src.translator.view.frame.SearchFunctionFrame;
 
 public class FamilyMartApplication  implements TranslatorApplication{
+	@Override
 	public void run() {
 		new SearchFunctionFrame("全家轉換",new FamilyMartController());
 	}

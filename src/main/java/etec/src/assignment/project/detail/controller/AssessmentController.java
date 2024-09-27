@@ -29,16 +29,16 @@ import etec.src.translator.view.panel.SearchFunctionPnl;
 public class AssessmentController implements Controller{
 	public static Map<String,Integer> mapFunc;
 	public static List<String> lstSkip = Arrays.asList(Params.searchFunction.SKIP_LIST);
-	
+
 	@Override
 	public void run() throws Exception {
-		mapFunc = new HashMap<String,Integer>();
-		
+		mapFunc = new HashMap<>();
+
 		/*
-		 SearchDDLToSDIController.run(); 
-		 SearchFunctionController.run(); 
+		 SearchDDLToSDIController.run();
+		 SearchFunctionController.run();
 		 */
-		  
+
 		// 儲存參數
 		SearchFunctionPnl.tsLog.clearLog();
 		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.WORKING);
@@ -62,11 +62,11 @@ public class AssessmentController implements Controller{
 		SearchFunctionPnl.tsLog.setLog("資訊", "開始讀取檔案");
 		SearchFunctionPnl.progressBar.reset();
 		SearchFunctionPnl.progressBar.setUnit(lf.size());
-		
+
 		int i = 0;
 		// 讀取每一份檔案
 		for (File f : lf) {
-			
+
 			SearchFunctionPnl.tsLog.setLog("資訊","讀取檔案：" + f.getPath());
 			CreateMultisetListService.CreateList(BasicParams.getInputPath(), f);
 			// 讀取檔案
@@ -77,7 +77,7 @@ public class AssessmentController implements Controller{
 			.replace(f.getName(), "")
 			.replaceAll("\\\\$", "")
 			;
-			
+
 			/* Generate file List */
 //			SearchFileList(f,content,category);
 
@@ -91,8 +91,8 @@ public class AssessmentController implements Controller{
 			CreateCallSPList.createCallList(category, f.getName(), content);
 			/* Generate function List */
 			SearchFunctionList(f,content,category);
-			
-			
+
+
 			i++;
 			SearchFunctionPnl.progressBar.plusOne();
 		}
@@ -100,17 +100,17 @@ public class AssessmentController implements Controller{
 		SearchFunctionPnl.tsLog.setLog("資訊","產生函式檔");
 		SearchFunctionPnl.progressBar.reset();
 		SearchFunctionPnl.progressBar.setUnit(mapFunc.size());
-		
+
 		//建立清單檔
 		String funcListNm = BasicParams.getOutputPath()+Params.searchFunction.FUNC_LIST_NAME;//列出所有方法
 		if(Params.searchFunction.IS_TITLE) {
 			FileTool.addFile(funcListNm,"\"FUNCTION_NAME\",\"USE_CNT\"");//方法名
 		}
-		
+
 		/**
 		 * 20240409	Tim	把有小數點的項目放在後面
 		 * */
-		Map<String,Integer> mapNodeItem = new HashMap<String,Integer>();
+		Map<String,Integer> mapNodeItem = new HashMap<>();
 		for(Entry<String, Integer> entry : mapFunc.entrySet()) {
 			if(entry.getKey().contains(".")) {
 				mapNodeItem.put(entry.getKey(), entry.getValue());
@@ -131,20 +131,20 @@ public class AssessmentController implements Controller{
 					+"\"");
 			SearchFunctionPnl.progressBar.plusOne();
 		}
-		
+
 		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.SUCCESS);
 		SearchFunctionPnl.tsLog.setLog("資訊","Function資訊產生完成，共 "+i+" 個檔案");
 		Log.info("完成，共 "+i+" 個檔案");
 	}
-	
+
 	/* Generate SDI file */
 	public void SearchSDIList(String  fileName,String content) throws Exception {
 
 		//String newFileName = BasicParams.getTargetFileNm(f.getPath())+f.getName();
 		SearchFunctionPnl.tsLog.setLog("資訊","SearchSDIList" );
-		
+
 		content = content.replaceAll("//.*",";$0;");
-				
+
 		Pattern p = Pattern.compile("([^;]+);", Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(content);
 		StringBuffer sb = new StringBuffer();
@@ -160,56 +160,56 @@ public class AssessmentController implements Controller{
 			}
 			//處理前後空白
 			String sql = m.group().trim();
-			
+
 			//確認為CREATE 語法
 			//String regCol ="CREATE\\s+(?:MULTISET|SET)?\\s+TABLE[^;]+;";
 			String regCol ="(?i)CREATE\\s*(MULTISET|SET)?(\\s+VOLATILE)?\\s+TABLE\\s+[\\S\\s]+;";
 			Pattern pCol = Pattern.compile(regCol,Pattern.CASE_INSENSITIVE); //不用動
 			Matcher mCol = pCol.matcher(sql); //參數放要處裡的字串
-			while(mCol.find()) { 
+			while(mCol.find()) {
 				//排除 CTAS 語法
 				if(!mCol.group(0).matches("(?si).*\\bSELECT\\b.*;")){
-					String res = CreateSDMService.createSD(fileName,mCol.group(0)); // 查到的CREATE 語法						
+					String res = CreateSDMService.createSD(fileName,mCol.group(0)); // 查到的CREATE 語法
 				}
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	/* Generate fileList */
 	public void SearchFileList(File f,String content,String category) throws Exception {
-		
+
 		SearchFunctionPnl.tsLog.setLog("資訊","SearchFileList" );
 		//建立清單檔
 		String fileListNm = BasicParams.getOutputPath()+Params.searchFunction.FILE_LIST_NAME;//列出所有檔案
 		//是否要包含title
 		if(Params.searchFunction.IS_TITLE) {
-			FileTool.addFile(fileListNm,"\"FILE_PATH\",\"FILE_NAME\",\"FILE_TYPE\",\"FILE_SIZE\"");//路徑,檔名,副檔名,大小			
-		}	
-		
+			FileTool.addFile(fileListNm,"\"FILE_PATH\",\"FILE_NAME\",\"FILE_TYPE\",\"FILE_SIZE\"");//路徑,檔名,副檔名,大小
+		}
+
 		String[] arrFileType = f.getName().split("\\.");
 		String fileType = arrFileType[arrFileType.length-1];
-		
-		
+
+
 		//計算檔案行數
 		String[] arrFileLine = content.split("\\r\\n");
 		int fileLine = arrFileLine.length+1;
-		
-		
-		FileTool.addFile(fileListNm,																
-				  "\""   +category 
+
+
+		FileTool.addFile(fileListNm,
+				  "\""   +category
 				+ "\",\""+f.getName()
 				+ "\",\""+fileType
-				+ "\",\""+fileLine  
+				+ "\",\""+fileLine
 				+ "\"");
 	}
-	
+
 	/**
 	 * <h1></h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年4月17日	Tim	增加排除資料型態強制轉換的功能
 	 * <br>2024年4月26日	Tim	增加欄位function的前後文
@@ -219,7 +219,7 @@ public class AssessmentController implements Controller{
 	 * @param	content	內容
 	 * @param	category	資料夾
 	 * @throws	Exception
-	 * @see		
+	 * @see
 	 * @return	void
 	 */
 	public void SearchFunctionList(File f,String content,String category) throws Exception {
@@ -267,7 +267,7 @@ public class AssessmentController implements Controller{
 					.replaceAll("(?i)\\(\\s*("+Params.searchFunction.DATA_TYPE_LIST+")(?:\\s*\\([^)]+\\))?\\s*\\)", "")//強制轉換 ex: CURRENT_DATE(VARCHAR(10))
 					.replaceAll("(?i)\\)\\s*\\w+\\s*\\((?!\\s*SELECT\\b)[\\s\\w,]+\\)","")//Alias name ex: join (select aa,trim(bb) from tbl_nm) b (aa,bb_new)
 					.replaceAll("'[^']+'","''")//單引號裡的括號 ex: ,'比例(金額)' as desc_title
-//					.replaceAll("\"[^\"]+\"","\"\"")//雙引號裡的括號 
+//					.replaceAll("\"[^\"]+\"","\"\"")//雙引號裡的括號
 					.replaceAll("(?i)\\bWith\\s+Data[\\w\\s]+?Index\\s*\\(","")//CTAS的INDEX
 					;
 			/**
@@ -325,10 +325,7 @@ public class AssessmentController implements Controller{
 				if(func.equals("ANY")) {//LIKE ANY
 					func = "LIKE ANY";
 				}
-				if(func.matches("\\s*[0-9]+\\s*")) {//純數字是出現在強制轉換
-					continue;
-				}
-				if(lstSkip.contains(func)) {
+				if(func.matches("\\s*[0-9]+\\s*") || lstSkip.contains(func)) {
 					continue;
 				}
 				//寫入總表
@@ -345,6 +342,6 @@ public class AssessmentController implements Controller{
 			j++;
 		}
 	}
-	
-	
+
+
 }

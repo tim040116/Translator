@@ -75,7 +75,7 @@ public class DDIMFileTransduceService {
 		String result = RegexTool.encodeSQL(fc);
 		// 列出參數清單
 		List<String> paramList = RegexTool.getRegexTarget("(?<=my\\s{0,10}\\$)[^=\\s]+\\s*=\\s*\\$ENV[^;]+", fc);
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, String> paramMap = new HashMap<>();
 		// 把參數加到map
 		for (String param : paramList) {
 			String[] arparam = param.split("=");

@@ -19,9 +19,9 @@ import etec.src.translator.sql.td.model.SelectTableModel;
  * @author	Tim
  * @since	2023年12月19日
  * @version	4.0.0.0
- * 
+ *
  * <h1>查詢語法轉換</h1>
- * 
+ *
  * <br>此類別並不是用來轉換SQL裡的語法
  * <br>若需要轉換語法請使用
  * <br>{@link etec.src.translator.sql.gp.translater.SQLTranslater}
@@ -31,15 +31,15 @@ import etec.src.translator.sql.td.model.SelectTableModel;
  * <br>複合型語句拆解成單純的查詢語句
  * */
 public class DQLTranslater {
-	
+
 	/**
 	 * <h1>統整DQL的所有轉換</h1>
 	 * <p>qualify row_number over 處理</p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2023年12月26日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @see
@@ -48,7 +48,7 @@ public class DQLTranslater {
 	 * @throws	SQLFormatException
 	 * @return	String	轉換完成的SQL
 			 */
-	public String easyReplace(String script) throws UnknowSQLTypeException, SQLFormatException {		
+	public String easyReplace(String script) throws UnknowSQLTypeException, SQLFormatException {
 		String res = GreenPlumTranslater.sql.easyReplase(script);
 		ConvertSubQuerySafely csqs = new ConvertSubQuerySafely();
 		res = csqs.savelyConvert(res, (t)->{
@@ -61,13 +61,13 @@ public class DQLTranslater {
 		});
 		return res;
 	}
-	
-	
+
+
 	/**
 	 * <h1>QUALIFY ROW_NUMBER()語法轉換</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2023年12月19日	Tim	建立功能
 	 * <br>2024年4月22日		Tim	修復 alias name 因為 cast as date 而出現錯位的問題
@@ -76,7 +76,7 @@ public class DQLTranslater {
 	 * @since	4.0.0.0
 	 * @param	sql
 	 * @throws	UnknowSQLTypeException
-	 * @see		
+	 * @see
 	 * @return	return_type
 	 */
 	public String changeQualifaRank(String sql) throws UnknowSQLTypeException {
@@ -89,11 +89,11 @@ public class DQLTranslater {
 		/*
 		 *  這個語法是建立在沒有sub query的前提下
 		 *  所以要先處理子查詢
-		 *  
-		 * 第一步要先將UNION語法分段 
+		 *
+		 * 第一步要先將UNION語法分段
 		 * 再把一些階段的關鍵字加上標記
-		 *再用split切分 
-		 * 
+		 *再用split切分
+		 *
 		 * */
 		//安插標記
 		String[] arrSplitType = {//所有特殊階段的關鍵字
@@ -149,7 +149,7 @@ public class DQLTranslater {
 				throw new UnknowSQLTypeException(str, null);
 			}
 		}
-		/* 
+		/*
 		 * 轉換邏輯
 		 * 	- select
 		 * 		1.有邏輯的部分全部只留Alias name
@@ -158,7 +158,7 @@ public class DQLTranslater {
 		 * 		2.加上row_number
 		 * 	- where
 		 * 		1.加上where row_number = 1
-		 * 
+		 *
 		 * 2023/12/26 Tim 跟Jason討論過，可以將邏輯放在子查詢
 		 * 2024/04/22 Tim 修復alias name 因為 cast as date 而出現錯位的問題
 		 * 2024/05/02 Tim 保留Alias name邏輯修改
@@ -189,7 +189,7 @@ public class DQLTranslater {
 		Log.debug("結束 changeQualifaRank");
 		return res;
 	}
-	
+
 	/**
 	 * <h1>Alias name 轉換</h1>
 	 * <p>Teradata環境中
@@ -198,17 +198,17 @@ public class DQLTranslater {
 	 * <br>所以需要包一層sub Query 再進行group by跟where
 	 * </p>
 	 * <p>僅支援</p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年2月26日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	script	要轉換的SQL語法
-	 * @throws	
+	 * @throws
 	 * @see
 	 * @return	String	轉換後的SQL
-	 * @throws UnknowSQLTypeException 
+	 * @throws UnknowSQLTypeException
 			 */
 	public String changeAliasName(String script) throws UnknowSQLTypeException {
 		String res = "";
@@ -234,7 +234,7 @@ public class DQLTranslater {
 				 * 	2.
 				 * 	3.
 				 * <h2>備註 ：</h2>
-				 * 	
+				 *
 				 * <h2>異動紀錄 ：</h2>
 				 * 2024年4月10日	Tim	建立邏輯
 				 * */
@@ -248,19 +248,19 @@ public class DQLTranslater {
 					}
 					m.group();
 				});
-				
-				
+
+
 				//取得group by欄位
 				String[] arrGroupBy = stm.groupBy.replaceAll("(?i)^\\s*GROUP\\s+BY\\s*|\\s+","").toUpperCase().split(",");
-				
-				
+
+
 				//先處理數字的group by
 				for (int i = 0; i < arrGroupBy.length; i++) {
 					//數字改為欄位名稱
 					if(arrGroupBy[i].matches("\\d+")){
 						arrGroupBy[i] = lstAlias.get(Integer.parseInt(arrGroupBy[i]));
 					}
-					
+
 				}
 				//比對
 				boolean flag = false;//是否需要轉換
@@ -278,7 +278,7 @@ public class DQLTranslater {
 		Log.debug("結束 AliasName");
 		return res;
 	}
-	
+
 	public String changeMultAnalyze(String script) {
 		if(!script.toUpperCase().contains("ANALYZE")) {
 			return script;

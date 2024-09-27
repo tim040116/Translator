@@ -27,13 +27,13 @@ import etec.framework.context.convert_safely.service.ConvertFunctionsSafely;
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
- * @see		
+ * @see
  */
 public class DataTypeService {
-	
+
 	public static final String REG_DATE= "YMDHS:,\\-\\\\\\/ ";//日期格式會用到的字符
 	public static final String REG_INT = "0-9ZI\\.,\\+\\-\\$\\%\\(\\)";//數字格式會用到的字符
-	
+
 	/**
 	 * <h1>日期加減轉換</h1>
 	 * <br>INTERVAL可進行月份加減
@@ -45,20 +45,20 @@ public class DataTypeService {
 	 * <br>2024年5月15日	Tim	將LAST_DAY合併到changeAddMonths
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * 
+	 *
 	 * */
 	public static String changeAddMonths(String sql) {
 		String res = sql;
 		res = res
-			
+
 			.replaceAll("(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*([+-])\\s*(\\d+)\\s*\\)", " CAST\\($2 $3 INTERVAL'$4 $1' AS DATE\\)")//ADD_MONTHS
 			.replaceAll("(?i)ADD_(YEAR|MONTH|DAY)\\s*\\(([^,]+)\\s*,\\s*(\\d+)\\s*\\)", "CAST\\($2+INTERVAL'$3 $1' AS DATE\\)")//ADD_MONTHS
 			.replaceAll("(?i)\\bAS\\s+DATE\\s+FORMAT\\s+('[^']+')\\s*\\)\\s*([\\+\\-]\\s*INTERVAL'[^']+'\\s+AS\\s+DATE)\\s*\\)","AS DATE\\)$2 FORMAT $1\\)")//ADD_MONTH(CAST AS DATE
 		;
 		/**
-		 * 
+		 *
 		 * <h1>LAST_DAY 取該月的最後一天</h1>
-		 * 
+		 *
 		 * <br> * 此語法目前只提供參數為DATE使用，若為其他格式則須人工轉換資料型態
 		 * <br>
 		 * <br> 先使用DATE_TRUNC 取該月第一天
@@ -66,15 +66,15 @@ public class DataTypeService {
 		 * <br> 由於 INTERVAL 語法運算後會轉成 timestamp 所以要再轉回 DATE
 		 * @author	Tim
 		 * @since	4.0.0.0
-		 * 
+		 *
 		 * */
 		res = res.replaceAll("(?i)LAST_DAY\\(([^\\)]+)\\)", "CAST\\(DATE_TRUNC\\('Month',$1\\)+INTERVAL'1MONTH'-INTERVAL'1DAY' AS DATE\\)");
 		return res;
 	}
-	
+
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * <br>1. 強制轉換  //2023-12-10 搬遷至changeTypeConversion
 	 * <br>		1-1. (FORMAT 'YYYY-MM-DD')(CHAR(7)) 轉成 TO_CHAR($1,'$2')
 	 * <br>		1-2. $1(FORMAT '$2') 轉成 TO_DATE($1,'$2')
@@ -113,7 +113,7 @@ public class DataTypeService {
 //			 * 1. 先將SUBSTR(CAST(AS DATE FORMAT語法轉換成TO_CHAR，FORMAT 跟 SUBSTR 合併
 //			 * 	SUBSTR(CAST($1 AS DATE FORMAT $2),$3,$4) 轉成 TO_CHAR(CAST($1 AS DATE),SUBSTR($2,$3,$4))
 //			 * 2.SUBSTR($2,$3,$4)轉成一般字串
-//			 * 
+//			 *
 //			 * <p>2024年2月5日	Tim	應Jason要求更改寫法</p>
 //			 * */
 //			t = t
@@ -153,19 +153,19 @@ public class DataTypeService {
 		return res;
 	}
 	/**
-	 * 
+	 *
 	 * <br>轉換欄位強制轉換的語法
 	 * <br>
 	 * <br>$1(FORMAT 'YYYY-MM-DD') >> TO_DATE($1,'YYYY-MM-DD')
 	 * <br>$1(CHAR(7)) >> cast($1 as char(7))
 	 * <br>$1(FORMAT 'YYYY-MM-DD')(CHAR(7)) >> TO_CHAR($1 ,'YYYY-MM-DD')
 	 * <br>DATE'${TX4Y-M}-01' >> CAST('${TX4Y-M}-01' AS DATE)
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * */
 	public static String changeTypeConversion(String sql) {
-		
+
 		String res = sql;
 		res = res
 			//1-1 (FORMAT 'YYYY-MM-DD')(CHAR(7))
@@ -181,10 +181,10 @@ public class DataTypeService {
 	}
 	/**
 	 * CURRENT_DATE 轉換
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * 
+	 *
 	 * */
 	public static String changeCurrentDate(String sql) {
 		String res = sql;
@@ -199,14 +199,14 @@ public class DataTypeService {
 	/**
 	 * <h1>轉換CAST轉換數字的語法</h1>
 	 * <br>CAST($1 AS FORMAT '9(12)') -> TRIM(TO_CHAR($1,'000000000000'))
-	 * 
+	 *
 	 * 2024年6月4日	Tim	加上TRIM
 	 * @author	Tim
 	 * @since	2023年12月20日
 	 * */
 	public static String changeFormatNumber(String sql) {
 		String res = sql;
-		Map<String,String> mapIntFormat = new HashMap<String,String>();//需轉換的語法
+		Map<String,String> mapIntFormat = new HashMap<>();//需轉換的語法
 		mapIntFormat.put("9", "0");
 		mapIntFormat.put("Z", "9");
 		//先抓出FORMAT語句
@@ -241,20 +241,20 @@ public class DataTypeService {
 		res =  m.appendTail(sb).toString();
 		return res;
 	}
-	
+
 	/**
 	 * <h1>轉換next_day</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年5月7日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	enclosing_method_arguments
 	 * @throws	e
-	 * @see		
+	 * @see
 	 * @return	return_type
 			 */
 	public static String changeNextDay(String sql) {
@@ -262,13 +262,13 @@ public class DataTypeService {
 			return sql;
 		}
 		//week
-		Map<String,String> mapWeek = new HashMap<String,String>();
+		Map<String,String> mapWeek = new HashMap<>();
 		mapWeek.put("SU","0");
 		mapWeek.put("SUN","0");
 		mapWeek.put("SUNDAY","0");
 		mapWeek.put("M","1");
 		mapWeek.put("MO","1");
-		mapWeek.put("MON","1"); 
+		mapWeek.put("MON","1");
 		mapWeek.put("MONDAY","1");
 		mapWeek.put("TU","2");
 		mapWeek.put("TUE","2");
@@ -290,7 +290,7 @@ public class DataTypeService {
 		mapWeek.put("SAT","6");
 		mapWeek.put("SATURDAY","6");
 		String res = "";
-		
+
 		/**
 		 * <p>功能 ：轉換 NEXT_DAY</p>
 		 * <p>類型 ：搜尋</p>
@@ -300,7 +300,7 @@ public class DataTypeService {
 		 * 	1.日期格式的資料
 		 *  2.星期幾，參照上方的mapWeek
 		 * <h2>備註 ：</h2>
-		 * 	
+		 *
 		 * <h2>異動紀錄 ：</h2>
 		 * 2024年5月8日	Tim	建立邏輯
 		 * */
@@ -317,9 +317,9 @@ public class DataTypeService {
 		res =  sb.toString();
 		return res;
 	}
-	
+
 	private static String formatConvert(String format) {
-		Map<String,String> mapIntFormat = new HashMap<String,String>();//需轉換的語法
+		Map<String,String> mapIntFormat = new HashMap<>();//需轉換的語法
 		mapIntFormat.put("9", "0");
 		mapIntFormat.put("Z", "9");
 		for (Map.Entry<String, String> e : mapIntFormat.entrySet()) {

@@ -6,13 +6,13 @@ import java.util.Date;
 import java.util.List;
 
 public class BasicParams {
-	
+
 	private static String inputPath;
-	
+
 	private static String outputPath;
-	
+
 	private static List<File> listFile;
-	
+
 	public static List<File> getListFile() {
 		return listFile;
 	}
@@ -49,5 +49,5 @@ public class BasicParams {
 		String op = getOutputPath()+"src\\";
 		return fileName.replace(ip, op);
 	}
-	
+
 }

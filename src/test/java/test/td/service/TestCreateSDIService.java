@@ -8,7 +8,7 @@ import etec.framework.file.readfile.service.FileTool;
 import etec.src.assignment.project.sd.service.CreateSDIService;
 
 public class TestCreateSDIService {
-	
+
 	public static void run() {
 		try {
 			List<File> lf = FileTool.getFileList("C:\\Users\\User\\Desktop\\台企銀\\");
@@ -19,5 +19,5 @@ public class TestCreateSDIService {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

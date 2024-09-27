@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  * </p>
  * <h2>異動紀錄</h2>
  * <br>2024年3月14日	Tim	建立功能
- * 
+ *
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
@@ -58,20 +58,20 @@ public class ColumnSettingModel {
 	 * @author	Tim
 	 * @since	4.0.0.0 */
 	private String primaryIndex = "";
-	public ColumnSettingModel() {};
+	public ColumnSettingModel() {}
 	/**
 	 * <h1>包裝CREATE TABLE時各欄位的設定值</h1>
 	 * <p>整段設定放進來，可以直接解析，包裝</p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年3月14日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	setting	設定值
-	 * @throws	
+	 * @throws
 	 * @see
-	 * @return	
+	 * @return
 			 */
 	public ColumnSettingModel(String setting) {
 		/**
@@ -93,7 +93,7 @@ public class ColumnSettingModel {
 		 * <h2>異動紀錄 ：</h2>
 		 * 2024年3月13日	Tim	建立邏輯
 		 * */
-		String regCol = 
+		String regCol =
 				  "(?<=FORMAT_')(?<format>[^']+)"
 				+ "|(?<cssp>(?:NOT_)?CASESPECIFIC)"
 				+ "|(?<nullable>(?:NOT_)?NULL)"
@@ -154,9 +154,9 @@ public class ColumnSettingModel {
 		return    " TITLE '" + title + "'"
 				+ " FORMAT '" + format + "'"
 				+ " DEFAULT " + defaultData
-				+ " " + casespecific 
-				+ " " + nullable 
-				+ " CHARACTER SET " + characterSet 
+				+ " " + casespecific
+				+ " " + nullable
+				+ " CHARACTER SET " + characterSet
 				+ " ";
 	}
 	public String getPrimaryIndex() {

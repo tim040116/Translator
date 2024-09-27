@@ -14,16 +14,16 @@ import etec.framework.context.translater.exception.SQLFormatException;
  * <br>這兩種語法結構差異極大，但功能是相同的
  * <br>轉換後的架構也不一樣，單純是取決於方便轉換
  * <br>功能上都是一樣的
- * 
+ *
  * <h2>屬性</h2>
  * <p></p>
  * <h2>方法</h2>
  * <p>changeTD_UNPIVOT 	: 轉換TD_UNPIVOT語法</p>
  * <p>changeUNPIVOT 	: 轉換UNPIVOT語法</p>
- * 
+ *
  * <h2>異動紀錄</h2>
  * <br>2024年2月22日	Tim	建立功能
- * 
+ *
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
@@ -33,7 +33,7 @@ import etec.framework.context.translater.exception.SQLFormatException;
 public class UnpivotService {
 	/**
 	 * <h1>TD_UNPIVOT</h1>
-	 * 
+	 *
 	 * <h2>功能介紹</h2>
 	 * 	<br>此語法為將多個欄位轉換成多筆資料
 	 * 	<br>範例：
@@ -79,13 +79,13 @@ TD_UNPIVOT(
 </pre>
 	 * <h2>GP架構</h2>
 <pre>
-SELECT 
+SELECT
 	unnest(ARRAY['jan', 'feb', ..., 'dec']) AS month,
 	unnest(ARRAY[jan_sales, feb_sales, ..., dec_sales]) AS monthly_sales,
 	unnest(ARRAY[jan_expense, feb_expense, ..., dec_expense]) AS monthly_expense
 FROM T
 </pre>
-	 * 
+	 *
 	 * @author	Tim
 	 * @throws 	SQLFormatException	COLUMN_LIST 跟 COLUMN_ALIAS_LIST 數量不同時報錯
 	 * @since	4.0.0.0
@@ -106,7 +106,7 @@ FROM T
 			String table = temp.replaceAll("\\s*USING[\\S\\s]*", "");//表
 			//分析參數
 			//取得參數的map
-			Map<String,String> mapUnpivot = new HashMap<String,String>();
+			Map<String,String> mapUnpivot = new HashMap<>();
 			temp = temp.replaceAll("[\\S\\s]+USING\\s+", "");
 			Pattern p2 = Pattern.compile("\\b([^\\(]+)\\s*\\(\\s*([^\\)]+)\\s*\\)", Pattern.CASE_INSENSITIVE);
 			Matcher m2 = p2.matcher(temp);
@@ -126,7 +126,7 @@ FROM T
 			String[] arrValueColumns = mapUnpivot.get("VALUE_COLUMNS") //轉換後的欄位名
 					.replaceAll("^\\s*'\\s*|\\s*'\\s*$", "")
 					.split("\\s*'\\s*,\\s*'\\s*")
-			;		
+			;
 			String[] arrColumnList = mapUnpivot.get("COLUMN_LIST") //要取得的欄位
 					.replaceAll("^\\s*'\\s*|\\s*'\\s*$", "")
 					.split("\\s*'\\s*,\\s*'\\s*")
@@ -148,8 +148,8 @@ FROM T
 				}
 			}
 			//處理開頭
-			for(int i = 0 ; i < arrValueColumns.length ; i++) {
-				replacement += "\r\n\t\t" + comma + arrValueColumns[i].replaceAll("^,", "unnest(ARRAY[");
+			for (String arrValueColumn : arrValueColumns) {
+				replacement += "\r\n\t\t" + comma + arrValueColumn.replaceAll("^,", "unnest(ARRAY[");
 				if(" ".equals(comma)) {
 					comma = ",";
 				}
@@ -160,7 +160,7 @@ FROM T
 		m.appendTail(sb);
 		return sb.toString();
 	}
-	
+
 	/**
 	 * <h1>UNPIVOT</h1>
 	 * <p>轉換UNPIVOT語法</p>
@@ -195,7 +195,7 @@ FROM T
 	 * 	</table>
 	 * <h2>TD架構</h2>
 <pre>
-SELECT 
+SELECT
 	 sj2.yr
 	,sj2.months
 	,sj2.monthly_sales
@@ -223,11 +223,11 @@ JOIN LATERAL(VALUES
 ) sj2 (months,monthly_sales,monthly_cnt) ON TRUE;
 </pre>
 	 *
-	 * 
-	 * 
+	 *
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年2月22日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	script	要轉換的語法

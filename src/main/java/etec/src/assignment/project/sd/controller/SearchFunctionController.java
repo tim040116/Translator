@@ -48,7 +48,7 @@ public class SearchFunctionController implements Controller{
 			FileTool.addFile(funcListNm,"\"FUNCTION_NAME\",\"USE_CNT\"");//方法名
 			FileTool.addFile(detlListNm,"\"FILE_PATH\",\"FILE_NAME\",\"PART_ID\",\"FUNCTION_NAME\"");//路徑,檔名,段落,方法名
 		}
-		Map<String,Integer> mapFunc = new HashMap<String,Integer>();
+		Map<String,Integer> mapFunc = new HashMap<>();
 		List<String> lstSkip = Arrays.asList(Params.searchFunction.SKIP_LIST);
 		// 讀取檔案
 		SearchFunctionPnl.tsLog.setLog("資訊", "開始讀取檔案");
@@ -66,16 +66,16 @@ public class SearchFunctionController implements Controller{
 					;
 			String[] arrFileType = f.getName().split("\\.");
 			String fileType = arrFileType[arrFileType.length-1];
-			
+
 			// 讀取檔案
 			String content = FileTool.readFile(f,Charset.forName("utf-8"));
-			
-			
+
+
 			String[] arrFileLine = content.split("\r\n");
 			int fileLine = arrFileLine.length+1;
-			
-			FileTool.addFile(fileListNm,																
-					  "\""   +category 
+
+			FileTool.addFile(fileListNm,
+					  "\""   +category
 					+ "\",\""+f.getName()
 					+ "\",\""+fileType
 					+ "\",\""+fileLine
@@ -83,13 +83,13 @@ public class SearchFunctionController implements Controller{
 
 			content = SearchFunctionService.getSqlContent(content);
 
-			
+
 			//搜尋function
 			List<String> lstSql = RegexTool.getRegexTarget("SELECT[^;]*", content);
 			//每一段sql
 			int j = 1;
 			String temp = "";
-		
+
 			for(String sql : lstSql) {
 				List<String> lfc = RegexTool.getRegexTarget("(?i)(QUALIFY +|AS +)?[A-Z0-9_\\$\\{\\}\\.]+\\s*\\(", sql);
 				for(String func : lfc) {
@@ -122,10 +122,7 @@ public class SearchFunctionController implements Controller{
 					if(func.equals("ANY")) {//LIKE ANY
 						func = "LIKE ANY";
 					}
-					if(func.matches("\\s*[0-9]+\\s*")) {//純數字是出現在強制轉換
-						continue;
-					}
-					if(lstSkip.contains(func)) {
+					if(func.matches("\\s*[0-9]+\\s*") || lstSkip.contains(func)) {
 						continue;
 					}
 					//寫入總表

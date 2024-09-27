@@ -6,11 +6,11 @@ import java.util.List;
 import etec.src.translator.view.panel.SearchFunctionPnl;
 
 public class SearchFunctionService {
-	
+
 
 	public static List<String> searchDQL(String content){
 		SearchFunctionPnl.tsLog.setLog("資訊", "整理查詢使用的資料表");
-		List<String> lstDQLTable = new ArrayList<String>();
+		List<String> lstDQLTable = new ArrayList<>();
 		String dqlcontent = content
 				.replaceAll("DELETE\\s+FROM", "")
 				.replaceAll("EXTRACT\\s*\\(\\s*\\S+\\s+FROM\\s+[^\\s\\)]+\\s*\\)", "")
@@ -26,7 +26,7 @@ public class SearchFunctionService {
 	}
 	// 將btq轉成sql
 	public List<String> subQuery(String dqlcontent) {
-			List<String> lstDQLTable = new ArrayList<String>();
+			List<String> lstDQLTable = new ArrayList<>();
 			String type = "";
 			String temp = "";
 			int cntSub = 0;
@@ -86,7 +86,7 @@ public class SearchFunctionService {
 					default:
 						break;
 				}
-				
+
 			}
 			return lstDQLTable;
 		}

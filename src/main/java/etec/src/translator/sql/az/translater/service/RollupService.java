@@ -10,15 +10,15 @@ public class RollupService {
 	 * <h1>rollup</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年7月31日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	1.0.0.0
 	 * @param	enclosing_method_arguments
 	 * @throws	e
-	 * @see		
+	 * @see
 	 * @return	return_type
 			 */
 	public static String changeRollUp(String sql) {
@@ -38,14 +38,14 @@ public class RollupService {
 			String remark = m.group("groupby").replaceAll("\\s+"," ");
 			//新的GROUP BY
 			String newStr = "";
-			
+
 			//處裡欄位
-			String allcol = m.group("groupby").replaceAll("GROUP\\s+BY\\s+", "");
-			List<String> lstCol = new ArrayList<String>();
-			List<String> lstRollup = new ArrayList<String>();
+			String allcol = m.group("groupby").replaceAll("(?i)GROUP\\s+BY\\s+", "");
+			List<String> lstCol = new ArrayList<>();
+			List<String> lstRollup = new ArrayList<>();
 			Matcher mcol = Pattern.compile("(?i)ROLLUP\\(([^)]+)\\)|([\\w.]+)").matcher(allcol);
 			while(mcol.find()) {
-				if(mcol.group(1)!=null) 
+				if(mcol.group(1)!=null)
 					{lstRollup.add(mcol.group(0));}
 				else{lstCol.add(mcol.group(0));}
 			}
@@ -67,7 +67,7 @@ public class RollupService {
 	//單一rollup轉換
 	public static String singleRollup(RollupModel m) {
 		RollupModel model = m;
-		List<String> lstAll = new ArrayList<String>();
+		List<String> lstAll = new ArrayList<>();
 		lstAll.addAll(model.lstCol);
 		lstAll.addAll(model.lstRollup);
 		String groupby = "\r\n" + model.tab + "GROUP BY ROLLUP("+String.join(",", lstAll)+")";

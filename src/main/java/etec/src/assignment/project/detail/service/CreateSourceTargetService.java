@@ -20,12 +20,12 @@ import etec.src.translator.sql.az.translater.AzTranslater;
 
 public class CreateSourceTargetService {
 
-	private List<String> lstStaticTable = new ArrayList<String>();
-	
-	private List<String> lstSourceTable = new ArrayList<String>();
-	
-	private List<String> lstTargetTable = new ArrayList<String>();
-	
+	private List<String> lstStaticTable = new ArrayList<>();
+
+	private List<String> lstSourceTable = new ArrayList<>();
+
+	private List<String> lstTargetTable = new ArrayList<>();
+
 	public static void run(File f) throws MalformedURLException, IOException {
 		Charset chs = CharsetTool.getCharset(f.getPath());
 		String context = CharsetTool.readFileInCharset(chs.name(),f.getPath());
@@ -71,7 +71,7 @@ public class CreateSourceTargetService {
 			return sb.toString();
 		});
 	}
-	
+
 	public void importFile(String fileName, String content) {
 		content = cleanScript(content);
 		// 找語法
@@ -79,7 +79,7 @@ public class CreateSourceTargetService {
 		while (m.find()) {
 			switch (m.group(1).toUpperCase()) {
 			case "CREATE":
-				
+
 				break;
 			case "INSERT":
 
@@ -95,13 +95,13 @@ public class CreateSourceTargetService {
 			}
 		}
 	}
-	
+
 	private void mappingCreateTable(String sql) {
 		Matcher m = Pattern.compile("(?i)\\bCREATE.*?(?:TABLE|VIEW)\\s+([\\w#${}.]+)([^;]+)").matcher(sql);
 		if (m.find()) {
 			String target = m.group(1);
 			String content = m.group(2);
-			
+
 		}
 	}
 
@@ -110,11 +110,11 @@ public class CreateSourceTargetService {
 		if (m.find()) {
 			String target = m.group(1);
 			String content = m.group(2);
-			
+
 		}
 	}
-	
-	
+
+
 	/**
 	 * <h1>清理語句</h1>
 	 * <p>
@@ -122,10 +122,10 @@ public class CreateSourceTargetService {
 	 * </p>
 	 * <p>
 	 * </p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2> <br>
 	 * 2024年3月13日 Tim 建立功能
-	 * 
+	 *
 	 * @author Tim
 	 * @since 4.0.0.0
 	 * @param script 原城市

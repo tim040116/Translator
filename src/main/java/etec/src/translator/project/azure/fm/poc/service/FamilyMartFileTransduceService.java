@@ -20,21 +20,21 @@ import etec.src.translator.sql.az.translater.AzTranslater;
  * @author	Tim
  * @since	2023年10月4日
  * @version	3.3.0.0
- * 
+ *
  * 全家的城市轉換
  * */
 public class FamilyMartFileTransduceService {
 
-	
+
 	/**
 	 * <h1>執行入口</h1>
 	 * <br>抄AzureTranslateService
 	 * <br>加上全家客製化功能
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年09月02日	Tim	建立功能
 	 * @author Tim
-	 * @since 2024年9月2日	
+	 * @since 2024年9月2日
 	 * @param context 檔案的內容
 	 * @see
 	 * @return
@@ -86,7 +86,7 @@ public class FamilyMartFileTransduceService {
 			}
 			return sb.toString();
 		});
-		
+
 		//全家客製化項目
 		newContext = fmOnly(newContext);
 		newFileName = newFileName.replaceAll("(?i)\\.btq.*", ".sql");
@@ -95,7 +95,7 @@ public class FamilyMartFileTransduceService {
 //		newContext = GreenPlumTranslater.dql.changeMultAnalyze(newContext);
 		FileTool.createFile(newFileName, newContext, chs);
 	}
-	
+
 	private static String fmOnly(String content) {
 		String res = content;
 		res = FmSqlService.easyReplace(res);

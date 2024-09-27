@@ -14,11 +14,11 @@ import etec.framework.security.encryption.factory.EncryptionFactory;
 import etec.framework.security.encryption.model.HashResult;
 
 public class CreateKeyFileService {
-	
+
 	private static final String SEC_FILE = "sec.txt";//金鑰檔名
 	private static final String QTE = "|";//key value的分格
 	private static final String DTR = "#";//data的分隔
-	
+
 	/**
 	 * 檢核項目
 	 * */
@@ -35,7 +35,7 @@ public class CreateKeyFileService {
 		String md = EncryptionFactory.base64.encode(limitDate);
 		String hash = getHash(fm,id,pass,VersionModel.VERSION);
 		//
-		String res = 
+		String res =
 			        "fm"   + QTE + fm
 			+ DTR + "eps"  + QTE + "!Q2w3e4r5t"
 			+ DTR + "fmd"  + QTE + fmd
@@ -49,8 +49,8 @@ public class CreateKeyFileService {
 		res = EncryptionFactory.base64.encode(res);
 		return res;
 	}
-	
-	
+
+
 	public static HashResult decode() throws IOException, ParseException {
 		Map<String,String> map = readSecFile();
 		HashResult m = new HashResult();
@@ -60,7 +60,7 @@ public class CreateKeyFileService {
 		m.setLimitDate(new SimpleDateFormat(EncryptionFactory.base64.decode(map.get("fmd"))).parse(EncryptionFactory.base64.decode(map.get("md"))));
 		return m;
 	}
-	
+
 	public static String getHash(String key,String id,String pass,String version) {
 		String res = key
 			.replace("k", EncryptionFactory.base64.encode(key))
@@ -70,9 +70,9 @@ public class CreateKeyFileService {
 		;
 		return EncryptionFactory.base64.encode(res);
 	}
-	
+
 	public static  Map<String,String> readSecFile() throws IOException {
-		Map<String,String> res = new HashMap<String,String>();
+		Map<String,String> res = new HashMap<>();
 		String str = FileTool.readFile(SEC_FILE).trim();
 		String args = EncryptionFactory.base64.decode(str);
 		args = EncryptionFactory.base64.decode(args).replaceAll("\r","=");

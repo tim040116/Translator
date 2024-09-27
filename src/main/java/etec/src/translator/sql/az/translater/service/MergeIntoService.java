@@ -3,7 +3,7 @@ package etec.src.translator.sql.az.translater.service;
 import java.util.regex.Matcher;
 
 public class MergeIntoService {
-	
+
 	public static String convert(String type,String tableNm,String using,String sql) {
 		String res = "";
 		switch(type.toUpperCase()) {
@@ -16,8 +16,8 @@ public class MergeIntoService {
 		}
 		return res;
 	}
-	
-	
+
+
 	public static String insert(String tableNm,String using,String sql) {
 		String alias = tableNm.replaceAll("\\S+\\s+(\\S+)\\s*", "$1");
 		String table = tableNm.replaceAll("(\\S+)\\s+\\S+\\s*", "$1");
@@ -41,8 +41,8 @@ public class MergeIntoService {
 				+ "\r\n;"
 				;
 		return res;
-	} 
-	
+	}
+
 	public static String update(String tableNm,String using,String sql) {
 			String update = "UPDATE " + tableNm
 				+ "\r\nFROM " + using

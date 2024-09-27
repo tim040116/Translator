@@ -12,17 +12,16 @@ import java.util.Map;
 
 import etec.common.factory.Params;
 import etec.framework.file.params.model.ParamMap;
-import etec.framework.file.readfile.service.FileTool;
 
 /***/
 public class ParamsTool {
-	
+
 	/**
 	 * <h1>依照根目錄讀取外部參數</h1>
-	 * 
+	 *
 	 * <p>請放在同一個根目錄
 	 * <p>附檔名請一致
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	dev
 	 * @param	rootPath	參數檔根目錄
@@ -31,26 +30,25 @@ public class ParamsTool {
 	 * @throws	IOException
 	 * */
 	public static Map<String,File> readConfigFile(String rootPath,String fileType) throws IOException {
-		Map<String,File> mapParams = new HashMap<String,File>();
-		FileTool.getFileList(Params.ROOT_PATH+"config\\");
+		Map<String,File> mapParams = new HashMap<>();
 		for(String fn : Params.CONFIG_FILE_LIST) {
 			File f = new File(Params.ROOT_PATH+"config\\"+fn+".txt");
 			mapParams.put(fn, f);
 		}
 		return mapParams;
 	}
-	
 
-	/** 
+
+	/**
 	 * <h1>讀取外部的參數檔的功能</h1>
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	2023年07月14日
 	 * <br> 2023/10/03	Tim	新增註解功能以雙減號為註解
-	 * 
+	 *
 	 */
 	public static Map<String,String> readParam(String sp,File f) {
-		Map<String,String> mapParams = new ParamMap<String,String>();
+		Map<String,String> mapParams = new ParamMap<>();
 		try(
 			FileInputStream fis = new FileInputStream(f);
 			InputStreamReader isr = new InputStreamReader(fis,Charset.forName("utf-8"));

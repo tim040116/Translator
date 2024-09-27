@@ -10,5 +10,5 @@ public interface Reviewer {
 
 	//return 0 為通過
 	public int check(Map<String,String> args) throws PermissionDeniedException;
-	
+
 }

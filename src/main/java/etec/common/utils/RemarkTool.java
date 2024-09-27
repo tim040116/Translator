@@ -6,9 +6,9 @@ import java.util.Map;
 public class RemarkTool {
 
 	// 區域
-	private Map<String, String> mapText = new HashMap<String, String>();
+	private Map<String, String> mapText = new HashMap<>();
 	// 單行
-	private Map<String, String> mapLine = new HashMap<String, String>();
+	private Map<String, String> mapLine = new HashMap<>();
 
 	public String remark(String text) {
 		StringBuffer res = new StringBuffer();
@@ -23,13 +23,13 @@ public class RemarkTool {
 				if ("/*".equals(old + c)) {
 					t="";
 					type = "T";
-				} 
+				}
 				else if ("//".equals(old + c) || "--".equals(old + c)) {
 					t="";
 					type = "L";
 				}
 			}
-			
+
 			// end
 			if("".equals(type)) {
 				res.append(old);
@@ -47,7 +47,7 @@ public class RemarkTool {
 					old="";
 					type = "";
 				}
-			} 
+			}
 			else if ("L".equals(type)) {
 				t+=old;
 				old=c;

@@ -14,34 +14,34 @@ import etec.framework.context.convert_safely.model.Mark;
  * <p></p>
  * <h2>方法</h2>
  * <p></p>
- * 
+ *
  * <h2>異動紀錄</h2>
  * <br>2024年2月26日	Tim	建立功能
- * 
+ *
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
- * @see		
+ * @see
  */
 public class SplitCommaSafely {
-	
+
 	/**
 	 * <h1>以逗號為條件切分</h1>
 	 * <p>會trim資料</p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年2月26日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	context	要切分的字串
-	 * @throws	
+	 * @throws
 	 * @see
 	 * @return	List<String>	切分後的清單
 			 */
 	public static List<String> splitComma(String context) {
-		List<String> lst = new ArrayList<String>();
+		List<String> lst = new ArrayList<>();
 		String res = context.replaceAll(",|\\(|\\)", Mark.MAHJONG_RED+"$0"+Mark.MAHJONG_RED);
 		int cntBracket = 0;
 		String temp = "";
@@ -60,19 +60,19 @@ public class SplitCommaSafely {
 	 * <h1>以逗號為條件切分</h1>
 	 * <p>會trim資料</p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年2月26日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	context	要切分的字串
-	 * @throws	
+	 * @throws
 	 * @see
 	 * @return	List<String>	切分後的清單
 			 */
 	public static List<String> splitComma(String context,Function<String,String> f) {
-		List<String> lst = new ArrayList<String>();
+		List<String> lst = new ArrayList<>();
 		String res = context.replaceAll(",|\\(|\\)", Mark.MAHJONG_RED+"$0"+Mark.MAHJONG_RED);
 		int cntBracket = 0;
 		String temp = "";
@@ -92,19 +92,19 @@ public class SplitCommaSafely {
 	 * <h1>以逗號為條件切分</h1>
 	 * <p>會trim資料</p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年2月26日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	context	要切分的字串
-	 * @throws	
+	 * @throws
 	 * @see
 	 * @return	List<String>	切分後的清單
 			 */
 	public static List<String> splitComma(String context,Consumer<String> f) {
-		List<String> lst = new ArrayList<String>();
+		List<String> lst = new ArrayList<>();
 		String res = context.replaceAll(",|\\(|\\)", Mark.MAHJONG_RED+"$0"+Mark.MAHJONG_RED);
 		int cntBracket = 0;
 		String temp = "";

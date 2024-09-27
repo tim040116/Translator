@@ -11,14 +11,15 @@ public class SearchFunctionListener implements ActionListener {
 
 	/*
 	 * 整個流程
-	 * 
+	 *
 	 */
-	
+
 	private Controller con;
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		new Thread() {
+			@Override
 			public void run() {
 				try {
 					con.run();
@@ -30,9 +31,9 @@ public class SearchFunctionListener implements ActionListener {
 			}
 		}.start();
 	}
-	
+
 	public SearchFunctionListener(Controller controller) {
 		this.con = controller;
 	}
-	
+
 }

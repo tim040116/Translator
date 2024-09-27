@@ -15,19 +15,19 @@ import javax.swing.JTextField;
  * @author	Tim
  * @since	2023/03/06
  * @version	23.3.1.1
- * 
+ *
  */
 public class FileButton extends JPanel {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	//按鈕
 	private JButton btn;
 	//文字
 	private JTextField text;
 	//選擇器
 	private JFileChooser chooser;
-	
+
 	public FileButton() {
 		//初始化
 		btn = new JButton("檔案");

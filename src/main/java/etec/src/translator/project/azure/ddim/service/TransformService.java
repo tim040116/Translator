@@ -14,21 +14,21 @@ public class TransformService {
 		String result = "Success";
 		//取出SQL段落
 		String sql = getTransformSQL(fc);
-		
+
 		sql=sql
 		.replaceAll("(?i)CREATE\\s+(?:MULTI)?SET\\s+TABLE","Create Table")
 		;
-		
+
 		//取出清單
 		CreateListService.createQualifyRank(fn,sql);
 		CreateListService.createODBC(fn,fc);
 		CreateListService.createWithData(fn, sql);
-		
+
 		//整理SQL匯出檔案
 		createSQLFile(fn, sql);
 		return result;
 	}
-	
+
 	//SQL轉換產檔
 	private static String createSQLFile(String fn, String fc) throws IOException {
 		System.out.println("createSQLFile");
@@ -36,10 +36,10 @@ public class TransformService {
 		String strTry = "\r\nSET NOCOUNT ON;\r\n\r\n";
 		//清除註解
 		String content = fc ;
-		
-		/* 22-06-13 新增 create set table 更新為 create table 
+
+		/* 22-06-13 新增 create set table 更新為 create table
 		 *         remove .replaceAll("[Cc][Aa][Ss][Tt] *\\(|[Aa][Ss] *[Dd][Aa][Tt][Ee] *[Ff][Oo][Rr][Mm][Aa][Tt] *'[YyMmDdHhSs-]*'\\)","")
-		 * 23-10-03 Tim 將部分功能移轉到easyreplase 
+		 * 23-10-03 Tim 將部分功能移轉到easyreplase
 		 * */
 		//content = TransduceTool.changeAddMonth(content)
 		content = content
@@ -59,7 +59,7 @@ public class TransformService {
 		content = easyRemove(content);
 		content = transformSingleSQL(content,fn);
 		//20220613 	//content = TransduceTool.transduceSelectSQLTransduce(content);
-		
+
 		String tssql = DQLTranslater.easyReplace(content);
 		content = strTry;
 		int cntarea = 1;
@@ -72,14 +72,14 @@ public class TransformService {
 		String file = BasicParams.getTargetFileNm(fn);
 		String[] arfn = file.split("\\\\");
 		String frn = arfn[arfn.length-1];
-		
+
 		//產出檔名調整
 		String fnn = frn.replace(".pl", ".sql").replace(".btq", ".sql");
 		file = file.replace(frn, fnn);
 		FileTool.createFile(file,content);
 		return result;
 	}
-	
+
 	private static String addTryCatch(String sql,int areaCnt) {
 		if("".equals(sql.trim())) {
 			return "";
@@ -89,18 +89,18 @@ public class TransformService {
 		}
 		String res = "\r\nBEGIN TRY\r\n\r\n";
 		res += sql.trim() + "\r\n;\r\n\r\n";
-		res += "END TRY\r\n" 
-				+ "BEGIN CATCH\r\n" 
+		res += "END TRY\r\n"
+				+ "BEGIN CATCH\r\n"
 				+ "  SELECT '" + areaCnt + "' AS ErrorArea,\r\n"
-				+ "    ERROR_NUMBER() AS ErrorNumber,\r\n" 
+				+ "    ERROR_NUMBER() AS ErrorNumber,\r\n"
 				+ "    ERROR_STATE() AS ErrorState,\r\n"
-				+ "    ERROR_SEVERITY() AS ErrorSeverity,\r\n" 
+				+ "    ERROR_SEVERITY() AS ErrorSeverity,\r\n"
 				+ "    ERROR_PROCEDURE() AS ErrorProcedure,\r\n"
-				+ "    ERROR_MESSAGE() AS ErrorMessage;\r\n" 
-				+ "  RETURN ERROR_STATE();\r\n" 
+				+ "    ERROR_MESSAGE() AS ErrorMessage;\r\n"
+				+ "  RETURN ERROR_STATE();\r\n"
 				+ "END CATCH;\r\n";
 		return res;
-		
+
 	}
 	//取得sql的部分
 	private static String getTransformSQL(String fc) {
@@ -121,20 +121,20 @@ public class TransformService {
 			   line.matches("(?i)[^;]*LOGON[^;]*;")) {
 				flag = true;
 			}
-			
+
 		}
 		return res;
 	}
 	/*
 	 * 拆分每一段語法並處裡
-	 * 
+	 *
 	 * 並依照種類進行處理
 	 * */
 	private static String transformSingleSQL(String fc,String fn) throws IOException {
 		String res = "";
 		String newSql = "";
 		/*20220615  針對有含 like '%;%'的分號字元，先將%;%置換成TtEeSsTt 再處理
-		 *         List<String> lstSql = RegexTool.getRegexTarget("(?!=;)[^;]*;",fc); 
+		 *         List<String> lstSql = RegexTool.getRegexTarget("(?!=;)[^;]*;",fc);
 		 *       =>List<String> lstSql = RegexTool.getRegexTarget("(?!=;)[^;]*;",fc.replaceAll("%;%","TtEeSsTt"));
 		 * */
 		List<String> lstSql = RegexTool.getRegexTarget("(?!=;)[^;]*;",fc.toUpperCase());
@@ -208,7 +208,7 @@ public class TransformService {
 				newSql = "";
 				res += newSql+"\r\n";
 			}
-			//insert into 
+			//insert into
 			else if(sql.matches("(?i)[^;]*Insert\\s+into\\s+[^;]*;")) {
 				newSql = sql;
 				List<String> lstSelect = RegexTool.getRegexTarget("(?i)select", newSql);
@@ -234,7 +234,7 @@ public class TransformService {
 //						.trim()
 //						.replaceAll("\\s[^;]+;", "");
 //				/*20220615  針對有含 like '%;%'的分號字元，先將%;%置換成TtEeSsTt 再處理
-//				 *         String strCre=sql; =>String strCre=sql.replaceAll("TtEeSsTt","%;%"); 
+//				 *         String strCre=sql; =>String strCre=sql.replaceAll("TtEeSsTt","%;%");
 //				 * */
 //				String strCre=sql.replaceAll("TtEeSsTt","%;%");
 ////				strCre = TransduceService.transduceCreateSQL(strCre);
@@ -285,15 +285,15 @@ public class TransformService {
 	}
 	/*
 	 * 清除不需要的語法
-	 * 
+	 *
 	 * */
 	private static String easyRemove(String fc) {
-		
+
         /* 20220613 Modify .replaceAll("COMPRESS", "") => .replaceAll("COMPRESS[^\\r\\n]*", "")
          * 20220613 add    .replaceAll(RegexTool.getReg("\\slogon \\$\\{USERID\\}, \\$\\{PASSWD\\};"),"")
          * 20220623 add    .replaceAll(RegexTool.getReg("\\.IF ACTIVITY")+"[^\\r\\n]*\\r\\n", "")
          * */
-		
+
 		String res = fc
 			.replaceAll("(?i)\\.SET\\s+[^\\r\\n]*\\r\\n", "")
 			.replaceAll("(?i)\\.QUIT\\s*\\d*;", "")
@@ -306,7 +306,7 @@ public class TransformService {
 			.replaceAll("(?i)[^\\r\\n]*LOGOFF;[^\\r\\n]*\\r\\n", "")
 			.replaceAll("(?i)\\.EXPORT\\s+RESET;", "")
 		;
-		
+
 		return res;
 	}
 //	// try catch
@@ -316,15 +316,15 @@ public class TransformService {
 //			}
 //			String res = "\r\nBEGIN TRY\r\n\r\n";
 //			res += sql.trim() + "\r\n\r\n";
-//			res += 	  "END TRY\r\n" 
-//					+ "BEGIN CATCH\r\n" 
+//			res += 	  "END TRY\r\n"
+//					+ "BEGIN CATCH\r\n"
 //					+ "  SELECT '" + cntarea + "' AS ErrorArea,\r\n"
-//					+ "    ERROR_NUMBER() AS ErrorNumber,\r\n" 
+//					+ "    ERROR_NUMBER() AS ErrorNumber,\r\n"
 //					+ "    ERROR_STATE() AS ErrorState,\r\n"
-//					+ "    ERROR_SEVERITY() AS ErrorSeverity,\r\n" 
+//					+ "    ERROR_SEVERITY() AS ErrorSeverity,\r\n"
 //					+ "    ERROR_PROCEDURE() AS ErrorProcedure,\r\n"
-//					+ "    ERROR_MESSAGE() AS ErrorMessage;\r\n" 
-//					+ "  RETURN ERROR_STATE();\r\n" 
+//					+ "    ERROR_MESSAGE() AS ErrorMessage;\r\n"
+//					+ "  RETURN ERROR_STATE();\r\n"
 //					+ "END CATCH;\r\n";
 //			cntarea++;
 //			return res;

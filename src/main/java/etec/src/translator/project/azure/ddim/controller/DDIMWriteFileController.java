@@ -10,6 +10,7 @@ import etec.common.model.element.WriteFileElement;
 import etec.src.translator.common.model.BasicParams;
 
 public class DDIMWriteFileController implements Controller {
+	@Override
 	public void run() throws IOException {
 		List<File> lf = BasicParams.getListFile();
 		String rootPath = BasicParams.getInputPath();

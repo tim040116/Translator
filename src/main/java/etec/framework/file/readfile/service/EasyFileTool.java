@@ -26,7 +26,7 @@ public class EasyFileTool {
 	private FileOutputStream gfos;
 	private GZIPOutputStream gos;
 	private BufferedOutputStream gbos;
-	
+
 	public BufferedReader getBr() {
 		return br;
 	}
@@ -120,6 +120,6 @@ public class EasyFileTool {
 			gfos.close();
 		}
 	}
-	
-	
+
+
 }

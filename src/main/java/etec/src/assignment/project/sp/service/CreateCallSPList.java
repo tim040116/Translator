@@ -10,11 +10,11 @@ import etec.src.translator.view.panel.SearchFunctionPnl;
 
 
 public class CreateCallSPList {
-	
+
 	private static final String TITLE = "\"FILE_PATH\",\"FILE_NAME\",\"SP_NAME\",\"PARAMS\"";
-	
+
 	private static boolean IS_TITLE = true;
-	
+
 	/**
 	 * <h1>列出所有call store porsiture</h1>
 	 * <p></p>
@@ -24,7 +24,7 @@ public class CreateCallSPList {
 	 * <br>SP_NAME	 : SP NAME
 	 * <br>PARAMS	 : 使用到的參數
 	 * </p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年4月17日	Tim	增加排除資料型態強制轉換的功能
 	 * <br>2024年4月26日	Tim	增加欄位function的前後文
@@ -34,7 +34,7 @@ public class CreateCallSPList {
 	 * @param	content	內容
 	 * @param	category	資料夾
 	 * @throws	Exception
-	 * @see		
+	 * @see
 	 * @return	void
 	 */
 	public static void createCallList(String category,String fileNm,String content) throws Exception {
@@ -71,6 +71,6 @@ public class CreateCallSPList {
 					+"\",\"" + m.group(2)
 					+"\"");
 		}
-		
+
 	}
 }

@@ -15,7 +15,7 @@ public class WriteFileElement {
 	public static LogTextArea tsLog;
 	public static ProgressBar progressBar;
 	public static StatusBar lblStatus;
-	
+
 	public static void init() {
 		btnStart = new JButton("開始置換");
 		tsLog = UIPanelFactory.addLogTextArea();

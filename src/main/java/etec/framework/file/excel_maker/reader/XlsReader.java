@@ -11,7 +11,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import etec.framework.file.excel_maker.util.POIUtil;
 
 public class XlsReader {
-	
+
 	public static void readLine(String path) throws IOException{
 		//讀檔
 		Workbook wb = POIUtil.read(path);

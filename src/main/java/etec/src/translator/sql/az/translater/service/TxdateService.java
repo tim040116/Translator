@@ -4,18 +4,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TxdateService {
-	
+
 	public static String easyReplace(String content) {
 		String res = content;
 //		res = toVarchar(res);
 		res = replaceLastnnTxdate(res);
 		return res;
 	}
-	
+
 //	public static String toVarchar(String content) {
 //		return content.replaceAll("'(\\$\\{\\w+\\})'","cast\\($1 as varchar\\)");
 //	}
-//	
+//
 	public static String replaceLastnnTxdate(String content){
 		StringBuffer sb = new StringBuffer();
 		Matcher m = Pattern.compile("\\$\\{(NEXT|LAST)(\\d+)(TXDATE1?)\\}").matcher(content);
@@ -34,5 +34,5 @@ public class TxdateService {
 		m.appendTail(sb);
 		return sb.toString();
 	}
-	
+
 }

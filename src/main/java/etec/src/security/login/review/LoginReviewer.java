@@ -12,7 +12,7 @@ import etec.framework.security.restriction.interfaces.Reviewer;
 import etec.src.security.login.service.CreateKeyFileService;
 
 public class LoginReviewer  implements Reviewer {
-	
+
 
 	@Override
 	public int check(Map<String,String> args) throws PermissionDeniedException {
@@ -24,7 +24,7 @@ public class LoginReviewer  implements Reviewer {
 				return -2;}
 			else if(!VersionModel.VERSION.equals(m.getVersion())){return -3;}
 			else if((new Date()).before(VersionModel.VERSION_DATE)){return -4;}
-			
+
 			else{return 1;}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -34,7 +34,7 @@ public class LoginReviewer  implements Reviewer {
 		}
 		return 0;
 	}
-	
-	
+
+
 
 }

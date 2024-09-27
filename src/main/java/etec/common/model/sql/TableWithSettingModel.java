@@ -1,11 +1,11 @@
 package etec.common.model.sql;
 
 public class TableWithSettingModel {
-	
+
 	private String clustered;
-	
+
 	private String distribution;
-	
+
 	private String partition;
 
 	public String getClustered() {
@@ -31,5 +31,5 @@ public class TableWithSettingModel {
 	public void setPartition(String partition) {
 		this.partition = partition;
 	}
-	
+
 }

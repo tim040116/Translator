@@ -19,33 +19,33 @@ import etec.src.translator.sql.td.model.TableColumnModel;
  * <p></p>
  * <h2>方法</h2>
  * <p></p>
- * 
+ *
  * <h2>異動紀錄</h2>
  * <br>2024年3月11日	Tim	建立功能
- * 
+ *
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
- * @see		
+ * @see
  */
 public class CreateSDIService {
-	
+
 	/**
 	 * <h1>產製SD</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年3月11日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	1.0.0.0
 	 * @param	fileName	檔案名稱
 	 * @param	script		程式碼
-	 * @throws	
+	 * @throws
 	 * @see
 	 * @return	void	尚未決定是否要返回
-	 * @throws IOException 
+	 * @throws IOException
 	 * */
 	public static void createSDI(File f) throws IOException {
 		String fileName = f.getName();
@@ -66,7 +66,7 @@ public class CreateSDIService {
 		 * 	3.column script
 		 * 	4.primary index 的 column
 		 * <h2>備註 ：</h2>
-		 * 	
+		 *
 		 * <h2>異動紀錄 ：</h2>
 		 * 2024年3月11日	Tim	建立邏輯
 		 * */
@@ -78,29 +78,29 @@ public class CreateSDIService {
 			String tableName = m.group(2);//target table name
 			String context	 = m.group(3);//other script
 			String primaryIndex = m.group(4);//primary index
-			
+
 			Map<String, TableColumnModel> colMap = TableColumnModel.convertToMap(context);
 			for(String index : primaryIndex.split(",")) {
-				colMap.get(index.trim().toUpperCase()).getSetting().setPrimaryIndex("Y");;
+				colMap.get(index.trim().toUpperCase()).getSetting().setPrimaryIndex("Y");
 			}
 			System.out.println();
 		}
 	}
-	
+
 	/**
 	 * <h1>清理語句</h1>
 	 * <p>為了方便之後的轉換，對語法進行初步的加工</p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年3月13日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	script	原城市
-	 * @throws	
+	 * @throws
 	 * @see
-	 * @return	
+	 * @return
 			 */
 	private static String cleanScript(String script) {
 		String res = script;
@@ -134,5 +134,5 @@ public class CreateSDIService {
 		;
 		return res;
 	}
-	
+
 }

@@ -5,7 +5,7 @@ import etec.framework.context.translater.enums.SQLTypeEnum;
 public class SQLTypeModel {
 
 	private SQLTypeEnum type;
-	
+
 	private String title;
 
 	public String getTitle() {

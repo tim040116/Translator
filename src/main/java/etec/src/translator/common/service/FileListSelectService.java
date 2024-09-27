@@ -12,7 +12,7 @@ import etec.src.translator.common.model.BasicParams;
 public class FileListSelectService {
 	//取得檔案清單
 	public static DefaultListModel<File> getFileList() throws IOException{
-		DefaultListModel<File> dlm = new DefaultListModel<File>();
+		DefaultListModel<File> dlm = new DefaultListModel<>();
 		List<File> lf = FileTool.getFileList(BasicParams.getInputPath());
 		BasicParams.setListFile(lf);
 		for (File f : lf) {

@@ -8,7 +8,7 @@ import etec.framework.security.log.service.Log;
  * @author	Tim
  * @since	2023年11月30日
  * @version	4.0.0.0
- * 
+ *
  * teradata 的sql 語法分類器
  * */
 public class TeradataClassifier {
@@ -17,14 +17,14 @@ public class TeradataClassifier {
 	 * @author	Tim
 	 * @since	2023年10月4日
 	 * 分辨SQL的類型
-	 * 
+	 *
 	 * */
 	public static SQLTypeEnum getSQLType(String sql) {
  		sql = ConvertRemarkSafely.clean(sql).trim();
  		//清除修飾詞
  		sql = sql.replaceAll("(?i)\\b(MULTISET|SET|VOLATILE|TEMP)\\b", "");
 		SQLTypeEnum res = SQLTypeEnum.OTHER;
-		
+
 		if(sql.matches("\\s*;?\\s*")) {
 			res = SQLTypeEnum.EMPTY;
 		}
@@ -71,7 +71,7 @@ public class TeradataClassifier {
 			res = SQLTypeEnum.DELETE;
 		}
 		else if(sql.matches("(?i)REPLACE\\s+VIEW\\s+[\\S\\s]+")) {
-			res = SQLTypeEnum.REPLACE_VIEW; 	
+			res = SQLTypeEnum.REPLACE_VIEW;
 		}
 		else if(sql.matches("(?i)COLLECT\\s+STATISTICS\\s+[\\S\\s]+")) {
 			res = SQLTypeEnum.COLLECT_STATISTICS;
@@ -120,6 +120,6 @@ public class TeradataClassifier {
  			Log.warn("出現無法辨識的SQL語句");
 		}
 		return res;
-		
+
 	}
 }

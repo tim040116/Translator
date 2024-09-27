@@ -14,10 +14,10 @@ import etec.common.factory.Params;
  * @since 2023/02/24
  * @version dev
  * 	log
- * 	
+ *
  * */
 public class Log {
-	
+
 	public static void info(Object content) {
 		send(Params.log.COLOR_INFO,"INFO", content);
 	}
@@ -26,7 +26,7 @@ public class Log {
 		System.out.println(sfabs.format(new Date()) + " [\033[37;4m    \033[0m] : " + content);
 	}
 	public static void warn(Object content) {
-		send(Params.log.COLOR_WARN,"WARN", content); 
+		send(Params.log.COLOR_WARN,"WARN", content);
 	}
 
 	public static void error(Exception e) {
@@ -40,10 +40,10 @@ public class Log {
 		System.out.println("------------------------------------------------------------------------------------------------");
 	}
 	private static void send(String color,String level, Object content) {
-		
+
 		if (Params.log.levelContains(level)) {
-			String log = Params.log.sf.format(new Date()) 
-					+ (Params.log.IS_COLOR?" [\033["+color+";4m" + level + "\033[0m] : ":" [" + level + "] : ") 
+			String log = Params.log.sf.format(new Date())
+					+ (Params.log.IS_COLOR?" [\033["+color+";4m" + level + "\033[0m] : ":" [" + level + "] : ")
 					+ content;
 			System.out.println(log);
 			//寫檔

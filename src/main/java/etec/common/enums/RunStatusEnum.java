@@ -2,7 +2,7 @@ package etec.common.enums;
 
 /*
  * 程式執行的狀態
- * 
+ *
  * */
 public enum RunStatusEnum {
 	START,//準備

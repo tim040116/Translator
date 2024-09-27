@@ -18,7 +18,7 @@ public class IOPathSettingListener implements ActionListener {
 
 	/*
 	 * 儲存來源及目標的路徑
-	 * 
+	 *
 	 * */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -27,7 +27,7 @@ public class IOPathSettingListener implements ActionListener {
 		DefaultListModel<File> dlm = null;
 		try {
 			dlm = FileListSelectService.getFileList();
-			
+
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  * </p>
  * <h2>異動紀錄</h2>
  * <br>2024年3月14日	Tim	建立功能
- * 
+ *
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
@@ -29,9 +29,9 @@ import java.util.regex.Pattern;
 public class TableColumnModel {
 
 	private String columnName;
-	
+
 	private String columnType;
-	
+
 	private ColumnSettingModel setting;
 
 	public TableColumnModel() {}
@@ -64,19 +64,19 @@ public class TableColumnModel {
 	/**
 	 * <h1>建立欄位的Map</h1>
 	 * <p>將欄位的語法切分，組裝並包成Map</p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年3月14日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	columnScript	CREATE TABLE語法中整段欄位的法
-	 * @throws	
+	 * @throws
 	 * @see
 	 * @return	<欄位名,物件>
 			 */
 	public static Map<String,TableColumnModel> convertToMap(String columnScript){
-		Map<String,TableColumnModel> resMap = new HashMap<String,TableColumnModel>();
+		Map<String,TableColumnModel> resMap = new HashMap<>();
 		/**
 		 * <p>功能 ：切分單行欄位資訊</p>
 		 * <p>類型 ：切分</p>

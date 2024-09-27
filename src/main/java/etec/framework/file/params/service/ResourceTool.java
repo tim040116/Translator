@@ -14,11 +14,11 @@ import main.Main;
 
 /**
  * 讀取靜態資源
- * 
+ *
  * @author Tim
  * @since 2023/04/19
  * @version 2.dev
- * 
+ *
  */
 public class ResourceTool {
 
@@ -28,12 +28,12 @@ public class ResourceTool {
 	 * @return	String
 	 * @throws	IOException,URISyntaxException
 	 * */
-	public static String readFile(String file){
+	public String readFile(String file){
 		String res = "";
 		InputStream in = Main.class.getResourceAsStream("/META-INF/"+file);
-		try (
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-		) {
+		try {
+			InputStreamReader isr = new InputStreamReader(in);
+			BufferedReader br = new BufferedReader(isr);
 			while(br.ready()) {
 				String line = br.readLine();
 				res += line;
@@ -51,7 +51,7 @@ public class ResourceTool {
 	 * @throws	IOException,URISyntaxException
 	 * */
 	public Map<String, File> readYml() throws IOException, URISyntaxException {
-		Map<String, File> ymlMap = new HashMap<String, File>();
+		Map<String, File> ymlMap = new HashMap<>();
 		ymlMap.putAll(readYml("META-INF"));
 		return ymlMap;
 	}
@@ -59,7 +59,7 @@ public class ResourceTool {
 	/**for readYml()
 	 * */
 	private Map<String, File> readYml(String path) throws IOException, URISyntaxException {
-		Map<String, File> ymlMap = new HashMap<String, File>();
+		Map<String, File> ymlMap = new HashMap<>();
 		ClassLoader classLoader = getClass().getClassLoader();
 		URL resourceUrl = classLoader.getResource(path);
 		File resourceDir = new File(resourceUrl.toURI());

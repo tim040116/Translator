@@ -9,23 +9,23 @@ import etec.framework.file.excel_maker.annotation.Key;
 import etec.framework.file.excel_maker.annotation.SheetModel;
 
 public class Worksheet<T> {
-	
+
 	/**
 	 * 活頁簿的名稱
 	 * @author	Tim
 	 * @since	1.0
 	 * */
 	private String sheetName;
-	
+
 	private String key;
-	
+
 	/**
 	 * 活頁簿
 	 * @author	Tim
 	 * @since	1.0
-	 * */ 
+	 * */
 	private Map<String,T> column;
-	
+
 	public Worksheet() throws MissingAnnotationException, IllegalArgumentException, IllegalAccessException{
 		//取得類別
 		@SuppressWarnings("unchecked")

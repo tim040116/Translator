@@ -13,10 +13,11 @@ import etec.common.model.element.WriteFileElement;
 public class WriteFileListener implements ActionListener {
 
 	private Controller con;
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		new Thread() {
+			@Override
 			public void run() {
 				try {
 					con.run();
@@ -28,7 +29,7 @@ public class WriteFileListener implements ActionListener {
 			}
 		}.start();
 	}
-	
+
 	public WriteFileListener(Controller controller) {
 		con = controller;
 	}

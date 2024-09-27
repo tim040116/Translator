@@ -14,8 +14,8 @@ public class FileListSelectListener implements ActionListener {
 
 	/*
 	 * 取得來源目錄下的所有檔案
-	 * 
-	 * 
+	 *
+	 *
 	 * */
 	@Override
 	public void actionPerformed(ActionEvent e) {

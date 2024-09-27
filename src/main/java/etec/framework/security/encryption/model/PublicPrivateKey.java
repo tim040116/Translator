@@ -5,15 +5,15 @@ import java.security.KeyPair;
 public class PublicPrivateKey {
 
 	private String publicKey;
-	
+
 	private String privateKey;
 
 	public PublicPrivateKey(KeyPair kp) {
 		publicKey  = kp.getPublic().toString();
 		privateKey = kp.getPrivate().toString();
-		
+
 	}
-	
+
 	public String getPublicKey() {
 		return publicKey;
 	}
@@ -29,5 +29,5 @@ public class PublicPrivateKey {
 	public void setPrivateKey(String privateKey) {
 		this.privateKey = privateKey;
 	}
-	
+
 }

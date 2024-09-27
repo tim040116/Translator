@@ -2,18 +2,18 @@ package etec.common.model.sql;
 
 /**
  * create table 的欄位
- * 
+ *
  * @author Tim
  * @version dev
  * @since 2023/04/06
- * 
+ *
  */
 public class TableColumnModel {
 
 	private String columnName;
-	
+
 	private String columnType;
-	
+
 	private CreateColumnSettingModel setting = new CreateColumnSettingModel();
 
 	public String getColumnName() {
@@ -39,5 +39,5 @@ public class TableColumnModel {
 	public void setSetting(String setting) {
 		this.setting = new CreateColumnSettingModel(setting);
 	}
-	
+
 }

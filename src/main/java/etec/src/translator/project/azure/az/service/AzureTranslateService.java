@@ -19,12 +19,12 @@ import etec.src.translator.sql.az.translater.AzTranslater;
  * @author	Tim
  * @since	2023年10月4日
  * @version	3.3.0.0
- * 
+ *
  * 全家的城市轉換
  * */
 public class AzureTranslateService {
-	
-	
+
+
 	/**
 	 * <h1>執行入口</h1>
 	 * <p>
@@ -32,11 +32,11 @@ public class AzureTranslateService {
 	 * <br>沒有前後格式，單純用分號區隔
 	 * <br>雙斜線為註解，會先清除再進行轉換
 	 * </p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年06月17日	Tim	建立功能
 	 * @author Tim
-	 * @since 2024年6月17日	
+	 * @since 2024年6月17日
 	 * @param context 檔案的內容
 	 * @see
 	 * @return
@@ -88,7 +88,7 @@ public class AzureTranslateService {
 			}
 			return sb.toString();
 		});
-		
+
 		/*將bteq語法清除*/
 		//newContext = newContext.replaceAll("\\r\\n\\..*", "");
 //		newContext = GreenPlumTranslater.dql.changeMultAnalyze(newContext);

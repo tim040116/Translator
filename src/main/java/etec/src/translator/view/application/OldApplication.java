@@ -7,8 +7,9 @@ import etec.src.translator.view.listener.WriteFileListener;
 
 public class OldApplication implements TranslatorApplication{
 
+	@Override
 	public void run() {
-		
+
 		WriteFileListener lr = new WriteFileListener(new DDIMWriteFileController());
 		new IndexFrame(lr);
 	}

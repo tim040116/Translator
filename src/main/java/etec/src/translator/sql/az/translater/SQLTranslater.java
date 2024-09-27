@@ -10,16 +10,16 @@ import etec.src.translator.sql.az.translater.service.DataTypeService;
 import etec.src.translator.sql.az.translater.service.TxdateService;
 
 public class SQLTranslater {
-	
+
 
 	/**
 	 * 簡單轉換
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	2023年10月17日
 	 * @param	String	SQL語句
 	 * @return	String	轉換後的SQL語句
-	 * @throws SQLFormatException 
+	 * @throws SQLFormatException
 	 * */
 	public static String easyReplaceSelect(String sql) throws SQLTranslateException {
 		String res = sql;
@@ -72,12 +72,12 @@ public class SQLTranslater {
 			String rt = convertDecode(t);
 			return rt;
 		});
-		
+
 		return res;
 	}
-	/**	
+	/**
 	 * <h1>轉換decode語法<h1>
-	 * 
+	 *
 	 * <br>azure 不支援decode語法
 	 * <br>於是要改成case when
 	 * <br>
@@ -91,14 +91,14 @@ public class SQLTranslater {
 	 * <br>az語法:
 	 * <br>	CASE WHEN target_col = condition THEN col ELSE def_col END
 	 * <br>
-	 * 
-	 * 
+	 *
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	String	SQL語句
 	 * @return	String	轉換後的SQL語句
-	 * @throws SQLFormatException 
-	 * 
+	 * @throws SQLFormatException
+	 *
 	 * <br>2023/12/28	Tim	改使用 ConvertFunctionsSafely 處理
 	 * <br>2024/01/02	Tim	解決空白造成的誤判，改用Matcher處理
 	 * <br>2024/08/21	Tim	增加超過4個參數的情境
@@ -116,7 +116,7 @@ public class SQLTranslater {
 		 * 	3.參數3
 		 *  4.參數4
 		 * <h2>備註 ：</h2>
-		 * 	
+		 *
 		 * <h2>異動紀錄 ：</h2>
 		 * 2024年6月14日	Tim	建立邏輯
 		 * */
@@ -130,7 +130,7 @@ public class SQLTranslater {
 			String[] arrParam = m.group(2).split("\\s*,\\s*");
 			String strElse = m.group(3);
 			for (int i = 0; i < arrParam.length; i+=2) {
-				rpm += "\r\n\tWHEN "+targetCol+" = "+arrParam[i]+" THEN "+arrParam[i+1]; 
+				rpm += "\r\n\tWHEN "+targetCol+" = "+arrParam[i]+" THEN "+arrParam[i+1];
 			}
 			if(strElse!=null) {
 				rpm += "\r\n\tELSE "+strElse;
@@ -141,8 +141,8 @@ public class SQLTranslater {
 		m.appendTail(sb);
 		return sb.toString();
 	}
-	
-	
+
+
 	// zeroifnull
 	public static String changeZeroifnull(String selectSQL) {
 		String result = selectSQL;
@@ -152,7 +152,7 @@ public class SQLTranslater {
 		result = result.replaceAll("(?i)zeroifnull\\s*\\(([^()]+)?\\)", "ISNULL($1,0)");
 		return result;
 	}
-		
+
 	// char index
 	public static String changeCharindex(String sql) {
 		//20240618 Tim	優化
@@ -160,7 +160,7 @@ public class SQLTranslater {
 		res = res.replaceAll("(?i)\\bINDEX\\s*\\(([^,]+),([^()]+)\\)","CHARINDEX\\($2,$1\\)");
 		return res;
 	}
-		
+
 	/**
 	 * <h1>TRUNC</h1>
 	 * <p>功能說明
@@ -175,15 +175,15 @@ public class SQLTranslater {
 	 * <br>TRUNC(A.BDATE,\d+) -> ROUND(COL_NM, \d+, 1)
 	 * <br>若只有一個參數則\d+ = 0
 	 * </p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年8月26日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	sql
 	 * @throws	e
-	 * @see		
+	 * @see
 	 * @return	return_type
 			 */
 	public static String changeTrunc(String sql) {
@@ -191,7 +191,7 @@ public class SQLTranslater {
 		res = res
 			//trunc CAST(A.TIME_RANGE/10000 AS INTEGER)
 			//數字截斷
-			.replaceAll("(?i)\\bTRUNC\\(([^(),]+)\\)", "ROUND\\($1,0,1\\)")	
+			.replaceAll("(?i)\\bTRUNC\\(([^(),]+)\\)", "ROUND\\($1,0,1\\)")
 			.replaceAll("(?i)\\bTRUNC\\(([^(),]+),([\\s\\d.]+)\\)", "ROUND\\($1,$2,1\\)")
 			//日期截斷
 			.replaceAll("(?i)\\bTRUNC\\s*\\(([^,()]+),\\s*'(YEAR|MONTH|DAY)'\\s*\\)", "DATEADD\\($2, DATEDIFF\\(MONTH, 0, $1\\), 0\\)")

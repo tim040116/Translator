@@ -26,8 +26,9 @@ public class FileTool {
 		List<File> lf = new ArrayList<>();
 		// 取得標案的根目錄
 		File rp = new File(rootPath);
-		if (rp == null || !rp.isDirectory())
+		if (rp == null || !rp.isDirectory()) {
 			throw new IOException("系統搜尋不到文件的根目錄" + rootPath);
+		}
 		// 取得所有檔案資料
 		return getInsideFileList(lf, rp);
 	}
@@ -129,8 +130,8 @@ public class FileTool {
 	private static List<File> readInsideFileList(List<File> lf, File p) throws IOException {
 		// 取得所有檔案資料
 		File bidDoc[] = p.listFiles();
-		for (int i = 0; i < bidDoc.length; i++) {
-			String fileName = bidDoc[i].getName();
+		for (File element : bidDoc) {
+			String fileName = element.getName();
 //			System.out.println("讀取檔案： " + fileName);
 			if (fileName.lastIndexOf(".meta") > 0) {
 				continue;
@@ -142,10 +143,10 @@ public class FileTool {
 				continue;
 			} else if (fileName.equals("_structure")) {
 				continue;
-			} else if (bidDoc[i].isDirectory()) {
-				lf = readInsideFileList(lf, bidDoc[i]);
-			} else if (bidDoc[i].isFile()) {
-				lf.add(bidDoc[i]);
+			} else if (element.isDirectory()) {
+				lf = readInsideFileList(lf, element);
+			} else if (element.isFile()) {
+				lf.add(element);
 			} else {
 				throw new IOException("搜尋到的文件並非目錄或檔案，請稍後再試");
 			}
@@ -158,8 +159,8 @@ public class FileTool {
 	private static List<File> getInsideFileList(List<File> lf, File p) throws IOException {
 		// 取得所有檔案資料
 		File bidDoc[] = p.listFiles();
-		for (int i = 0; i < bidDoc.length; i++) {
-			String fileName = bidDoc[i].getName();
+		for (File element : bidDoc) {
+			String fileName = element.getName();
 //			System.out.println("讀取檔案： " + fileName);
 			if (fileName.lastIndexOf(".meta") > 0) {
 				continue;
@@ -171,10 +172,10 @@ public class FileTool {
 				continue;
 			} else if (fileName.equals("_structure")) {
 				continue;
-			} else if (bidDoc[i].isDirectory()) {
-				lf = getInsideFileList(lf, bidDoc[i]);
-			} else if (bidDoc[i].isFile()) {
-				lf.add(bidDoc[i]);
+			} else if (element.isDirectory()) {
+				lf = getInsideFileList(lf, element);
+			} else if (element.isFile()) {
+				lf.add(element);
 			} else {
 				throw new IOException("搜尋到的文件並非目錄或檔案，請稍後再試");
 			}
@@ -187,20 +188,20 @@ public class FileTool {
 	 * <h1>刪除檔案</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年4月29日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * @param	
+	 * @param
 	 * @throws	e
-	 * @see		
+	 * @see
 	 * @return	void
 			 */
 	public static void deleteFile(File file) {
 		if(file.exists()) {//判斷路徑是否存在
-			if(file.isFile()){//boolean isFile():測試此抽象路徑名錶示的檔案是否是一個標準檔案。 
+			if(file.isFile()){//boolean isFile():測試此抽象路徑名錶示的檔案是否是一個標準檔案。
 				file.delete();
 			}else{//不是檔案，對於資料夾的操作
 				//儲存 路徑D:/1/新建資料夾2  下的所有的檔案和資料夾到listFiles陣列中
@@ -216,7 +217,7 @@ public class FileTool {
 	}
 //	/**
 //	 * 判斷檔案的編碼
-//	 * 
+//	 *
 //	 * */
 //	public static Charset detectCharset(String fileName) throws IOException {
 //		File file = new File(fileName);
@@ -227,7 +228,7 @@ public class FileTool {
 //        BufferedReader br = new BufferedReader(isr);
 //        int ch;
 //        while ((ch = br.read()) != -1) {
-//        	
+//
 //            if (Character.charCount(ch) > 1) {
 //                int length = Character.charCount(ch);
 //                charset = length==2?Charset.forName("BIG5"):Charset.forName("UTF-8");

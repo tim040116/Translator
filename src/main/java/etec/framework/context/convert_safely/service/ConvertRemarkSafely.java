@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 
+ *
  * <h1>轉換語句時排除註解</h1>
  * <br>因應SQL語法中很多在方法中包覆其他方法的語法
  * <br>避免在取代的時候受到小括號跟逗號的影響導致轉換錯誤
@@ -21,17 +21,17 @@ import java.util.regex.Pattern;
  * @version	4.0.0.0
  * */
 public class ConvertRemarkSafely {
-	
+
 	public static long idRemarkDash = 0;
-	
+
 //	String regt = "^(?:\\s*--.*|\\/\\*[\\S\\s]+?\\*\\/)+\\s*";
-	
+
 	private static Pattern p = Pattern.compile("(?mi)(?:^\\s*\\#.*)|--.*|\\/\\*[\\S\\s]+?\\*\\/");
-	
-	
+
+
 	/**
 	 * <h1>轉換語句時排除註解</h1>
-	 * 
+	 *
 	 * <br>先把註解加密，最後再還原
 	 * @author	Tim
 	 * @since	4.0.0.0
@@ -42,7 +42,7 @@ public class ConvertRemarkSafely {
 	public static String savelyConvert(String script,Function<String, String> function) {
 		String res = script;
 		String title = "";
-		
+
 		/**
 		 * <p>功能 ：先排除最前端的註解</p>
 		 * <p>類型 ：搜尋</p>
@@ -56,15 +56,15 @@ public class ConvertRemarkSafely {
 		 * <h2>異動紀錄 ：</h2>
 		 * 2024年5月23日	Tim	建立邏輯
 		 * */
-		
+
 //		Matcher mt = Pattern.compile(regt).matcher(res);
 //		if(mt.find()) {
 //			title = mt.group(0);
 //			res = res.replace(mt.group(0), "");
 //		}
-		
+
 		StringBuffer sb = new StringBuffer();
-		Map<String,String> mapRemark = new HashMap<String,String>();
+		Map<String,String> mapRemark = new HashMap<>();
 		Matcher m = p.matcher(script);
 		while (m.find()) {
 //			Log.debug("找到註解"+idRemarkDash);
@@ -76,7 +76,7 @@ public class ConvertRemarkSafely {
 		}
 		m.appendTail(sb);
 		res = function.apply(sb.toString());
-		
+
 		StringBuffer sb2 = new StringBuffer();
 		Matcher m2 = Pattern.compile("<ConvertRemarkSafely_[^>]+?>").matcher(res);
 		while(m2.find()) {
@@ -92,7 +92,7 @@ public class ConvertRemarkSafely {
 //		;
 		return title+res;
 	}
-	
+
 	public static String markName(String type,long i) {
 		return markName(type,Long.toString(i));
 	}
@@ -109,7 +109,7 @@ public class ConvertRemarkSafely {
 	public static boolean match(String reg,String str) {
 		return str.replaceAll(markName("\\w+","\\d+"), "").trim().matches(reg);
 	}
-	
+
 	public static String clean(String script) {
 		return script.replaceAll(markName("[^_>]+","[^_>]+"), "");
 	}

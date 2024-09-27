@@ -3,19 +3,19 @@ package etec.src.translator.common.model;
 import java.util.List;
 
 public class SFSPModel {
-	
+
 	private String script;
-	
+
 	private String name;
-	
+
 	private String header;
-	
+
 	private String context;
-	
+
 	private String type;
-	
+
 	private List<String> params;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -63,5 +63,5 @@ public class SFSPModel {
 	public void setContext(String context) {
 		this.context = context;
 	}
-	
+
 }

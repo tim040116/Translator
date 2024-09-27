@@ -22,9 +22,9 @@ import etec.src.translator.view.listener.FastTransduceListener;
  * @author	Tim
  * @since	2023年11月8日
  * @version	3.4.0.1
- * 
+ *
  * 快速轉換的UI介面
- * 
+ *
  * */
 public class FastTransducePnl  extends JPanel {
 
@@ -32,7 +32,7 @@ public class FastTransducePnl  extends JPanel {
 	 * 設定產入籍產出的設定
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	//物件
 	public JTextArea	txtOldScript;//輸入欄位
 	public JTextArea	txtNewScript;//輸出欄位
@@ -41,7 +41,7 @@ public class FastTransducePnl  extends JPanel {
 	public StatusBar	statusBar;//狀態列
 	public JPanel		pnlCtrl;//選項區
 	public JCheckBox 	chbIsSetToVarchar;//是否轉換成字串
-	public Map<String,JRadioButton>	maprdo = new HashMap<String,JRadioButton>();
+	public Map<String,JRadioButton>	maprdo = new HashMap<>();
 //	public JRadioButton rdoAZ;
 //	public JRadioButton rdoMS;
 //	public JRadioButton rdoGP;
@@ -51,7 +51,7 @@ public class FastTransducePnl  extends JPanel {
 
 	public FastTransducePnl(Controller con) {
 		init(con);
-		
+
 	}
 
 	private void init(Controller con) {
@@ -108,21 +108,21 @@ public class FastTransducePnl  extends JPanel {
 		add(pnlInfo);
 		add(new JScrollPane(txtNewScript));
 	}
-	
+
 	/**
 	 * <h1>增加轉換的SQL環境選項</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年2月20日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	String	參數資料
 	 * @param	String	radio顯示文字
-	 * @throws	
-	 * @exception	
+	 * @throws
+	 * @exception
 	 * @see
 	 * @return	void
 			 */
@@ -133,5 +133,5 @@ public class FastTransducePnl  extends JPanel {
 		grpSQLType.add(rdo);
 		pnlCtrl.add(rdo);
 	}
-	
+
 }

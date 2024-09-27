@@ -24,52 +24,52 @@ import etec.framework.file.excel_maker.model.Worksheet;
  * 	<br>static String {@link #}
  * <h2>異動紀錄</h2>
  * <br>2024年6月12日	Tim	建立功能
- * 
+ *
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
- * @see		
+ * @see
  */
 public class CSVMaker{
 
 	private boolean isWriteTitle = true;
-	
-	private Charset charset = Charset.forName("UTF-8"); 
-	
+
+	private Charset charset = Charset.forName("UTF-8");
+
 	private File file;
-	
+
 	private BufferedWriter bw;
-	
+
 	@SuppressWarnings("rawtypes")
-	private Map<String,Worksheet> mapSheet = new HashMap<String,Worksheet>();
-	
+	private Map<String,Worksheet> mapSheet = new HashMap<>();
+
 	/**
 	 * 活躍頁籤
 	 * */
 	private String activeSheetName = "";
-	
+
 	/**
 	 * <h1></h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年6月12日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	domain	包含{@link SheetModel}的物件
 	 * @throws	MissingAnnotationException
-	 * @see		
+	 * @see
 	 * @return	void
-	 * @throws IOException 
+	 * @throws IOException
 			 */
 	public void addLine(Object domain) throws MissingAnnotationException, IOException {
-		
+
 		bw.write("");
 	}
-	
-	
+
+
 	public CSVMaker(String fileName) throws MissingAnnotationException, IOException{
 		//取得類別
 		@SuppressWarnings("unchecked")
@@ -86,7 +86,7 @@ public class CSVMaker{
 		}
 		bw = Files.newBufferedWriter(Paths.get(fileName), charset, StandardOpenOption.APPEND);
 	}
-	
+
 	/**
 	 * <h1>進入指定活頁簿</h1>
 	 * <p>
@@ -94,15 +94,15 @@ public class CSVMaker{
 	 * <br>若此頁籤上不存在，則會建立一個新的頁籤
 	 * </p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年6月19日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	1.0.0.0
 	 * @param	enclosing_method_arguments
 	 * @throws	e
-	 * @see		
+	 * @see
 	 * @return	return_type
 	 */
 	public <T> void findSheet(Class<T> c) throws MissingAnnotationException, IllegalArgumentException, IllegalAccessException {
@@ -114,23 +114,23 @@ public class CSVMaker{
 		activeSheetName = c.getAnnotation(SheetModel.class).sheetName();
 		//如果沒有註冊該活頁簿，則新建立一個
 		if(!mapSheet.containsKey(activeSheetName)) {
-			mapSheet.put(activeSheetName, new Worksheet<T>());
+			mapSheet.put(activeSheetName, new Worksheet<>());
 		}
-		
-		
+
+
 	}
-	
+
 	public void close() throws IOException {
 		if (bw == null) {
             return;
         }
 		bw.close();
 	}
-	
+
 	public void setWriteTitle(boolean isWriteTitle) {
 		this.isWriteTitle = isWriteTitle;
 	}
-	
+
 	public void setCharset(Charset charset) {
 		this.charset = charset;
 	}

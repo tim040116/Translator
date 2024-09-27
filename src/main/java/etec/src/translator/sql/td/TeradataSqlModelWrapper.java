@@ -16,33 +16,33 @@ import etec.framework.context.translater.enums.MultiSetEnum;
 
 /**
  * 將 teradata 的語法 包成物件
- * 
+ *
  * @author Tim
  * @version dev
  * @since 2023/04/06
- * 
+ *
  */
 public class TeradataSqlModelWrapper{
 
 	/**
 	 * <h1>找出所有CREATE TABLE 語句並轉成ModelSQL語句</h1>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年4月8日	Tim	建立功能
 	 * <br>2024年4月8日	Tim	暫時將format歸類在Other裡面
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * @param	
-	 * @throws	
+	 * @param
+	 * @throws
 	 * @see
 	 * @return	List<CreateTableModel>
 	 */
 	public List<CreateTableModel> createTable(String sql) {
 		sql = sql.replaceAll("\"REQUEST TEXT\"", "").trim();
 		String tempsql = sql.toUpperCase(Locale.TAIWAN).replaceAll("\\s+", " ").replaceAll("\\\"","");
-		
-		List<CreateTableModel> res = new ArrayList<CreateTableModel>();
+
+		List<CreateTableModel> res = new ArrayList<>();
 		/**
 		 * <p>功能 ：拆解Create table 語法</p>
 		 * <p>類型 ：搜尋</p>
@@ -148,7 +148,7 @@ public class TeradataSqlModelWrapper{
 	 * @since 2023/04/28
 	 * @param String select table的sql語句
 	 * @return SelectTableModel select table的物件
-	 * 
+	 *
 	 */
 	public SelectTableModel selectTable(String sql) {
 		String step = "";
@@ -217,7 +217,7 @@ public class TeradataSqlModelWrapper{
 				}
 				break;
 			case "JOIN":
-				
+
 				break;
 			case "GROUP_BY":
 				temp += c;

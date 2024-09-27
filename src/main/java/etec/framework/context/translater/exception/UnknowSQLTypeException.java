@@ -10,12 +10,12 @@ import etec.framework.context.translater.enums.SQLTypeEnum;
 public class UnknowSQLTypeException extends SQLTranslateException{
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	private String script = "";
-	
+
 	public UnknowSQLTypeException(String script,SQLTypeEnum type) {
         super("Unknow sql type : "+script);
         this.script = script;
@@ -24,6 +24,6 @@ public class UnknowSQLTypeException extends SQLTranslateException{
 	public String getErrorScript() {
 		return script;
 	}
-	
-	
+
+
 }

@@ -1,15 +1,15 @@
 package etec.common.model.sql;
 
 public class CreateIndexModel {
-	
+
 	private boolean isPrimary;
-	
+
 	private boolean isUnique;
-	
+
 	private String[] column;
 
 	private String str;
-	
+
 	public boolean isPrimary() {
 		return isPrimary;
 	}
@@ -17,12 +17,13 @@ public class CreateIndexModel {
 	public void setStr(String s) {
 		this.str = s;
 	}
-	
+
+	@Override
 	public String toString() {
 		return str;
-		
+
 	}
-	
+
 	public void setPrimary(boolean isPrimary) {
 		this.isPrimary = isPrimary;
 	}

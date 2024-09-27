@@ -14,7 +14,7 @@ public class LogParams {
 
 	// log的等級
 	public final String PRINT_LEVEL;
-	private final List<String> arrlv = new ArrayList<String>();
+	private final List<String> arrlv = new ArrayList<>();
 	public final boolean IS_WRITE_FILE;
 	public final String LOG_FILE_NAME;
 	// 時間的格式
@@ -39,7 +39,7 @@ public class LogParams {
 		this.COLOR_ERROR = map.get("COLOR_ERROR");
 		this.COLOR_INFO = map.get("COLOR_INFO");
 		this.COLOR_WARN = map.get("COLOR_WARN");
-		
+
 		switch (PRINT_LEVEL) {
 			case "DEBUG":
 				arrlv.add("DEBUG");
@@ -53,9 +53,9 @@ public class LogParams {
 				break;
 		}
 	}
-	
+
 	public boolean levelContains(String str) {
 		return arrlv.contains(str);
 	}
-	
+
 }

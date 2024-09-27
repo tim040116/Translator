@@ -5,23 +5,23 @@ import etec.common.utils.RegexTool;
 public class CreateColumnSettingModel {
 
 	private String title;
-	
+
 	private String format;
-	
+
 	private String defaultData;
-	
+
 	private String casespecific;
-	
+
 	private String notNull;
-	
+
 	private String character;
-	
+
 	private String other;
 
 	private String setting;
-	
+
 	public CreateColumnSettingModel() {}
-	
+
 	public CreateColumnSettingModel(String setting) {
 		String tmpsetting = setting.toUpperCase();
 		this.setting = setting;
@@ -40,10 +40,11 @@ public class CreateColumnSettingModel {
 		tmpsetting = tmpsetting.replaceAll("CHARACTER\\s+SET\\s+\\S+","");
 		this.other = tmpsetting.replaceAll("\\s+", " ").replaceAll("^,\\s*", "");
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
+	@Override
 	public String toString() {
 		return setting;
 	}
@@ -98,6 +99,6 @@ public class CreateColumnSettingModel {
 	public void setOther(String other) {
 		this.other = other;
 	}
-	
-	
+
+
 }

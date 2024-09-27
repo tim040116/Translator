@@ -23,7 +23,7 @@ public class IOPathSettingElement {
 	public static JTextField tfOp;
 	public static JLabel lblIp;
 	public static JLabel lblOp;
-	
+
 	public static void init() {
 		fcIp = new JFileChooser();
 		fcOp = new JFileChooser();

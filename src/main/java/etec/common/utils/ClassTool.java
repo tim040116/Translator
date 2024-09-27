@@ -17,14 +17,14 @@ import etec.framework.ui.annotation.Application;
  * <p></p>
  * <h2>方法</h2>
  * <p></p>
- * 
+ *
  * <h2>異動紀錄</h2>
  * <br>2024年3月5日	Tim	建立功能
- * 
+ *
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
- * @see		
+ * @see
  */
 public class ClassTool {
 
@@ -33,7 +33,7 @@ public class ClassTool {
 		String packageName = "";
 		String packageDirName = "";
 		Enumeration<URL> dirs;
-		List<Class> clazzs = new ArrayList<Class>();
+		List<Class> clazzs = new ArrayList<>();
 		try {
 			dirs = Thread.currentThread().getContextClassLoader().getResources(packageDirName);
 			while(dirs.hasMoreElements()) {
@@ -51,15 +51,15 @@ public class ClassTool {
 		}
 		return clazzs;
 	}
-	
+
 //	https://blog.51cto.com/u_15344989/5012608
-	
+
 	public static void findClassInPackageByFile(String packageName,String filePath,final boolean recursive,List<Class> clazzs) {
 		File dir = new File(filePath);
 		if(!dir.exists()||!dir.isDirectory()) {
 			return;
 		}
-		
+
 		//在目錄下找到所有檔案並進行條件過濾
 		File[] dirFiles = dir.listFiles(new FileFilter() {
 
@@ -69,9 +69,9 @@ public class ClassTool {
 				boolean acceptClass = file.getName().endsWith(".class");
 				return acceptDir||acceptClass;
 			}
-			
+
 		});
-		
+
 		for(File file : dirFiles) {
 			if(file.isDirectory()) {
 				findClassInPackageByFile(packageName+"."+file.getName(),file.getAbsolutePath(),recursive,clazzs);

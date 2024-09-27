@@ -13,39 +13,39 @@ import etec.src.translator.sql.td.TeradataSqlModelWrapper;
 
 /**
  * 儲存建立SDI的功能
- * 
+ *
  * */
 public class CreateSDMService {
-	
+
 
 	/**
 	 * @author	Tim
 	 * @since	2023年9月15日
-	 * 
+	 *
 	 * SD檔案製作
 	 * 只能處理CREATE TABLE語法
 	 * 產生SDI.csv 紀錄每個資料表中各欄位的設定
-	 * 
+	 *
 	 * */
 	public static String createSD(String fileName,String content) throws IOException {
 		String result = "Success";
 		String sdMainFileName = BasicParams.getOutputPath()+"list\\SDI_MAIN.csv";//列出所有檔案
 		String sdDetailFileName = BasicParams.getOutputPath()+"list\\SDI_DETAIL.csv";//列出所有檔案
-		
+
 		File sdMainFile = new File(sdMainFileName);
 		sdMainFile.getParentFile().mkdirs();
 		if (!sdMainFile.exists()) {
 			FileTool.addFile(sdMainFileName,"\"FILE_NAME\",\"DB_NAME\",\"TABLE_NAME\",\"SET_TABLE\",\"INDEX\"");//路徑,檔名,段落,方法名
         }
-		
+
 		File sdDetailFile = new File(sdDetailFileName);
 		sdDetailFile.getParentFile().mkdirs();
 		if (!sdDetailFile.exists()) {
 			FileTool.addFile(sdDetailFileName ,"\"DB_NAME\",\"TABLE_NAME\",\"COLUMN_NAME\",\"COLUMN_TYPE\",\"CHARACTER\",\"CASESPECIFIC\",\"TITLE\",\"DEFAULT\",\"NOT_NULL\",\"OTHER\"");//路徑,檔名,類型,資料表名
-			
+
 		}
 
-        //將Create table語法 轉成 CreateTableModel 物件 
+        //將Create table語法 轉成 CreateTableModel 物件
 		TeradataSqlModelWrapper wp = new TeradataSqlModelWrapper();
 		List<CreateTableModel> lstcm =  wp.createTable(content.replaceAll("\"Request Text\"",""));
 		for(CreateTableModel cm : lstcm) {
@@ -73,7 +73,7 @@ public class CreateSDMService {
 				if(!"".equals(col.getSetting().getFormat())) {
 					other +=  " FORMAT '" + col.getSetting().getFormat()+ "' ";
 				}
-				FileTool.addFile(sdDetailFileName,																
+				FileTool.addFile(sdDetailFileName,
 						  "\""+dbNm
 						+ "\",\""+tableNm
 						+ "\",\""+colNm
@@ -94,9 +94,9 @@ public class CreateSDMService {
 					+ "\",\""+index.trim()
 					+ "\"");
 		}
-		
+
 		return result;
 	}
-	
+
 
 }

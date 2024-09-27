@@ -19,8 +19,8 @@ public class WriteFilePnl extends JPanel {
 	// 物件
 
 	/**
-	 * @param	listener	
-	 * 
+	 * @param	listener
+	 *
 	 * */
 	public WriteFilePnl(ActionListener listener) {
 		init(listener);

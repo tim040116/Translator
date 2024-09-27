@@ -4,7 +4,7 @@ package etec.framework.context.translater.enums;
  * @author	Tim
  * @since	2023年10月4日
  * @version	3.3.0.0
- * 
+ *
  * SQL的類型
  * */
 public enum SQLTypeEnum {

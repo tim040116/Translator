@@ -8,28 +8,28 @@ import etec.src.translator.sql.gp.translater.service.DataTypeService;
 import etec.src.translator.sql.gp.translater.service.UnpivotService;
 
 /**
- * 
- * 
+ *
+ *
  * td 轉 gp 通用語法轉換
- * 
+ *
  * <h2>常見TD語法</h2>
  * <br>column_name(CHAR(8))	TD語法支援強制轉換資料型態
- * 
- * 
+ *
+ *
  * <br><br><h2>常見GP語法</h2>
  * <br>INTERVAL	時間間隔，為一種資料型態，用於時間運算，並可以藉由後綴詞限制儲存內容
- * 
+ *
  * @author	Tim
  * @since	4.0.0.0
  * @version	4.0.0.0
  * */
 public class SQLTranslater {
-	
+
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * <h1>轉換SQL語法</h1><br>
-	 * 
+	 *
 	 * <br>NVL 轉成 COALESCE
 	 * <br>MINUS 轉成 EXCEPT
 	 * <br>SEL 轉成 SELECT
@@ -44,21 +44,21 @@ public class SQLTranslater {
 	 * <br>CHARACTERS|CHAR|CHARACTER_LENGTH|LENGTH改成LENGTH
 	 * <br>INSTR改成POSITION
 	 * <br>ISNULL改成COALESCE
-	 * <br>LIKE ANY('','','') 轉成 LIKE ANY(ARRAY['','',''])	
-	 * <br>日期運算轉換 
+	 * <br>LIKE ANY('','','') 轉成 LIKE ANY(ARRAY['','',''])
+	 * <br>日期運算轉換
 	 * <br> {@link DataTypeService#changeAddMonths(String)}
 	 * <br> {@link DataTypeService#changeDateFormat(String)}
 	 * <br>DATE 轉成 CURRENT_DATE
 	 * <br>UNPIVOT語法轉換
 	 * <br> {@link UnpivotService#changeTD_UNPIVOT(String)}
 	 * <br>	{@link UnpivotService#changeUNPIVOT(String)}
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年5月2日	Tim	建立功能
 	 * <br>2024年5月2日	Tim	開通轉換日期 6 CURRENT_DATE
 	 * <br>2024年5月7日	Tim	增加AVG,Character,INSTR,ISNULL
 	 * @author	Tim
-	 * @throws SQLFormatException 
+	 * @throws SQLFormatException
 	 * @since	4.0.0.0
 	 * @see	DataTypeService
 	 * @see	UnpivotService
@@ -90,7 +90,7 @@ public class SQLTranslater {
 				.replaceAll("(?i)ZEROIFNULL\\s*\\(([^\\)]+)\\)", "COALESCE\\($1,0\\)")//ZEROIFNULL改成COALESCE
 				.replaceAll("(?i)NULLIFZERO\\s*\\(([^\\)]+)\\)", "NULLIF\\($1,0\\)")//NullIfZero改成NULLIF
 				.replaceAll("(?i)\\bINSTR\\s*\\(([^,]+),([^\\)]+)\\)", "POSITION\\($2 IN $1\\)")//INSTR
-				.replaceAll("(?i)\\bLIKE\\s+(ANY|ALL)\\s*\\(\\s*('[^']+'(\\s*\\,\\s*'[^']+')+)\\s*\\)", "LIKE $1 \\(ARRAY[$2])")//LIKE ANY('','','') >> LIKE ANY(ARRAY['','',''])	
+				.replaceAll("(?i)\\bLIKE\\s+(ANY|ALL)\\s*\\(\\s*('[^']+'(\\s*\\,\\s*'[^']+')+)\\s*\\)", "LIKE $1 \\(ARRAY[$2])")//LIKE ANY('','','') >> LIKE ANY(ARRAY['','',''])
 				.replaceAll("(?i)\\bEXTRACT\\s*\\([^()]+\\)", "CAST\\($0 AS INT\\)")
 				.replaceAll("(?i)CAST\\((CAST\\(EXTRACT\\s*\\([^()]+\\) AS INT\\)) AS INT\\)", "$1")
 			;
@@ -142,15 +142,15 @@ public class SQLTranslater {
 	 * <h1>IN語法轉換</h1>
 	 * <p>僅限單一值的情況下，IN語法可以省略括號</p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年5月28日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * @param	
-	 * @throws	
-	 * @see		
+	 * @param
+	 * @throws
+	 * @see
 	 * @return	String
 	 */
 	public String changeIn(String sql){
@@ -158,7 +158,7 @@ public class SQLTranslater {
 		res = res.replaceAll("(?i)\\bIN\\s+([^\\s(']\\S+|'[^']+')", "IN \\($1\\)");
 		res = res.replaceAll(Mark.MAHJONG_BLACK+Mark.MAHJONG_BLACK+Mark.MAHJONG_BLACK, "''")
 		;
-		
+
 		return res;
 	}
 

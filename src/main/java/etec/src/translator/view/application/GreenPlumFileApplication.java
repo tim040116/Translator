@@ -5,6 +5,7 @@ import etec.src.translator.project.greenplum.gp.controller.GreenPlumFileControll
 import etec.src.translator.view.frame.SearchFunctionFrame;
 
 public class GreenPlumFileApplication  implements TranslatorApplication{
+	@Override
 	public void run() {
 		new SearchFunctionFrame("Green Plum 測試",new GreenPlumFileController());
 	}

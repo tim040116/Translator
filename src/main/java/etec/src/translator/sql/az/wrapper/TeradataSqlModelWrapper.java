@@ -12,11 +12,11 @@ import etec.framework.context.translater.enums.MultiSetEnum;
 
 /**
  * 將 teradata 的語法 包成物件
- * 
+ *
  * @author Tim
  * @version dev
  * @since 2023/04/06
- * 
+ *
  */
 public class TeradataSqlModelWrapper{
 
@@ -25,7 +25,7 @@ public class TeradataSqlModelWrapper{
 	 * @since 2023/04/06
 	 * @param String create table的sql語句
 	 * @return CreateTableModel create table的物件
-	 * 
+	 *
 	 */
 	public CreateTableModel createTable(String sql) {
 		sql = sql.replaceAll("\"REQUEST TEXT\"", "").trim();
@@ -94,7 +94,7 @@ public class TeradataSqlModelWrapper{
 				if("'".equals(c)) {
 					flag = !flag;
 				}
-				if ((",".equals(c) && parenthesesCnt == 1 || parenthesesCnt == 0)&&flag==false) {
+				if ((",".equals(c) && parenthesesCnt == 1 || parenthesesCnt == 0)&&!flag) {
 					TableColumnModel col = new TableColumnModel();
 					String[] arCol = temp.replaceAll("^,\\s+", "").trim().split(" ");
 					col.setColumnName(arCol[0]);
@@ -169,7 +169,7 @@ public class TeradataSqlModelWrapper{
 	 * @since 2023/04/28
 	 * @param String select table的sql語句
 	 * @return SelectTableModel select table的物件
-	 * 
+	 *
 	 */
 	public SelectTableModel selectTable(String sql) {
 		String step = "";
@@ -238,7 +238,7 @@ public class TeradataSqlModelWrapper{
 				}
 				break;
 			case "JOIN":
-				
+
 				break;
 			case "GROUP_BY":
 				temp += c;

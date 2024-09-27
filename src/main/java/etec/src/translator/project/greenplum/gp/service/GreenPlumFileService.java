@@ -21,7 +21,7 @@ import etec.src.translator.sql.gp.translater.GreenPlumTranslater;
  * <br>單純的測試SQL語法
  * <br>沒有前後格式，單純用分號區隔
  * <br>雙斜線為註解，會先清除再進行轉換
- * 
+ *
  * </p>
  * <h2>屬性</h2>
  * <p>
@@ -30,10 +30,10 @@ import etec.src.translator.sql.gp.translater.GreenPlumTranslater;
  * <p>
  * run(String) : 執行 {@link #run(String)}
  * </p>
- * 
+ *
  * <h2>異動紀錄</h2> <br>
  * <br>2024年3月1日 Tim 建立功能
- * 
+ *
  * @author Tim
  * @version 4.0.0.0
  * @since 4.0.0.0
@@ -48,7 +48,7 @@ public class GreenPlumFileService {
 	 * <br>沒有前後格式，單純用分號區隔
 	 * <br>雙斜線為註解，會先清除再進行轉換
 	 * </p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年03月01日	Tim	建立功能
 	 * <br>2024年04月22日	Tim	修正副檔名有兩個的錯誤
@@ -62,7 +62,7 @@ public class GreenPlumFileService {
 	 * @throws IOException
 	 */
 	public static void run(File f) throws IOException {
-		
+
 		/* 2024/05/06	Tim	強制轉換成指定編碼
 		 * */
 //		String context = FileTool.readFile(f);
@@ -98,16 +98,16 @@ public class GreenPlumFileService {
 					String sql = m.group().trim();
 					sql = GreenPlumTranslater.translate(sql);
 					m.appendReplacement(sb, Matcher.quoteReplacement(sql + "\r\n"));
-					
+
 				}
 				m.appendTail(sb);
 			} catch (SQLTranslateException e) {
 				e.printStackTrace();
 			}
-			
+
 			return sb.toString();
 		});
-		
+
 		/*將bteq語法清除*/
 		//newContext = newContext.replaceAll("\\r\\n\\..*", "");
 		newContext = GreenPlumTranslater.dql.changeMultAnalyze(newContext);

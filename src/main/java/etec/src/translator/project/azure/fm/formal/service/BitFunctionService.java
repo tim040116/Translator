@@ -12,13 +12,13 @@ public class BitFunctionService {
 	public static String replaceBitAnd(String script) {
 		return script.replaceAll("(?i)(?<!dev\\.)\\bbit_(?:and|or|extract)\\s*\\(","dev.$0");
 	}
-	
+
 	/**
 	 * bit_gen_aggt跟bit_or_aggt
-	 * ,dev.bit_gen_aggt(STRING_AGG(cast(ostore_bit_seq as VARCHAR(MAX)),',')  WITHIN GROUP (ORDER BY ostore_bit_seq ASC))  
-	 * 
+	 * ,dev.bit_gen_aggt(STRING_AGG(cast(ostore_bit_seq as VARCHAR(MAX)),',')  WITHIN GROUP (ORDER BY ostore_bit_seq ASC))
+	 *
 	 * bit_or_aggt需要加工，但程式無法處理
-	 * 
+	 *
 	 * @since	2024/09/06
 	 * */
 	public static String replaceBitGenAggt(String script) {

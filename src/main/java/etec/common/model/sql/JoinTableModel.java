@@ -7,9 +7,9 @@ import etec.framework.context.translater.enums.JoinTypeEnum;
 public class JoinTableModel {
 
 	private JoinTypeEnum joinType;
-	
+
 	private String tableName;
-	
+
 	private List<String> lstCondition;
 
 	public JoinTypeEnum getJoinType() {
@@ -35,6 +35,6 @@ public class JoinTableModel {
 	public void setLstCondition(List<String> lstCondition) {
 		this.lstCondition = lstCondition;
 	}
-	
-	
+
+
 }

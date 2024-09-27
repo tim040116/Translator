@@ -14,11 +14,12 @@ import etec.framework.context.convert_safely.service.ConvertFunctionsSafely;
  * @author 	Tim
  * @version	1.2
  * */
+@Deprecated
 public class RegexTool {
-	
+
 	/**
 	 * 取得函數中的參數 function(param...)中括號中的內容
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	2023/04/29
 	 * @param	functionNm	括號前面的象徵性字串
@@ -51,7 +52,7 @@ public class RegexTool {
 	 * @Deprecated	考量到group功能無法使用，此功能效能上有待加強，建議改用JAVA原生Matcher語法
 	 * */
 	public static List<String> getRegexTarget(String regex, String content) {
-		List<String> lstRes = new ArrayList<String>();
+		List<String> lstRes = new ArrayList<>();
 		Pattern p = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(content);
 		while (m.find()) {
@@ -66,7 +67,7 @@ public class RegexTool {
 	 * <h1>是否包含特定格式</h1>
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * 
+	 *
 	 * */
 	public static boolean contains(String regex, String content) {
 		Pattern p = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
@@ -85,10 +86,10 @@ public class RegexTool {
 //	/**
 //	 * @author	Tim
 //	 * @deprecated
-//	 * 
+//	 *
 //	 * 取得符合正規表達式的字串(原本的語法有時會出錯)，
 //	//盡量不要用(?=)類型的語法
-//	 * 
+//	 *
 //	 * <br>2023-12-12 Tim 原功能已修復請改用：
 //	 * <br> {@link #getRegexTarget(String, String)}
 //	 * */
@@ -105,7 +106,7 @@ public class RegexTool {
 //	}
 	// 拆分成每個單詞
 	public static List<String> getSingleWord(String content) {
-		List<String> lstRes = new ArrayList<String>();
+		List<String> lstRes = new ArrayList<>();
 		Pattern p = Pattern.compile("\\S+");
 		Matcher m = p.matcher(content);
 		while (m.find()) {
@@ -181,13 +182,14 @@ public class RegexTool {
 	 * @author	Tim
 	 * @since	2023年12月13日
 	 * @deprecated
-	 * 
+	 *
 	 * <h1>把括弧內的逗號置換掉</h1>
-	 * 
+	 *
 	 * 請統一改用<br>
 	 *  {@link ConvertFunctionsSafely #saveTranslateFunction(String, Function)}
-	 * 
+	 *
 	 * */
+	@Deprecated
 	public static String encodeCommaInBracket(String context) {
 		String res = "";
 		int cntBracket = 0;
@@ -209,13 +211,14 @@ public class RegexTool {
 	 * @author	Tim
 	 * @since	2023年12月13日
 	 * @deprecated
-	 * 
+	 *
 	 * <h1>把括弧內的逗號置換掉</h1>
-	 * 
+	 *
 	 * 請統一改用<br>
 	 *  {@link ConvertFunctionsSafely #saveTranslateFunction(String, Function)}
-	 * 
+	 *
 	 * */
+	@Deprecated
 	public static String decodeCommaInBracket(String context) {
 		String res = context.replaceAll("<encodingCode_Comma>", ",");
 		return res;

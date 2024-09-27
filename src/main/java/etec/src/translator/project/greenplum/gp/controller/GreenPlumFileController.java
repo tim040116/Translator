@@ -22,10 +22,10 @@ import etec.src.translator.view.panel.SearchFunctionPnl;
  * <p></p>
  * <h2>方法</h2>
  * <p></p>
- * 
+ *
  * <h2>異動紀錄</h2>
  * <br>2024年3月4日	Tim	建立功能
- * 
+ *
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
@@ -33,6 +33,7 @@ import etec.src.translator.view.panel.SearchFunctionPnl;
  */
 public class GreenPlumFileController implements Controller {
 
+	@Override
 	public void run() throws Exception {
 
 		// 儲存參數

@@ -1,0 +1,8 @@
+2024/05/29 Tim:
+
+
+ADD_MONTH修好了
+
+TO_CHAR還沒
+
+UPDATE SET跟WHERE相反的時候會出問題

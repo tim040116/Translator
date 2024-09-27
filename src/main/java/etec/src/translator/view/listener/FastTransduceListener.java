@@ -12,14 +12,15 @@ public class FastTransduceListener implements ActionListener {
 
 	/*
 	 * 整個流程
-	 * 
+	 *
 	 */
-	
+
 	private Controller con;
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		new Thread() {
+			@Override
 			public void run() {
 				try {
 					con.run();
@@ -31,9 +32,9 @@ public class FastTransduceListener implements ActionListener {
 			}
 		}.start();
 	}
-	
+
 	public FastTransduceListener(Controller controller) {
 		this.con = controller;
 	}
-	
+
 }

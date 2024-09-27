@@ -6,15 +6,15 @@ import java.util.Map;
 import etec.framework.file.params.service.ParamsTool;
 
 public class ConfigParams {
-	
+
 	public final String APPLICATION_TYPE;
-	
+
 	public final String INIT_INPUT_PATH;
-	
+
 	public final String INIT_OUTPUT_PATH;
-	
+
 	public final boolean BIG_FILE_SPLIT;
-	
+
 	public ConfigParams(File f) {
 		Map<String, String> map = ParamsTool.readParam("=",f);
 		APPLICATION_TYPE = map.get("APPLICATION_TYPE");

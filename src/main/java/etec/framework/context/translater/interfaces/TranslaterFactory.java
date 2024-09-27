@@ -17,63 +17,63 @@ import etec.src.translator.sql.gp.translater.GreenPlumTranslater;
  * 	<br>static String {@link #}
  * <h2>異動紀錄</h2>
  * <br>2024年6月17日	Tim	建立功能
- * 
+ *
  * @author	Tim
  * @version	4.0.0.0
  * @since	2024年6月17日
- * @see		
+ * @see
  */
 public abstract class TranslaterFactory {
 
 	//
 	public static final String[] AR_DQL = { "WITH", "SELECT" };
-	
+
 	public static final String[] AR_DML = { "INSERT", "DELETE", "UPDATE","MERGE"};
-	
+
 	public static final String[] AR_DDL = { "CREATE", "TRUNCAT", "DROP", "RENAME", "REPLACE" };
-	
+
 	public static final String[] AR_OTH = { "CALL", "COLLECT", "LOCKING" };
-	
-	private static List<String> listTitle = new ArrayList<String>();
-	
+
+	private static List<String> listTitle = new ArrayList<>();
+
 	static {
-		listTitle = new ArrayList<String>();
+		listTitle = new ArrayList<>();
 		listTitle.addAll(Arrays.asList(GreenPlumTranslater.arrDQL));
 		listTitle.addAll(Arrays.asList(GreenPlumTranslater.arrDML));
 		listTitle.addAll(Arrays.asList(GreenPlumTranslater.arrDDL));
 		listTitle.addAll(Arrays.asList(GreenPlumTranslater.arrOther));
 	}
-	
+
 	/**
 	 * <h1>轉換主程序</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年6月17日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	2024年6月17日
 	 * @param	script	單一段落程式，需先預處理
 	 * @throws	SQLTranslateException
-	 * @see		
+	 * @see
 	 * @return	return_type
 			 */
 //	public abstract String translate(String script) throws SQLTranslateException;
-	
+
 	/**
 	 * <h1>取得該SQL的大類</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年6月17日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	2024年6月17日
 	 * @param	script
 	 * @throws	SQLTranslateException
-	 * @see		
+	 * @see
 	 * @return	return_type
 			 */
 	protected static SQLTypeModel getType(String script) throws SQLTranslateException {
@@ -96,19 +96,19 @@ public abstract class TranslaterFactory {
 		}
 		return m;
 	}
-	
+
 	/**
 	 * <h1>取得該SQL的類型清單</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年6月17日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	2024年6月17日
 	 * @throws	SQLTranslateException
-	 * @see		
+	 * @see
 	 * @return	return_type
 			 */
 	public static List<String> getTitleList(){

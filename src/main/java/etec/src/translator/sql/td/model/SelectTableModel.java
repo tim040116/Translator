@@ -25,13 +25,13 @@ import etec.framework.context.translater.exception.UnknowSQLTypeException;
  * <p>(String script)	會自動將語法拆解，分裝</p>
  * <h2>異動紀錄</h2>
  * <br>2024年2月20日	Tim	建立功能
- * 
+ *
  * @author	Tim
  * @since	4.0.0.0
- * @see		
+ * @see
  */
 public class SelectTableModel {
-	
+
 	/**
 	 * <h1>所有特殊階段的關鍵字</h1>
 	 * <p></p>
@@ -56,39 +56,39 @@ public class SelectTableModel {
 	 * @since	4.0.0.0
 	 */
 	public String construction = "";
-	
+
 	public String select = "";
-	
+
 	public String from = "";
-	
+
 //	private List<String> WITH = new ArrayList<String>();
 
-	public Map<String,String> join = new HashMap<String,String>();
-	
+	public Map<String,String> join = new HashMap<>();
+
 	public String where = "";
-	
+
 	public String groupBy = "";
-	
+
 	public String orderBy = "";
-	
+
 	public String qualifyRowNumber = "";
-	
+
 	public SelectTableModel(){}
-	
+
 	/**
 	 * <h1>Teradata 的 Select 語法物件</h1>
 	 * <p>直接把select語法導入，</p>
 	 * <p>會在建置時直接拆解分奘語法</p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年2月21日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	1.0.0.0
-	 * @param	
-	 * @throws	
+	 * @param
+	 * @throws
 	 * @see
-	 * @return	
+	 * @return
 			 */
 	public SelectTableModel(String sql) throws UnknowSQLTypeException{
 		//安插標記
@@ -96,7 +96,7 @@ public class SelectTableModel {
 				.replaceAll(REG_KEY, Mark.MAHJONG_BLACK+"$0")
 				.replaceAll("(?i)(TRIM\\s*\\([\\S\\s]*?)"+Mark.MAHJONG_BLACK+"(FROM)", "$1$2")//排除TRIM(FROM)
 				.replaceAll("\\s+"+Mark.MAHJONG_BLACK, Mark.MAHJONG_BLACK+"$0");//保留段落間的空白
-		;
+
 		//分裝
 		int cntJoin = 1;
 		Pattern p = Pattern.compile("[^"+Mark.MAHJONG_BLACK+"]+");
@@ -138,40 +138,40 @@ public class SelectTableModel {
 		m.appendTail(sb);
 		construction = sb.toString().replaceAll(Mark.MAHJONG_BLACK, "");
 	}
-	
+
 	/**
 	 * <h1>組成取代文字</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年2月20日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	id	取代文字的ID
-	 * @throws	
+	 * @throws
 	 * @see
 	 * @return	取代的文字
 			 */
 	private String getTag(String id) {
 		return "<SelectTableModel_construction_"+id+">";
 	}
-	
+
 	/**
 	 * <h1>toString會直接將物件還原成SQL語句</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年2月20日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * @param	
-	 * @throws	
+	 * @param
+	 * @throws
 	 * @see
-	 * @return	
+	 * @return
 			 */
 	@Override
 	public String toString() {
@@ -188,23 +188,23 @@ public class SelectTableModel {
 		}
 		return res;
 	}
-	
+
 	/**
 	 * <h1></h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年2月26日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * @param	
-	 * @throws	
-	 * @see		
-	 * @return	
+	 * @param
+	 * @throws
+	 * @see
+	 * @return
 			 */
 	public void changeConstruction() {
-		
+
 	}
 }

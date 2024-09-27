@@ -20,20 +20,20 @@ import java.lang.annotation.Target;
  * 	<br>static String {@link #}
  * <h2>異動紀錄</h2>
  * <br>2024年6月12日	Tim	建立功能
- * 
+ *
  * @author	Tim
  * @version	4.0.0.0
  * @since	4.0.0.0
- * @see		
+ * @see
  */
 @Documented
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SheetModel {
-	
+
 	/**
 	 * 頁簽名或檔名
-	 * */	
+	 * */
 	String sheetName();
-	
+
 }

@@ -12,16 +12,16 @@ import etec.src.translator.view.listener.FileListSelectNextPageListener;
 public class FileListSelectPnl  extends JPanel {
 	/**
 	 * 檔案清單畫面
-	 * 
+	 *
 	 * 已廢棄
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	// 事件監聽器
 	FileListSelectListener lr;
 	FileListSelectNextPageListener lr2;
 	// 物件
-	
+
 	public FileListSelectPnl() {
 		init();
 		setLayout(new GridLayout(2,2));
@@ -36,7 +36,7 @@ public class FileListSelectPnl  extends JPanel {
 		FileListSelectElement.btnNext.addActionListener(lr2);
 		add(FileListSelectElement.lblTitle);
 		add(FileListSelectElement.btnSelect);
-		
+
 		add(new JScrollPane(FileListSelectElement.jlS));
 		add(FileListSelectElement.btnNext);
 //		add(new JScrollPane(jlC));

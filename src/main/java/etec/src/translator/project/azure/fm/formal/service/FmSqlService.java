@@ -11,9 +11,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FmSqlService {
-	
-	private static List<String[]> lstrpl = new ArrayList<String[]>();
-	
+
+	private static List<String[]> lstrpl = new ArrayList<>();
+
 	static {
 		try (FileInputStream fis = new FileInputStream(new File("config\\replace_list\\fm\\replace_list.csv"));
 				InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
@@ -34,9 +34,91 @@ public class FmSqlService {
 		res = dropCreate(res);
 		res = removeBteq(res);
 		res = cleanCode(res);
+		res = addRerun(res);
 		res = addSP(res);
 		res = replaceAll(res);
 		res = fdpUpt(res);
+		return res;
+	}
+	
+	/* rerun機制
+	 * 1.找到所有target table
+	 * 
+	 * */
+	public static String addRerun(String content) {
+		String res = content;
+		String rerunNotNull = "IF  1=1";//準備rerun flag
+		String rerunMerge = "";
+		List<String> rerunSet = new ArrayList<String>();
+		//1.解析merge語法
+		/**
+		 * target	: target table
+		 * tmpA		: 單一table
+		 * tmpB		: sub query
+		 * */
+		List<String> lstTTable = new ArrayList<String>();
+		String regMerge = "(?i)"
+			+ "MERGE\\s+INTO\\s+(?<target>\\S+)[^;]*USING\\s*(?:"//target table
+			+ "(?<tmpA>\\S+)\\s+\\w+"//單一table
+			+ "|\\([^;]+?FROM\\s+(?<tmpB>[\\w.]+)[^;]+\\)\\s*\\w+)"//sub query
+			+ "\\s*ON[^;]+?"//on 只是為了限制範圍
+			+ "when\\s+(?:NOT\\s+)?MATCHED"//Match 只是為了限制範圍
+			+ "[^;]+;";//到最底，為了組rerun
+		Matcher mm = Pattern.compile(regMerge).matcher(res);
+		while(mm.find()) {
+			//1-1.取得target跟temp table
+			String targetTable = mm.group("target");
+			String tempTable = mm.group("tmpA")!=null?mm.group("tmpA"):mm.group("tmpB");
+			//1-2.lstTTable 用來組註解
+			lstTTable.add(targetTable);
+			//1-3.if table Not Null 
+			rerunNotNull += "\r\n\tAND OBJECT_ID('"+tempTable+"','U') IS NOT NULL";
+			//1-4.set @check_rerun_dtl
+			String strCnt = "\t\t\tSELECT COUNT(*) CNT"
+					+ "\r\n\t\t\tFROM " + tempTable
+					+ "\r\n\t\t\tWHERE fdp_upt = @tx_date"
+			;
+			rerunSet.add(strCnt);
+			//1-5.rerun
+			rerunMerge += 
+				  "\r\n\t" 
+				+ mm.group(0)
+					.replaceAll("\r\n", "\r\n\t")
+					.replaceAll("(?i)when\\s+not\\s+matched\\s+then\\s+[^;]+", "")
+				+ "\r\n"
+			;
+			//1-6.將create跟insert加上fdp_upd
+			res = res.replaceAll("(?i)"
+				+ "(?:CREATE\\s+TABLE\\s*\\Q"+tempTable+"\\E\\s*WITH\\s*\\([\\S\\s]+?\\)\\s*AS"
+				+ "|INSERT\\s+INTO\\s+\\Q"+tempTable+"\\E)"
+				+ "\\s*SELECT\\s*"
+				,"$0@tx_date as fdp_upt,\r\n"
+			);
+		}
+		//2.組裝
+		String rerun =  
+			  "-- Rerun 機制 " + String.join(" , ", lstTTable)
+			+ "\r\nDECLARE @check_rerun_dtl char(1);"
+			+ "\r\n" + rerunNotNull
+			+ "\r\nBEGIN"
+			+ "\r\n\tSET @check_rerun_dtl = ("
+			+ "\r\n\t\tSELECT CASE WHEN SUM(A.CNT)>0 THEN 'Y' ELSE 'N' END"
+			+ "\r\n\t\tFROM ("
+			+ "\r\n" + String.join("\r\n\t\t\tUNION\r\n", rerunSet)
+			+ "\r\n\t\t) A"
+			+ "\r\n\t);"
+			+ "\r\nEND"
+			+ "\r\nELSE BEGIN"
+			+ "\r\n\tSET @check_rerun_dtl = 'N';"
+			+ "\r\nEND"
+			+ "\r\n"
+			+ "\r\nIF@check_rerun_dtl = 'Y'"
+			+ "\r\nBEGIN"
+			+ "\r\n" + rerunMerge
+			+ "\r\nEND"
+			+ "\r\n"
+		;
+		res = rerun + res;
 		return res;
 	}
 	//依開發規範轉換
@@ -62,13 +144,13 @@ public class FmSqlService {
 		String res = content;
 		String txdate = "@tx_date";
 		String txdate1 = "@v_tx_date";
-		res = "CREATE PROCEDURE dev.sp__ldtf\r\n\t" 
-			+ txdate + " varchar(10)" 
+		res = "CREATE PROCEDURE dev.sp__ldtf\r\n\t"
+			+ txdate + " varchar(10)"
 			+ "\r\nAS BEGIN"
-			+ IOPTableLog(txdate)
+			+ p_IOPTableLog(txdate)
 			+ "\r\n\r\n\tDECLARE " + txdate1 + " int;"
-			+ "\r\n\tSET " + txdate1 + " cast(convert(varchar(8),cast(" + txdate + " as date),112) as int);\r\n"
-			+ res.trim().replaceAll("\n", "\n\t") 
+			+ "\r\n\tSET " + txdate1 + " = cast(convert(varchar(8),cast(" + txdate + " as date),112) as int);\r\n"
+			+ res.trim().replaceAll("\n", "\n\t")
 			+ "\r\n\r\nEND";
 		//TXDATE處理
 		res = res
@@ -81,9 +163,9 @@ public class FmSqlService {
 
 	/**
 	 * 關於temp table 的處理
-	 * 
+	 *
 	 * 依宇皇提供的開發規範(2024/09/02) table name一律小寫 存於dev. stg_開頭 若有複數temp table則編號放在最後
-	 * 
+	 *
 	 */
 	public static String replaceTempTableName(String content) {
 		String res = content;
@@ -104,9 +186,9 @@ public class FmSqlService {
 
 	/**
 	 * 關於temp table 的處理
-	 * 
+	 *
 	 * 依宇皇提供的開發規範(2024/09/02) table name及column name一律小寫
-	 * 
+	 *
 	 */
 	public static String toLowerCase(String content) {
 		String res = content;
@@ -149,7 +231,7 @@ public class FmSqlService {
 			.replaceAll("(?i)\\.IF\\s+ERRORCODE\\b[^;]+;", "")
 			.replaceAll("(?i)\\.SET\\s+ERROROUT\\s+STDOUT\\s*;?", "")
 			.replaceAll("(?i)\\.SET\\s+SESSION\\b[^;]+;", "")
-			.replaceAll("(?i)\\.LOGON\\s+[^,]+,\\s*\\S+\\s*", "")			
+			.replaceAll("(?i)\\.LOGON\\s+[^,]+,\\s*\\S+\\s*", "")
 			.replaceAll("(?i)\\.LOGOFF\\s*;\\s*\\.QUIT\\s*0\\s*;","")
 		;
 		return res;
@@ -172,20 +254,7 @@ public class FmSqlService {
 						"(?i)IF OBJECT_ID\\('([^']+)','U'\\) IS NOT NULL\\s+BEGIN\\s+DROP TABLE \\1;\\s+END\\s+(IF OBJECT_ID\\('\\1','U'\\) IS NOT NULL\\s+BEGIN\\s+DROP TABLE \\1;\\s+END)",
 						"$2");
 		return res;
-	}
-	
-	private static String IOPTableLog(String txdate) {
-		String res = "\r\n\t/*--------------------------------------------------------------------------"
-				+ "\r\n\tSP參數"
-				+ "\r\n\t\t"+txdate+" = ${TXDATE}"
-				+ "\r\n\tINPUT"
-				+ "\r\n\t\t"
-				+ "\r\n\tOUTPUT"
-				+ "\r\n\t"
-				+ "\r\n\t--------------------------------------------------------------------------*/"
-				+ "";
-		return res;
-	}
+	}	
 
 	/**
 	 * Merge into語法增加fdp_upt欄位，是異動日期
@@ -196,6 +265,20 @@ public class FmSqlService {
 			.replaceAll("(?i)(when\\s+matched\\s+then\\s+[\\S\\s]+?)(\\s+when\\s*not\\s*matched|;)", "$1\r\n\t\t\t,fdp_upt = dateadd\\(hour,8,getdate\\(\\)\\)$2")
 			.replaceAll("(?i)(when\\s*not\\s*matched\\s*then\\s*insert\\s*\\([^)]+?)(\\s*\\)\\s*values\\s*\\([^;]+?)(\\s*\\)\\s*;)", "$1\r\n\t\t\t,fdp_upt$2\r\n\t\t\t,dateadd\\(hour,8,getdate\\(\\)\\)$3")
 		;
+		return res;
+	}
+	
+	//input output的註解
+	private static String p_IOPTableLog(String txdate) {
+		String res = "\r\n\t/*--------------------------------------------------------------------------"
+				+ "\r\n\tSP參數"
+				+ "\r\n\t\t"+txdate+" = ${TXDATE}"
+				+ "\r\n\tINPUT"
+				+ "\r\n\t\t"
+				+ "\r\n\tOUTPUT"
+				+ "\r\n\t"
+				+ "\r\n\t--------------------------------------------------------------------------*/"
+				+ "";
 		return res;
 	}
 }

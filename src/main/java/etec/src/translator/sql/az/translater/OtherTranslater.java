@@ -13,18 +13,18 @@ import etec.src.translator.sql.td.classifier.TeradataClassifier;
  * @author	Tim
  * @since	3.3.1.1
  * @version	3.3.1.1
- * 
+ *
  * 處理 SF SP 用到的不是單段語法
- * 
- * 
+ *
+ *
  * */
 public class OtherTranslater {
-	
+
 	/**
 	 * @author	Tim
-	 * @throws SQLTranslateException 
+	 * @throws SQLTranslateException
 	 * @since	2023年12月20日
-	 * 
+	 *
 	 * */
 	public String easyReplace(String script) throws SQLTranslateException {
 		String res = script;
@@ -42,14 +42,14 @@ public class OtherTranslater {
 		default:
 			res = transduceCursor(res);
 		}
-		
+
 		return res;
 	}
-	
+
 	/**
 	 * @author	Tim
 	 * @since	2023年10月27日
-	 * 
+	 *
 	 * -   轉換Cursor跟 label語法
 	 * 1.EXECUTE  後面的字拿掉
 		ex: EXECUTE IMMEDIATE -> EXECUTE
@@ -65,7 +65,7 @@ public class OtherTranslater {
 				;
 		/**
 		 * 2023-11-06 Tim : 經測試，Cursor語法僅支援MS SQL 不支援Azure，因此廢棄
-		 * 
+		 *
 		 * */
 //		txt = txt
 //				.replaceAll("PREPARE\\s(\\S+)\\sFROM\\s+(\\S+)\\s*;"
@@ -73,12 +73,12 @@ public class OtherTranslater {
 //				;
 		return txt;
 	}
-	
+
 	/**
 	 * @author	Tim
 	 * @since	2023年11月1日
 	 * IF ELSEIF ELSE的語法轉換
-	 * 
+	 *
 	 * */
 	public static String transduceIF(String script) {
 		String res = script;
@@ -88,7 +88,7 @@ public class OtherTranslater {
 //				.replaceAll("(?i)(\\s+)ELSE(\\s+)\\b([^中]+)\\b中", "$2END$1ELSE$2BEGIN$2$3$2END\r\n")
 //				.replaceAll("中","END IF;")
 //				;
-		
+
 		String tmp = res.replaceAll("\\b", Mark.MAHJONG_RED);
 		String tmp2 = "";
 		int caseArea = 0;
@@ -139,9 +139,9 @@ public class OtherTranslater {
 	}
 	/**
 	 * @author	Tim
-	 * @throws SQLTranslateException 
+	 * @throws SQLTranslateException
 	 * @since	2023年11月13日
-	 * 
+	 *
 	 * Call 語法轉成EXEC
 	 * */
 	public static String transduceCall(String script) throws SQLTranslateException {
@@ -149,7 +149,7 @@ public class OtherTranslater {
 		res = res.replaceAll("(?i)CALL\\s+(\\S+)\\s*\\(([^\\)]+)\\)", "EXEC $1 $2");
 		return res;
 	}
-	
+
 //	// index
 //	public static String changeIndex(String sql) {
 //		String result = sql;
@@ -186,7 +186,7 @@ public class OtherTranslater {
 	/**
 	 * @author	Tim
 	 * @since	2023年10月17日
-	 * 
+	 *
 	 * COLLECT STATISTICS ON 改成 UPDATE STATISTICS
 	 * */
 	public static String runStatistics(String sql){

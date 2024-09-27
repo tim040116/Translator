@@ -9,7 +9,7 @@ import java.util.Map;
 import etec.framework.file.params.service.ParamsTool;
 
 public class FamilyMartParams {
-	
+
 	/**
 	 * @author	Tim
 	 * @since	2023年10月3日
@@ -28,14 +28,14 @@ public class FamilyMartParams {
 	 * 產檔時的編碼
 	 * */
 	public final Charset WRITE_FILE_CHARSET;
-	
+
 	/**
 	 * @author	Tim
 	 * @since	2023年10月3日
 	 * 編碼是big5的檔案類型清單，不在清單中則是utf-8
 	 * */
 	public final List<String> LIST_FILE_TYPE_BIG5;
-	
+
 	public FamilyMartParams(File f) {
 		Map<String, String> map = ParamsTool.readParam("=",f);
 		this.IS_REPLACE_PARAMS_IN_PERL = "TRUE".equals(map.get("IS_REPLACE_PARAMS_IN_PERL").toUpperCase());
@@ -43,6 +43,6 @@ public class FamilyMartParams {
 		this.LIST_FILE_TYPE_BIG5 = Arrays.asList(map.get("LIST_FILE_TYPE_BIG5").split(","));
 		this.MERGE_INTO = "TRUE".equals(map.get("IS_REPLACE_PARAMS_IN_PERL").toUpperCase());
 
-		
+
 	}
 }

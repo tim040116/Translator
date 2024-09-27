@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 
+ *
  * <h1>安全的轉換SQL語句</h1>
  * <br>因應SQL語法中很多在方法中包覆其他方法的語法
  * <br>避免在取代的時候受到小括號跟逗號的影響導致轉換錯誤
@@ -19,26 +19,26 @@ import java.util.regex.Pattern;
  * @version	4.0.0.0
  * */
 public class ConvertFunctionsSafely {
-	
+
 	public int maxCnt = 0;
-	
+
 	public static int maxObjId = 0;
-	
+
 	public int objId = 0;
 	/**
 	 * @author	Tim
 	 * @since	2023年11月30日
-	 * 	
+	 *
 	 * 會依小括號進行分層
 	 * 避免函式轉換時造成錯位
 	 * */
-	
+
 	{
 		maxObjId++;
 		objId = maxObjId;
-		
+
 	}
-	
+
 	public String savelyConvert(String script,Function<String, String> function) {
 		String res = "";
 		int cntBracket = 0;
@@ -61,9 +61,9 @@ public class ConvertFunctionsSafely {
 			if( "(".equals(c)) {
 				cntBracket++;
 				c = markName("leftquater", cntBracket);
-				
+
 			}else if(")".equals(c)) {
-				
+
 				c = markName("rightquater", cntBracket);
 				cntBracket--;
 			}else if(",".equals(c)) {
@@ -74,7 +74,7 @@ public class ConvertFunctionsSafely {
 			}
 			res+=c;
 		}
-		
+
 		//decode
 		for(int i = 0;i<=maxCnt+1;i++) {
 			String leftQuaterMark = markName("leftquater", i);
@@ -86,33 +86,33 @@ public class ConvertFunctionsSafely {
 					.replaceAll(rightQuaterMark, ")")
 					.replaceAll(commaMark, ",")
 					;
-			
+
 		}
-		
+
 		//解編字串裡的括號
 		res = res
 				.replaceAll(markName("vc_l",-1),"\\(")
 				.replaceAll(markName("vc_r",-1),"\\)")
 				.replaceAll(markName("vc_c",-1),",")
 			;
-		
+
 		if(!res.equals(script)) {
 			res = savelyConvert(res,function);
 		}
 		return res;
 	}
-	
+
 	/**
 	 * @author	Tim
 	 * @since	2023年11月30日
-	 * 	
+	 *
 	 * 會依小括號進行分層
 	 * 避免函式轉換時造成錯位
 	 * */
 	public static String convert(String script,Function<String, String> function) {
 		return (new ConvertFunctionsSafely()).savelyConvert(script, function);
 	}
-	
+
 	protected String markName(String type,int i) {
 		return markName(type,Integer.toString(i));
 	}
@@ -125,7 +125,7 @@ public class ConvertFunctionsSafely {
 	/**
 	 * @author	Tim
 	 * @since	2023年12月20日
-	 * 
+	 *
 	 * 將字串解編
 	 * */
 	public static String decodeMark(String script) {

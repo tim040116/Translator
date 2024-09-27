@@ -21,7 +21,7 @@ import etec.src.translator.view.panel.SearchFunctionPnl;
  * @author	Tim
  * @since	2023年10月13日
  * @version	3.3.1.0
- * 
+ *
  * 	- 只有一個檔案以雙引號包住sql,沒有分隔符號
  * 	- 只轉換 RETURN 到  ; 中間的語法,其餘直接搬
  * 	- 註解全清掉
@@ -29,6 +29,7 @@ import etec.src.translator.view.panel.SearchFunctionPnl;
  * */
 public class TranslateStoreFunctionController implements Controller {
 
+	@Override
 	public void run() throws Exception {
 
 		// 儲存參數
@@ -53,7 +54,7 @@ public class TranslateStoreFunctionController implements Controller {
 		SearchFunctionPnl.tsLog.setLog("資訊", "轉換Store Function");
 		List<File> lf = null;
 //		Map<String, String> mapSF = new HashMap<String, String>();
-		List<SFSPModel> lstm = new ArrayList<SFSPModel>();
+		List<SFSPModel> lstm = new ArrayList<>();
 		//取得檔案內容
 		lf = FileTool.getFileList(BasicParams.getInputPath()+"sf\\");
 		//轉換
@@ -87,7 +88,7 @@ public class TranslateStoreFunctionController implements Controller {
 		SearchFunctionPnl.tsLog.setLog("資訊", "轉換Store Porsidure");
 		List<File> lf = null;
 //		Map<String, String> mapSF = new HashMap<String, String>();
-		List<SFSPModel> lstm = new ArrayList<SFSPModel>();
+		List<SFSPModel> lstm = new ArrayList<>();
 		//取得檔案內容
 		lf = FileTool.getFileList(BasicParams.getInputPath()+"sp\\");
 		SearchFunctionPnl.progressBar.setUnit(lf.size());

@@ -11,11 +11,11 @@ import etec.src.translator.sql.td.classifier.TeradataClassifier;
  * @author	Tim
  * @since	2023年11月17日
  * @version	3.4.1.1
- * 
+ *
  * 全家的城市轉換
  * */
 public class FastTransduceService {
-	
+
 	/**
 	 * @author	Tim
 	 * @since	2023年11月17日
@@ -26,11 +26,11 @@ public class FastTransduceService {
 	}
 	/**
 	 * @author	Tim
-	 * @throws IOException 
-	 * @throws UnknowSQLTypeException 
+	 * @throws IOException
+	 * @throws UnknowSQLTypeException
 	 * @since	2023年11月13日
 	 * @param	boolean	isEncode	true會回傳SET 字串語法 false回傳SQL語句
-	 * 
+	 *
 	 * */
 	public static String transduceSetExcute(String sql,boolean isEncode,String sqlType) throws UnknowSQLTypeException, IOException {
 		String res = sql;
@@ -71,7 +71,7 @@ public class FastTransduceService {
 //case SET_EXECUTE:
 //	result = OtherTransducer.transduceSetExcute(result,true);
 //	break;
-	
+
 //	else if(sql.matches("(?i)SET\\s+@\\S+\\s*=\\s*'[\\S\\s]+")) {
 //		res = SQLTypeEnum.SET_EXECUTE;
 //	}

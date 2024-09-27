@@ -13,7 +13,7 @@ import etec.src.translator.sql.az.translater.AzTranslater;
 import etec.src.translator.sql.gp.translater.service.MergeIntoService;
 
 public class DMLTranslater {
-	
+
 	/**
 	 * <h1>轉換DML</h1>
 	 * <p>
@@ -22,15 +22,15 @@ public class DMLTranslater {
 	 * <br>轉換 DELETE TABLE
 	 * </p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年5月15日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * @param	
+	 * @param
 	 * @throws	e
-	 * @see		
+	 * @see
 	 * @return	return_type
 			 */
 	public String easyReplace(String title,String sql) throws SQLTranslateException {
@@ -59,12 +59,12 @@ public class DMLTranslater {
   		return sql;
 	}
 	/**
-	 * 
+	 *
 	 * DELETE TABLE 要加上 USING
-	 * 
+	 *
 	 * @author	Tim
-	 * @throws SQLFormatException 
-	 * @since	4.0.0.0 
+	 * @throws SQLFormatException
+	 * @since	4.0.0.0
 	 * */
 	public String changeDeleteTableUsing(String sql) throws SQLFormatException {
 		String res = sql;
@@ -82,7 +82,7 @@ public class DMLTranslater {
 		 * </p>with data 的部分也要再確認
 		 * <h2>異動紀錄 ：</h2>
 		 * <br>2024年5月16日	Tim	建立邏輯
-		 * <br>2024年5月23日	Tim	
+		 * <br>2024年5月23日	Tim
 		 * */
 		StringBuffer sb = new StringBuffer();
 		String reg = "(?i)DELETE\\s+FROM\\s+(?<tableNm>\\S+(?:\\s+\\w+)?)(?:\\s*,(?<usingTable>[^;]+))?\\s*WHERE(?<where>[^;]+);?";
@@ -96,28 +96,28 @@ public class DMLTranslater {
 					+"\r\nWHERE\r\n\t"
 					+GreenPlumTranslater.sql.easyReplase(where).trim().replaceAll("\\s*;\\s*$","")
 					+"\r\n;"
-					; 
+					;
 			m.appendReplacement(sb, Matcher.quoteReplacement(delete));
 		}
 		m.appendTail(sb);
 		res = sb.toString();
 		return res;
 	}
-	
+
 	/**
 	 * <h1>INSERT SELECT語法轉換</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2023年12月26日	Tim	建立功能
 	 * <br>2024年 4月22日	Tim	修正insert語法有欄位名稱時會錯位的問題
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	enclosing_method_arguments
 	 * @throws	SQLTranslateException
-	 * @see		
+	 * @see
 	 * @return	String
 	 */
 	public String changeInsertSelect(String sql) throws SQLTranslateException {
@@ -130,22 +130,22 @@ public class DMLTranslater {
  		res = insert+select;
 		return res;
 	}
-	
+
 	/**
 	 * <h1>UPDATE SELECT語法轉換</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年5月31日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	enclosing_method_arguments
 	 * @throws	SQLTranslateException
-	 * @see		
+	 * @see
 	 * @return	String
-	 * @throws UnknowSQLTypeException 
+	 * @throws UnknowSQLTypeException
 	 */
 	public String changeUpdateTable(String sql) throws SQLFormatException, UnknowSQLTypeException {
 		String res = "";
@@ -158,7 +158,7 @@ public class DMLTranslater {
 		 * 1. table name
 		 * 2. from
 		 * 3. from alias name
-		 * 4. set 
+		 * 4. set
 		 * <h2>備註 ：</h2>
 		 * <p>
 		 * </p>
@@ -170,12 +170,12 @@ public class DMLTranslater {
 		Matcher m = Pattern.compile(reg).matcher(sql);
 		while (m.find()) {
 			String update = "";
-			
+
 			String tableNm = m.group("tableNm");
 			String from = "";
 			String set = m.group("set");
-			
-			
+
+
 			if(m.group("from")!=null) {
 				List<String> lst = SplitCommaSafely.splitComma(m.group("from"),(t)->{
 					/**
@@ -195,13 +195,13 @@ public class DMLTranslater {
 					while (msel.find()) {
 						String subselect = msel.group(1);
 						String subalias  = msel.group(2);
-						
+
 						try {
 							subselect = GreenPlumTranslater.dql.easyReplace(subselect);
 						} catch (UnknowSQLTypeException | SQLFormatException e) {
 							e.printStackTrace();
 						}
-						
+
 						msel.appendReplacement(sbsel, Matcher.quoteReplacement("("+subselect+subalias));
 					}
 					msel.appendTail(sbsel);
@@ -209,7 +209,7 @@ public class DMLTranslater {
 				});
 				from = "\r\nFROM "+String.join("\r\n,", lst);
 			}
-			
+
 			set = GreenPlumTranslater.sql.easyReplase(set).trim();
 			update = "UPDATE "+tableNm
 					+from
@@ -217,13 +217,13 @@ public class DMLTranslater {
 			m.appendReplacement(sb,Matcher.quoteReplacement(update));
 		}
 		m.appendTail(sb);
-		
+
 		res = sb.toString();
-		
+
 		return res;
 	}
-	
-	
+
+
 	/**
 	 * <h1>Merge into語法轉換</h1>
 	 * <p>
@@ -232,17 +232,17 @@ public class DMLTranslater {
 	 * <br>然後將條件塞在where裡面
 	 * </p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年6月3日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	enclosing_method_arguments
 	 * @throws	SQLTranslateException
-	 * @see		
+	 * @see
 	 * @return	String
-	 * @throws UnknowSQLTypeException 
+	 * @throws UnknowSQLTypeException
 	 */
 	public String changeMergeInto(String sql) throws SQLTranslateException {
 		String res = "";
@@ -283,7 +283,7 @@ public class DMLTranslater {
 			//處理WHEN 2
 			sql2 = MergeIntoService.convert(m.group("type2"), tableNm, using, m.group("sql2").trim());
 			sql2 = AzTranslater.translate(sql2);
-			
+
 			merge = sql1+"\r\n\r\n"+sql2;
 			m.appendReplacement(sb,Matcher.quoteReplacement(merge));
 		}

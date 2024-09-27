@@ -8,7 +8,7 @@ import etec.common.enums.RunStatusEnum;
 
 public class StatusBar extends JLabel {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	public StatusBar() {

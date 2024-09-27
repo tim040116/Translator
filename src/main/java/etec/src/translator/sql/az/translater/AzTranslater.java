@@ -10,9 +10,9 @@ import etec.framework.security.log.service.Log;
 
 /**
  * <h1>Azsure轉換</h1>
- * 
+ *
  * 統整
- * 
+ *
  * @author Tim
  * @since 4.0.0.0
  * @version 4.0.0.0
@@ -25,7 +25,7 @@ public class AzTranslater extends TranslaterFactory{
 	 * <li>Create table
 	 * <li>不同型態間的比較有時會出現ERROR，要人工判斷
 	 * <li>CHAR($1)若$1為DATE要改成TO_CHAR，若為CHAR則改成LENGTH
-	 * 
+	 *
 	 * @author Tim
 	 * @since 4.0.0.0
 	 */
@@ -45,7 +45,7 @@ public class AzTranslater extends TranslaterFactory{
 	 * <li>DATE_TRUNC語法需確保裡面的參數為日期
 	 * <li>不同型態間的比較有時會出現ERROR，要人工判斷
 	 * <li>CHAR($1)若$1為DATE要改成TO_CHAR，若為CHAR則改成LENGTH
-	 * 
+	 *
 	 * @author Tim
 	 * @since 4.0.0.0
 	 */
@@ -61,11 +61,11 @@ public class AzTranslater extends TranslaterFactory{
 	 * </p>
 	 * <p>
 	 * </p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2> <br>
 	 * 2024年3月1日 Tim 建立功能 <br>
 	 * 2024年5月2日 Tim 增加Other類別
-	 * 
+	 *
 	 * @author Tim
 	 * @since 4.0.0.0
 	 * @param
@@ -89,7 +89,7 @@ public class AzTranslater extends TranslaterFactory{
  		switch(m.getType()) {
 			case DQL:
 				Log.debug("\t分類：DQL");
-				res = dql.easyReplace(script);
+				res = DQLTranslater.easyReplace(script);
 				break;
 			case DML:
 				Log.debug("\t分類：DML");
@@ -97,7 +97,7 @@ public class AzTranslater extends TranslaterFactory{
 				break;
 			case DDL:
 				Log.debug("\t分類：DDL");
-				res = ddl.easyReplace(script);
+				res = DDLTranslater.easyReplace(script);
 				break;
 			case OTHER:
 				Log.debug("\t分類：OTHER");
@@ -114,14 +114,14 @@ public class AzTranslater extends TranslaterFactory{
 		Log.debug("轉換完成");
 		return res;
 	}
-	
-	
+
+
 	public static String regular(String script) {
 		String res = script;
 		res = res
 				.replaceAll("(?i)\\bSEL\\b", "SELECT")
 //				.replaceAll("(?i)\\bINS\\b", "INSERT")
-				
+
 			;
 		return res;
 	}

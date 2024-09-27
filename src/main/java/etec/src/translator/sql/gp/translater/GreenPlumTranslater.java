@@ -10,9 +10,9 @@ import etec.framework.security.log.service.Log;
 
 /**
  * <h1>GreenPlumn轉換</h1>
- * 
+ *
  * 統整
- * 
+ *
  * @author Tim
  * @since 4.0.0.0
  * @version 4.0.0.0
@@ -25,7 +25,7 @@ public class GreenPlumTranslater {
 	 * <li>Create table
 	 * <li>不同型態間的比較有時會出現ERROR，要人工判斷
 	 * <li>CHAR($1)若$1為DATE要改成TO_CHAR，若為CHAR則改成LENGTH
-	 * 
+	 *
 	 * @author Tim
 	 * @since 4.0.0.0
 	 */
@@ -45,7 +45,7 @@ public class GreenPlumTranslater {
 	 * <li>DATE_TRUNC語法需確保裡面的參數為日期
 	 * <li>不同型態間的比較有時會出現ERROR，要人工判斷
 	 * <li>CHAR($1)若$1為DATE要改成TO_CHAR，若為CHAR則改成LENGTH
-	 * 
+	 *
 	 * @author Tim
 	 * @since 4.0.0.0
 	 */
@@ -61,11 +61,11 @@ public class GreenPlumTranslater {
 	 * </p>
 	 * <p>
 	 * </p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2> <br>
 	 * 2024年3月1日 Tim 建立功能 <br>
 	 * 2024年5月2日 Tim 增加Other類別
-	 * 
+	 *
 	 * @author Tim
 	 * @since 4.0.0.0
 	 * @param

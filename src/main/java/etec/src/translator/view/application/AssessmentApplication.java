@@ -6,6 +6,7 @@ import etec.src.translator.view.frame.SearchFunctionFrame;
 
 public class AssessmentApplication implements TranslatorApplication{
 
+	@Override
 	public void run() {
 		new SearchFunctionFrame("Assessment製作工具",new AssessmentController());
 	}

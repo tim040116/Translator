@@ -9,7 +9,7 @@ import etec.framework.context.translater.exception.UnknowSQLTypeException;
 import etec.framework.security.log.service.Log;
 
 public class DDLTranslater {
-	
+
 	public String easyReplace(String sql) throws UnknowSQLTypeException, SQLFormatException {
 		sql = sql.replaceAll("(?i)IF\\s+NOT\\s+EXISTS\\s+", "");//解決已經有IF NOT EXISTS的問題
 		sql = changeCreateVolaTileTable(sql);//temp table
@@ -32,7 +32,7 @@ public class DDLTranslater {
 		return sql;
 	}
 	/**
-	 * 
+	 *
 	 * @author	Tim
 	 *
 	 * @since	4.0.0.0
@@ -42,16 +42,16 @@ public class DDLTranslater {
 	 * <p>在GP中如果使用REPLACE VIEW，確定轉換前後的欄位有沒有變化
 	 * <br>否則推薦DROP後再CREATE</p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年5月2日	Tim	建立功能
 	 * <br>2024年5月2日	增加處理後面的select語法
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * @param	sql
-	 * @throws	SQLFormatException 
-	 * @throws	UnknowSQLTypeException 
-	 * @see		
+	 * @throws	SQLFormatException
+	 * @throws	UnknowSQLTypeException
+	 * @see
 	 * @return	String
 			 */
 	public String changeReplaceView(String sql) throws UnknowSQLTypeException, SQLFormatException {
@@ -79,7 +79,7 @@ public class DDLTranslater {
 	 * <h1>Create Table 的轉換</h1>
 	 * <li>if not exist的功能
 	 * <li>date format
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * */
@@ -111,7 +111,7 @@ public class DDLTranslater {
 			.replaceAll("(?i)CREATE(\\s+TEMP)?\\s+TABLE\\s+", "CREATE$1 TABLE IF NOT EXISTS ")
 			.replaceAll("(?i)\\bDATE\\s+FORMAT\\s+'[^']+'", "DATE")
 		;
-//		res = changeTypeConversion(res); 
+//		res = changeTypeConversion(res);
 		return res;
 	}
 	/**
@@ -120,10 +120,10 @@ public class DDLTranslater {
 	 * </p>
 	 * <p>
 	 * </p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2> <br>
 	 * <br>2024年5月27日 Tim 建立功能
-	 * 
+	 *
 	 * @author Tim
 	 * @since 4.0.0.0
 	 * @param
@@ -135,7 +135,7 @@ public class DDLTranslater {
 	 */
 	public String easyReplaceCTAS(String sql) throws UnknowSQLTypeException, SQLFormatException {
 		String res = sql;
-		
+
 		/**
 		 * <p>功能 ：CTAS</p>
 		 * <p>類型 ：搜尋</p>
@@ -179,7 +179,7 @@ public class DDLTranslater {
 			String other = m.group(4);
 			String ctas = "";
 			String select = GreenPlumTranslater.dql.easyReplace(sel);
-			
+
 			/**2024年5月20日	Tim	CTAS 與IF NOT EXIST 不相容
 			 * */
 			String title = "CREATE TABLE " + table + " AS ( \r\n\t";
@@ -194,7 +194,7 @@ public class DDLTranslater {
 			 * <h2>備註 ：</h2>
 			 * <br>1.sql加上 limit 0
 			 * <br>2.單引號跳脫
-			 * <br>3.加上'' || 
+			 * <br>3.加上'' ||
 			 * <br>4.把最後一個 || 改成 ;
 			 * <h2>異動紀錄 ：</h2>
 			 * 2024年5月20日	Tim	建立邏輯
@@ -226,11 +226,11 @@ public class DDLTranslater {
 	 * </p>
 	 * <p>
 	 * </p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2> <br>
 	 * 2024年3月1日 Tim 建立功能 <br>
 	 * 2024年5月2日 Tim 增加Other類別
-	 * 
+	 *
 	 * @author Tim
 	 * @since 4.0.0.0
 	 * @param
@@ -242,7 +242,7 @@ public class DDLTranslater {
 	 */
 	public String easyReplaceCTASTemp(String sql) throws UnknowSQLTypeException, SQLFormatException {
 		String res = sql;
-		
+
 		/**
 		 * <p>功能 ：CTAS</p>
 		 * <p>類型 ：搜尋</p>
@@ -277,7 +277,7 @@ public class DDLTranslater {
 			String other = m.group(4);
 			String ctas = "";
 			String select = GreenPlumTranslater.dql.easyReplace(sel);
-			
+
 			/**2024年5月20日	Tim	CTAS 與IF NOT EXIST 不相容
 			 * */
 			String title = "CREATE TEMP TABLE " + table + " AS ( \r\n\t";
@@ -290,10 +290,10 @@ public class DDLTranslater {
 		res = sb.toString();
 		return res;
 	}
-	
+
 	/**
 	 * DROP TABLE 要加上 if exist
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
 	 * */
@@ -306,9 +306,9 @@ public class DDLTranslater {
 	/**
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * 
+	 *
 	 * RENAME TABLE 改成 ALTER TABLE 加上 RENAME TO
-	 * 
+	 *
 	 * */
 	public String changeRenameTable(String sql) {
 		String res = sql
@@ -319,9 +319,9 @@ public class DDLTranslater {
 	/**
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * 
+	 *
 	 * CREATE VOLATILE TABLE 改成 CREATE temp TABLE
-	 * 
+	 *
 	 * */
 	public String changeCreateVolaTileTable(String sql) {
 		String res = sql
@@ -332,9 +332,9 @@ public class DDLTranslater {
 	/**
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * 
+	 *
 	 * INTEGER GENERATED ALWAYS AS IDENTITY (CYCLE) 改成 SERIAL
-	 * 
+	 *
 	 * */
 	public String changeIntegerGeneratedAlwaysAsIdentity(String sql) {
 		String res = sql
@@ -345,9 +345,9 @@ public class DDLTranslater {
 	/**
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * 
+	 *
 	 * PRIMARY INDEX 要改成 DISTRIBUTED
-	 * 
+	 *
 	 * */
 	public String changePrimaryIndex(String sql) {
 		String res = sql

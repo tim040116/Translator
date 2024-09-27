@@ -7,33 +7,33 @@ import etec.framework.context.translater.enums.MultiSetEnum;
 
 /**
  * create table的語法模組
- * 
+ *
  * @author Tim
  * @version dev
  * @since 2023/04/06
- * 
+ *
  */
 @SQLModel
 public class CreateTableModel {
 
 	private String databaseName;
-	
+
 	private String tableName;
-	
+
 	private MultiSetEnum multiSet = MultiSetEnum.MULTI_SET;
-	
+
 	private String[] tableSetting;
-	
-	private List<TableColumnModel> column = new ArrayList<TableColumnModel>();
-	
+
+	private List<TableColumnModel> column = new ArrayList<>();
+
 	private TableWithSettingModel withSetting = new TableWithSettingModel();
-	
-	private List<CreateIndexModel> index = new ArrayList<CreateIndexModel>();
-	
+
+	private List<CreateIndexModel> index = new ArrayList<>();
+
 	public String getDatabaseTable() {
 		return databaseName==null?tableName:(databaseName+"."+tableName);
 	}
-	
+
 	public String getTableName() {
 		return tableName;
 	}

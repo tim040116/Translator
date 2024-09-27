@@ -6,11 +6,11 @@ public class EncryptionService {
 
 	//base64扣掉最後的==
 	public static String decodeA(String str) {
-		return EncryptionFactory.base64.decode(str+"=="); 
+		return EncryptionFactory.base64.decode(str+"==");
 	}
-	
+
 	//base64扣掉最後的==
 	public static String decodeB(String str) {
-		return EncryptionFactory.base64.decode(str); 
+		return EncryptionFactory.base64.decode(str);
 	}
 }

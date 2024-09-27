@@ -16,19 +16,19 @@ import etec.src.translator.sql.az.wrapper.TeradataSqlModelWrapper;
 
 /**
  * 儲存所有建立清單的功能
- * 
+ *
  * */
 public class CreateListService {
-	
+
 	/**
 	 * @author	Tim
-	 * @throws IOException 
+	 * @throws IOException
 	 * @since	2023年9月21日
-	 * 
+	 *
 	 * 無論如何先產一份檔案清單檔
 	 * */
 	public static void createFileList(File f) throws IOException {
-		
+
 		String fileListNm = BasicParams.getOutputPath()+Params.searchFunction.FILE_LIST_NAME;//列出所有檔案
 		String path = "\\" + f.getPath()
 		.replace(BasicParams.getInputPath(), "")
@@ -37,24 +37,24 @@ public class CreateListService {
 		;
 		String[] arrFileType = f.getName().split("\\.");
 		String fileType = arrFileType[arrFileType.length-1];
-		FileTool.addFile(fileListNm,																
-				  "\""   +path 
+		FileTool.addFile(fileListNm,
+				  "\""   +path
 				+ "\",\""+f.getName()
 				+ "\",\""+fileType
 				+ "\",\""+f.length()
 				+ "\"");
 	}
-	
+
 	/**
 	 * @author	Tim
 	 * @since	2023年9月15日
-	 * 
+	 *
 	 * SD檔案製作
 	 * 只能處理純CREATE TABLE語法
 	 * 產生兩個檔案
 	 * 	1.Table_list.csv 紀錄每個資料表的設定
 	 * 	2.SDI.csv 紀錄每個資料表中各欄位的設定
-	 * 
+	 *
 	 * */
 	public static String createSD(String content) throws IOException {
 		String result = "Success";
@@ -81,7 +81,7 @@ public class CreateListService {
 			String def = col.getSetting().getDefaultData();
 			String character = col.getSetting().getCharacter();
 			String other = col.getSetting().getOther();
-			FileTool.addFile(sdDetailFileName,																
+			FileTool.addFile(sdDetailFileName,
 					  "\""+dbNm
 					+ "\",\""+tableNm
 					+ "\",\""+colNm
@@ -94,7 +94,7 @@ public class CreateListService {
 					+ "\",\""+other
 					+ "\"");
 		}
-		FileTool.addFile(sdMainFileName,																
+		FileTool.addFile(sdMainFileName,
 				  "\""+dbNm
 				+ "\",\""+tableNm
 				+ "\",\""+setTable
@@ -102,7 +102,7 @@ public class CreateListService {
 				+ "\"");
 		return result;
 	}
-	
+
 	//SD
 		public static String column(String column){
 			String result = "";
@@ -113,7 +113,7 @@ public class CreateListService {
 					;
 			return result;
 		}
-	
+
 	// create table
 	public static String createCreateTable(String fn, String fc) {
 		String result = "Success";
@@ -264,7 +264,7 @@ public class CreateListService {
 		}
 		return result;
 	}
-	
+
 	//group by
 	public static String createGroupBy(String fn, String fc) {
 		String result = "Success";
@@ -282,7 +282,7 @@ public class CreateListService {
 		}
 		return result;
 	}
-	
+
 	//cast as Char10
 	public static String createChar10(String fn, String fc) {
 		String result = "Success";
@@ -297,7 +297,7 @@ public class CreateListService {
 		}
 		return result;
 	}
-	// 產檔lst Rename Table 
+	// 產檔lst Rename Table
 	public static String createLstRenameTable(String fn, String fc) throws IOException {
 		Log.info("createLstRenameTable");
 		String result = "Success";
@@ -311,7 +311,7 @@ public class CreateListService {
 		FileTool.addFile(file,fn+"\t"+arOld[0]+"."+arOld[1]+"\tto\t"+arNew[0]+"."+arNew[1]);
 		return result;
 	}
-	// 產檔lst drop Table 
+	// 產檔lst drop Table
 	public static String createLstDropTable(String fn, String fc) throws IOException {
 		Log.info("createLstDropTable");
 		String result = "Success";

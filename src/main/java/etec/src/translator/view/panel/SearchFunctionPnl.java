@@ -62,7 +62,7 @@ public class SearchFunctionPnl  extends JPanel {
 		lblOp = new JLabel("產檔路徑:");
 		tsLog = UIPanelFactory.addLogTextArea();
 		progressBar = UIPanelFactory.addProgressBar();
-		
+
 		lblStatus = UIPanelFactory.addStatusBar();
 		lblStatus.setStatus(RunStatusEnum.START);
 		// 排版

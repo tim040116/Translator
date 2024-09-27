@@ -9,7 +9,7 @@ public class TestBitFunctionService {
 		testReplaceBitGenAggt();
 		testReplaceBitOrAggt();
 	}
-	
+
 	public static void testReplaceBitAnd() {
 		String str = "SELECT\r\n"
 			+ "  SUM(CASE WHEN C.TIME_ID=F.TIME_ID THEN COALESCE(BIT_EXTRACT(BIT_AND(C.STNUM_STORE_NUM,D.MASK)),0) ELSE 0 END) AS WORK_DAYS, -->稼動店數\r\n"
@@ -19,7 +19,7 @@ public class TestBitFunctionService {
 		String test = BitFunctionService.replaceBitAnd(str);
 		System.out.println(test);
 	}
-	
+
 	public static void testReplaceBitGenAggt() {
 		String str = "insert into ${MART}.st_basic_mast_fact(l_day_id,mast_store_num)\r\n"
 				+ "select l_day_id,bit_gen_aggt(B.ostore_bit_seq(decimal)) as mast_store_num \r\n"
@@ -30,7 +30,7 @@ public class TestBitFunctionService {
 		String test = BitFunctionService.replaceBitGenAggt(str);
 		System.out.println(test);
 	}
-	
+
 	public static void testReplaceBitOrAggt() {
 		String str = "insert into ${MART}.st_remd_fact(l_day_id,stnum_store_num,date_type)\r\n"
 				+ "select\r\n"

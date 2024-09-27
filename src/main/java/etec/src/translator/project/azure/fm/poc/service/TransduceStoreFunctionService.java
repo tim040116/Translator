@@ -24,7 +24,7 @@ import etec.src.translator.sql.az.translater.SQLTranslater;
  * @author	Tim
  * @since	2023年10月17日
  * @version	3.3.1.0
- * 
+ *
  * 應Jason要求轉換store function
  * */
 public class TransduceStoreFunctionService {
@@ -32,7 +32,7 @@ public class TransduceStoreFunctionService {
 	/**
 	 * @author	Tim
 	 * @since	2023年10月17日
-	 * 
+	 *
 	 * */
 	public static String run(File f) throws IOException {
 		Log.info("TranslateStoreFunctionService");
@@ -48,7 +48,7 @@ public class TransduceStoreFunctionService {
 			/**
 			 * @author	Tim
 			 * @since	2023年11月20日
-			 * 
+			 *
 			 * 應Joyce要求，SQL的註解不應該被去除
 			 * */
 			sf = sf.trim()/*TransduceTool.cleanRemark(sf.trim())*/
@@ -80,11 +80,11 @@ public class TransduceStoreFunctionService {
 	}
 	/**
 	 * @author	Tim
-	 * @throws IOException 
-	 * @throws UnknowSQLTypeException 
+	 * @throws IOException
+	 * @throws UnknowSQLTypeException
 	 * @since	2023年10月23日
-	 * 		
-	 * 
+	 *
+	 *
 	 * */
 	public static SFSPModel transformSP(File f) throws IOException, UnknowSQLTypeException{
 		String text = FileTool.readFile(f,Charset.forName("UTF-8"));
@@ -93,14 +93,14 @@ public class TransduceStoreFunctionService {
 		text = text
 				.replaceAll(" {2,3}", "\t")
 				.replaceAll("(?i)\"RequestText\"", "")
-				.replaceAll("(?i)DECLARE EXIT HANDLER FOR SQLEXCEPTION\r\n" + 
-						"BEGIN\r\n" + 
+				.replaceAll("(?i)DECLARE EXIT HANDLER FOR SQLEXCEPTION\r\n" +
+						"BEGIN\r\n" +
 						"END;", "")
 				;
 		/**
 		 * @author	Tim
 		 * @since	2023年11月20日
-		 * 
+		 *
 		 * 應Joyce要求，SQL的註解不應該被去除
 		 * */
 //		String sp = TransduceTool.cleanRemark(text.toUpperCase());
@@ -126,7 +126,7 @@ public class TransduceStoreFunctionService {
 			}else if(step==1){
 				txtContext+=line+"\r\n";
 			}
-			
+
 		}
 		//
 		//取得檔名
@@ -138,7 +138,7 @@ public class TransduceStoreFunctionService {
 				.replaceAll("(?i)(\\S+)\\s+PROCEDURE\\s+([^\\s\\.]+)\\.([^\\s\\.\\(]+)", "USE $2\r\nGO\r\n$1 PROCEDURE $3 ")
 				+txtContext;
 		//header的參數
-		List<String> lstParams = new ArrayList<String>();
+		List<String> lstParams = new ArrayList<>();
 		txtHeader = TransduceTool.cleanRemark(txtHeader)
 				.replaceAll("(?i)\\bCASESPECIFIC\\b", "")
 				.replaceAll("(?i)CHARACTER(\\s+SET)?\\s+\\w+", "")
@@ -155,7 +155,7 @@ public class TransduceStoreFunctionService {
 		headerParams = headerParams.replaceAll("\\([^\\)]+\\)", "");
 		headerParams = headerParams.replaceAll("([^,\\s]+)\\s+([^,\\s]+)", "$1");
 		headerParams = headerParams.replaceAll("([^,\\s]+)\\s+([^,]+)","$1");
-				;
+
 		lstParams.addAll(Arrays.asList(headerParams.split("\\s*,\\s*")));
 		//DECLARE的參數
 		lstParams.addAll(RegexTool.getRegexTarget("(?i)(?<=DECLARE\\s{0,100})\\S+", txtContext));
@@ -181,14 +181,14 @@ public class TransduceStoreFunctionService {
 	}
 	/**
 	 * @author	Tim
-	 * @throws IOException 
-	 * @throws UnknowSQLTypeException 
+	 * @throws IOException
+	 * @throws UnknowSQLTypeException
 	 * @since	2023年10月23日
 	 * 		- 只有一個檔案以雙引號包住sql,沒有分隔符號
 	 * 		- 只轉換 RETURN 到  ; 中間的語法,其餘直接搬
 	 * 		- 註解全清掉
 	 * 		- 每隻sf產一個檔,檔名為function name
-	 * 
+	 *
 	 * */
 	public static SFSPModel transformSF(String sf) throws IOException, UnknowSQLTypeException{
 		SFSPModel res = new SFSPModel();
@@ -207,7 +207,7 @@ public class TransduceStoreFunctionService {
 		txtSQL = transformSQL(txtSQL);
 		String script = txtHeader+txtSQL;
 		//header的參數
-		List<String> lstParams = new ArrayList<String>();
+		List<String> lstParams = new ArrayList<>();
 		String headerParams = txtHeader
 				.replaceAll("(?i)\\bCASESPECIFIC\\b", "")
 				.replaceAll("(?i)CHARACTER(\\s+SET)?\\s+\\w+", "")
@@ -242,11 +242,11 @@ public class TransduceStoreFunctionService {
 	}
 	/**
 	 * @author	Tim
-	 * @throws IOException 
-	 * @throws UnknowSQLTypeException 
+	 * @throws IOException
+	 * @throws UnknowSQLTypeException
 	 * @since	2023年10月23日
 	 * 只處理sql的部分
-	 * 
+	 *
 	 * */
 	public static String transformSQL(String txtSQL) throws UnknowSQLTypeException, IOException {
 		//轉換sql
@@ -271,7 +271,7 @@ public class TransduceStoreFunctionService {
 		return txtSQL;
 //		return FamilyMartFileTransduceService.transduceSQLScript(sql);
 	}
-	
+
 	/*
 	 * 處理 SET @SQLSTR = ''; 裡面的SQL雨具
 	 * */
@@ -303,7 +303,7 @@ public class TransduceStoreFunctionService {
 	 * */
 	public static String openSQLSTR(String script) {
 		String res = "";
-		
+
 		res = script
 			.replaceAll("\\s*;\\s*$", "")
 			.replaceAll("(?<![\\+\\'])'(?![\\+\\'])", "")
@@ -312,9 +312,9 @@ public class TransduceStoreFunctionService {
 			.replaceAll("'\\s*$", "")
 			.replaceAll("^\\s*\\+\\s*'", "")
 		;
-		
+
 		res = SQLTranslater.convertDecode(res);
-		
+
 		res = res
 			.replaceAll("'", "''")
 			.replaceAll("'('\\s*\\+.*?\\s*\\+\\s*')'", "$1")

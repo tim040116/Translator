@@ -11,10 +11,11 @@ import etec.src.translator.view.frame.FastTransduceFrame;
  * @since	2023年11月8日
  * @version	3.4.1.1
  * 快入轉換
- * 
+ *
  * */
 public class FastTransduceController implements Controller {
 
+	@Override
 	public void run() throws Exception {
 		FastTransduceFrame.pnl.statusBar.setStatus(RunStatusEnum.WORKING);
 		String script = FastTransduceFrame.pnl.txtOldScript.getText();

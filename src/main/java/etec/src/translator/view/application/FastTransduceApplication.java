@@ -10,12 +10,12 @@ import etec.src.translator.view.frame.FastTransduceFrame;
  * <p></p>
  * <h2>方法</h2>
  * <p>run</p>
- * 
+ *
  * <h2>異動紀錄</h2>
  * <br>2023年11月06日	Tim	建立功能
  * <br>2024年02月20日	Tim	新增GP
- * 
- * 
+ *
+ *
  * @author	Tim
  * @version	4.0.0.0
  * @since	3.3.4.0
@@ -23,6 +23,7 @@ import etec.src.translator.view.frame.FastTransduceFrame;
  * @see		FastTransduceController
  */
 public class FastTransduceApplication  implements TranslatorApplication{
+	@Override
 	public void run() {
 		new FastTransduceFrame("即時轉換",new FastTransduceController());
 		//設定SQL語言的選項

@@ -10,7 +10,7 @@ import etec.common.utils.RegexTool;
 import etec.framework.context.convert_safely.model.Mark;
 
 /**
- * 
+ *
  * <h1>安全的轉換SQL語句</h1>
  * <br>因應SQL語法中很多子查詢及聯立的語法
  * <br>避免在語法拆解的時候因此影響構造的判讀
@@ -19,15 +19,15 @@ import etec.framework.context.convert_safely.model.Mark;
  * <br>拆解每個子查詢再切聯立
  * <br>
  * <br>以確保方法的參數不會受到其他子查詢影響
- * 
+ *
  * @author	Tim
  * @since	2023年12月26日
  * @version	4.0.0.0
  * */
 public class ConvertSubQuerySafely {
-	
-	
-	
+
+
+
 	public static long subQueryId = 0;
 	public static long unionQueryId = 0;
 	public long maxCnt = 0;
@@ -40,10 +40,10 @@ public class ConvertSubQuerySafely {
 	 * <br>拆解每個子查詢再切聯立
 	 * <br>
 	 * <br>以確保方法的參數不會受到其他子查詢影響
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * 	
+	 *
 	 *
 	 * */
 	public String savelyConvert(String script,Function<String, String> function) {
@@ -58,7 +58,7 @@ public class ConvertSubQuerySafely {
 		String subSrc = "";
 		String fthSrc = "";
 		String subId = "";
-		Map<String,String> mapSub = new HashMap<String,String>();
+		Map<String,String> mapSub = new HashMap<>();
 		int intq = 0;
 		int issub = 0;
 		for(String ch : res.split("\\b")) {
@@ -101,7 +101,7 @@ public class ConvertSubQuerySafely {
 			}else {
 				fthSrc += ch;
 			}
-			
+
 		}
 		//處理父查詢
 		fthSrc = savelyConvertUnion(fthSrc,function);
@@ -113,7 +113,7 @@ public class ConvertSubQuerySafely {
 		for(Entry<String,String> e : mapSub.entrySet()) {
 			fthSrc = fthSrc.replace(e.getKey(),"("+ e.getValue()+")");
 		}
-		
+
 		return fthSrc;
 	}
 	/**

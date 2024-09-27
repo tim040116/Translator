@@ -52,13 +52,13 @@ public class POCTransduserService {
 				.replaceAll("(?i)BIT_GEN_AGGT\\s*\\(", "dbo.bit_gen_aggt(")
 				.replaceAll("(?i)BIT_OR\\s*\\(", "dbo.bit_or(")
 				.replaceAll("(?i)BIT_OR_AGGT\\s*\\(", "dbo.bit_or_aggt(")
-		
+
 				;
 		return res;
 	}
 	/*
 	 * 拆分每一段語法並處裡
-	 * 
+	 *
 	 * 並依照種類進行處理
 	 */
 	private static String transformSingleSQL(String sql) throws IOException {
@@ -69,7 +69,7 @@ public class POCTransduserService {
 		 * RegexTool.getRegexTarget("(?!=;)[^;]*;",fc); =>List<String> lstSql =
 		 * RegexTool.getRegexTarget("(?!=;)[^;]*;",fc.replaceAll("%;%","TtEeSsTt"));
 		 */
-		
+
 		if(sql.matches("\\s*")) {
 			res = "";
 		}
@@ -94,7 +94,7 @@ public class POCTransduserService {
 		else if (newSql.matches("CREATE\\s*(MULTISET|SET)?\\s+TABLE\\s+\\S+\\s+[^;]+")) {
 			res = addTryCatch(DDLTranslater.runCreateTable(newSql));
 		}
-		// MERGE INTO 
+		// MERGE INTO
 		else if (newSql.matches("MERGE\\s+INTO\\s+\\S+\\s+[^;]+")) {
 			res = addTryCatch(DMLTranslater.runMergeInto(newSql));
 		}
@@ -110,7 +110,7 @@ public class POCTransduserService {
 		else if (newSql.matches("SELECT\\s+[^;]+")) {
 			res = DQLTranslater.easyReplace(newSql)+"\r\n;";
 		}
-		
+
 		// drop view
 		else if (newSql.matches("(?i)[^;]*drop\\s+view[^;]*;")) {
 			// drop view
@@ -168,7 +168,7 @@ public class POCTransduserService {
 
 	/*
 	 * 清除不需要的語法
-	 * 
+	 *
 	 */
 	private static String easyRemove(String fc) {
 
@@ -300,15 +300,15 @@ public class POCTransduserService {
 		}
 		String res = "\r\nBEGIN TRY\r\n\r\n";
 		res += sql.trim() + "\r\n\r\n";
-		res += 	  "END TRY\r\n" 
-				+ "BEGIN CATCH\r\n" 
+		res += 	  "END TRY\r\n"
+				+ "BEGIN CATCH\r\n"
 				+ "  SELECT '" + cntarea + "' AS ErrorArea,\r\n"
-				+ "    ERROR_NUMBER() AS ErrorNumber,\r\n" 
+				+ "    ERROR_NUMBER() AS ErrorNumber,\r\n"
 				+ "    ERROR_STATE() AS ErrorState,\r\n"
-				+ "    ERROR_SEVERITY() AS ErrorSeverity,\r\n" 
+				+ "    ERROR_SEVERITY() AS ErrorSeverity,\r\n"
 				+ "    ERROR_PROCEDURE() AS ErrorProcedure,\r\n"
-				+ "    ERROR_MESSAGE() AS ErrorMessage;\r\n" 
-				+ "  RETURN ERROR_STATE();\r\n" 
+				+ "    ERROR_MESSAGE() AS ErrorMessage;\r\n"
+				+ "  RETURN ERROR_STATE();\r\n"
 				+ "END CATCH;\r\n";
 		cntarea++;
 		return res;

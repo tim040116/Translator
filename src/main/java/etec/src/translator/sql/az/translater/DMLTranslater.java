@@ -11,7 +11,7 @@ import etec.src.translator.sql.az.translater.service.MergeIntoService;
 import etec.src.translator.sql.td.classifier.TeradataClassifier;
 
 public class DMLTranslater {
-	
+
 	/**
 	 * <h1>轉換DML</h1>
 	 * <p>
@@ -20,15 +20,15 @@ public class DMLTranslater {
 	 * <br>轉換 DELETE TABLE
 	 * </p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年5月15日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.0.0.0
-	 * @param	
+	 * @param
 	 * @throws	e
-	 * @see		
+	 * @see
 	 * @return	return_type
 			 */
 	public String easyReplace(String title,String sql) throws SQLTranslateException {
@@ -66,14 +66,14 @@ public class DMLTranslater {
 //		res = DQLTranslater.easyReplace(res);
 		return res+"\r\n;";
 	}
-	
+
 	//insert select
 	public static String runInsertSelect(String sql) throws SQLTranslateException {
 //		String res = "";
 //		String insert = RegexTool.getRegexTarget("INSERT\\s+(?:INTO\\s+)?\\S+\\s+", sql).get(0).trim();
 //		String select = RegexTool.decodeSQL(RegexTool.encodeSQL(sql).replaceAll(RegexTool.encodeSQL(insert), ""));
 //		res = insert+"\r\n"+DQLTranslater.easyReplace(select);
-		
+
 		String res = "";
 		String[] arr = sql.split("(?i)\\bSELECT\\b", 2);
 		String insert = arr[0];
@@ -82,7 +82,7 @@ public class DMLTranslater {
  		res = insert+select;
 		return res;
 	}
-	
+
 	/**
 	 * <h1>merge into 轉換</h1>
 	 * <p>
@@ -90,10 +90,10 @@ public class DMLTranslater {
 	 * <br>決定改比照GP語法，將語法拆分成insert跟update 兩段語法
 	 * </p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年6月20日	Tim	改使用gp語法
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.1.0.0.0
 	 * @param	sql
@@ -154,7 +154,7 @@ public class DMLTranslater {
 		m.appendTail(sb);
 		res = sb.toString();
 		return res;
-		
+
 //		String res = "";
 //		String mergeInto = sql.replaceAll("\\s*USING\\s*\\([^;]+","");
 //		String using = "";
@@ -185,31 +185,31 @@ public class DMLTranslater {
 //			else if("AFTER".equals(status)){
 //				when+=c;
 //			}
-//			
+//
 //		}
 //		res = mergeInto+"\r\nUSING (\r\n"+using.trim()+"\r\n)"+when+"\r\n";
 //		return res;
 	}
-	
-	
+
+
 	/**
 	 * <h1></h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年6月24日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	4.1.0.0
 	 * @param	enclosing_method_arguments
 	 * @throws	e
-	 * @see		
+	 * @see
 	 * @return	return_type
 			 */
 	public static String changeUpdateTable(String sql) throws SQLTranslateException {
 		String res = sql;
-		
+
 		/**
 		 * <p>功能 ：UPDATE TABLE 語法轉換</p>
 		 * <p>類型 ：搜尋</p>
@@ -223,7 +223,7 @@ public class DMLTranslater {
 		 * 5.where		 : where
 		 * <h2>備註 ：</h2>
 		 * <p>
-			TD :　
+			TD :
 				UPDATE AAA a
 				FROM BBB b
 				SET a.AA = b.BB
@@ -253,7 +253,7 @@ public class DMLTranslater {
 			String joinTable = m.group("joinTable");
 			String set = m.group("set");
 			String where = m.group("where");
-			
+
 			alias = alias==null?"upd_als_nm":alias;
 			set = SQLTranslater.easyReplaceSelect(set).trim().replaceAll("(?)(?<!\\.|<)\\b\\w+\\b(?<!DATE|AS)(?![.('])", alias+".$0");//欄位加上alias name
 			joinTable = joinTable==null?"":","+SQLTranslater.easyReplaceSelect(joinTable);

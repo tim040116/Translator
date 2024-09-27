@@ -14,11 +14,11 @@ import etec.common.view.panel.FileButton;
 
 /**
  * 輸入讀檔產檔路徑的頁面
- * 
+ *
  * @author	Tim
  * @since	2023/03/28
  * @version	dev
- * 
+ *
  */
 public class ChooseIOPathPanel extends JPanel {
 
@@ -33,7 +33,7 @@ public class ChooseIOPathPanel extends JPanel {
 	//讀檔
 	private FileButton readPath;
 	public ChooseIOPathPanel() {
-		
+
 			//初始化
 			btn = new JButton("檔案");
 			text = new JTextField(100);

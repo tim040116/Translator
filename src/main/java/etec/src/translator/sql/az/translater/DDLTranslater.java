@@ -11,7 +11,7 @@ import etec.framework.security.log.service.Log;
 import etec.src.translator.sql.td.classifier.TeradataClassifier;
 
 public class DDLTranslater {
-	
+
 	public static String easyReplace(String sql) throws SQLTranslateException {
 		SQLTypeEnum type = TeradataClassifier.getSQLType(sql);
 		String res = sql;
@@ -52,32 +52,32 @@ public class DDLTranslater {
 		res = addDropIfExists(res);
 		return res;
 	}
-	
+
 	/**
 	 * <h1>CTAS</h1>
 	 * <p>
 	 * <br>先清除註解並處理index
-	 * <br>拆開sub query 
+	 * <br>拆開sub query
 	 * <br>加上 if not exists
 	 * </p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年6月20日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	1.0.0.0
 	 * @param	enclosing_method_arguments
 	 * @throws	e
-	 * @see		
+	 * @see
 	 * @return	return_type
 			 */
 	public static String runCTAS(String sql) throws SQLTranslateException {
 		String res = sql;
-		
+
 		res = replaceCreateTitle(res);
 		res = addWith(res);
-		
+
 		/**
 		 * <p>功能 ：CTAS拆解</p>
 		 * <p>類型 ：搜尋</p>
@@ -107,12 +107,12 @@ public class DDLTranslater {
 			String tableName = m.group("tableName");
 			String select = m.group("select");
 			String with = m.group("with");
-			
+
 			select = DQLTranslater.easyReplace(select);
 			newSql =  "IF OBJECT_ID('"
-					+ tableName.replaceAll("#","tempdb..") 
+					+ tableName.replaceAll("#","tempdb..")
 					+ "') IS NOT NULL DROP TABLE " + tableName + "\r\n"
-					+ "CREATE TABLE "+tableName 
+					+ "CREATE TABLE "+tableName
 					+ with
 					+ "AS \r\n"
 					+ select+"\r\n";
@@ -124,16 +124,16 @@ public class DDLTranslater {
 //		res = addDropIfExists(res);
 		return res;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * @author	Tim
 	 * @since	2023年10月17日
-	 * 
+	 *
 	 * 可用於drop table跟drop view
 	 * 會加上if exist的語法
-	 * 
+	 *
 	 * */
 	public static String runDropTable(String sql){
 		String res = sql
@@ -143,7 +143,7 @@ public class DDLTranslater {
 	/**
 	 * @author	Tim
 	 * @since	2023年10月17日
-	 * 
+	 *
 	 * rename table 改成rename object
 	 * 新名稱不要加DBname
 	 * */
@@ -152,20 +152,20 @@ public class DDLTranslater {
 		result = result.replaceAll("(?i)RENAME\\s+TABLE\\s+(\\S+)\\s+TO\\s+([^;]+)", "RENAME OBJECT $1 TO $2");
 		return result;
 	}
-	
+
 	/**
 	 * <h1>replace view</h1>
 	 * <p>replace view ... </p>
 	 * <p>ALTER VIEW ...</p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年6月19日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	1.0.0.0
 	 * @param	enclosing_method_arguments
 	 * @throws	e
-	 * @see		
+	 * @see
 	 * @return	return_type
 			 */
 	public static String runReplaceView(String sql){
@@ -173,7 +173,7 @@ public class DDLTranslater {
 		res = sql.replaceAll("(?i)REPLACE\\s+VIEW", "ALTER VIEW")+ "\r\n;";
 		return res;
 	}
-	
+
 	// 轉換create table
 	public static String replaceCreateTitle(String sql) {
 		String result = sql.replaceAll("(?i)\\s*,\\s*NO\\s*FALLBACK\\s*", " ")
@@ -188,12 +188,12 @@ public class DDLTranslater {
 				.replaceAll("(?i)TITLE\\s+'[^']+'", " ");
 		/**
 		 * 2024年8月21日	Tim	直接用位置來刪除 CREATE TABLE 的多餘設定
-		 * 
-		 * */		
+		 *
+		 * */
 		result = result.replaceAll("(?is)CREATE\\b.*?\\bTABLE\\s+(?<tableName>[^,\\s()]+)\\s+.*?(?:AS\\s*)?\\(", "CREATE TABLE $1 AS (");
 		return result;
 	}
-	
+
 	// 清除TD特有的語法
 		@Deprecated
 		public static String replaceTDsql(String sql) {
@@ -205,7 +205,7 @@ public class DDLTranslater {
 			;
 			return result;
 		}
-		
+
 		// 清除欄位的多餘設定
 		public static String replaceColumn(String sql) {
 			String result = sql.replaceAll("(?i)CHARACTER\\s+SET\\s+\\S+", " ")
@@ -217,20 +217,20 @@ public class DDLTranslater {
 					.replaceAll(" +,", ",");
 			return result;
 		}
-	
+
 	/**
 	 * <h1>CREATE TABLE加上DROP IF EXISTS</h1>
 	 * <p></p>
 	 * <p></p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年6月24日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	1.0.0.0
 	 * @param	enclosing_method_arguments
 	 * @throws	e
-	 * @see		
+	 * @see
 	 * @return	return_type
 			 */
 	public static String addDropIfExists(String sql) {
@@ -244,8 +244,8 @@ public class DDLTranslater {
 		return res;
 
 	}
-		
-		
+
+
 	/**
 	 * <h1>with處理</h1>
 	 * <p>
@@ -260,15 +260,15 @@ public class DDLTranslater {
 	 * 	DISTRIBUTION = [ REPLICATE | HASH(...) ]
 	 * )
 	 * </p>
-	 * 
+	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年6月19日	Tim	建立功能
-	 * 
+	 *
 	 * @author	Tim
 	 * @since	1.0.0.0
 	 * @param	index 的處理
 	 * @throws	e
-	 * @see		
+	 * @see
 	 * @return	return_type
 			 */
 	public static String addWith(String sql) {
@@ -283,19 +283,19 @@ public class DDLTranslater {
 		 * 	1.修飾詞
 		 * 	2.欄位
 		 * <h2>備註 ：</h2>
-		 * 	
+		 *
 		 * <h2>異動紀錄 ：</h2>
 		 * 2024年6月19日	Tim	建立邏輯
 		 * */
 		StringBuffer sb = new StringBuffer();
-		List<String> lst = new ArrayList<String>();
+		List<String> lst = new ArrayList<>();
 		String reg = "(?i)((?:(?:UNIQUE|PRIMARY)\\s+)*)INDEX\\s*\\(([^()]+)\\)";
 		Matcher m = Pattern.compile(reg).matcher(result);
 		while(m.find()) {
 			lst.add(m.group(2));
 			m.appendReplacement(sb, "");
 		}
-		String distribution = "\r\nWITH (" 
+		String distribution = "\r\nWITH ("
 				+ "\r\n\tCLUSTERED COLUMNSTORE INDEX,"
 				+ "\r\n\tDISTRIBUTION = "
 				+ (lst.isEmpty()?"REPLICATE":"HASH( " + String.join(",", lst) + " )")
@@ -303,9 +303,9 @@ public class DDLTranslater {
 				;
 //		sb.append(distribution);
 		m.appendTail(sb);
-		
+
 		result = sb.toString().replaceAll("\\s*;\\s*$","") + distribution;
-//		
+//
 //		// 取得欄位
 //		List<String> lstPrimaryIndex = RegexTool.getRegexTarget("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", temp);
 //		temp = temp.replaceAll("(?i)UNIQUE\\s+PRIMARY\\s+INDEX\\s+\\([^\\)]+\\)", "");
@@ -329,12 +329,12 @@ public class DDLTranslater {
 //		result += hash + "\r\n)";
 		return result;
 	}
-	
+
 	/**
 	 * 處理Az 跟 mssql之間的轉換
 	 * @author	Tim
 	 * @since	2023年11月17日
-	 * 
+	 *
 	 * 解決ms sql 不支援CTAS語法問題，將CTAS轉為select into語法
 	 * */
 	public static String runCTASToSelectInto(String sql) {
@@ -354,7 +354,7 @@ public class DDLTranslater {
 	 * 處理Az 跟 mssql之間的轉換
 	 * @author	Tim
 	 * @since	2023年11月24日
-	 * 
+	 *
 	 * 解決ms sql 不支援CTAS語法問題，將CTAS轉為select into語法
 	 * */
 	public static String runSelectIntoToCTAS(String sql) {

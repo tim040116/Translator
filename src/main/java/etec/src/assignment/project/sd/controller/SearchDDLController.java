@@ -46,7 +46,7 @@ public class SearchDDLController implements Controller{
 		if(Params.searchFunction.IS_TITLE) {
 			FileTool.addFile(ddlListNm ,"\"FILE_PATH\",\"FILE_NAME\",\"TYPE\",\"TABLE_NAME\"");//路徑,檔名,類型,資料表名
 		}
-		Map<String,Integer> mapFunc = new HashMap<String,Integer>();
+		Map<String,Integer> mapFunc = new HashMap<>();
 		List<String> lstSkip = Arrays.asList(Params.searchFunction.SKIP_LIST);
 		// 讀取檔案
 		SearchFunctionPnl.tsLog.setLog("資訊", "開始讀取檔案");
@@ -64,8 +64,8 @@ public class SearchDDLController implements Controller{
 					;
 			String[] arrFileType = f.getName().split("\\.");
 			String fileType = arrFileType[arrFileType.length-1];
-			FileTool.addFile(fileListNm,																
-					  "\""   +category 
+			FileTool.addFile(fileListNm,
+					  "\""   +category
 					+ "\",\""+f.getName()
 					+ "\",\""+fileType
 					+ "\",\""+f.length()
@@ -73,15 +73,15 @@ public class SearchDDLController implements Controller{
 			// 讀取檔案
 			String content = FileTool.readFile(f,Charset.forName("utf-8"));
 			content = SearchFunctionService.getSqlContent(content);
-			
-			List<String> lstFile = new ArrayList<String>();
-			
+
+			List<String> lstFile = new ArrayList<>();
+
 			/**
-			 * 2024/03/12 Tim	
+			 * 2024/03/12 Tim
 			 * 當初有辦法取得TD的DDL語法，且一個檔案只放一段語法
 			 * 此功能為將該DDL語法轉換成AZ語法
 			 * 之後會用其他功能替換掉
-			 * 
+			 *
 			 * */
 //			//SD
 //			if("SD_MAKER".equals(Params.config.APPLICATION_TYPE)) {
@@ -106,11 +106,11 @@ public class SearchDDLController implements Controller{
 //					continue;
 //				}
 //			}
-			
+
 			//轉換語法
-			
+
 			//搜尋DDL
-			Map<String,String> mapDDL = new HashMap<String,String>();
+			Map<String,String> mapDDL = new HashMap<>();
 			mapDDL.put("CREATE", "CREATE\\s+TABLE");
 			mapDDL.put("DROP", "DROP\\s+TABLE");
 			mapDDL.put("INSERT", "INSERT\\s+INTO");
@@ -139,8 +139,8 @@ public class SearchDDLController implements Controller{
 			List<String> lstDQLTable = SearchFunctionService.searchDQL(content);
 			SearchFunctionPnl.tsLog.setLog("資訊", "建立清單");
 			for(String tblNm : lstDQLTable) {
-				FileTool.addFile(ddlListNm,																
-						  "\""   +category 
+				FileTool.addFile(ddlListNm,
+						  "\""   +category
 						+ "\",\""+f.getName()
 						+ "\",\""+"SELECT"
 						+ "\",\""+tblNm
@@ -150,7 +150,7 @@ public class SearchDDLController implements Controller{
 			i++;
 			SearchFunctionPnl.progressBar.plusOne();
 		}
-		
+
 		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.SUCCESS);
 		SearchFunctionPnl.tsLog.setLog("資訊","產生完成，共 "+i+" 個檔案");
 		Log.info("完成，共 "+i+" 個檔案");

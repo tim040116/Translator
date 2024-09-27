@@ -5,6 +5,7 @@ import etec.src.security.compress.controller.UncompressController;
 
 public class UncompressApplication implements TranslatorApplication {
 
+	@Override
 	public void run() {
 		try {
 			(new UncompressController()).run();

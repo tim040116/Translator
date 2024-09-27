@@ -7,7 +7,7 @@ public class DataTypeService {
 
 	private static String reg = "";
 	static{
-		List<String> lstType = new ArrayList<String>();
+		List<String> lstType = new ArrayList<>();
 		lstType.add("INTEGER");
 		lstType.add("BIGINT");
 		lstType.add("CHAR\\(\\d+\\)");
@@ -19,5 +19,5 @@ public class DataTypeService {
 		res = res.replaceAll(reg,"CAST\\($1 AS $2\\)");
 		return res;
 	}
-	
+
 }

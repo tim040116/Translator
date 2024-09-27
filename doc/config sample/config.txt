@@ -1,0 +1,8 @@
+--APPLICATION_TYPE=FAMILY_MART_TRANSLATOR
+APPLICATION_TYPE=SF_SP
+--APPLICATION_TYPE=SD_MAKER
+--
+INIT_INPUT_PATH=C:\Users\User\Desktop\familymart\T1
+--INIT_INPUT_PATH=C:\Users\User\Desktop\familymart\T0\20230828_NEW
+INIT_OUTPUT_PATH=C:\Users\User\Desktop\familymart\T2
+--INIT_OUTPUT_PATH=Assessment_Result	

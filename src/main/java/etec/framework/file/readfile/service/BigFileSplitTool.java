@@ -29,7 +29,7 @@ public class BigFileSplitTool {
 		FileTool.deleteFile(new File(tmpFilePath+"sample\\"));
 		delf.delete();
 	}
-	
+
 	public static void splitFile(String rootPath) {
 		try {
 			//移
@@ -41,7 +41,7 @@ public class BigFileSplitTool {
 			File delf = new File("C:\\Assignment_Temp\\Temp_Data");
 			FileTool.deleteFile(new File("C:\\Assignment_Temp\\Temp_Data"));
 			delf.delete();
-			
+
 			System.out.println("Success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -54,7 +54,7 @@ public class BigFileSplitTool {
 			// 名
 			String fileName = f.getPath().replace(rootPath, "");
 			fileName = targetFilePath + fileName.replaceAll("@", "");
-			
+
 			File newFile = new File(fileName);
 			newFile.getParentFile().mkdirs();
 			if (newFile.exists()) {
@@ -84,7 +84,7 @@ public class BigFileSplitTool {
 			String fileName = f.getPath().replace(rootPath, "");
 //			fileName = tmpFilePath + fileName.replaceAll(".", strQ + "$0" + strE);
 			fileName = tmpFilePath + fileName.replaceAll("(?<=.)", "@");
-			
+
 			File newFile = new File(fileName);
 			newFile.getParentFile().mkdirs();
 			if (newFile.exists()) {
@@ -109,5 +109,5 @@ public class BigFileSplitTool {
 			}
 		}
 	}
-	
+
 }
