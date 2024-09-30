@@ -1,3 +1,5 @@
+PDATA.,${DATA}.
+PMART.,${MART}.
 ${DATA}.ACT_TIME_W,dev.act_time_w
 ${DATA}.AGMAGNT,dev.m_ag
 ${DATA}.AGMCLASS,dev.m_ag_cat
@@ -146,7 +148,7 @@ ${MART}.LAST_ORG_OSTYPE_DIM,dev.m_org_type_ostype
 ${MART}.LAST_ORG_SAGE_DIM,dev.m_org_type_sage
 ${MART}.LAST_ORG_STORE,dev.last_org_store
 ${MART}.LAST_ORG_STYPE_DIM,dev.m_org_type_stype
-${MART}.LATEST_ORG_DIM,dev.m_org_hist
+${MART}.LATEST_ORG_DIM,tfm.m_org_hist
 ${MART}.MEMBER_SEND_PAS,dev.psl_send_mem
 ${MART}.MEMBER_SEND_REP,dev.co_send_mem
 ${MART}.MEMBER_STOCK_PAS,dev.psl_stock_mem
@@ -157,7 +159,7 @@ ${MART}.PAS_STOCK_DAILY,dev.psl_stock_daily
 ${MART}.PRD_DIM,tfm.m_cmdt_retst
 ${MART}.PRD_GRP,dev.m_cmdt_kgrp
 ${MART}.PRD_KND,dev.m_cmdt_knd
-${MART}.PRD_LINK_DIM,dev.m_cmdt_link
+${MART}.PRD_LINK_DIM,tfm.m_cmdt_link
 ${MART}.PRD_PRD,dev.m_cmdt_orist
 ${MART}.STORE_TYPE_DIM,dev.m_store_type_hist
 ${MART}.TIME_D,dev.m_date_d
@@ -169,7 +171,32 @@ ${MART}.TSC_REMD_FACT_IMM,dev.tsc_remd_fact_imm
 ${MART}.TSC_TRANS_PRD_AGN_L2_ALL,dev.tsc_trans_prd_agn_l2_all
 ${MART}.TSC_TRANS_PRD_AGN_L3_ALL,dev.tsc_trans_prd_agn_l3_all
 ${MART}.TSC_TRANS_PRD_AGN_L3_IMM,dev.tsc_trans_prd_agn_l3_imm
-${MART}.YMWD_TIME,dev.m_date_ymwd
+${MART}.YMWD_TIME,tfm.m_date_ymwd
 ${MART}.YMWD_TIME_W2,dev.m_date_ymwd2
 ${MART}.bi_code,dev.bi_code
 ${MART}.bi_1_5_add1day,dev.bi_1_5_add1day
+${MART}.BASIC_MFACT_DETAIL_ORD1,dev.BASIC_MFACT_DETAIL_ORD1
+${MART}.BASIC_MFACT_ORD1       ,dev.BASIC_MFACT_ORD1       
+${MART}.sales_tcfact,dev.sales_tcfact
+${MART}.sales_tcfact_detail,dev.sales_tcfact_detail
+${MART}.sales_ctfact,dev.sales_ctfact
+${MART}.fact_sales_time_detail,dev.fact_sales_time_detail
+${MART}.fact_sales_time,dev.fact_sales_time
+${DATA}.throwdetail,dev.throw_detail
+${MART}.basic_mlfact,dev.basic_mlfact
+${MART}.sales_ctfact_detail,dev.sales_ctfact_detail
+${MART}.store_rel,tfm.m_store_rel
+${MART}.PRD_DIM_CSUNT_14,dev.prd_dim_csunt_14
+${MART}.basic_mfact_shop_sec,dev.basic_mfact_shop_sec
+${MART}.LAST_SHOPDIST,dev.vw_last_shopdist
+${MART}.prd_link_dim_bi,dev.prd_link_dim_bi
+${MART}.BASIC_MLFACT_ORD1,dev.basic_mlfact_ord1
+${MART}.remd_fact,dev.remd_fact
+${MART}.remd_fact_sum,dev.remd_fact_sum
+${DATA}.pbmcmdt_vd,tfmds.m_cmdt_vd
+${DATA}.ORDDETAIL,dev.order_detail
+${MART}.org_bit_mapping,dev.org_bit_mapping
+${MART}.basic_stfact_detail,dev.basic_stfact_dtl
+${MART}.basic_stfact,dev.basic_stfact
+${MART}.,dev.
+${DATA}.,dev.

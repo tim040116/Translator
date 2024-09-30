@@ -26,18 +26,46 @@ public class FmSqlService {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public static String preReplace(String content) {
+		String res = content;
+		res = removeBteq(res);
+		res = res.replaceAll("CALL\\s+[^.]+\\.P_DROP_TABLE\\('[^']+'\\)\\s*;", "");
+		
+		return res;
+	}
+	
 	public static String easyReplace(String content) {
 		String res = content;
 		res = replaceTempTableName(res);
 		res = toLowerCase(res);
 		res = dropCreate(res);
-		res = removeBteq(res);
 		res = cleanCode(res);
 		res = addRerun(res);
 		res = addSP(res);
 		res = replaceAll(res);
 		res = fdpUpt(res);
+		res = cleanCode(res);
+		return res;
+	}
+	
+	//在程式的最後面加上droptable
+	public static String addDropTempTable(String content,List<String> lstTempTable) {
+		String res = content;
+		String drop = "\r\n -- 刪除暫存檔";
+		String regex = "(?i)IF\\s+OBJECT_ID\\('([^']+)','U'\\)\\s*IS\\s+NOT\\s+NULL"
+				+ "\\s+BEGIN"
+				+ "\\s+DROP\\s*TABLE\\s+\\1\\s*;"
+				+ "\\s*END";
+		Matcher m = Pattern.compile(regex).matcher(res);
+		while(m.find()) {
+			String str = m.group(0);
+			if(lstTempTable.contains(m.group(1))) {
+				str = "/*\r\n -- rerun\r\n" + str + "\r\n*/";
+			}
+			drop += "\r\n" + str;
+		}
+		res = res + "\r\n" + drop;
 		return res;
 	}
 	
@@ -45,18 +73,21 @@ public class FmSqlService {
 	 * 1.找到所有target table
 	 * 
 	 * */
-	public static String addRerun(String content) {
+ 	public static String addRerun(String content) {
 		String res = content;
 		String rerunNotNull = "IF  1=1";//準備rerun flag
 		String rerunMerge = "";
 		List<String> rerunSet = new ArrayList<String>();
+		List<String> lstTempTable = new ArrayList<String>();
+		List<String> lstTTable = new ArrayList<String>();
+		List<String> lstSTable = new ArrayList<String>();
+		
 		//1.解析merge語法
 		/**
 		 * target	: target table
 		 * tmpA		: 單一table
 		 * tmpB		: sub query
 		 * */
-		List<String> lstTTable = new ArrayList<String>();
 		String regMerge = "(?i)"
 			+ "MERGE\\s+INTO\\s+(?<target>\\S+)[^;]*USING\\s*(?:"//target table
 			+ "(?<tmpA>\\S+)\\s+\\w+"//單一table
@@ -69,6 +100,7 @@ public class FmSqlService {
 			//1-1.取得target跟temp table
 			String targetTable = mm.group("target");
 			String tempTable = mm.group("tmpA")!=null?mm.group("tmpA"):mm.group("tmpB");
+			lstTempTable.add(tempTable.toLowerCase().trim());
 			//1-2.lstTTable 用來組註解
 			lstTTable.add(targetTable);
 			//1-3.if table Not Null 
@@ -95,6 +127,22 @@ public class FmSqlService {
 				,"$0@tx_date as fdp_upt,\r\n"
 			);
 		}
+		//Source table
+		Matcher ms = Pattern.compile("(?i)(PDATA|PMART|\\$\\{PDATA\\}|\\$\\{PMART\\}|dev|tfm|tfmds)\\.\\w+").matcher(content);
+		while(ms.find()) {
+			String str = ms.group().toLowerCase();
+			if(str.matches("(?i)dev\\.stg_\\w+")){
+				continue;
+			}
+			else if(lstSTable.contains(str)) {
+				continue;
+			}
+			else if(lstTTable.contains(str)) {
+				continue;
+			}
+				
+			lstSTable.add(str);
+		}
 		//2.組裝
 		String rerun =  
 			  "-- Rerun 機制 " + String.join(" , ", lstTTable)
@@ -112,13 +160,17 @@ public class FmSqlService {
 			+ "\r\n\tSET @check_rerun_dtl = 'N';"
 			+ "\r\nEND"
 			+ "\r\n"
-			+ "\r\nIF@check_rerun_dtl = 'Y'"
+			+ "\r\nIF @check_rerun_dtl = 'Y'"
 			+ "\r\nBEGIN"
 			+ "\r\n" + rerunMerge
 			+ "\r\nEND"
 			+ "\r\n"
 		;
-		res = rerun + res;
+		String txdate = "@tx_date";
+		res = p_IOPTableLog(txdate,lstTTable,lstSTable)
+			+ rerun
+			+ res
+			+ addDropTempTable(content,lstTempTable);
 		return res;
 	}
 	//依開發規範轉換
@@ -147,7 +199,6 @@ public class FmSqlService {
 		res = "CREATE PROCEDURE dev.sp__ldtf\r\n\t"
 			+ txdate + " varchar(10)"
 			+ "\r\nAS BEGIN"
-			+ p_IOPTableLog(txdate)
 			+ "\r\n\r\n\tDECLARE " + txdate1 + " int;"
 			+ "\r\n\tSET " + txdate1 + " = cast(convert(varchar(8),cast(" + txdate + " as date),112) as int);\r\n"
 			+ res.trim().replaceAll("\n", "\n\t")
@@ -172,7 +223,7 @@ public class FmSqlService {
 		StringBuffer sb = new StringBuffer();
 		Matcher m = Pattern.compile("(?i)(?:#|tempdb\\.\\.|TEMP_TABLE\\.)(?:TP(\\d+)?_)?(\\w+)").matcher(res);
 		while (m.find()) {
-			String all = m.group(0);
+//			String all = m.group(0);
 			String tmpId = m.group(1);
 			String tblNm = m.group(2);
 			tmpId = tmpId == null ? "" : "_" + tmpId;
@@ -232,7 +283,8 @@ public class FmSqlService {
 			.replaceAll("(?i)\\.SET\\s+ERROROUT\\s+STDOUT\\s*;?", "")
 			.replaceAll("(?i)\\.SET\\s+SESSION\\b[^;]+;", "")
 			.replaceAll("(?i)\\.LOGON\\s+[^,]+,\\s*\\S+\\s*", "")
-			.replaceAll("(?i)\\.LOGOFF\\s*;\\s*\\.QUIT\\s*0\\s*;","")
+			.replaceAll("(?i)\\.LOGOFF\\s*;","")
+			.replaceAll("(?i)\\.QUIT\\s*0\\s*;","")
 		;
 		return res;
 	}
@@ -250,9 +302,24 @@ public class FmSqlService {
 				.replaceAll("    ","\t")
 				.replaceAll("[ \\t]+\\r?\\n","\r\n")
 				// DROP兩次
-				.replaceAll(
-						"(?i)IF OBJECT_ID\\('([^']+)','U'\\) IS NOT NULL\\s+BEGIN\\s+DROP TABLE \\1;\\s+END\\s+(IF OBJECT_ID\\('\\1','U'\\) IS NOT NULL\\s+BEGIN\\s+DROP TABLE \\1;\\s+END)",
-						"$2");
+//				.replaceAll("(?i)IF OBJECT_ID\\('([^']+)','U'\\) IS NOT NULL\\s+BEGIN\\s+DROP TABLE \\1;\\s+END\\s+(IF OBJECT_ID\\('\\1','U'\\) IS NOT NULL\\s+BEGIN\\s+DROP TABLE \\1;\\s+END)","$2")
+				//排版
+				.replaceAll(" *, *",",")
+				.replaceAll(",[ \t]*(\r?\n[ \t]++)(?!,)","$1,")
+				.replaceAll("(?<! )(?==|<>)|(?<==|<>)(?! )"," ")
+				.replaceAll("\\s*;",";")
+				.replaceAll("(?!\\s|^);\\s*","\r\n\t;\r\n\r\n\t")
+				.replaceAll("(?i)([ \t]+)SELECT *(\\S+)","$1SELECT\r\n$1\t$2")
+				.replaceAll("(?i)\\s*(,fdp_upt)\\)", "$1\r\n\t\t\\)")
+				.replaceAll("(?i)([ \t]+)(DROP TABLE \\S+)\\s*;\\s*END","$1$2;\r\n$1END")
+				.replaceAll("(?i)\\s*?([\t ]+)(FROM|JOIN)\\s*\\(\\s*","\r\n$1$2 \\(\r\n$1\t")
+				.replaceAll("(?i)\\s*([ \t]+-- GROUP BY)","\r\n$1")
+				.replaceAll("(?i)\\s*?([\t ]+)(UNION(?:\\s*ALL)?)\\s*","\r\n$1\r\n$1$2\r\n$1")
+				.replaceAll("(?i)(\\s*)([^\r\n]*)\\s*(,fdp_upt = dateadd)","$1$2$1$3")
+				.replaceAll("(?i)(\n\\s*)(.*)\\s*(,dateadd\\(hour,8,getdate\\(\\)\\))","$1$2$1$3")
+				.replaceAll("(\r?\n){3,}", "\r\n")
+		;
+			
 		return res;
 	}	
 
@@ -269,16 +336,18 @@ public class FmSqlService {
 	}
 	
 	//input output的註解
-	private static String p_IOPTableLog(String txdate) {
+	private static String p_IOPTableLog(String txdate,List<String> lstTTable,List<String> lstSTable) {
 		String res = "\r\n\t/*--------------------------------------------------------------------------"
 				+ "\r\n\tSP參數"
 				+ "\r\n\t\t"+txdate+" = ${TXDATE}"
 				+ "\r\n\tINPUT"
 				+ "\r\n\t\t"
+				+ String.join("\r\n\t\t", lstSTable)
 				+ "\r\n\tOUTPUT"
-				+ "\r\n\t"
+				+ "\r\n\t\t"
+				+ String.join("\r\n\t\t", lstTTable)
 				+ "\r\n\t--------------------------------------------------------------------------*/"
-				+ "";
+				+ "\r\n";
 		return res;
 	}
 }

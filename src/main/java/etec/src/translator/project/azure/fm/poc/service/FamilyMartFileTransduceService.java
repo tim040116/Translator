@@ -47,6 +47,7 @@ public class FamilyMartFileTransduceService {
 		Charset chs = CharsetTool.getCharset(f.getPath());
 		String context = CharsetTool.readFileInCharset(chs.name(),f.getPath());
 		String newFileName = BasicParams.getTargetFileNm(f.getPath());
+		context = FmSqlService.preReplace(context);
 		Log.debug("清理註解");
 		String newContext = ConvertRemarkSafely.savelyConvert(context, (t) -> {
 			StringBuffer sb = new StringBuffer();

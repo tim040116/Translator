@@ -1,7 +1,12 @@
+5.1.4.1	2024/09/30	Tim	全家專案	程式優化
+	- 強化程式功能
+		- 將drop table搬到語法最後端
+		- fdp_upt 欄位排版優化
+		- INPUT OUTPUT TABLE
+		- 自動讀取版本
 5.1.4.0	2024/09/26	Tim	全家專案	re-run功能實裝
 	- re-run機制
 		- 添加re-run語法
-		- 
 	- debug
 		- 修改@v_tx_date語法錯誤
 		- 修復rollup誤判問題

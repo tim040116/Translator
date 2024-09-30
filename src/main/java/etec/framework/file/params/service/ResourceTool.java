@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import main.Main;
+import etec.app.main.Main;
 
 /**
  * 讀取靜態資源
@@ -30,7 +30,7 @@ public class ResourceTool {
 	 * */
 	public String readFile(String file){
 		String res = "";
-		InputStream in = Main.class.getResourceAsStream("/META-INF/"+file);
+		InputStream in = Main.class.getClassLoader().getResourceAsStream("META-INF/"+file);
 		try {
 			InputStreamReader isr = new InputStreamReader(in);
 			BufferedReader br = new BufferedReader(isr);
