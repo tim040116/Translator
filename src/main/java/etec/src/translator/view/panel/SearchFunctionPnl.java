@@ -87,4 +87,10 @@ public class SearchFunctionPnl  extends JPanel {
 		add(lblStatus);
 		add(new JScrollPane(tsLog));
 	}
+	
+	public static void reset() {
+		tsLog.clearLog();
+		lblStatus.setStatus(RunStatusEnum.WORKING);
+		progressBar.reset();
+	}
 }

@@ -19,8 +19,7 @@ public class FamilyMartController implements Controller {
 	public void run() throws Exception {
 
 		// 儲存參數
-		SearchFunctionPnl.tsLog.clearLog();
-		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.WORKING);
+		SearchFunctionPnl.reset();
 		IOpathSettingService.setPath(SearchFunctionPnl.tfIp.getText(),Params.config.INIT_OUTPUT_PATH);
 		SearchFunctionPnl.tsLog.setLog("資訊", "取得資料目錄 : " + BasicParams.getInputPath());
 		SearchFunctionPnl.tsLog.setLog("資訊", "取得產檔目錄 : " + BasicParams.getOutputPath());
