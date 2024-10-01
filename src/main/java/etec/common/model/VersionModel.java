@@ -1,12 +1,10 @@
 package etec.common.model;
 
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import etec.app.main.Main;
 import etec.framework.file.params.service.ResourceTool;
 
 /**

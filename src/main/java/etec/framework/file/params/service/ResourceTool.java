@@ -24,7 +24,7 @@ public class ResourceTool {
 
 	/**讀取內部參數檔案
 	 * @author	Tim
-	 * @since	2.dev
+	 * @since	5.1.4
 	 * @return	String
 	 * @throws	IOException,URISyntaxException
 	 * */

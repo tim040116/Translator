@@ -1,7 +1,7 @@
 package etec.src.translator.view.application;
 
 import etec.common.interfaces.TranslatorApplication;
-import etec.src.security.compress.controller.UncompressController;
+import etec.src.security.project.compress.controller.UncompressController;
 
 public class UncompressApplication implements TranslatorApplication {
 

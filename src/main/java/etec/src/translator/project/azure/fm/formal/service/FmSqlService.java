@@ -51,21 +51,20 @@ public class FmSqlService {
 	
 	//在程式的最後面加上droptable
 	public static String addDropTempTable(String content,List<String> lstTempTable) {
-		String res = content;
-		String drop = "\r\n -- 刪除暫存檔";
+		String res = "\r\n -- 刪除暫存檔";
 		String regex = "(?i)IF\\s+OBJECT_ID\\('([^']+)','U'\\)\\s*IS\\s+NOT\\s+NULL"
 				+ "\\s+BEGIN"
 				+ "\\s+DROP\\s*TABLE\\s+\\1\\s*;"
 				+ "\\s*END";
-		Matcher m = Pattern.compile(regex).matcher(res);
+		Matcher m = Pattern.compile(regex).matcher(content);
 		while(m.find()) {
 			String str = m.group(0);
 			if(lstTempTable.contains(m.group(1))) {
 				str = "/*\r\n -- rerun\r\n" + str + "\r\n*/";
 			}
-			drop += "\r\n" + str;
+			res += "\r\n" + str;
 		}
-		res = res + "\r\n" + drop;
+		res = "\r\n" + res;
 		return res;
 	}
 	
@@ -102,7 +101,10 @@ public class FmSqlService {
 			String tempTable = mm.group("tmpA")!=null?mm.group("tmpA"):mm.group("tmpB");
 			lstTempTable.add(tempTable.toLowerCase().trim());
 			//1-2.lstTTable 用來組註解
-			lstTTable.add(targetTable);
+			if(!lstTTable.contains(targetTable.trim().toLowerCase())) {
+				lstTTable.add(targetTable.trim().toLowerCase());
+			}
+			
 			//1-3.if table Not Null 
 			rerunNotNull += "\r\n\tAND OBJECT_ID('"+tempTable+"','U') IS NOT NULL";
 			//1-4.set @check_rerun_dtl
@@ -128,7 +130,7 @@ public class FmSqlService {
 			);
 		}
 		//Source table
-		Matcher ms = Pattern.compile("(?i)(PDATA|PMART|\\$\\{PDATA\\}|\\$\\{PMART\\}|dev|tfm|tfmds)\\.\\w+").matcher(content);
+		Matcher ms = Pattern.compile("(?i)(PDATA|PMART|\\$\\{DATA\\}|\\$\\{MART\\}|dev|tfm|tfmds)\\.\\w+").matcher(content);
 		while(ms.find()) {
 			String str = ms.group().toLowerCase();
 			if(str.matches("(?i)dev\\.stg_\\w+")){
@@ -145,12 +147,12 @@ public class FmSqlService {
 		}
 		//2.組裝
 		String rerun =  
-			  "-- Rerun 機制 " + String.join(" , ", lstTTable)
+			  "\r\n-- Rerun 機制 " + String.join(" , ", lstTTable)
 			+ "\r\nDECLARE @check_rerun_dtl char(1);"
 			+ "\r\n" + rerunNotNull
 			+ "\r\nBEGIN"
 			+ "\r\n\tSET @check_rerun_dtl = ("
-			+ "\r\n\t\tSELECT CASE WHEN SUM(A.CNT)>0 THEN 'Y' ELSE 'N' END"
+			+ "\r\n\t\tSELECT CASE WHEN SUM(A.CNT) > 0 THEN 'Y' ELSE 'N' END"
 			+ "\r\n\t\tFROM ("
 			+ "\r\n" + String.join("\r\n\t\t\tUNION\r\n", rerunSet)
 			+ "\r\n\t\t) A"
@@ -308,8 +310,8 @@ public class FmSqlService {
 				.replaceAll(",[ \t]*(\r?\n[ \t]++)(?!,)","$1,")
 				.replaceAll("(?<! )(?==|<>)|(?<==|<>)(?! )"," ")
 				.replaceAll("\\s*;",";")
-				.replaceAll("(?!\\s|^);\\s*","\r\n\t;\r\n\r\n\t")
-				.replaceAll("(?i)([ \t]+)SELECT *(\\S+)","$1SELECT\r\n$1\t$2")
+//				.replaceAll("(?!\\s|^);\\s*","\r\n\t;\r\n\r\n\t")
+				.replaceAll("(?i)([ \t]+)(SELECT *(DISTINCT *)?)(\\S+)","$1$2\r\n$1\t$3")
 				.replaceAll("(?i)\\s*(,fdp_upt)\\)", "$1\r\n\t\t\\)")
 				.replaceAll("(?i)([ \t]+)(DROP TABLE \\S+)\\s*;\\s*END","$1$2;\r\n$1END")
 				.replaceAll("(?i)\\s*?([\t ]+)(FROM|JOIN)\\s*\\(\\s*","\r\n$1$2 \\(\r\n$1\t")
@@ -318,6 +320,12 @@ public class FmSqlService {
 				.replaceAll("(?i)(\\s*)([^\r\n]*)\\s*(,fdp_upt = dateadd)","$1$2$1$3")
 				.replaceAll("(?i)(\n\\s*)(.*)\\s*(,dateadd\\(hour,8,getdate\\(\\)\\))","$1$2$1$3")
 				.replaceAll("(\r?\n){3,}", "\r\n")
+				.replaceAll("(?i)(OUTER|INNER|LEFT|RIGHT|CROSS)\\s+JOIN","$1 JOIN")
+				.replaceAll("\tCLUSTERED", "\t CLUSTERED")
+				.replaceAll("([\t ]+)WHEN\\s+(NOT\\s+)?MATCHED\\s*THEN\\s+","$1WHEN $2MATCHED\\r\\n$1\\tTHEN ")
+				.replaceAll("\tCLUSTERED", "\t CLUSTERED")
+				.replaceAll("(INSERT|VALUES)\\s*\\([ \t]*\\b", "$1 \\(\r\n\t")
+				.replaceAll("USING\\s*\\(", "USING \\(")
 		;
 			
 		return res;

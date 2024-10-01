@@ -3,8 +3,8 @@ package etec.app.main;
 import etec.common.factory.Params;
 import etec.common.interfaces.TranslatorApplication;
 import etec.framework.security.log.service.Log;
-import etec.src.security.login.review.LoginReviewer;
-import etec.src.security.login.view.LoginFrame;
+import etec.src.security.project.login.service.CheckLoginService;
+import etec.src.security.project.login.view.LoginFrame;
 import etec.src.translator.view.application.AssessmentApplication;
 import etec.src.translator.view.application.AzureFileApplication;
 import etec.src.translator.view.application.FamilyMartApplication;
@@ -66,7 +66,7 @@ public class Main {
 		default:
 			break;
 		}
-		LoginFrame frame = new LoginFrame(app,new LoginReviewer());
+		LoginFrame frame = new LoginFrame(app,new CheckLoginService());
 		frame.setVisible(true);
 //		app.run();
 	}
