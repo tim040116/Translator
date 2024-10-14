@@ -2,11 +2,11 @@ package etec.common.model.element;
 
 import javax.swing.JButton;
 
-import etec.common.enums.RunStatusEnum;
 import etec.common.factory.UIPanelFactory;
-import etec.common.view.panel.LogTextArea;
-import etec.common.view.panel.ProgressBar;
-import etec.common.view.panel.StatusBar;
+import etec.framework.ui.search_func.enums.RunStatusEnum;
+import etec.framework.ui.search_func.pnl.LogTextArea;
+import etec.framework.ui.search_func.pnl.ProgressBar;
+import etec.framework.ui.search_func.pnl.StatusBar;
 /*
  * 轉換時的畫面呈現
  * */

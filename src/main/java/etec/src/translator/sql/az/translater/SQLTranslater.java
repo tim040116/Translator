@@ -23,6 +23,13 @@ public class SQLTranslater {
 	 * */
 	public static String easyReplaceSelect(String sql) throws SQLTranslateException {
 		String res = sql;
+		while(true) {
+			String temp = res;
+			res = res.replaceAll("(?i)COALESCE\\s*\\(\\s*((?:[^,()]+,)+)\\s*COALESCE\\s*\\(\\s*+([^()]+?)\\s*+\\)\\)","COALESCE\\($1$2\\)");
+			if(temp.equals(res)) {
+				break;
+			}
+		}
 		res = res
 				.replaceAll("(?i)\\bCURRENT_DATE\\b", "getDate\\(\\)")//CURRENT_DATE
 				.replaceAll("(?i)ADD_MONTHS", "ADD_MONTH")//ADD_MONTHS
@@ -70,6 +77,7 @@ public class SQLTranslater {
 		ConvertFunctionsSafely cfs2 = new ConvertFunctionsSafely();
 		res = cfs2.savelyConvert(res, (t)->{
 			String rt = convertDecode(t);
+			rt = rt.replaceAll("(?i)\\s*=\\s*NULL", " IS NULL");
 			return rt;
 		});
 

@@ -1,9 +1,9 @@
 package etec.common.factory;
 
-import etec.common.view.panel.FileButton;
-import etec.common.view.panel.LogTextArea;
-import etec.common.view.panel.ProgressBar;
-import etec.common.view.panel.StatusBar;
+import etec.framework.ui.search_func.pnl.FileButton;
+import etec.framework.ui.search_func.pnl.LogTextArea;
+import etec.framework.ui.search_func.pnl.ProgressBar;
+import etec.framework.ui.search_func.pnl.StatusBar;
 
 /**
  * UI介面的小物件

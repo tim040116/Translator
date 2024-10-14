@@ -1,6 +1,6 @@
 package etec.src.translator.view.application;
 
-import etec.common.interfaces.TranslatorApplication;
+import etec.framework.code.interfaces.Application;
 import etec.src.translator.project.azure.fm.poc.controller.FastTransduceController;
 import etec.src.translator.view.frame.FastTransduceFrame;
 /**
@@ -22,7 +22,7 @@ import etec.src.translator.view.frame.FastTransduceFrame;
  * @see		FastTransduceFrame
  * @see		FastTransduceController
  */
-public class FastTransduceApplication  implements TranslatorApplication{
+public class FastTransduceApplication  implements Application{
 	@Override
 	public void run() {
 		new FastTransduceFrame("即時轉換",new FastTransduceController());

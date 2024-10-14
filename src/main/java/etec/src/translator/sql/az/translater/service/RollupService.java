@@ -43,7 +43,7 @@ public class RollupService {
 			String allcol = m.group("groupby").replaceAll("(?i)GROUP\\s+BY\\s+", "");
 			List<String> lstCol = new ArrayList<>();
 			List<String> lstRollup = new ArrayList<>();
-			Matcher mcol = Pattern.compile("(?i)ROLLUP\\(([^)]+)\\)|([\\w.]+)").matcher(allcol);
+			Matcher mcol = Pattern.compile("(?i)ROLLUP\\s*\\(([^)]+)\\)|([\\w.]+)").matcher(allcol);
 			while(mcol.find()) {
 				if(mcol.group(1)!=null)
 					{lstRollup.add(mcol.group(0));}
@@ -92,6 +92,11 @@ public class RollupService {
 			res = singleRollup(model);
 			for(String rollup : arrRollup) {
 				model.lstCol.add(rollup);
+				String[] arrNewHeader = model.head.split("(?i)FROM",2);
+				model.head = arrNewHeader[0]
+						.replaceAll("(?i)\\Q"+rollup+"\\E","NULL")
+						+"FROM"
+						+ arrNewHeader[1];
 				res = singleRollup(model)+"\r\n\tUNION\r\n\t"+res;
 			}
 		}else{

@@ -1,10 +1,10 @@
 package etec.src.translator.view.application;
 
 import etec.common.factory.UIPanelFactory;
-import etec.common.interfaces.TranslatorApplication;
+import etec.framework.code.interfaces.Application;
 import etec.src.translator.view.frame.BaseFrame;
 
-public class UIApplication implements TranslatorApplication{
+public class UIApplication implements Application{
 
 	@Override
 	public void run() {

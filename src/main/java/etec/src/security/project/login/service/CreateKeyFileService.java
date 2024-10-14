@@ -22,11 +22,9 @@ public class CreateKeyFileService {
 	/**
 	 * 檢核項目
 	 * */
-	public static String print() {
+	public static String print(String id,String pass,String limitDate) {
 		//base
-		String id = "etec";
-		String pass = "abc123";
-		String limitDate = "2026/12/31";
+		
 		String format = "yyyy/mm/dd";
 		String fm = "i!=gks/ap-v";
 		String vv = EncryptionFactory.base64.encode(VersionModel.VERSION);
@@ -34,15 +32,21 @@ public class CreateKeyFileService {
 		String fmd = EncryptionFactory.base64.encode(format);
 		String md = EncryptionFactory.base64.encode(limitDate);
 		String hash = getHash(fm,id,pass,VersionModel.VERSION);
+		String key = EncryptionFactory.base64.encode(VersionModel.ALL_LOG+VersionModel.ALL_LOG+VersionModel.ALL_LOG);
+		String key2 = EncryptionFactory.base64.encode(key+key+fm);
 		//
 		String res =
 			        "fm"   + QTE + fm
 			+ DTR + "eps"  + QTE + "!Q2w3e4r5t"
 			+ DTR + "fmd"  + QTE + fmd
+			+ DTR + "primaryHashKey2024"  + QTE + key2
 			+ DTR + "ei"   + QTE + "admin"
 			+ DTR + "md"   + QTE + md
 			+ DTR + "vv"   + QTE + vv
+			+ DTR + "vss"   + QTE + "12"
+			+ DTR + "epkv"  + QTE + "!QAZ@WSX3edc4rfv"
 			+ DTR + "hash" + QTE + hash
+			+ DTR + "key"  + QTE + key
 		;
 		res = res.replaceAll("=", "\r");
 		res = EncryptionFactory.base64.encode(res);

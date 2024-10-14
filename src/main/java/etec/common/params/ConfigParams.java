@@ -3,8 +3,6 @@ package etec.common.params;
 import java.io.File;
 import java.util.Map;
 
-import etec.framework.file.params.service.ParamsTool;
-
 public class ConfigParams {
 
 	public final String APPLICATION_TYPE;

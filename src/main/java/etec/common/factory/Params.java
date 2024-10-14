@@ -8,9 +8,9 @@ import etec.common.params.ConfigParams;
 import etec.common.params.FamilyMartParams;
 import etec.common.params.GreenPlumParams;
 import etec.common.params.LogParams;
+import etec.common.params.ParamsTool;
 import etec.common.params.SFSPParams;
 import etec.common.params.SearchFunctionParams;
-import etec.framework.file.params.service.ParamsTool;
 
 /**
  * <h1>外部參數</h1>

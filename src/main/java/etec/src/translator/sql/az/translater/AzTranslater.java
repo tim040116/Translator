@@ -1,11 +1,11 @@
 package etec.src.translator.sql.az.translater;
 
+import etec.common.factory.TranslaterFactory;
 import etec.common.model.SQLTypeModel;
 import etec.framework.context.convert_safely.service.ConvertVarcharSafely;
 import etec.framework.context.translater.exception.SQLFormatException;
 import etec.framework.context.translater.exception.SQLTranslateException;
 import etec.framework.context.translater.exception.UnknowSQLTypeException;
-import etec.framework.context.translater.interfaces.TranslaterFactory;
 import etec.framework.security.log.service.Log;
 
 /**

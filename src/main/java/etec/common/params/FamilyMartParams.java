@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import etec.framework.file.params.service.ParamsTool;
-
 public class FamilyMartParams {
 
 	/**

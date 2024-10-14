@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import etec.framework.context.convert_safely.service.ConvertFunctionsSafely;
+
 public class FmSqlService {
 
 	private static List<String[]> lstrpl = new ArrayList<>();
@@ -203,7 +205,7 @@ public class FmSqlService {
 			+ "\r\nAS BEGIN"
 			+ "\r\n\r\n\tDECLARE " + txdate1 + " int;"
 			+ "\r\n\tSET " + txdate1 + " = cast(convert(varchar(8),cast(" + txdate + " as date),112) as int);\r\n"
-			+ res.trim().replaceAll("\n", "\n\t")
+			+ "\r\n\t" + res.trim().replaceAll("\n", "\n\t")
 			+ "\r\n\r\nEND";
 		//TXDATE處理
 		res = res
@@ -310,8 +312,8 @@ public class FmSqlService {
 				.replaceAll(",[ \t]*(\r?\n[ \t]++)(?!,)","$1,")
 				.replaceAll("(?<! )(?==|<>)|(?<==|<>)(?! )"," ")
 				.replaceAll("\\s*;",";")
-//				.replaceAll("(?!\\s|^);\\s*","\r\n\t;\r\n\r\n\t")
-				.replaceAll("(?i)([ \t]+)(SELECT *(DISTINCT *)?)(\\S+)","$1$2\r\n$1\t$3")
+				.replaceAll("(?!\\s|^);\\s*","\r\n\t;\r\n\r\n\t")
+				.replaceAll("(?i)([ \t]+)(SELECT *(?:DISTINCT *)?)(\\S+)","$1$2\r\n$1\t$3")
 				.replaceAll("(?i)\\s*(,fdp_upt)\\)", "$1\r\n\t\t\\)")
 				.replaceAll("(?i)([ \t]+)(DROP TABLE \\S+)\\s*;\\s*END","$1$2;\r\n$1END")
 				.replaceAll("(?i)\\s*?([\t ]+)(FROM|JOIN)\\s*\\(\\s*","\r\n$1$2 \\(\r\n$1\t")
@@ -322,12 +324,11 @@ public class FmSqlService {
 				.replaceAll("(\r?\n){3,}", "\r\n")
 				.replaceAll("(?i)(OUTER|INNER|LEFT|RIGHT|CROSS)\\s+JOIN","$1 JOIN")
 				.replaceAll("\tCLUSTERED", "\t CLUSTERED")
-				.replaceAll("([\t ]+)WHEN\\s+(NOT\\s+)?MATCHED\\s*THEN\\s+","$1WHEN $2MATCHED\\r\\n$1\\tTHEN ")
+				.replaceAll("([\t ]+)WHEN\\s+(NOT\\s+)?MATCHED\\s*THEN\\s+","$1WHEN $2MATCHED\r\n$1\tTHEN ")
 				.replaceAll("\tCLUSTERED", "\t CLUSTERED")
 				.replaceAll("(INSERT|VALUES)\\s*\\([ \t]*\\b", "$1 \\(\r\n\t")
 				.replaceAll("USING\\s*\\(", "USING \\(")
 		;
-			
 		return res;
 	}	
 
@@ -345,7 +346,7 @@ public class FmSqlService {
 	
 	//input output的註解
 	private static String p_IOPTableLog(String txdate,List<String> lstTTable,List<String> lstSTable) {
-		String res = "\r\n\t/*--------------------------------------------------------------------------"
+		String res = "\r\n/*--------------------------------------------------------------------------"
 				+ "\r\n\tSP參數"
 				+ "\r\n\t\t"+txdate+" = ${TXDATE}"
 				+ "\r\n\tINPUT"
@@ -354,7 +355,7 @@ public class FmSqlService {
 				+ "\r\n\tOUTPUT"
 				+ "\r\n\t\t"
 				+ String.join("\r\n\t\t", lstTTable)
-				+ "\r\n\t--------------------------------------------------------------------------*/"
+				+ "\r\n--------------------------------------------------------------------------*/"
 				+ "\r\n";
 		return res;
 	}

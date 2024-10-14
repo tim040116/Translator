@@ -9,14 +9,14 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.common.enums.RunStatusEnum;
 import etec.common.factory.Params;
-import etec.common.interfaces.Controller;
 import etec.common.utils.TransduceTool;
+import etec.framework.code.interfaces.Controller;
 import etec.framework.file.readfile.service.BigFileSplitTool;
 import etec.framework.file.readfile.service.CharsetTool;
 import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;
+import etec.framework.ui.search_func.enums.RunStatusEnum;
 import etec.src.assignment.project.detail.service.SearchFunctionService;
 import etec.src.assignment.project.sd.service.CreateMultisetListService;
 import etec.src.assignment.project.sd.service.CreateSDMService;
@@ -31,7 +31,7 @@ public class AssessmentController implements Controller{
 	public static List<String> lstSkip = Arrays.asList(Params.searchFunction.SKIP_LIST);
 
 	@Override
-	public void run() throws Exception {
+	public void run(Map<String,Object> args) throws Exception {
 		mapFunc = new HashMap<>();
 
 		/*

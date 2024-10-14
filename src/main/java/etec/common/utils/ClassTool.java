@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import etec.framework.ui.annotation.Application;
+import etec.framework.code.annotation.Application;
 
 /**
  * <h1>做程式的映射處理</h1>

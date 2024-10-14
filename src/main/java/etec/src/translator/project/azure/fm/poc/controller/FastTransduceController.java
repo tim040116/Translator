@@ -1,7 +1,9 @@
 package etec.src.translator.project.azure.fm.poc.controller;
 
-import etec.common.enums.RunStatusEnum;
-import etec.common.interfaces.Controller;
+import java.util.Map;
+
+import etec.framework.code.interfaces.Controller;
+import etec.framework.ui.search_func.enums.RunStatusEnum;
 import etec.src.translator.project.azure.fm.poc.service.FastTransduceService;
 import etec.src.translator.sql.gp.translater.GreenPlumTranslater;
 import etec.src.translator.view.frame.FastTransduceFrame;
@@ -16,7 +18,7 @@ import etec.src.translator.view.frame.FastTransduceFrame;
 public class FastTransduceController implements Controller {
 
 	@Override
-	public void run() throws Exception {
+	public void run(Map<String,Object> args) throws Exception {
 		FastTransduceFrame.pnl.statusBar.setStatus(RunStatusEnum.WORKING);
 		String script = FastTransduceFrame.pnl.txtOldScript.getText();
 		boolean isToVarchar = FastTransduceFrame.pnl.chbIsSetToVarchar.isSelected();

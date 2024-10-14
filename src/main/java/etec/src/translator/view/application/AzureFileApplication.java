@@ -1,12 +1,10 @@
 package etec.src.translator.view.application;
 
-import etec.common.interfaces.TranslatorApplication;
-import etec.framework.ui.annotation.Application;
+import etec.framework.code.interfaces.Application;
 import etec.src.translator.project.azure.az.controller.AzureController;
 import etec.src.translator.view.frame.SearchFunctionFrame;
 
-@Application(value = "AZ")
-public class AzureFileApplication implements TranslatorApplication{
+public class AzureFileApplication implements Application{
 	@Override
 	public void run() {
 		new SearchFunctionFrame("Azure 轉換",new AzureController());

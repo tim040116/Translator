@@ -5,7 +5,7 @@ import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import etec.common.interfaces.Controller;
+import etec.framework.code.interfaces.Controller;
 import etec.src.translator.view.panel.FastTransducePnl;
 
 public class FastTransduceFrame extends JFrame{

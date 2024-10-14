@@ -11,13 +11,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import etec.common.enums.RunStatusEnum;
 import etec.common.factory.Params;
 import etec.common.factory.UIPanelFactory;
-import etec.common.interfaces.Controller;
-import etec.common.view.panel.LogTextArea;
-import etec.common.view.panel.ProgressBar;
-import etec.common.view.panel.StatusBar;
+import etec.framework.code.interfaces.Controller;
+import etec.framework.ui.search_func.enums.RunStatusEnum;
+import etec.framework.ui.search_func.pnl.LogTextArea;
+import etec.framework.ui.search_func.pnl.ProgressBar;
+import etec.framework.ui.search_func.pnl.StatusBar;
 import etec.src.translator.view.listener.SearchFunctionListener;
 
 public class TranslaterPnl  extends JPanel {

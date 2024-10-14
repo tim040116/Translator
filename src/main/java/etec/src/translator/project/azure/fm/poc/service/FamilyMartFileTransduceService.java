@@ -6,9 +6,9 @@ import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import etec.common.factory.TranslaterFactory;
 import etec.framework.context.convert_safely.service.ConvertRemarkSafely;
 import etec.framework.context.translater.exception.SQLTranslateException;
-import etec.framework.context.translater.interfaces.TranslaterFactory;
 import etec.framework.file.readfile.service.CharsetTool;
 import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;

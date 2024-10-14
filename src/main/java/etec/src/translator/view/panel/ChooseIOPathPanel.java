@@ -10,7 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import etec.common.view.panel.FileButton;
+import etec.framework.ui.search_func.pnl.FileButton;
 
 /**
  * 輸入讀檔產檔路徑的頁面

@@ -1,10 +1,12 @@
 package etec.app.main;
 
 import etec.common.factory.Params;
-import etec.common.interfaces.TranslatorApplication;
+import etec.common.model.VersionModel;
+import etec.framework.code.interfaces.Application;
 import etec.framework.security.log.service.Log;
+import etec.framework.ui.login.LoginFrame;
 import etec.src.security.project.login.service.CheckLoginService;
-import etec.src.security.project.login.view.LoginFrame;
+import etec.src.tool.project.replace.application.ReplaceAllApplication;
 import etec.src.translator.view.application.AssessmentApplication;
 import etec.src.translator.view.application.AzureFileApplication;
 import etec.src.translator.view.application.FamilyMartApplication;
@@ -20,7 +22,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		Log.info("執行項目：" + Params.config.APPLICATION_TYPE);
-		TranslatorApplication app = null;
+		Application app = null;
 		switch (Params.config.APPLICATION_TYPE) {
 		case "OLD_TRANSLATOR":// 鼎鼎舊版
 			app = new OldApplication();
@@ -63,10 +65,13 @@ public class Main {
 		case "UNCOMPRESS":
 			app = new UncompressApplication();
 			break;
+		case "REPLACE_ALL"://5.2
+			app = new ReplaceAllApplication();
+			break;
 		default:
 			break;
 		}
-		LoginFrame frame = new LoginFrame(app,new CheckLoginService());
+		LoginFrame frame = new LoginFrame(app,new CheckLoginService(),VersionModel.VERSION);
 		frame.setVisible(true);
 //		app.run();
 	}

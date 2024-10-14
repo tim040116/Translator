@@ -3,13 +3,14 @@ package etec.src.translator.project.greenplum.gp.controller;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import etec.common.enums.RunStatusEnum;
 import etec.common.factory.Params;
-import etec.common.interfaces.Controller;
+import etec.framework.code.interfaces.Controller;
 import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;
+import etec.framework.ui.search_func.enums.RunStatusEnum;
 import etec.src.translator.common.model.BasicParams;
 import etec.src.translator.common.service.IOpathSettingService;
 import etec.src.translator.project.greenplum.gp.service.GreenPlumFileService;
@@ -34,7 +35,7 @@ import etec.src.translator.view.panel.SearchFunctionPnl;
 public class GreenPlumFileController implements Controller {
 
 	@Override
-	public void run() throws Exception {
+	public void run(Map<String,Object> args) throws Exception {
 
 		// 儲存參數
 		SearchFunctionPnl.tsLog.clearLog();

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import etec.common.factory.Params;
-import etec.framework.file.params.service.ParamsTool;
 
 public class LogParams {
 

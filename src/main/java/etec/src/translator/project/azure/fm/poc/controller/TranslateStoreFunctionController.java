@@ -4,13 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import etec.common.enums.RunStatusEnum;
 import etec.common.factory.Params;
-import etec.common.interfaces.Controller;
+import etec.framework.code.interfaces.Controller;
 import etec.framework.context.translater.exception.UnknowSQLTypeException;
 import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;
+import etec.framework.ui.search_func.enums.RunStatusEnum;
 import etec.src.translator.common.model.BasicParams;
 import etec.src.translator.common.model.SFSPModel;
 import etec.src.translator.common.service.IOpathSettingService;
@@ -30,7 +31,7 @@ import etec.src.translator.view.panel.SearchFunctionPnl;
 public class TranslateStoreFunctionController implements Controller {
 
 	@Override
-	public void run() throws Exception {
+	public void run(Map<String,Object> args) throws Exception {
 
 		// 儲存參數
 		SearchFunctionPnl.tsLog.clearLog();

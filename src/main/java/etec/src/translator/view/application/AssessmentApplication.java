@@ -1,10 +1,10 @@
 package etec.src.translator.view.application;
 
-import etec.common.interfaces.TranslatorApplication;
+import etec.framework.code.interfaces.Application;
 import etec.src.assignment.project.detail.controller.AssessmentController;
 import etec.src.translator.view.frame.SearchFunctionFrame;
 
-public class AssessmentApplication implements TranslatorApplication{
+public class AssessmentApplication implements Application{
 
 	@Override
 	public void run() {

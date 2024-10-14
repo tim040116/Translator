@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
 
-import etec.common.interfaces.Controller;
+import etec.framework.code.interfaces.Controller;
 import etec.src.translator.view.panel.SearchFunctionPnl;
 
 public class TransFormSQLFrame extends JFrame{

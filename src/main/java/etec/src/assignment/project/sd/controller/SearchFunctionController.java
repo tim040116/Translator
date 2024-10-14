@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import etec.common.enums.RunStatusEnum;
 import etec.common.factory.Params;
-import etec.common.interfaces.Controller;
 import etec.common.utils.RegexTool;
+import etec.framework.code.interfaces.Controller;
 import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;
+import etec.framework.ui.search_func.enums.RunStatusEnum;
 import etec.src.assignment.project.detail.service.SearchFunctionService;
 import etec.src.translator.common.model.BasicParams;
 import etec.src.translator.common.service.IOpathSettingService;
@@ -22,7 +22,7 @@ import etec.src.translator.view.panel.SearchFunctionPnl;
 public class SearchFunctionController implements Controller{
 
 	@Override
-	public void run() throws Exception {
+	public void run(Map<String,Object> args) throws Exception {
 		// 儲存參數
 		SearchFunctionPnl.tsLog.clearLog();
 		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.WORKING);
