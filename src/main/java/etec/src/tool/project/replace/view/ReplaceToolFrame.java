@@ -7,16 +7,20 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.DefaultCaret;
 
 import etec.common.factory.Params;
 import etec.framework.code.interfaces.Controller;
@@ -28,7 +32,8 @@ public class ReplaceToolFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtInput;
 	private JTextField txtMapping;
-//	JProgressBar progressBar;
+	private JProgressBar progressBar;
+	private boolean isLock = false;
 	/**
 	 * Launch the application.
 	 */
@@ -57,72 +62,71 @@ public class ReplaceToolFrame extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JPanel panel = new JPanel();
 		panel.setBounds(6, 6, 500, 334);
 		contentPane.add(panel);
 		panel.setLayout(null);
-		
+
 		JPanel pnlInput = new JPanel();
 		pnlInput.setBounds(10, 10, 484, 50);
 		panel.add(pnlInput);
 		pnlInput.setLayout(null);
-		
+
 		JLabel lblInput = new JLabel("    檔案目錄：");
 		lblInput.setBounds(6, 10, 80, 30);
 		pnlInput.add(lblInput);
-		
+
 		txtInput = new JTextField();
 		txtInput.setText(Params.config.INIT_INPUT_PATH);
 		txtInput.setBounds(86, 10, 350, 30);
 		pnlInput.add(txtInput);
 		txtInput.setColumns(10);
-		
-		Button button = new Button("...");
-		button.setBounds(442, 10, 42, 30);
-		pnlInput.add(button);
-		
+
+		Button btnInput = new Button("...");
+		btnInput.setBounds(442, 10, 42, 30);
+		pnlInput.add(btnInput);
+
 		JPanel pnlMapping = new JPanel();
 		pnlMapping.setBounds(10, 65, 484, 50);
 		panel.add(pnlMapping);
 		pnlMapping.setLayout(null);
-		
+
 		JLabel lblMapping = new JLabel("設定檔路徑：");
 		lblMapping.setBounds(6, 10, 80, 30);
 		pnlMapping.add(lblMapping);
-		
+
 		txtMapping = new JTextField();
-		txtMapping.setText(Params.config.INIT_INPUT_PATH.replace("Target\\","replace_list.csv"));
+		txtMapping.setText(Params.config.INIT_INPUT_PATH.replace("Target\\", "replace_list.csv"));
 		txtMapping.setColumns(10);
 		txtMapping.setBounds(86, 10, 350, 30);
 		pnlMapping.add(txtMapping);
-		
-		Button button_1 = new Button("...");
-		button_1.setBounds(442, 10, 42, 30);
-		pnlMapping.add(button_1);
+
+		Button btnMapping = new Button("...");
+		btnMapping.setBounds(442, 10, 42, 30);
+		pnlMapping.add(btnMapping);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(6, 155, 488, 173);
+		panel.add(scrollPane);
 		
 		JTextArea txtLog = new JTextArea();
 		txtLog.setEditable(false);
+		txtLog.setLineWrap(false);
+		txtLog.setWrapStyleWord(false);
+		((DefaultCaret)txtLog.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		txtLog.setBounds(10, 155, 484, 173);
-		panel.add(txtLog);
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(54, 167, 341, 40);
-		panel.add(panel_2);
-		panel_2.setLayout(null);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(26, 24, 10, 10);
-		panel_2.add(panel_1);
-		panel_1.setBackground(new Color(0, 0, 0));
-		
-		JProgressBar progressBar = new JProgressBar();
-		progressBar.setBounds(45, 123, 449, 20);
+		scrollPane.setViewportView(txtLog);
+
+		progressBar = new JProgressBar();
+		progressBar.setBounds(45, 121, 449, 30);
 		panel.add(progressBar);
-		
+		progressBar.setString("0 %");
+		progressBar.setStringPainted(true);
+
 		JPanel pnlStatusColor = new JPanel();
 		pnlStatusColor.setBackground(new Color(0, 0, 0));
-		pnlStatusColor.setBounds(20, 123, 20, 20);
+		pnlStatusColor.setBounds(10, 121, 30, 30);
 		panel.add(pnlStatusColor);
 		
 		Button btnRun = new Button("GO");
@@ -130,36 +134,70 @@ public class ReplaceToolFrame extends JFrame {
 		contentPane.add(btnRun);
 		btnRun.setFont(new Font("Dialog", Font.BOLD, 14));
 		btnRun.setActionCommand("");
-		
+
 		Checkbox ckbCaseInsensitive = new Checkbox("Case Insensitive ");
 		ckbCaseInsensitive.setBounds(516, 89, 160, 36);
 		contentPane.add(ckbCaseInsensitive);
 		ckbCaseInsensitive.setState(true);
-		
-		
+
+		// 執行程式
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new Thread() {
 					@Override
 					public void run() {
+						if(isLock) {
+							return;
+						}
+						isLock=true;
 						try {
-							Map<String,Object> args = new HashMap<String,Object>();
-							args.put("caseInsensitive",ckbCaseInsensitive.getState());
-							args.put("inputPath",txtInput.getText());
-							args.put("outputPath",Params.config.INIT_OUTPUT_PATH);
-							args.put("mappingPath",txtMapping.getText());
-							args.put("progressBar",progressBar);
-							args.put("txtLog",txtLog);
-							args.put("pnlStatusColor",pnlStatusColor);
+							Map<String, Object> args = new HashMap<String, Object>();
+							args.put("caseInsensitive", ckbCaseInsensitive.getState());
+							args.put("inputPath", txtInput.getText());
+							args.put("outputPath", Params.config.INIT_OUTPUT_PATH);
+							args.put("mappingPath", txtMapping.getText());
+							args.put("progressBar", progressBar);
+							args.put("txtLog", txtLog);
+							args.put("pnlStatusColor", pnlStatusColor);
 							controller.run(args);
 						} catch (Exception e1) {
 							txtLog.append(e1.getMessage());
 							pnlStatusColor.setBackground(Color.RED);
 							e1.printStackTrace();
 						}
+						isLock=false;
 					}
 				}.start();
 			}
 		});
+
+		// 來源路徑
+		btnInput.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser;
+				chooser = new JFileChooser(new File(txtInput.getText()));
+				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				int option = chooser.showOpenDialog(null);
+				if (option == JFileChooser.APPROVE_OPTION) {
+					File file = chooser.getSelectedFile();
+					txtInput.setText(file.getPath());
+				}
+			}
+		});
+
+		// 比對檔路徑
+		btnMapping.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser;
+				chooser = new JFileChooser(new File(txtMapping.getText()));
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				int option = chooser.showOpenDialog(null);
+				if (option == JFileChooser.APPROVE_OPTION) {
+					File file = chooser.getSelectedFile();
+					txtMapping.setText(file.getPath());
+				}
+			}
+		});
 	}
+
 }

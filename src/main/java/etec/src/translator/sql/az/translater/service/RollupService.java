@@ -49,6 +49,7 @@ public class RollupService {
 					{lstRollup.add(mcol.group(0));}
 				else{lstCol.add(mcol.group(0));}
 			}
+			model.sql = m.group();
 			model.head = m.group("head");
 			model.tab = m.group("tab");
 			model.lstCol = lstCol;
@@ -100,19 +101,24 @@ public class RollupService {
 				res = singleRollup(model)+"\r\n\tUNION\r\n\t"+res;
 			}
 		}else{
-			String[] arrRollup = model.lstRollup.get(1).split("\\s*,\\s*");
-			model.lstRollup.remove(1);
-			res = multiRollup(model);
-			for(String rollup : arrRollup) {
-				model.lstCol.add(rollup);
-				res = multiRollup(model)+"\r\n\tUNION\r\n\t"+res;
-			}
+//			try {
+				String[] arrRollup = model.lstRollup.get(1).split("\\s*,\\s*");
+				model.lstRollup.remove(1);
+				res = multiRollup(model);
+				for(String rollup : arrRollup) {
+					model.lstCol.add(rollup);
+					res = multiRollup(model)+"\r\n\tUNION\r\n\t"+res;
+				}
+//			}catch(Exception e) {
+//				e.printStackTrace();
+//			}
 		}
 		return res;
 	}
 }
 
 class RollupModel{
+	String sql;
 	String remark;
 	String head;
 	String tab;

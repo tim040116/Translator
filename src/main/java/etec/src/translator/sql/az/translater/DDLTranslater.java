@@ -137,7 +137,7 @@ public class DDLTranslater {
 	 * */
 	public static String runDropTable(String sql){
 		String res = sql
-				.replaceAll("(?i)DROP\\s+(TABLE|VIEW)\\s+([^;]+)", "IF OBJECT_ID(N'$1') IS NOT NULL\r\nDROP $1 $2");
+				.replaceAll("(?i)DROP\\s+(TABLE|VIEW)\\s+([^;]+)", "IF OBJECT_ID(N'$2') IS NOT NULL\r\nDROP $1 $2");
 		return res;
 	}
 	/**

@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import etec.framework.context.convert_safely.service.ConvertFunctionsSafely;
-
 public class FmSqlService {
 
 	private static List<String[]> lstrpl = new ArrayList<>();
@@ -168,6 +166,7 @@ public class FmSqlService {
 			+ "\r\nBEGIN"
 			+ "\r\n" + rerunMerge
 			+ "\r\nEND"
+			+ "\r\n-- rerun end"
 			+ "\r\n"
 		;
 		String txdate = "@tx_date";
@@ -283,12 +282,12 @@ public class FmSqlService {
 	public static String removeBteq(String content) {
 		String res = content;
 		res = res
-			.replaceAll("(?i)\\.IF\\s+ERRORCODE\\b[^;]+;", "")
-			.replaceAll("(?i)\\.SET\\s+ERROROUT\\s+STDOUT\\s*;?", "")
-			.replaceAll("(?i)\\.SET\\s+SESSION\\b[^;]+;", "")
-			.replaceAll("(?i)\\.LOGON\\s+[^,]+,\\s*\\S+\\s*", "")
-			.replaceAll("(?i)\\.LOGOFF\\s*;","")
-			.replaceAll("(?i)\\.QUIT\\s*0\\s*;","")
+			.replaceAll("(?i)^\\s*\\.IF\\s+ERRORCODE\\b[^;]+;", "")
+			.replaceAll("(?i)^\\s*\\.SET\\s+ERROROUT\\s+STDOUT\\s*;?", "")
+			.replaceAll("(?i)^\\s*\\.SET\\s+SESSION\\b[^;]+;", "")
+			.replaceAll("(?i)^\\s*\\.LOGON\\s+[^,]+,\\s*\\S+\\s*", "")
+			.replaceAll("(?i)^\\s*\\.LOGOFF\\s*;","")
+			.replaceAll("(?i)^\\s*\\.QUIT\\s*0\\s*;","")
 		;
 		return res;
 	}
