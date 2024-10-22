@@ -36,7 +36,7 @@ public class FamilyMartController implements Controller {
 			// 寫入檔案清單
 			CreateListService.createFileList(f);
 			// 置換
-			FamilyMartFileTransduceService.run(f);
+			FamilyMartFileTransduceService.run(BasicParams.getTargetFileNm(f.getPath()),f);
 			// 寫檔案
 			SearchFunctionPnl.tsLog.setLog("資訊", "產製檔案：" + BasicParams.getTargetFileNm(f.getPath()));
 			SearchFunctionPnl.progressBar.plusOne();

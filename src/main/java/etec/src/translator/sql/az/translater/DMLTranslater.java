@@ -123,6 +123,7 @@ public class DMLTranslater {
 		 * </p>
 		 * <h2>異動紀錄 ：</h2>
 		 * 2024年5月31日	Tim	建立邏輯
+		 * 2024年10月16日	Tim	增加排版功能
 		 * */
 		StringBuffer sb = new StringBuffer();
 		String reg = "(?is)"
@@ -138,6 +139,12 @@ public class DMLTranslater {
 			String using = m.group("using").trim();
 			String sql1  = m.group("sql1");
 			String sql2  = m.group("sql2");
+			
+			//排版
+			using = using
+				.replaceAll("(?i)\bON\\s*\\(([\\S\\s]+)\\)", "ON $1")
+			;
+			
 			//處理WHEN 1
 			sql1 = MergeIntoService.convert(m.group("type1"), tableNm, using, m.group("sql1").trim());
 			sql1 = AzTranslater.translate(sql1);
@@ -155,40 +162,6 @@ public class DMLTranslater {
 		res = sb.toString();
 		return res;
 
-//		String res = "";
-//		String mergeInto = sql.replaceAll("\\s*USING\\s*\\([^;]+","");
-//		String using = "";
-//		String when = "";
-//		String temp = "";
-//		String status = "BEGIN";
-//		int	bracketCnt = -1;
-//		for(String c : sql.split("")) {
-//			if("BEGIN".equals(status)) {
-//				temp+=c;
-//				if(temp.toUpperCase().replaceAll("\\s+", " ").contains(("USING"+" (").toUpperCase().replaceAll("\\s+", " "))) {
-//					status = "USING";
-//					bracketCnt = 1;
-//				}
-//			}
-//			else if("USING".equals(status)) {
-//				if(c.equals("(")) {
-//					bracketCnt++;
-//				}else if(c.equals(")")) {
-//					bracketCnt--;
-//				}
-//				if(bracketCnt==0) {
-//					status = "AFTER";
-//					continue;
-//				}
-//				using+=c;
-//			}
-//			else if("AFTER".equals(status)){
-//				when+=c;
-//			}
-//
-//		}
-//		res = mergeInto+"\r\nUSING (\r\n"+using.trim()+"\r\n)"+when+"\r\n";
-//		return res;
 	}
 
 

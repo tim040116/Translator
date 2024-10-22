@@ -2,6 +2,7 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +13,6 @@ import etec.framework.context.translater.exception.SQLTranslateException;
 import etec.framework.file.readfile.service.CharsetTool;
 import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;
-import etec.src.translator.common.model.BasicParams;
 import etec.src.translator.project.azure.fm.formal.service.FmSqlService;
 import etec.src.translator.sql.az.translater.AzTranslater;
 
@@ -33,6 +33,7 @@ public class FamilyMartFileTransduceService {
 	 *
 	 * <h2>異動紀錄</h2>
 	 * <br>2024年09月02日	Tim	建立功能
+	 * <br>2024年10月21日	Tim	將不同副檔名分開處理，主要是為了轉換fastload
 	 * @author Tim
 	 * @since 2024年9月2日
 	 * @param context 檔案的內容
@@ -40,15 +41,53 @@ public class FamilyMartFileTransduceService {
 	 * @return
 	 * @throws IOException
 	 */
-	public static void run(File f) throws IOException {
+	public static void run(String outputPath,File f) throws IOException {
+		
+		if(f.getName().toUpperCase().contains(".FLD")) {
+			Log.info("檔案類型：Fastload");
+		}else if(f.getName().toUpperCase().contains(".BTQ")) {
+			Log.info("檔案類型：BTEQ");
+			transduceBtq(outputPath, f);
+		}
+			
+	}
+	
+	public static void transduceFld(String outputPath,File f) throws MalformedURLException, IOException {
 		/* 2024/05/06	Tim	強制轉換成指定編碼
 		 * */
 //		String context = FileTool.readFile(f);
 		Charset chs = CharsetTool.getCharset(f.getPath());
 		String context = CharsetTool.readFileInCharset(chs.name(),f.getPath());
-		String newFileName = BasicParams.getTargetFileNm(f.getPath());
+		
 		Log.debug("清理註解");
 		String newContext = ConvertRemarkSafely.savelyConvert(context, (t) -> {
+			
+			
+			
+			return t;
+		});
+
+		//全家客製化項目
+		newContext = fmOnly(newContext);
+		outputPath = outputPath.replaceAll("(?i)\\.fld", ".fld.sql");
+		/*將bteq語法清除*/
+		//newContext = newContext.replaceAll("\\r\\n\\..*", "");
+//		newContext = GreenPlumTranslater.dql.changeMultAnalyze(newContext);
+		FileTool.createFile(outputPath, newContext, chs);
+	}
+	
+	public static void transduceBtq(String outputPath,File f) throws MalformedURLException, IOException {
+		/* 2024/05/06	Tim	強制轉換成指定編碼
+		 * */
+//		String context = FileTool.readFile(f);
+		Charset chs = CharsetTool.getCharset(f.getPath());
+		String context = CharsetTool.readFileInCharset(chs.name(),f.getPath());
+		
+		Log.debug("清理註解");
+		String newContext = ConvertRemarkSafely.savelyConvert(context, (t) -> {
+			if(f.getName().toUpperCase().contains(".FLD")) {
+				
+			}
 			t = FmSqlService.preReplace(t);
 			StringBuffer sb = new StringBuffer();
 			try {
@@ -90,13 +129,15 @@ public class FamilyMartFileTransduceService {
 
 		//全家客製化項目
 		newContext = fmOnly(newContext);
-		newFileName = newFileName.replaceAll("(?i)\\.btq.*", ".sql");
+		outputPath = outputPath.replaceAll("(?i)\\.btq.*", ".sql");
 		/*將bteq語法清除*/
 		//newContext = newContext.replaceAll("\\r\\n\\..*", "");
 //		newContext = GreenPlumTranslater.dql.changeMultAnalyze(newContext);
-		FileTool.createFile(newFileName, newContext, chs);
+		FileTool.createFile(outputPath, newContext, chs);
+		
 	}
-
+	
+	
 	private static String fmOnly(String content) {
 		String res = content;
 		res = FmSqlService.easyReplace(res);

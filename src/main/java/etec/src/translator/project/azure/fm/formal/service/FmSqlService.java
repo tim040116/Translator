@@ -108,7 +108,7 @@ public class FmSqlService {
 			//1-3.if table Not Null 
 			rerunNotNull += "\r\n\tAND OBJECT_ID('"+tempTable+"','U') IS NOT NULL";
 			//1-4.set @check_rerun_dtl
-			String strCnt = "\t\t\tSELECT COUNT(*) CNT"
+			String strCnt = "\t\t\tSELECT COUNT(*) cnt"
 					+ "\r\n\t\t\tFROM " + tempTable
 					+ "\r\n\t\t\tWHERE fdp_upt = @tx_date"
 			;
@@ -152,7 +152,7 @@ public class FmSqlService {
 			+ "\r\n" + rerunNotNull
 			+ "\r\nBEGIN"
 			+ "\r\n\tSET @check_rerun_dtl = ("
-			+ "\r\n\t\tSELECT CASE WHEN SUM(A.CNT) > 0 THEN 'Y' ELSE 'N' END"
+			+ "\r\n\t\tSELECT CASE WHEN SUM(A.cnt) > 0 THEN 'Y' ELSE 'N' END"
 			+ "\r\n\t\tFROM ("
 			+ "\r\n" + String.join("\r\n\t\t\tUNION\r\n", rerunSet)
 			+ "\r\n\t\t) A"
@@ -246,20 +246,27 @@ public class FmSqlService {
 	 */
 	public static String toLowerCase(String content) {
 		String res = content;
-		StringBuffer sb = new StringBuffer();
-		Matcher m = Pattern.compile("(?i)([${}\\w]+)\\.(\\w+)").matcher(res);
-		while (m.find()) {
-			String dbNm = m.group(1);
-			String tbNm = m.group(2);
+		StringBuffer sbt = new StringBuffer();
+		Matcher mt = Pattern.compile("(?i)([${}\\w]+)\\.(\\w+)").matcher(res);
+		while (mt.find()) {
+			String dbNm = mt.group(1);
+			String tbNm = mt.group(2);
 			if (!dbNm.matches("\\$\\{\\w+\\}")) {
 				dbNm = dbNm.toLowerCase();
 			}
 			tbNm = tbNm.toLowerCase();
 			String rpm = dbNm + "." + tbNm;
-			m.appendReplacement(sb, Matcher.quoteReplacement(rpm));
+			mt.appendReplacement(sbt, Matcher.quoteReplacement(rpm));
 		}
-		m.appendTail(sb);
-		return sb.toString();
+		mt.appendTail(sbt);
+		Matcher mc = Pattern.compile("(?i)[0-Za-z]+(?:_[a-z0-Z]+)+|(?<=AS)\\s+\\w+").matcher(sbt.toString());
+		StringBuffer sbc = new StringBuffer();
+		while(mc.find()) {
+			mc.appendReplacement(sbc,mc.group().toLowerCase());
+		}
+		mc.appendTail(sbc);
+		res = sbc.toString();
+		return res;
 	}
 
 	/**
@@ -321,12 +328,15 @@ public class FmSqlService {
 				.replaceAll("(?i)(\\s*)([^\r\n]*)\\s*(,fdp_upt = dateadd)","$1$2$1$3")
 				.replaceAll("(?i)(\n\\s*)(.*)\\s*(,dateadd\\(hour,8,getdate\\(\\)\\))","$1$2$1$3")
 				.replaceAll("(\r?\n){3,}", "\r\n")
-				.replaceAll("(?i)(OUTER|INNER|LEFT|RIGHT|CROSS)\\s+JOIN","$1 JOIN")
+				.replaceAll("(?i)\\s*(OUTER|INNER|LEFT|RIGHT|CROSS)\\s+JOIN","\r\n$1 JOIN")
 				.replaceAll("\tCLUSTERED", "\t CLUSTERED")
-				.replaceAll("([\t ]+)WHEN\\s+(NOT\\s+)?MATCHED\\s*THEN\\s+","$1WHEN $2MATCHED\r\n$1\tTHEN ")
+				.replaceAll("([\t ]+)WHEN\\s+(NOT\\s+)?MATCHED\\s*THEN\\s+","$1WHEN $2MATCHED THEN\r\n$1\t")
 				.replaceAll("\tCLUSTERED", "\t CLUSTERED")
 				.replaceAll("(INSERT|VALUES)\\s*\\([ \t]*\\b", "$1 \\(\r\n\t")
 				.replaceAll("USING\\s*\\(", "USING \\(")
+				.replaceAll("(?i)\\s+(ON|WHEN|END|AND|OR)\\s+", "\r\n\t$1 ")
+				.replaceAll("\\s*([+\\-*/=])\\s*"," $1 ")
+				.replaceAll("(?i)\\(\\s*SELECT", "\\(\r\n\tSELECT")
 		;
 		return res;
 	}	
@@ -342,6 +352,15 @@ public class FmSqlService {
 		;
 		return res;
 	}
+	
+	public static String cleanLayout(String sql) {
+		String res = sql;
+		
+		
+		return res;
+	}
+	
+	
 	
 	//input output的註解
 	private static String p_IOPTableLog(String txdate,List<String> lstTTable,List<String> lstSTable) {

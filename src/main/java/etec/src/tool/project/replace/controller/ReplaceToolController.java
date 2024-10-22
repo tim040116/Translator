@@ -60,22 +60,24 @@ public class ReplaceToolController implements Controller {
 				for(String[] rpr : lstrpr) {
 					newContent = newContent.replaceAll(caseInsensitive+"\\Q"+rpr[0]+"\\E",Matcher.quoteReplacement(rpr[1]));
 				}
-				pgbLen++;
-				float val = (pgbLen*100/pgbTotal);
-				progressBar.setValue((int)val);
-				progressBar.setString(val+"");
 				//寫入檔案
 				addLog("INFO","寫入檔案："+outputPaath+f.getName());
 				FileTool.createFile(outputPaath+f.getName(), newContent,Charset.forName("utf-8"));
+				plusProgress();
 			}
+			addLog("INFO","轉換成功");
+			pnlStatusColor.setBackground(Color.GREEN);
 		}catch (Exception e) {
 			addLog("EROR","錯誤：" + e.getLocalizedMessage());
 			pnlStatusColor.setBackground(Color.RED);
 			e.printStackTrace();
 		}
-		addLog("INFO","轉換成功");
-		pnlStatusColor.setBackground(Color.GREEN);
-		
+	}
+	public void  plusProgress(){
+		pgbLen++;
+		float val = (pgbLen*100/pgbTotal);
+		progressBar.setValue((int)val);
+		progressBar.setString((int)val+" %");
 	}
 	public void reset() {
 		txtLog.setText("");
