@@ -65,7 +65,7 @@ public class TransduceFrame extends JFrame {
 		contentPane.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(6, 6, 500, 334);
+		panel.setBounds(6, 6, 670, 334);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
@@ -108,7 +108,7 @@ public class TransduceFrame extends JFrame {
 		pnlOutput.add(btnOutput);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 155, 488, 173);
+		scrollPane.setBounds(6, 155, 663, 173);
 		panel.add(scrollPane);
 		
 		JTextArea txtLog = new JTextArea();
@@ -120,7 +120,7 @@ public class TransduceFrame extends JFrame {
 		scrollPane.setViewportView(txtLog);
 
 		progressBar = new JProgressBar();
-		progressBar.setBounds(45, 121, 449, 30);
+		progressBar.setBounds(45, 121, 624, 30);
 		panel.add(progressBar);
 		progressBar.setString("0 %");
 		progressBar.setStringPainted(true);
@@ -131,8 +131,8 @@ public class TransduceFrame extends JFrame {
 		panel.add(pnlStatusColor);
 		
 		Button btnRun = new Button("GO");
-		btnRun.setBounds(519, 43, 157, 40);
-		contentPane.add(btnRun);
+		btnRun.setBounds(510, 30, 150, 58);
+		panel.add(btnRun);
 		btnRun.setFont(new Font("Dialog", Font.BOLD, 14));
 		btnRun.setActionCommand("");
 

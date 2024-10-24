@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import etec.framework.context.convert_safely.service.ConvertRemarkSafely;
+
 public class FmSqlService {
 
 	private static List<String[]> lstrpl = new ArrayList<>();
@@ -37,15 +39,16 @@ public class FmSqlService {
 	
 	public static String easyReplace(String content) {
 		String res = content;
+		res = cleanCode(res);
 		res = replaceTempTableName(res);
 		res = toLowerCase(res);
 		res = dropCreate(res);
 		res = cleanCode(res);
+		res = fdpUpt(res);
 		res = addRerun(res);
+		res = cleanLayout(res);
 		res = addSP(res);
 		res = replaceAll(res);
-		res = fdpUpt(res);
-		res = cleanCode(res);
 		return res;
 	}
 	
@@ -289,12 +292,13 @@ public class FmSqlService {
 	public static String removeBteq(String content) {
 		String res = content;
 		res = res
-			.replaceAll("(?i)^\\s*\\.IF\\s+ERRORCODE\\b[^;]+;", "")
-			.replaceAll("(?i)^\\s*\\.SET\\s+ERROROUT\\s+STDOUT\\s*;?", "")
-			.replaceAll("(?i)^\\s*\\.SET\\s+SESSION\\b[^;]+;", "")
-			.replaceAll("(?i)^\\s*\\.LOGON\\s+[^,]+,\\s*\\S+\\s*", "")
-			.replaceAll("(?i)^\\s*\\.LOGOFF\\s*;","")
-			.replaceAll("(?i)^\\s*\\.QUIT\\s*0\\s*;","")
+			.replaceAll("(?i)\\.IF\\s+ERRORCODE\\b[^;]+;", "")
+			.replaceAll("(?i)\\.IF\\s+ERRORCODE\\s*<>\\s*0\\s+THEN\\s*\\.QUIT\\s+1\\s*;","")
+			.replaceAll("(?i)\\.SET\\s+ERROROUT\\s+STDOUT\\s*;?", "")
+			.replaceAll("(?i)\\.SET\\s+SESSION\\b[^;]+;", "")
+			.replaceAll("(?i)\\.LOGON\\s+[^,]+,\\s*\\S+\\s*", "")
+			.replaceAll("(?i)\\.LOGOFF\\s*;","")
+			.replaceAll("(?i)\\.QUIT\\s*0\\s*;","")
 		;
 		return res;
 	}
@@ -305,6 +309,7 @@ public class FmSqlService {
 	public static String cleanCode(String content) {
 		String res = content;
 		res = res
+				.replaceAll("\\s*$","")
 				.replaceAll("\uFEFF", "")
 				.replaceAll("(?i)\r?\nDATABASE\\s*\\S+\\s*;", "")// database
 				.replaceAll("(?i)\t+CASE", "CASE")// CASE
@@ -318,26 +323,29 @@ public class FmSqlService {
 				.replaceAll(",[ \t]*(\r?\n[ \t]++)(?!,)","$1,")
 				.replaceAll("(?<! )(?==|<>)|(?<==|<>)(?! )"," ")
 				.replaceAll("\\s*;",";")
-				.replaceAll("(?!\\s|^);\\s*","\r\n\t;\r\n\r\n\t")
-				.replaceAll("(?i)([ \t]+)(SELECT *(?:DISTINCT *)?)(\\S+)","$1$2\r\n$1\t$3")
 				.replaceAll("(?i)\\s*(,fdp_upt)\\)", "$1\r\n\t\t\\)")
-				.replaceAll("(?i)([ \t]+)(DROP TABLE \\S+)\\s*;\\s*END","$1$2;\r\n$1END")
-				.replaceAll("(?i)\\s*?([\t ]+)(FROM|JOIN)\\s*\\(\\s*","\r\n$1$2 \\(\r\n$1\t")
+//				.replaceAll("(?i)\\s*?([\t ]+)(FROM|JOIN)\\s*\\(\\s*","\r\n$1$2 \\(\r\n$1\t")
 				.replaceAll("(?i)\\s*([ \t]+-- GROUP BY)","\r\n$1")
-				.replaceAll("(?i)\\s*?([\t ]+)(UNION(?:\\s*ALL)?)\\s*","\r\n$1\r\n$1$2\r\n$1")
 				.replaceAll("(?i)(\\s*)([^\r\n]*)\\s*(,fdp_upt = dateadd)","$1$2$1$3")
 				.replaceAll("(?i)(\n\\s*)(.*)\\s*(,dateadd\\(hour,8,getdate\\(\\)\\))","$1$2$1$3")
 				.replaceAll("(\r?\n){3,}", "\r\n")
-				.replaceAll("(?i)\\s*(OUTER|INNER|LEFT|RIGHT|CROSS)\\s+JOIN","\r\n$1 JOIN")
 				.replaceAll("\tCLUSTERED", "\t CLUSTERED")
-				.replaceAll("([\t ]+)WHEN\\s+(NOT\\s+)?MATCHED\\s*THEN\\s+","$1WHEN $2MATCHED THEN\r\n$1\t")
-				.replaceAll("\tCLUSTERED", "\t CLUSTERED")
-				.replaceAll("(INSERT|VALUES)\\s*\\([ \t]*\\b", "$1 \\(\r\n\t")
 				.replaceAll("USING\\s*\\(", "USING \\(")
-				.replaceAll("(?i)\\s+(ON|WHEN|END|AND|OR)\\s+", "\r\n\t$1 ")
-				.replaceAll("\\s*([+\\-*/=])\\s*"," $1 ")
-				.replaceAll("(?i)\\(\\s*SELECT", "\\(\r\n\tSELECT")
+				.replaceAll("\\s*(?<![+\\-*/=])([+\\-*/=])(?![+\\-*/=])\\s*"," $1 ")
 		;
+		StringBuffer sbinsert = new StringBuffer();
+		Matcher minsert = Pattern.compile("(?i)INSERT\\s*\\(([^\\)]+)\\)\\s*VALUES\\s*\\(\\s*").matcher(res);
+		while(minsert.find()) {
+			String col = minsert.group(1).trim().replaceAll("\\s*,\\s*","\r\n\t,");
+			String str = "INSERT ( \r\n"
+					+ col + "\r\n"
+					+ ")\r\n"
+					+ "VALUES (\r\n\t"
+			;
+			minsert.appendReplacement(sbinsert, Matcher.quoteReplacement(str));
+		}
+		minsert.appendTail(sbinsert);
+		res = sbinsert.toString();
 		return res;
 	}	
 
@@ -354,14 +362,146 @@ public class FmSqlService {
 	}
 	
 	public static String cleanLayout(String sql) {
-		String res = sql;
-		
+		String res = ConvertRemarkSafely.savelyConvert(sql,(t) ->{
+			t = t
+				.replaceAll("(?i)(SELECT(\\s+DISTINCT)?)\\s+", "$1\r\n\t")
+				.replaceAll("([\\t ]+)WHEN\\s+(NOT\\s+)?MATCHED\\s*THEN\\s+","$1WHEN $2MATCHED THEN\r\n$1\t")
+				.replaceAll("(?i)([ \\t]+)(DROP TABLE \\S+)\\s*;\\s*END","$1$2;\r\n$1END")
+				.replaceAll("(?i)([ \\t]+)(SELECT *(?:DISTINCT *)?)(\\S+)","$1$2\r\n$1\t$3")
+
+			;
+			//將單純的欄位行進行分行
+			StringBuffer sb = new StringBuffer();
+			Matcher m = Pattern.compile("(?mi)^\\s*(?:,\\s*)?[\\w.@]+(?:\\s*,\\s*[\\w.@]+)+(?:\\s*,)?").matcher(t);
+			while(m.find()) {
+				m.appendReplacement(sb, m.group().replaceAll("\\s*,\\s*", "\r\n,"));
+			}
+			m.appendTail(sb);
+			t = sb.toString();
+			//整理
+			t = t
+				.replaceAll("\\s*,\\r?\\n\\s*","\r\n\t,")
+				.replaceAll("(?!\\s|^);\\s*","\r\n;\r\n\r\n\t")
+				.replaceAll("(?i)\\s*?([\\t ]+)(UNION(?:\\s*ALL)?)\\s*","\r\n$1\r\n$1$2\r\n$1")
+				.replaceAll("(?i)\\s*(OUTER|INNER|LEFT|RIGHT|CROSS)\\s+JOIN","\r\n$1 JOIN")
+				.replaceAll("(?i)\\s*\\(\\s*SELECT", "\r\n\t\\(\r\n\tSELECT")
+				.replaceAll("(?i)\\b(ON|WHEN|THEN|ELSE|END|AND|OR|FROM)\\s+", "\r\n\t$1 ")
+				.replaceAll("(?i)\\s*FROM\\s*\\(","\r\nFROM\r\n\\(")
+				.replaceAll("(?i)\\s+SET\\s+", "\r\n\tSET\r\n\t\t")
+				.replaceAll("(?i)\\s+AS\\s+(\\w+)\\s*,\\s*", " AS $1\r\n,")
+				.replaceAll("\\s*;", "\r\n;")
+				.replaceAll("(?i)(INSERT|VALUES)\\s*\\(", "$1\r\n\\(")
+				;
+			//處理排版
+			String temp = "";
+			String type = "";
+			String tab = "";
+			String space = "";
+			sb = new StringBuffer();
+			m = Pattern.compile("(?mi)^\\s*(\\S+?)(?=\\b|\\s)").matcher(t);
+			while(m.find()) {
+				String title = m.group(1);
+				switch (m.group(1).toUpperCase()) {
+					//增排寫入
+					case "WHEN":
+						if("MERGE".equals(type)) {
+							tab = temp;
+						}
+						tab += "\t";
+						m.appendReplacement(sb,tab+title);
+						tab += "\t";
+						break;
+					//增排寫入再縮排
+//					case "THEN":
+//						if("MERGE".equals(type)) {
+//							tab = temp+"\t";
+//						}
+//					case "ELSE":
+//						tab += "\t";
+//						m.appendReplacement(sb,tab+title);
+//						tab = tab.replaceAll("^\t", "");
+//						break;
+					//增排寫入增排
+					case "SET":
+						tab += "\t";
+						m.appendReplacement(sb,tab+title);
+//						tab += "\t";
+						break;
+					//寫入增排
+					case "WITH":
+					case "(":
+					case "SELECT":
+						m.appendReplacement(sb,tab+title);
+						tab += "\t";
+						break;
+					//先縮排再寫入再增排
+					case "FROM":
+						tab = tab.replaceAll("^\t", "");
+						m.appendReplacement(sb,tab+title);
+						break;
+					//先縮排再寫入
+					case "END":
+					case ")":
+						tab = tab.replaceAll("^\t", "");
+						m.appendReplacement(sb,tab+title);
+						break;
+					//歸零
+					case ";":
+						tab = "";
+						type = "";
+						temp = "";
+						m.appendReplacement(sb,title);
+						break;
+					//JOIN系列
+					case "LEFT":
+					case "RIGHT":
+					case "OUTER":
+					case "INNER":
+					case "CROSS":
+					case "JOIN":
+						space = " ";
+						m.appendReplacement(sb,tab+title);
+						break;
+					//維持
+					case "WHERE":
+						space = "  ";
+						m.appendReplacement(sb,tab+title);
+						break;
+					case "MERGE":
+						temp = tab;
+						type = m.group(1).toUpperCase();
+						m.appendReplacement(sb,tab+title);
+						break;
+					case "ON":
+					case "OR":
+						title = " " + title;
+					case "AND":
+						title = space + title;
+					default:
+						m.appendReplacement(sb,tab+title);
+						break;
+				}
+			}
+			m.appendTail(sb);
+			t = sb.toString();
+			//最後整理
+			t = t
+				.replaceAll("(?i)\\b((SET|DECLARE)\\b[^;]+?)\\s*;","$1;")
+				.replaceAll("(?i)\\bSET\\s*@", "SET @")
+				.replaceAll("(?i)SELECT\\s+DISTINCT","SELECT DISTINCT")
+				.replaceAll("(?i)(SELECT(?:\\s+DISTINCT)?)\\s*\\r?\\n(\\t+)","$1\r\n$2 ")
+				.replaceAll("(?i)\\bSET\\s+","$0 ")
+				.replaceAll("(?i)(FROM|JOIN|=)\\s*\\(","$1 \\(")
+				.replaceAll("(?i)(INSERT|VALUES)\\s*\\((\\s*)","$1 \\($2 ")
+				.replaceAll("(?i)THEN\\s+UPDATE\\s+SET", "THEN UPDATE SET")
+				.replaceAll(";", ";\r\n")
+			;
+			return t;
+		});
 		
 		return res;
 	}
-	
-	
-	
+		
 	//input output的註解
 	private static String p_IOPTableLog(String txdate,List<String> lstTTable,List<String> lstSTable) {
 		String res = "\r\n/*--------------------------------------------------------------------------"

@@ -32,7 +32,7 @@ public class CreateKeyFileService {
 		String fmd = EncryptionFactory.base64.encode(format);
 		String md = EncryptionFactory.base64.encode(limitDate);
 		String hash = getHash(fm,id,pass,VersionModel.VERSION);
-		String key = EncryptionFactory.base64.encode(VersionModel.ALL_LOG+VersionModel.ALL_LOG+VersionModel.ALL_LOG);
+		String key = EncryptionFactory.base64.encode(VersionModel.ALL_LOG);
 		String key2 = EncryptionFactory.base64.encode(key+key+fm);
 		//
 		String res =

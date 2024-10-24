@@ -36,6 +36,7 @@ public class VersionModel {
 			ResourceTool rt = new ResourceTool();
 			String str = rt.readFile("doc/版本紀錄");
 			String[] arr = null;
+			allLog = str;
 			arr = str.trim().split("\\s+", 5);
 			version = arr[0];
 			vsDate = sf.parse(arr[1]);

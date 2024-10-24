@@ -50,6 +50,8 @@ public class FamilyMartController2 implements Controller {
 
 			// 儲存參數
 			reset();
+			addLog("資訊", "開始轉換");
+			pnlStatusColor.setBackground(Color.ORANGE);
 			addLog("資訊", "取得資料目錄 : " + inputPath);
 			addLog("資訊", "取得產檔目錄 : " + outputPaath);
 			// 取得檔案清單
