@@ -11,14 +11,10 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 
-import etec.common.factory.Params;
 import etec.framework.code.interfaces.Controller;
 import etec.framework.file.readfile.service.FileTool;
-import etec.src.translator.common.model.BasicParams;
-import etec.src.translator.common.service.IOpathSettingService;
-import etec.src.translator.project.azure.ddim.service.CreateListService;
+import etec.framework.security.log.service.Log;
 import etec.src.translator.project.azure.fm.poc.service.FamilyMartFileTransduceService;
-import etec.src.translator.view.panel.SearchFunctionPnl;
 
 /**
  * 對應新版UI
@@ -67,14 +63,15 @@ public class FamilyMartController2 implements Controller {
 				String newFileName = f.getPath().replace(inputPath, outputPaath);
 				FamilyMartFileTransduceService.run(newFileName,f);
 				// 
-				addLog("INFO","寫入檔案："+outputPaath+f.getName());
+				addLog("資訊","寫入檔案："+outputPaath+f.getName());
 				plusProgress();
 			}
-			addLog("INFO", "轉換成功");
+			addLog("資訊", "轉換成功");
 			pnlStatusColor.setBackground(Color.GREEN);
 		} catch (Exception e) {
-			addLog("EROR", "錯誤：" + e.getLocalizedMessage());
+			addLog("錯誤", "錯誤：" + e.getLocalizedMessage());
 			pnlStatusColor.setBackground(Color.RED);
+			Log.error(e);
 			e.printStackTrace();
 		}
 	}
@@ -95,6 +92,7 @@ public class FamilyMartController2 implements Controller {
 	}
 
 	public void addLog(String level, String content) {
+		Log.info(content);
 		txtLog.append(sfabs.format(new Date()) + " [" + level.toUpperCase() + "] " + content + "\r\n");
 	}
 }

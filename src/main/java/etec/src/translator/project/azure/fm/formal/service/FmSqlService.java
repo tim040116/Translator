@@ -37,7 +37,7 @@ public class FmSqlService {
 		return res;
 	}
 	
-	public static String easyReplace(String content) {
+	public static String easyReplace(String content) throws Exception{
 		String res = content;
 		res = cleanCode(res);
 		res = replaceTempTableName(res);
@@ -361,7 +361,7 @@ public class FmSqlService {
 		return res;
 	}
 	
-	public static String cleanLayout(String sql) {
+	public static String cleanLayout(String sql) throws Exception {
 		String res = ConvertRemarkSafely.savelyConvert(sql,(t) ->{
 			t = t
 				.replaceAll("(?i)(SELECT(\\s+DISTINCT)?)\\s+", "$1\r\n\t")
@@ -372,7 +372,7 @@ public class FmSqlService {
 			;
 			//將單純的欄位行進行分行
 			StringBuffer sb = new StringBuffer();
-			Matcher m = Pattern.compile("(?mi)^\\s*(?:,\\s*)?[\\w.@]+(?:\\s*,\\s*[\\w.@]+)+(?:\\s*,)?").matcher(t);
+			Matcher m = Pattern.compile("(?mi)^\\s*(?:,\\s*|FROM\\s+)?[\\w.@]+(?:\\s*,\\s*[\\w.@]+)+(?:\\s*,)?").matcher(t);
 			while(m.find()) {
 				m.appendReplacement(sb, m.group().replaceAll("\\s*,\\s*", "\r\n,"));
 			}
@@ -380,7 +380,7 @@ public class FmSqlService {
 			t = sb.toString();
 			//整理
 			t = t
-				.replaceAll("\\s*,\\r?\\n\\s*","\r\n\t,")
+				.replaceAll("\\s*,(\\s*<[^<>]+>\\s*)\r?\n\\s*"," $1 \r\n\t,")
 				.replaceAll("(?!\\s|^);\\s*","\r\n;\r\n\r\n\t")
 				.replaceAll("(?i)\\s*?([\\t ]+)(UNION(?:\\s*ALL)?)\\s*","\r\n$1\r\n$1$2\r\n$1")
 				.replaceAll("(?i)\\s*(OUTER|INNER|LEFT|RIGHT|CROSS)\\s+JOIN","\r\n$1 JOIN")
@@ -391,6 +391,7 @@ public class FmSqlService {
 				.replaceAll("(?i)\\s+AS\\s+(\\w+)\\s*,\\s*", " AS $1\r\n,")
 				.replaceAll("\\s*;", "\r\n;")
 				.replaceAll("(?i)(INSERT|VALUES)\\s*\\(", "$1\r\n\\(")
+				.replaceAll("(?i),\\s*CASE",",\r\nCASE")
 				;
 			//處理排版
 			String temp = "";
@@ -398,7 +399,7 @@ public class FmSqlService {
 			String tab = "";
 			String space = "";
 			sb = new StringBuffer();
-			m = Pattern.compile("(?mi)^\\s*(\\S+?)(?=\\b|\\s)").matcher(t);
+			m = Pattern.compile("(?mi)^[ \\t]*(\\S+?)(?=\\b|\\s)").matcher(t);
 			while(m.find()) {
 				String title = m.group(1);
 				switch (m.group(1).toUpperCase()) {
@@ -407,50 +408,49 @@ public class FmSqlService {
 						if("MERGE".equals(type)) {
 							tab = temp;
 						}
-						tab += "\t";
-						m.appendReplacement(sb,tab+title);
-						tab += "\t";
+//						tab += "\t";
+						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
+//						tab += "\t";
 						break;
 					//增排寫入再縮排
-//					case "THEN":
-//						if("MERGE".equals(type)) {
-//							tab = temp+"\t";
-//						}
-//					case "ELSE":
-//						tab += "\t";
-//						m.appendReplacement(sb,tab+title);
-//						tab = tab.replaceAll("^\t", "");
-//						break;
+					case "THEN":
+					case "ELSE":
+						m.appendReplacement(sb,"\t"+tab+title);
+						if("MERGE".equals(type)) {
+							tab = temp+"\t";
+						}
+						break;
 					//增排寫入增排
 					case "SET":
 						tab += "\t";
-						m.appendReplacement(sb,tab+title);
+						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
 //						tab += "\t";
 						break;
 					//寫入增排
+					case "CASE":
 					case "WITH":
 					case "(":
 					case "SELECT":
-						m.appendReplacement(sb,tab+title);
+						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
 						tab += "\t";
 						break;
 					//先縮排再寫入再增排
 					case "FROM":
 						tab = tab.replaceAll("^\t", "");
-						m.appendReplacement(sb,tab+title);
+						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
 						break;
 					//先縮排再寫入
 					case "END":
 					case ")":
 						tab = tab.replaceAll("^\t", "");
-						m.appendReplacement(sb,tab+title);
+						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
 						break;
 					//歸零
 					case ";":
 						tab = "";
 						type = "";
 						temp = "";
-						m.appendReplacement(sb,title);
+						m.appendReplacement(sb,Matcher.quoteReplacement(title));
 						break;
 					//JOIN系列
 					case "LEFT":
@@ -460,17 +460,21 @@ public class FmSqlService {
 					case "CROSS":
 					case "JOIN":
 						space = " ";
-						m.appendReplacement(sb,tab+title);
+						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
 						break;
 					//維持
 					case "WHERE":
 						space = "  ";
-						m.appendReplacement(sb,tab+title);
+						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
+						break;
+					case "HAVING":
+						space = "   ";
+						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
 						break;
 					case "MERGE":
 						temp = tab;
 						type = m.group(1).toUpperCase();
-						m.appendReplacement(sb,tab+title);
+						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
 						break;
 					case "ON":
 					case "OR":
@@ -478,7 +482,7 @@ public class FmSqlService {
 					case "AND":
 						title = space + title;
 					default:
-						m.appendReplacement(sb,tab+title);
+						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
 						break;
 				}
 			}
@@ -486,6 +490,9 @@ public class FmSqlService {
 			t = sb.toString();
 			//最後整理
 			t = t
+				.replaceAll("(?i),\\s*CASE\\b", ",CASE")
+				.replaceAll("\r(?!=\n)","\r\n")
+				.replaceAll("(?<!\r)\n","\r\n")
 				.replaceAll("(?i)\\b((SET|DECLARE)\\b[^;]+?)\\s*;","$1;")
 				.replaceAll("(?i)\\bSET\\s*@", "SET @")
 				.replaceAll("(?i)SELECT\\s+DISTINCT","SELECT DISTINCT")
@@ -493,12 +500,15 @@ public class FmSqlService {
 				.replaceAll("(?i)\\bSET\\s+","$0 ")
 				.replaceAll("(?i)(FROM|JOIN|=)\\s*\\(","$1 \\(")
 				.replaceAll("(?i)(INSERT|VALUES)\\s*\\((\\s*)","$1 \\($2 ")
+				.replaceAll("(?i)(VALUES\\s*\\([^;]+\\))\\s*;", "")
 				.replaceAll("(?i)THEN\\s+UPDATE\\s+SET", "THEN UPDATE SET")
-				.replaceAll(";", ";\r\n")
 			;
 			return t;
 		});
-		
+		res = res
+			.replaceAll("(?:\r\n[\t ]*)+\r\n","\r\n")
+			.replaceAll(";", ";\r\n")
+		;
 		return res;
 	}
 		

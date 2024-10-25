@@ -1,8 +1,6 @@
  package etec.src.translator.project.azure.fm.poc.service;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,9 +37,9 @@ public class FamilyMartFileTransduceService {
 	 * @param context 檔案的內容
 	 * @see
 	 * @return
-	 * @throws IOException
+	 * @throws Exception 
 	 */
-	public static void run(String outputPath,File f) throws IOException {
+	public static void run(String outputPath,File f) throws Exception {
 		
 		if(f.getName().toUpperCase().contains(".FLD")) {
 			Log.info("檔案類型：Fastload");
@@ -52,7 +50,7 @@ public class FamilyMartFileTransduceService {
 			
 	}
 	
-	public static void transduceFld(String outputPath,File f) throws MalformedURLException, IOException {
+	public static void transduceFld(String outputPath,File f) throws Exception {
 		/* 2024/05/06	Tim	強制轉換成指定編碼
 		 * */
 //		String context = FileTool.readFile(f);
@@ -76,7 +74,7 @@ public class FamilyMartFileTransduceService {
 		FileTool.createFile(outputPath, newContext, chs);
 	}
 	
-	public static void transduceBtq(String outputPath,File f) throws MalformedURLException, IOException {
+	public static void transduceBtq(String outputPath,File f) throws Exception {
 		/* 2024/05/06	Tim	強制轉換成指定編碼
 		 * */
 //		String context = FileTool.readFile(f);
@@ -138,7 +136,7 @@ public class FamilyMartFileTransduceService {
 	}
 	
 	
-	private static String fmOnly(String content) {
+	private static String fmOnly(String content) throws Exception{
 		String res = content;
 		res = FmSqlService.easyReplace(res);
 		return res;
