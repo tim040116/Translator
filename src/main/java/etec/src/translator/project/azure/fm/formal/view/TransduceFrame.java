@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.DefaultCaret;
 
 import etec.common.factory.Params;
+import etec.common.model.VersionModel;
 import etec.framework.code.interfaces.Controller;
 import etec.src.tool.project.replace.controller.ReplaceToolController;
 import etec.src.translator.project.azure.fm.formal.controller.FamilyMartController2;
@@ -55,7 +56,7 @@ public class TransduceFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public TransduceFrame(Controller controller) {
-		setTitle("快速轉換");
+		setTitle("全家轉換" + VersionModel.VERSION);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 383);
 		contentPane = new JPanel();

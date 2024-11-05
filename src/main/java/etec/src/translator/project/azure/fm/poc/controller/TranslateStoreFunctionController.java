@@ -1,14 +1,12 @@
 package etec.src.translator.project.azure.fm.poc.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import etec.common.factory.Params;
 import etec.framework.code.interfaces.Controller;
-import etec.framework.context.translater.exception.UnknowSQLTypeException;
 import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;
 import etec.framework.ui.search_func.enums.RunStatusEnum;
@@ -48,10 +46,11 @@ public class TranslateStoreFunctionController implements Controller {
 	}
 	/**
 	 * @author	Tim
+	 * @throws Exception 
 	 * @since	2023年10月23日
 	 * store function處理
 	 * */
-	public void runSF() throws IOException, UnknowSQLTypeException {
+	public void runSF() throws Exception {
 		SearchFunctionPnl.tsLog.setLog("資訊", "轉換Store Function");
 		List<File> lf = null;
 //		Map<String, String> mapSF = new HashMap<String, String>();
@@ -82,10 +81,11 @@ public class TranslateStoreFunctionController implements Controller {
 	}
 	/**
 	 * @author	Tim
+	 * @throws Exception 
 	 * @since	2023年10月23日
 	 * store function處理
 	 * */
-	public void runSP() throws IOException, UnknowSQLTypeException {
+	public void runSP() throws Exception {
 		SearchFunctionPnl.tsLog.setLog("資訊", "轉換Store Porsidure");
 		List<File> lf = null;
 //		Map<String, String> mapSF = new HashMap<String, String>();

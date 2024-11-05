@@ -71,8 +71,8 @@ public class Main {
 		default:
 			break;
 		}
-		LoginFrame frame = new LoginFrame(app,new CheckLoginService(),VersionModel.VERSION);
-		frame.setVisible(true);
-//		app.run();
+//		LoginFrame frame = new LoginFrame(app,new CheckLoginService(),VersionModel.VERSION);
+//		frame.setVisible(true);
+		app.run();
 	}
 }

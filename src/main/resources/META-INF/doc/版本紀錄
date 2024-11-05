@@ -1,3 +1,31 @@
+6.0.1.11	2024/11/05	Tim	全家專案	SP
+	- SP轉換
+		- 補上fm處理
+	- SQL轉換
+		- 現在fld會做轉換，指轉換固定長切成欄位的部分
+		- .sql檔會進行轉換，但不包SP
+6.0.1.10	2024/11/04	Tim	全家專案	Export
+	- export
+		- 依照浩鈞的要求壓縮那一段的分號要換行
+6.0.1.9-dev	2024/10/30	Tim	全家專案	Export
+	- export
+		- 包zip的語法改成gzip
+		- title空白改為100個
+	- 全家轉換
+		- .sql檔改成直接轉sql，不加工
+6.0.1.8	2024/10/30	Tim	全家專案	Export
+	- export
+		- 依照浩鈞的要求加上包zip的語法
+		- title要放空白
+6.0.1.7	2024/10/28	Tim	全家專案	debug
+	- 全家轉換
+		- drop Table 的語法排版有問題
+		- CASE WHEN 排版優化
+	- Export Maker
+		- seq每個檔案獨立
+6.0.1.6	2024/10/28	Tim	全家專案	debug
+	- 全家轉換
+		- debug 避免TXDATE語法因前後有其他字串導致語法被嵌在字串裡面
 6.0.1.5	2024/10/25	Tim	全家專案	Export
 	- export
 		- 標題加上版本號

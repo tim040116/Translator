@@ -15,6 +15,8 @@ import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;
 import etec.src.translator.common.model.BasicParams;
 import etec.src.translator.common.model.SFSPModel;
+import etec.src.translator.project.azure.fm.formal.service.FmSqlService;
+import etec.src.translator.sql.az.translater.AzTranslater;
 import etec.src.translator.sql.az.translater.DDLTranslater;
 import etec.src.translator.sql.az.translater.DQLTranslater;
 import etec.src.translator.sql.az.translater.OtherTranslater;
@@ -80,17 +82,17 @@ public class TransduceStoreFunctionService {
 	}
 	/**
 	 * @author	Tim
-	 * @throws IOException
-	 * @throws UnknowSQLTypeException
+	 * @throws Exception 
 	 * @since	2023年10月23日
 	 *
 	 *
 	 * */
-	public static SFSPModel transformSP(File f) throws IOException, UnknowSQLTypeException{
+	public static SFSPModel transformSP(File f) throws Exception{
 		String text = FileTool.readFile(f,Charset.forName("UTF-8"));
 		SFSPModel res = new SFSPModel();
 		//初步處理
 		text = text
+				.replaceAll("(?i)\\bREPLACE\\s+PROC", "ALTER PROC")
 				.replaceAll(" {2,3}", "\t")
 				.replaceAll("(?i)\"RequestText\"", "")
 				.replaceAll("(?i)DECLARE EXIT HANDLER FOR SQLEXCEPTION\r\n" +
@@ -171,6 +173,8 @@ public class TransduceStoreFunctionService {
 				.replaceAll("\n[\t \r\n]+\n", "\r\n")
 				.replaceAll("(?i)VARCHAR\\s*\\(\\s*([8-9][0-9]{3}|[0-9]{5,})\\s*\\)", "VARCHAR(MAX)")
 				.trim();
+		script = FmSqlService.easyReplaceSP(script);
+		script = FmSqlService.replaceAll(script);
 		res.setName(spName);
 		res.setHeader(txtHeader);
 		res.setContext(txtContext);
@@ -181,8 +185,7 @@ public class TransduceStoreFunctionService {
 	}
 	/**
 	 * @author	Tim
-	 * @throws IOException
-	 * @throws UnknowSQLTypeException
+	 * @throws Exception 
 	 * @since	2023年10月23日
 	 * 		- 只有一個檔案以雙引號包住sql,沒有分隔符號
 	 * 		- 只轉換 RETURN 到  ; 中間的語法,其餘直接搬
@@ -190,7 +193,7 @@ public class TransduceStoreFunctionService {
 	 * 		- 每隻sf產一個檔,檔名為function name
 	 *
 	 * */
-	public static SFSPModel transformSF(String sf) throws IOException, UnknowSQLTypeException{
+	public static SFSPModel transformSF(String sf) throws Exception{
 		SFSPModel res = new SFSPModel();
 		//每一個sf的
 		sf = TransduceTool.cleanRemark(sf.trim())
@@ -231,6 +234,8 @@ public class TransduceStoreFunctionService {
 				.replaceAll("\n[\t \r\n]+\n", "\\r\n")
 				;
 		script = findSQLSTR(script);
+		script = FmSqlService.easyReplaceSP(script);
+		script = FmSqlService.replaceAll(script);
 		res.setHeader(txtHeader);
 		res.setContext(txtSQL);
 		res.setScript(script);
@@ -275,7 +280,7 @@ public class TransduceStoreFunctionService {
 	/*
 	 * 處理 SET @SQLSTR = ''; 裡面的SQL雨具
 	 * */
-	public static String findSQLSTR(String script) {
+	public static String findSQLSTR(String script) throws Exception {
 		String res = "";
 		String tmp = "";
 		boolean isQuery = false;
@@ -300,8 +305,9 @@ public class TransduceStoreFunctionService {
 	}
 	/**
 	 * SQLSTR轉成SQL
+	 * @throws Exception 
 	 * */
-	public static String openSQLSTR(String script) {
+	public static String openSQLSTR(String script) throws Exception {
 		String res = "";
 
 		res = script
@@ -313,8 +319,9 @@ public class TransduceStoreFunctionService {
 			.replaceAll("^\\s*\\+\\s*'", "")
 		;
 
-		res = SQLTranslater.convertDecode(res);
-
+//		res = SQLTranslater.convertDecode(res);
+		res = AzTranslater.translate(res);
+		res = FmSqlService.easyReplaceSP(res);
 		res = res
 			.replaceAll("'", "''")
 			.replaceAll("'('\\s*\\+.*?\\s*\\+\\s*')'", "$1")

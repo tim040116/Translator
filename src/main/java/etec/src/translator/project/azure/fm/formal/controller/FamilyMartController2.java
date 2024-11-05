@@ -24,7 +24,7 @@ import etec.src.translator.project.azure.fm.poc.service.FamilyMartFileTransduceS
  **/
 public class FamilyMartController2 implements Controller {
 
-	private static SimpleDateFormat sfabs = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+	private static SimpleDateFormat sfabs = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 
 	JTextArea txtLog;
 

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -112,23 +113,31 @@ public class ExportController implements Controller {
 			addLog("資訊", "開始產檔");
 			pgbLen = 0;
 			pgbTotal = lst.size();
-			int cntFile = 0;
+			Map<String,Integer> mapFileCnt = new HashMap<String,Integer>();
 			for(TableModel tbl : lst) {
-				String dataFile = (tbl.getFilePath()+tbl.getFileNm())/*.replaceAll("(?i)(?:\\.txt)?$", ".txt")*/;
+				String dataFile = (tbl.getFilePath()+tbl.getFileNm());
 				String tableName = tbl.getDbNm()+"."+tbl.getTblNm();
 				String where = tbl.getCondition();
-				String yyyymm = where.replaceAll("(?i)[\\S\\s]+BETWEEN\\s+\\w+\\s+AND+\\s+(\\d{6})[\\S\\s]+", "$1");
-				if(!yyyymm.matches("\\d{6}")) {
-					yyyymm = "0".repeat(3-String.valueOf(cntFile).length())+cntFile;
+				String yyyymm = where.replaceAll("(?i)[\\S\\s]+BETWEEN\\s+([\\w${}]+)\\s+AND\\s*[\\S\\s]+", "$1");
+//				產生序號
+				if(!yyyymm.matches("\\d{8}")) {
+					if(yyyymm.matches("\\$\\{\\w+\\}")) {
+						yyyymm = yyyymm.replaceAll("[${}]", "");
+					} else {
+						mapFileCnt.compute(tbl.getTblNm(), (key, oldValue) -> oldValue == null ? 1 : oldValue + 1);
+						yyyymm = "0".repeat(8-String.valueOf(mapFileCnt.get(tbl.getTblNm())).length())+mapFileCnt.get(tbl.getTblNm());
+						
+					}
 				}
 				String btqFile = outputPath + tbl.getTblNm() + "_" + yyyymm + ".btq";
+//				String btqFile = outputPath + tbl.getTblNm() + "_4YM.btq";
+//				where = where.replaceAll("(?i)\\s*(\\S+)\\s+BETWEEN\\s+[\\S\\s]+", "$1") + " BETWEEN ${TX4YMB} AND ${TX4YME}";
 				String content = ExportService.buildContent(dataFile,tableName,tbl.getLstColumn(), where);
 				addLog("資訊", "產生檔案："+btqFile);
 				FileTool.createFile(btqFile, content);
-				cntFile++;
 				plusProgress();
 			}
-			addLog("資訊", "產檔成功，共 " + cntFile + " 筆資料");
+			addLog("資訊", "產檔成功，共 " + pgbTotal + " 筆資料");
 			pnlStatusColor.setBackground(Color.GREEN);
 		} catch (Exception e) {
 			addLog("錯誤", "錯誤：" + e.getLocalizedMessage());

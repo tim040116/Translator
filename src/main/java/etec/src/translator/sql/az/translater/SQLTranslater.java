@@ -23,7 +23,7 @@ public class SQLTranslater {
 	 * */
 	public static String easyReplaceSelect(String sql) throws SQLTranslateException {
 		String res = sql;
-		while(true) {
+		while(true) {//coalesce
 			String temp = res;
 			res = res.replaceAll("(?i)COALESCE\\s*\\(\\s*((?:[^,()]+,)+)\\s*COALESCE\\s*\\(\\s*+([^()]+?)\\s*+\\)\\)","COALESCE\\($1$2\\)");
 			if(temp.equals(res)) {

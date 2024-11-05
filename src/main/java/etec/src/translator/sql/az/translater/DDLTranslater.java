@@ -43,6 +43,7 @@ public class DDLTranslater {
 	public static String runCreateTable(String sql) throws SQLTranslateException {
 		// create語法轉換
 		String res = sql;
+		res = res.replaceAll("(?i)\\s+AS\\s*\\(", " \\(");
 		res = replaceCreateTitle(res);
 		res = replaceColumn(res);
 		res = replaceTDsql(res);

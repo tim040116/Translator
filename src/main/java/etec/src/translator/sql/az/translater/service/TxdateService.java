@@ -8,6 +8,7 @@ public class TxdateService {
 	public static String easyReplace(String content) {
 		String res = content;
 //		res = toVarchar(res);
+		res = isolateTxdate(res);
 		res = replaceLastnnTxdate(res);
 		return res;
 	}
@@ -17,6 +18,7 @@ public class TxdateService {
 //	}
 //
 	public static String replaceLastnnTxdate(String content){
+		content = content.replaceAll("(?i)'(\\$\\{(?:NEXT|LAST)[^{}]+\\})'","$1");
 		StringBuffer sb = new StringBuffer();
 		Matcher m = Pattern.compile("\\$\\{(NEXT|LAST)(\\d+)(TXDATE1?)\\}").matcher(content);
 		while(m.find()) {
@@ -35,4 +37,30 @@ public class TxdateService {
 		return sb.toString();
 	}
 
+	/**
+	 * 避免TXDATE語法參雜在字串中
+	 * ex:'${LAST01TXDATE} 12:00:00 AM'
+	 * @author	Tim
+	 * @since	2024年10月28日
+	 * */
+	public static String isolateTxdate(String content) {
+		StringBuffer sb = new StringBuffer();
+		Matcher m = Pattern.compile("'[^'\r\n']+?'").matcher(content);
+		while(m.find()) {
+			if(!m.group().contains("$")) {
+				continue;
+			}
+			if(m.group().matches("'\\$\\{[^${}']+\\}'")) {
+				continue;
+			}
+			String str = "(" + m.group(0)
+				.replaceAll("('[^${}']+)(?=\\$\\{)", "$1' + '")
+				.replaceAll("(\\$\\{[^${}']+\\})([^']+')", "$1' + '$2")
+				+ ")"
+			;
+			m.appendReplacement(sb,Matcher.quoteReplacement(str));
+		}
+		m.appendTail(sb);
+		return sb.toString();
+	}
 }

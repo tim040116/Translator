@@ -42,12 +42,25 @@ public class FmSqlService {
 		res = cleanCode(res);
 		res = replaceTempTableName(res);
 		res = toLowerCase(res);
-		res = dropCreate(res);
-		res = cleanCode(res);
+//		res = cleanCode(res);
 		res = fdpUpt(res);
-		res = addRerun(res);
 		res = cleanLayout(res);
+		res = dropCreate(res);
+		res = addRerun(res);
 		res = addSP(res);
+		res = replaceAll(res);
+		return res;
+	}
+	
+	public static String easyReplaceSP(String content) throws Exception{
+		String res = content;
+		res = cleanCode(res);
+		res = replaceTempTableName(res);
+		res = toLowerCase(res);
+//		res = cleanCode(res);
+		res = fdpUpt(res);
+		res = cleanLayout(res);
+		res = dropCreate(res);
 		res = replaceAll(res);
 		return res;
 	}
@@ -392,12 +405,17 @@ public class FmSqlService {
 				.replaceAll("\\s*;", "\r\n;")
 				.replaceAll("(?i)(INSERT|VALUES)\\s*\\(", "$1\r\n\\(")
 				.replaceAll("(?i),\\s*CASE",",\r\nCASE")
+				.replaceAll("(?i)\\s*\\bWHERE\\b", "\r\nWHERE")
+				.replaceAll("(?i)\\(\\s*CASE","\\(\r\nCASE")
+				.replaceAll("(?i)\\bEND\\s*\\)", "END\r\n\\)")
+				.replaceAll("(?i)\\bTHEN\\s*\\(","THEN\r\n\\(")
 				;
 			//處理排版
 			String temp = "";
 			String type = "";
 			String tab = "";
 			String space = "";
+			boolean isFirstCol = false;
 			sb = new StringBuffer();
 			m = Pattern.compile("(?mi)^[ \\t]*(\\S+?)(?=\\b|\\s)").matcher(t);
 			while(m.find()) {
@@ -405,32 +423,46 @@ public class FmSqlService {
 				switch (m.group(1).toUpperCase()) {
 					//增排寫入
 					case "WHEN":
+					case "ELSE":
 						if("MERGE".equals(type)) {
 							tab = temp;
 						}
+						tab = tab.replaceAll("^\t", "");
 //						tab += "\t";
 						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
-//						tab += "\t";
+						tab += "\t";
 						break;
 					//增排寫入再縮排
 					case "THEN":
-					case "ELSE":
-						m.appendReplacement(sb,"\t"+tab+title);
+						m.appendReplacement(sb,tab+title);
 						if("MERGE".equals(type)) {
 							tab = temp+"\t";
 						}
 						break;
 					//增排寫入增排
 					case "SET":
+						isFirstCol = true;
 						tab += "\t";
 						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
 //						tab += "\t";
 						break;
-					//寫入增排
 					case "CASE":
-					case "WITH":
-					case "(":
+						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
+						tab += "\t\t";
+						break;
+					//寫入增排
+					case "CREATE":
+					case "INSERT":
+						isFirstCol = true;
+						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
+						break;
 					case "SELECT":
+					case "WITH":
+						isFirstCol = true;
+						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
+						tab += "\t";
+						break;
+					case "(":
 						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
 						tab += "\t";
 						break;
@@ -441,6 +473,7 @@ public class FmSqlService {
 						break;
 					//先縮排再寫入
 					case "END":
+						tab = tab.replaceAll("^\t", "");
 					case ")":
 						tab = tab.replaceAll("^\t", "");
 						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
@@ -482,6 +515,10 @@ public class FmSqlService {
 					case "AND":
 						title = space + title;
 					default:
+						if(isFirstCol) {
+							isFirstCol = false;
+							title = " " + title;
+						}
 						m.appendReplacement(sb,Matcher.quoteReplacement(tab+title));
 						break;
 				}
@@ -496,18 +533,25 @@ public class FmSqlService {
 				.replaceAll("(?i)\\b((SET|DECLARE)\\b[^;]+?)\\s*;","$1;")
 				.replaceAll("(?i)\\bSET\\s*@", "SET @")
 				.replaceAll("(?i)SELECT\\s+DISTINCT","SELECT DISTINCT")
-				.replaceAll("(?i)(SELECT(?:\\s+DISTINCT)?)\\s*\\r?\\n(\\t+)","$1\r\n$2 ")
-				.replaceAll("(?i)\\bSET\\s+","$0 ")
+				.replaceAll("(?i)(SELECT(?:\\s+DISTINCT)?)\\s*\\r?\\n(\\t+)","$1\r\n$2")
+//				.replaceAll("(?i)\\bSET\\s+","$0 ")
 				.replaceAll("(?i)(FROM|JOIN|=)\\s*\\(","$1 \\(")
 				.replaceAll("(?i)(INSERT|VALUES)\\s*\\((\\s*)","$1 \\($2 ")
-				.replaceAll("(?i)(VALUES\\s*\\([^;]+\\))\\s*;", "")
+//				.replaceAll("(?i)(VALUES\\s*\\([^;]+\\))\\s*;", "")
 				.replaceAll("(?i)THEN\\s+UPDATE\\s+SET", "THEN UPDATE SET")
+				.replaceAll("(?i)\\bEND\\s*AS\\b"," END AS")
+				.replaceAll("(?i)\\bTHEN\\s*\\(","THEN \\(")
 			;
 			return t;
 		});
 		res = res
-			.replaceAll("(?:\r\n[\t ]*)+\r\n","\r\n")
+			.replaceAll("' \\+ ", " '\r\n\t+ ")
+			.replaceAll("(?:\\r\\n[\\t ]*)+\\r\\n","\r\n")
+			.replaceAll(" *\\r\\n", "\r\n")
+			.replaceAll(",\\r\\n([ \\t]+)", "\r\n$1,")
 			.replaceAll(";", ";\r\n")
+			.replaceAll("\\+ '\\r\\n", "+ ' ")
+			.replaceAll(";\\s+'", "; '")
 		;
 		return res;
 	}

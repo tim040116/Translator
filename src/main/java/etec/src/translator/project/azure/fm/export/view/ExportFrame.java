@@ -62,7 +62,7 @@ public class ExportFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public ExportFrame(Controller controller) {
-		setTitle("快速轉換  " + VersionModel.VERSION);
+		setTitle("匯出檔產生器  " + VersionModel.VERSION);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 383);
 		contentPane = new JPanel();

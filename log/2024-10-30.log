@@ -1,0 +1,144 @@
+2024-10-30 13:19:16 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2024-10-30 13:19:19 [INFO] : 開始產檔
+2024-10-30 13:19:19 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\Target\FastExportDDL 4.xlsx
+2024-10-30 13:19:19 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_131919\src\
+2024-10-30 13:19:19 [INFO] : 正在開啟檔案，請稍後...
+2024-10-30 13:19:21 [INFO] : 開始解析資料表設定
+2024-10-30 13:19:21 [INFO] : 解析Table參數
+2024-10-30 13:19:21 [INFO] : 解析完成，共 5 筆資料
+2024-10-30 13:19:21 [INFO] : 解析Column參數
+2024-10-30 13:19:21 [INFO] : 解析完成，共 93 筆資料
+2024-10-30 13:19:21 [INFO] : 開始產檔
+2024-10-30 13:19:21 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_131919\src\orddetail_4YM.btq
+2024-10-30 13:19:21 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_131919\src\orddetail_4YM.btq
+2024-10-30 13:19:21 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_131919\src\inprddetail_4YM.btq
+2024-10-30 13:19:21 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_131919\src\inprddetail_4YM.btq
+2024-10-30 13:19:21 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_131919\src\salesdetail_4YM.btq
+2024-10-30 13:19:21 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_131919\src\salesdetail_4YM.btq
+2024-10-30 13:19:21 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_131919\src\transprddetail_4YM.btq
+2024-10-30 13:19:21 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_131919\src\transprddetail_4YM.btq
+2024-10-30 13:19:21 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_131919\src\retprddetail_4YM.btq
+2024-10-30 13:19:21 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_131919\src\retprddetail_4YM.btq
+2024-10-30 13:19:21 [INFO] : 產檔成功，共 5 筆資料
+2024-10-30 13:30:48 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2024-10-30 13:30:49 [INFO] : 開始產檔
+2024-10-30 13:30:49 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\Target\FastExportDDL 4.xlsx
+2024-10-30 13:30:49 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133049\src\
+2024-10-30 13:30:49 [INFO] : 正在開啟檔案，請稍後...
+2024-10-30 13:30:50 [INFO] : 開始解析資料表設定
+2024-10-30 13:30:50 [INFO] : 解析Table參數
+2024-10-30 13:30:50 [INFO] : 解析完成，共 5 筆資料
+2024-10-30 13:30:50 [INFO] : 解析Column參數
+2024-10-30 13:30:50 [INFO] : 解析完成，共 93 筆資料
+2024-10-30 13:30:50 [INFO] : 開始產檔
+2024-10-30 13:30:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133049\src\orddetail_4YM.btq
+2024-10-30 13:30:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133049\src\orddetail_4YM.btq
+2024-10-30 13:30:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133049\src\inprddetail_4YM.btq
+2024-10-30 13:30:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133049\src\inprddetail_4YM.btq
+2024-10-30 13:30:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133049\src\salesdetail_4YM.btq
+2024-10-30 13:30:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133049\src\salesdetail_4YM.btq
+2024-10-30 13:30:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133049\src\transprddetail_4YM.btq
+2024-10-30 13:30:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133049\src\transprddetail_4YM.btq
+2024-10-30 13:30:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133049\src\retprddetail_4YM.btq
+2024-10-30 13:30:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133049\src\retprddetail_4YM.btq
+2024-10-30 13:30:50 [INFO] : 產檔成功，共 5 筆資料
+2024-10-30 13:31:56 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2024-10-30 13:31:57 [INFO] : 開始產檔
+2024-10-30 13:31:57 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\Target\FastExportDDL 4.xlsx
+2024-10-30 13:31:57 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133157\src\
+2024-10-30 13:31:57 [INFO] : 正在開啟檔案，請稍後...
+2024-10-30 13:31:58 [INFO] : 開始解析資料表設定
+2024-10-30 13:31:58 [INFO] : 解析Table參數
+2024-10-30 13:31:58 [INFO] : 解析完成，共 5 筆資料
+2024-10-30 13:31:58 [INFO] : 解析Column參數
+2024-10-30 13:31:58 [INFO] : 解析完成，共 93 筆資料
+2024-10-30 13:31:58 [INFO] : 開始產檔
+2024-10-30 13:31:58 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133157\src\orddetail_4YM.btq
+2024-10-30 13:31:58 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133157\src\orddetail_4YM.btq
+2024-10-30 13:31:58 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133157\src\inprddetail_4YM.btq
+2024-10-30 13:31:58 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133157\src\inprddetail_4YM.btq
+2024-10-30 13:31:58 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133157\src\salesdetail_4YM.btq
+2024-10-30 13:31:58 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133157\src\salesdetail_4YM.btq
+2024-10-30 13:31:58 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133157\src\transprddetail_4YM.btq
+2024-10-30 13:31:58 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133157\src\transprddetail_4YM.btq
+2024-10-30 13:31:58 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133157\src\retprddetail_4YM.btq
+2024-10-30 13:31:58 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_133157\src\retprddetail_4YM.btq
+2024-10-30 13:31:58 [INFO] : 產檔成功，共 5 筆資料
+2024-10-30 16:17:19 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2024-10-30 16:17:43 [INFO] : 開始產檔
+2024-10-30 16:17:43 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\Target\FastExportDDL 1.xlsx
+2024-10-30 16:17:43 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_161743\src\
+2024-10-30 16:17:43 [INFO] : 正在開啟檔案，請稍後...
+2024-10-30 16:17:44 [INFO] : 開始解析資料表設定
+2024-10-30 16:17:44 [INFO] : 解析Table參數
+2024-10-30 16:17:44 [INFO] : 解析完成，共 5 筆資料
+2024-10-30 16:17:44 [INFO] : 解析Column參數
+2024-10-30 16:17:44 [INFO] : 解析完成，共 93 筆資料
+2024-10-30 16:17:44 [INFO] : 開始產檔
+2024-10-30 16:17:44 [INFO] : 錯誤：No group 1
+2024-10-30 16:17:44 [ERROR] : No group 1
+2024-10-30 16:18:14 [INFO] : 開始產檔
+2024-10-30 16:18:14 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\Target\FastExportDDL 1.xlsx
+2024-10-30 16:18:14 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_161814\src\
+2024-10-30 16:18:14 [INFO] : 正在開啟檔案，請稍後...
+2024-10-30 16:18:14 [INFO] : 開始解析資料表設定
+2024-10-30 16:18:14 [INFO] : 解析Table參數
+2024-10-30 16:18:14 [INFO] : 解析完成，共 5 筆資料
+2024-10-30 16:18:14 [INFO] : 解析Column參數
+2024-10-30 16:18:14 [INFO] : 解析完成，共 93 筆資料
+2024-10-30 16:18:14 [INFO] : 開始產檔
+2024-10-30 16:18:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_161814\src\orddetail_TXDATE1.btq
+2024-10-30 16:18:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_161814\src\orddetail_TXDATE1.btq
+2024-10-30 16:18:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_161814\src\inprddetail_TXDATE1.btq
+2024-10-30 16:18:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_161814\src\inprddetail_TXDATE1.btq
+2024-10-30 16:18:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_161814\src\salesdetail_TXDATE1.btq
+2024-10-30 16:18:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_161814\src\salesdetail_TXDATE1.btq
+2024-10-30 16:18:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_161814\src\transprddetail_TXDATE1.btq
+2024-10-30 16:18:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_161814\src\transprddetail_TXDATE1.btq
+2024-10-30 16:18:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_161814\src\retprddetail_TXDATE1.btq
+2024-10-30 16:18:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_161814\src\retprddetail_TXDATE1.btq
+2024-10-30 16:18:14 [INFO] : 產檔成功，共 5 筆資料
+2024-10-30 16:23:11 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2024-10-30 16:23:19 [INFO] : 開始產檔
+2024-10-30 16:23:19 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\Target\FastExportDDL 1.xlsx
+2024-10-30 16:23:19 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162319\src\
+2024-10-30 16:23:19 [INFO] : 正在開啟檔案，請稍後...
+2024-10-30 16:23:20 [INFO] : 開始解析資料表設定
+2024-10-30 16:23:20 [INFO] : 解析Table參數
+2024-10-30 16:23:20 [INFO] : 解析完成，共 5 筆資料
+2024-10-30 16:23:20 [INFO] : 解析Column參數
+2024-10-30 16:23:20 [INFO] : 解析完成，共 93 筆資料
+2024-10-30 16:23:20 [INFO] : 開始產檔
+2024-10-30 16:23:20 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162319\src\orddetail_TXDATE1.btq
+2024-10-30 16:23:20 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162319\src\orddetail_TXDATE1.btq
+2024-10-30 16:23:20 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162319\src\inprddetail_TXDATE1.btq
+2024-10-30 16:23:20 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162319\src\inprddetail_TXDATE1.btq
+2024-10-30 16:23:20 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162319\src\salesdetail_TXDATE1.btq
+2024-10-30 16:23:20 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162319\src\salesdetail_TXDATE1.btq
+2024-10-30 16:23:20 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162319\src\transprddetail_TXDATE1.btq
+2024-10-30 16:23:20 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162319\src\transprddetail_TXDATE1.btq
+2024-10-30 16:23:20 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162319\src\retprddetail_TXDATE1.btq
+2024-10-30 16:23:20 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162319\src\retprddetail_TXDATE1.btq
+2024-10-30 16:23:20 [INFO] : 產檔成功，共 5 筆資料
+2024-10-30 16:24:12 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2024-10-30 16:24:13 [INFO] : 開始產檔
+2024-10-30 16:24:13 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\Target\FastExportDDL 1.xlsx
+2024-10-30 16:24:13 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162413\src\
+2024-10-30 16:24:13 [INFO] : 正在開啟檔案，請稍後...
+2024-10-30 16:24:14 [INFO] : 開始解析資料表設定
+2024-10-30 16:24:14 [INFO] : 解析Table參數
+2024-10-30 16:24:14 [INFO] : 解析完成，共 5 筆資料
+2024-10-30 16:24:14 [INFO] : 解析Column參數
+2024-10-30 16:24:14 [INFO] : 解析完成，共 93 筆資料
+2024-10-30 16:24:14 [INFO] : 開始產檔
+2024-10-30 16:24:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162413\src\orddetail_TXDATE1.btq
+2024-10-30 16:24:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162413\src\orddetail_TXDATE1.btq
+2024-10-30 16:24:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162413\src\inprddetail_TXDATE1.btq
+2024-10-30 16:24:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162413\src\inprddetail_TXDATE1.btq
+2024-10-30 16:24:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162413\src\salesdetail_TXDATE1.btq
+2024-10-30 16:24:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162413\src\salesdetail_TXDATE1.btq
+2024-10-30 16:24:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162413\src\transprddetail_TXDATE1.btq
+2024-10-30 16:24:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162413\src\transprddetail_TXDATE1.btq
+2024-10-30 16:24:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162413\src\retprddetail_TXDATE1.btq
+2024-10-30 16:24:14 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20241030_162413\src\retprddetail_TXDATE1.btq
+2024-10-30 16:24:14 [INFO] : 產檔成功，共 5 筆資料
