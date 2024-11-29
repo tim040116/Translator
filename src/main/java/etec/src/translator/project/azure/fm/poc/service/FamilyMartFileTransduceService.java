@@ -43,9 +43,7 @@ public class FamilyMartFileTransduceService {
 	 */
 	public static void run(String outputPath,File f) throws Exception {
 		
-		if(f.getName().toUpperCase().contains(".FLD")) {
-			Log.info("檔案類型：Fastload");
-		}else if(f.getName().toUpperCase().contains(".BTQ")) {
+		if(f.getName().toUpperCase().contains(".BTQ")) {
 			Log.info("檔案類型：BTEQ");
 			transduceBtq(outputPath, f);
 		}else if(f.getName().toUpperCase().contains(".FLD")) {
@@ -122,7 +120,7 @@ public class FamilyMartFileTransduceService {
 				lstCol.add(str);
 			}
 			res +="\r\n"
-				+ "IF OBJECT_ID('dev.stg_"+ tableNm +"_02','U') IS NOT　NULL\r\n"
+				+ "IF OBJECT_ID('dev.stg_"+ tableNm +"_02','U') IS NOT NULL\r\n"
 				+ "BEGIN\r\n"
 				+ "DROP TABLE dev.stg_" + tableNm + "_02 ;\r\n"
 				+ "END\r\n"
@@ -139,12 +137,9 @@ public class FamilyMartFileTransduceService {
 			;
 		}
 
-		//全家客製化項目
-		outputPath = outputPath.replaceAll("(?i)\\.fld", ".fld.sql");
 		/*將bteq語法清除*/
-		//newContext = newContext.replaceAll("\\r\\n\\..*", "");
-//		newContext = GreenPlumTranslater.dql.changeMultAnalyze(newContext);
-		FileTool.createFile(outputPath, res, chs);
+		FileTool.createFile(outputPath, context, chs);
+		FileTool.createFile(outputPath.replaceAll("(?i)\\.fld", ".fld.sql"), res, chs);
 	}
 	
 	public static void transduceBtq(String outputPath,File f) throws Exception {

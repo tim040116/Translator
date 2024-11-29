@@ -234,7 +234,7 @@ public class DMLTranslater {
 			where = where
 					.replaceAll("\\Q"+targetTable+".\\E", alias+".") //欄位加上alias name
 					;
-			str = "UPDATE " + alias + "\r\n"
+			str = "UPDATE " + targetTable + " " + alias + "\r\n"
 				+ "SET " + set + "\r\n"
 				+ "FROM " + targetTable + " " + alias + "\r\n"
 				+ joinTable

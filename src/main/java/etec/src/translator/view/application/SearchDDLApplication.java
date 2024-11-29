@@ -1,11 +1,15 @@
 package etec.src.translator.view.application;
 
+import etec.framework.code.interfaces.Application;
 import etec.src.assignment.project.sd.controller.SearchDDLToSDIController;
 import etec.src.translator.view.frame.SearchFunctionFrame;
 
-public class SearchDDLApplication {
+public class SearchDDLApplication  implements Application {
 
-	public static void run(String title) {
-		new SearchFunctionFrame(title,new SearchDDLToSDIController());
+	@Override
+	public void run() {
+		new SearchFunctionFrame("SD製作工具",new SearchDDLToSDIController());
+
+		
 	}
 }

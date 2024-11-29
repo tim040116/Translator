@@ -17,6 +17,7 @@ public class DDLTranslater {
 		String res = sql;
 		switch (type) {
 		case CREATE_TABLE:
+			Log.debug("\t\t細分：CREATE TABLE");
 			res = runCreateTable(res);
 			break;
 		case CREATE_INSERT:
@@ -43,7 +44,7 @@ public class DDLTranslater {
 	public static String runCreateTable(String sql) throws SQLTranslateException {
 		// create語法轉換
 		String res = sql;
-		res = res.replaceAll("(?i)\\s+AS\\s*\\(", " \\(");
+		
 		res = replaceCreateTitle(res);
 		res = replaceColumn(res);
 		res = replaceTDsql(res);
@@ -51,6 +52,7 @@ public class DDLTranslater {
 		res = addWith(res);
 		// drop if exist
 		res = addDropIfExists(res);
+		res = res.replaceAll("(?i)\\bAS\\s*\\(", " \\(");
 		return res;
 	}
 
@@ -191,7 +193,7 @@ public class DDLTranslater {
 		 * 2024年8月21日	Tim	直接用位置來刪除 CREATE TABLE 的多餘設定
 		 *
 		 * */
-		result = result.replaceAll("(?is)CREATE\\b.*?\\bTABLE\\s+(?<tableName>[^,\\s()]+)\\s+.*?(?:AS\\s*)?\\(", "CREATE TABLE $1 AS (");
+		result = result.replaceAll("(?is)CREATE\\b.*?\\bTABLE\\s+(?<tableName>[^,\\s()]+)\\s+.*?(?:AS\\s*)?\\(", "CREATE TABLE $1 (");
 		return result;
 	}
 

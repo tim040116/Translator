@@ -13,6 +13,7 @@ import etec.src.translator.view.application.FamilyMartApplication;
 import etec.src.translator.view.application.FastTransduceApplication;
 import etec.src.translator.view.application.GreenPlumFileApplication;
 import etec.src.translator.view.application.OldApplication;
+import etec.src.translator.view.application.SearchDDLApplication;
 import etec.src.translator.view.application.TranslateStoreFunctionApplication;
 import etec.src.translator.view.application.UIApplication;
 import etec.src.translator.view.application.UncompressApplication;
@@ -39,9 +40,9 @@ public class Main {
 //		case "SEARCH_FUNCTION":// 3.1 分析程式後列出清單
 //			SearchFunctionApplication.run("方法統計");
 //			break;
-//		case "SD_MAKER":// 3.2分析CREATE TABLE與法治做成資料表清單
-//			SearchDDLApplication.run("SD製作工具");
-//			break;
+		case "SD_MAKER":// 3.2分析CREATE TABLE與法治做成資料表清單
+			app = new SearchDDLApplication();
+			break;
 
 		case "SF_SP":// 3.3轉換sf 跟sp
 			app = new TranslateStoreFunctionApplication();
@@ -56,6 +57,7 @@ public class Main {
 //				e.printStackTrace();
 //			}
 //			break;
+		case "PG":
 		case "GP":// 4.1.0.0 Green Plum 轉換
 			app = new GreenPlumFileApplication();
 			break;

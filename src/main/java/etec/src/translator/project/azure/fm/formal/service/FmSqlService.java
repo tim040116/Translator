@@ -96,6 +96,7 @@ public class FmSqlService {
 		List<String> lstTempTable = new ArrayList<String>();
 		List<String> lstTTable = new ArrayList<String>();
 		List<String> lstSTable = new ArrayList<String>();
+		List<String> lstSP = new ArrayList<String>();
 		
 		//1.解析merge語法
 		/**
@@ -145,8 +146,12 @@ public class FmSqlService {
 				,"$0@tx_date as fdp_upt,\r\n"
 			);
 		}
+		Matcher ms = Pattern.compile("(?i)\\bEXEC\\s+([^;]+);").matcher(res);
+		while(ms.find()) {
+			lstSP.add(ms.group(1).trim());
+		}
 		//Source table
-		Matcher ms = Pattern.compile("(?i)(PDATA|PMART|\\$\\{DATA\\}|\\$\\{MART\\}|dev|tfm|tfmds)\\.\\w+").matcher(content);
+		ms = Pattern.compile("(?i)(PDATA|PMART|\\$\\{DATA\\}|\\$\\{MART\\}|dev|tfm|tfmds)\\.\\w+").matcher(content);
 		while(ms.find()) {
 			String str = ms.group().toLowerCase();
 			if(str.matches("(?i)dev\\.stg_\\w+")){
@@ -186,7 +191,7 @@ public class FmSqlService {
 			+ "\r\n"
 		;
 		String txdate = "@tx_date";
-		res = p_IOPTableLog(txdate,lstTTable,lstSTable)
+		res = p_IOPTableLog(txdate,lstTTable,lstSTable,lstSP)
 			+ rerun
 			+ res
 			+ addDropTempTable(content,lstTempTable);
@@ -557,7 +562,7 @@ public class FmSqlService {
 	}
 		
 	//input output的註解
-	private static String p_IOPTableLog(String txdate,List<String> lstTTable,List<String> lstSTable) {
+	private static String p_IOPTableLog(String txdate,List<String> lstTTable,List<String> lstSTable,List<String> lstSP) {
 		String res = "\r\n/*--------------------------------------------------------------------------"
 				+ "\r\n\tSP參數"
 				+ "\r\n\t\t"+txdate+" = ${TXDATE}"
@@ -567,6 +572,9 @@ public class FmSqlService {
 				+ "\r\n\tOUTPUT"
 				+ "\r\n\t\t"
 				+ String.join("\r\n\t\t", lstTTable)
+				+ "\r\n\tSTORED PROCEDURE"
+				+ "\r\n\t\t"
+				+ String.join("\r\n\t\t", lstSP)
 				+ "\r\n--------------------------------------------------------------------------*/"
 				+ "\r\n";
 		return res;

@@ -98,7 +98,6 @@ public class GreenPlumFileService {
 					String sql = m.group().trim();
 					sql = GreenPlumTranslater.translate(sql);
 					m.appendReplacement(sb, Matcher.quoteReplacement(sql + "\r\n"));
-
 				}
 				m.appendTail(sb);
 			} catch (SQLTranslateException e) {
@@ -110,6 +109,15 @@ public class GreenPlumFileService {
 
 		/*將bteq語法清除*/
 		//newContext = newContext.replaceAll("\\r\\n\\..*", "");
+		newContext = newContext
+				.replaceAll("(?i)replace\\s+PROCEDURE\\s+([\\w.]+)", "DROP PROCEDURE $1;\r\nCREATE PROCEDURE $1")
+				.replaceAll("(?i)SQL\\s+SECURITY\\s+INVOKER", "")
+				.replaceAll("(?i)SP:BEGIN","LANGUAGE plpgsql\r\nAS \\$\\$\r\nBEGIN\r\n")
+				.replaceAll("(?i)\\bEND\\s+SP\\s*;","END;\r\n\\$\\$;")
+			;
+		newContext = newContext
+				.replaceAll("(?i)\\bnumber\\b", "numeric")
+			;
 		newContext = GreenPlumTranslater.dql.changeMultAnalyze(newContext);
 		FileTool.createFile(newFileName, newContext, chs);
 	}

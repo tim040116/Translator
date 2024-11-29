@@ -16,8 +16,12 @@ public class ReplaceToolService {
 				InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
 				BufferedReader br = new BufferedReader(isr);) {
 			while (br.ready()) {
-				String[] line = br.readLine().replace("\uFEFF","").split(",");
-				lstrpl.add(line);
+				String line = br.readLine().replace("\uFEFF","");
+				if(line.matches("\\s*")) {
+					continue;
+				}
+				String[] arr = line.split(",");
+				lstrpl.add(arr);
 			}
 		}
 		return lstrpl;

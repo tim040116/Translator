@@ -30,6 +30,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.DefaultCaret;
 
 import etec.common.factory.Params;
+import etec.common.model.VersionModel;
 import etec.framework.code.interfaces.Controller;
 import etec.framework.file.readfile.service.FileTool;
 import etec.src.tool.project.replace.controller.ReplaceToolController;
@@ -62,7 +63,7 @@ public class ReplaceToolFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public ReplaceToolFrame(Controller controller) {
-		setTitle("語法轉換");
+		setTitle("大量取代  " + VersionModel.VERSION);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 383);
 		contentPane = new JPanel();
