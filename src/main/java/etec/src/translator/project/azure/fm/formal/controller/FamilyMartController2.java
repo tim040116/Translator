@@ -1,4 +1,4 @@
-	package etec.src.translator.project.azure.fm.formal.controller;
+package etec.src.translator.project.azure.fm.formal.controller;
 
 import java.awt.Color;
 import java.io.File;

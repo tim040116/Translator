@@ -50,9 +50,6 @@ public class SearchDDLToSDIController implements Controller{
 			// 讀取檔案
 			String content = FileTool.readFile(f,Charset.forName("utf-8"));
 
-			String newFileName = BasicParams.getTargetFileNm(f.getPath())+f.getName();
-
-
 			content = content.replaceAll("//.*",";$0;");
 			//去除註解
 			content=TransduceTool.cleanRemark(content);
@@ -72,7 +69,7 @@ public class SearchDDLToSDIController implements Controller{
 				}
 				//處理前後空白
 				String sql = m.group().trim();
-
+				sql = replaceTitleWithComment(sql);
 
 				//確認為CREATE 語法
 				//String regCol ="CREATE\\s+(?:MULTISET|SET)?\\s+TABLE[^;]+;";
@@ -92,5 +89,29 @@ public class SearchDDLToSDIController implements Controller{
 		SearchFunctionPnl.tsLog.setLog("資訊","產生完成，共 "+i+" 個檔案");
 		Log.info("完成，共 "+i+" 個檔案");
 
+	}
+	private static String replaceTitleWithComment(String strTd) {
+		Matcher m = Pattern.compile("(?i)TITLE\\s+U\\&'([^']+)'\\s+UESCAPE\\s+'\\\\'").matcher(strTd);
+		StringBuffer sb = new StringBuffer();
+		while(m.find()) {
+			m.appendReplacement(sb,"TITLE '"+convertUnicodeToChars(m.group(1))+"' ");
+		}
+		m.appendTail(sb);
+		return sb.toString();
+	}
+
+	private static String convertUnicodeToChars(String comment) {
+	    // 使用正則表達式找出 \xxxx 格式的 Unicode 編碼
+	    Pattern pattern = Pattern.compile("\\\\([0-9A-Fa-f]{4})");
+	    Matcher matcher = pattern.matcher(comment);
+
+	    StringBuffer sb = new StringBuffer();
+	    while (matcher.find()) {
+	        // 將每個匹配到的 Unicode 編碼轉換成字元
+	        int codePoint = Integer.parseInt(matcher.group(1), 16);
+	        matcher.appendReplacement(sb, String.valueOf((char) codePoint));
+	    }
+	    matcher.appendTail(sb);
+	    return sb.toString().replace("'", "").trim();
 	}
 }

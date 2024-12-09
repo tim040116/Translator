@@ -22,7 +22,7 @@ import etec.src.translator.sql.gp.translater.GreenPlumTranslater;
  * */
 public class Main {
 
-	static String folder = "C:\\Users\\User\\Desktop\\Trans\\Target\\show_procedure_2.txt";
+	static String folder = "C:\\Users\\User\\Desktop\\Trans\\Target\\PMART.SV_2_12_FUNC.sql";
 
 	static String outputFile = "C:\\Users\\user\\Desktop\\Trans\\Assessment_Result\\test2\\"; 
 	
