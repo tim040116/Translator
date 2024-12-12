@@ -24,7 +24,7 @@ public class CreateListService {
 	 * @author	Tim
 	 * @throws IOException
 	 * @since	2023年9月21日
-	 *
+	 * @deprecated	已搬遷到ScanFileList 
 	 * 無論如何先產一份檔案清單檔
 	 * */
 	public static void createFileList(File f) throws IOException {

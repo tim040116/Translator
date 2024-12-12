@@ -57,7 +57,7 @@ public class SQLTranslater {
 		res = cfs.savelyConvert(res, (t)->{
 			String rt = t
 				//TO_NUMBER
-				.replaceAll("(?i)TO_NUMBER\\s*\\(\\s*([^(),]*?)\\s*\\)", "CAST($1 AS INTEGER)")
+				.replaceAll("(?i)TO_NUMBER\\s*\\(\\s*([^(),]*?)\\s*\\)", "CAST($1 AS NUMERIC)")
 				//TO_DATE
 				.replaceAll("(?i)TO_DATE\\s*\\(\\s*([^(),]*?)\\s*,\\s*\\S+\\s*\\)", "CAST($1 AS DATETIME)")
 				//TO_CHAR

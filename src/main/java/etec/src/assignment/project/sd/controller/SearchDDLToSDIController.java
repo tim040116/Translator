@@ -8,8 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import etec.common.factory.Params;
-import etec.common.utils.TransduceTool;
 import etec.framework.code.interfaces.Controller;
+import etec.framework.context.convert_safely.service.ConvertRemarkSafely;
 import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;
 import etec.framework.ui.search_func.enums.RunStatusEnum;
@@ -52,7 +52,7 @@ public class SearchDDLToSDIController implements Controller{
 
 			content = content.replaceAll("//.*",";$0;");
 			//去除註解
-			content=TransduceTool.cleanRemark(content);
+			content = ConvertRemarkSafely.cleanRemark(content);
 
 			Pattern p = Pattern.compile("([^;]+);", Pattern.CASE_INSENSITIVE);
 			Matcher m = p.matcher(content);

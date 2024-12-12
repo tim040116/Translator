@@ -10,6 +10,7 @@ import java.util.List;
 import etec.common.utils.RegexTool;
 import etec.common.utils.TransduceTool;
 import etec.framework.context.convert_safely.model.Mark;
+import etec.framework.context.convert_safely.service.ConvertRemarkSafely;
 import etec.framework.context.translater.exception.UnknowSQLTypeException;
 import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;
@@ -132,7 +133,7 @@ public class TransduceStoreFunctionService {
 		}
 		//
 		//取得檔名
-		String spName = RegexTool.getRegexTargetFirst("(?i)^\\s*\\S+\\s+PROCEDURE\\s+[^\\(]+", TransduceTool.cleanRemark(sp))
+		String spName = RegexTool.getRegexTargetFirst("(?i)^\\s*\\S+\\s+PROCEDURE\\s+[^\\(]+", ConvertRemarkSafely.cleanRemark(sp))
 				.replaceAll("(?i)^\\s*\\S+\\s+PROCEDURE\\s+", "");
 		//轉換
 		txtContext = transformSQL(txtContext);
@@ -141,7 +142,7 @@ public class TransduceStoreFunctionService {
 				+txtContext;
 		//header的參數
 		List<String> lstParams = new ArrayList<>();
-		txtHeader = TransduceTool.cleanRemark(txtHeader)
+		txtHeader = ConvertRemarkSafely.cleanRemark(txtHeader)
 				.replaceAll("(?i)\\bCASESPECIFIC\\b", "")
 				.replaceAll("(?i)CHARACTER(\\s+SET)?\\s+\\w+", "")
 				.replaceAll("(?i)SQL\\s+SECURITY\\s+INVOKER", "")
@@ -196,7 +197,7 @@ public class TransduceStoreFunctionService {
 	public static SFSPModel transformSF(String sf) throws Exception{
 		SFSPModel res = new SFSPModel();
 		//每一個sf的
-		sf = TransduceTool.cleanRemark(sf.trim())
+		sf = ConvertRemarkSafely.cleanRemark(sf.trim())
 				.replaceAll("^\"", "")
 				.replaceAll("\"\\+$", "");
 		//取得檔名

@@ -1,7 +1,6 @@
 package etec.src.translator.project.azure.fm.formal.view;
 
 import java.awt.Button;
-import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -25,7 +24,6 @@ import javax.swing.text.DefaultCaret;
 import etec.common.factory.Params;
 import etec.common.model.VersionModel;
 import etec.framework.code.interfaces.Controller;
-import etec.src.tool.project.replace.controller.ReplaceToolController;
 import etec.src.translator.project.azure.fm.formal.controller.FamilyMartController2;
 
 public class TransduceFrame extends JFrame {

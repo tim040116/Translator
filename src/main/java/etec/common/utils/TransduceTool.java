@@ -243,22 +243,7 @@ public class TransduceTool {
 		return RegexTool.decodeSQL(result);
 	}
 
-	/**
-	 * @author	Tim
-	 * @since	2023年10月4日
-	 *
-	 * 清除註解
-	 * */
-	public static String cleanRemark(String sql) {
-		String res = sql.replaceAll("\\/\\*", "🀄")
-				.replaceAll("\\*\\/", "🀄")
-				.replaceAll("🀄[^🀄]*🀄", "")
-				.replaceAll("\\-\\-.*", "")
-				.replaceAll("\\/\\/.*", "")
-				.replaceAll("(\r\n)+", "\r\n")
-				.trim();
-		return res;
-	}
+	
 
 
 

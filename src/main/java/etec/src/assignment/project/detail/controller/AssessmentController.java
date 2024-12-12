@@ -10,8 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import etec.common.factory.Params;
-import etec.common.utils.TransduceTool;
 import etec.framework.code.interfaces.Controller;
+import etec.framework.context.convert_safely.service.ConvertRemarkSafely;
 import etec.framework.file.readfile.service.BigFileSplitTool;
 import etec.framework.file.readfile.service.CharsetTool;
 import etec.framework.file.readfile.service.FileTool;
@@ -82,7 +82,7 @@ public class AssessmentController implements Controller{
 //			SearchFileList(f,content,category);
 
 			// 清除註解
-			content= TransduceTool.cleanRemark(content);
+			content= ConvertRemarkSafely.cleanRemark(content);
 			//拆除SQLSTR
 			content = TransduceStoreFunctionService.findSQLSTR(content);
 			/* Generate SDI file */

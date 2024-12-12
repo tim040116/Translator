@@ -1,11 +1,8 @@
 package etec.app.main;
 
 import etec.common.factory.Params;
-import etec.common.model.VersionModel;
 import etec.framework.code.interfaces.Application;
 import etec.framework.security.log.service.Log;
-import etec.framework.ui.login.LoginFrame;
-import etec.src.security.project.login.service.CheckLoginService;
 import etec.src.tool.project.replace.application.ReplaceAllApplication;
 import etec.src.translator.view.application.AssessmentApplication;
 import etec.src.translator.view.application.AzureFileApplication;
