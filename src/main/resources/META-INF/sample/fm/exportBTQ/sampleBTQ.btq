@@ -1,0 +1,99 @@
+
+.LOGON ${USERID},${PASSWD}
+
+.OS DEL FILE = ${ETEC_outputFile}
+.EXPORT REPORT FILE = ${ETEC_outputFile}
+
+.SET RECORDMODE OFF;
+.SET FORMAT OFF ;
+.SET TITLEDASHES OFF;
+.SET SEPARATOR ',';
+.SET WIDTH 65531
+
+SELECT
+		'"'	 || COALESCE(TRIM(${ETEC_strlst}),'')
+	|| 	'"'
+(TITLE '${ETEC_strTitle}')
+FROM ${ETEC_tableName}
+WHERE ${ETEC_where}
+;
+
+
+
+.EXPORT RESET;
+
+
+.IF ERRORCODE <> 0 THEN .QUIT 1;
+
+---------------------------------------------------------------------
+--ZIP
+---------------------------------------------------------------------
+
+.os del ${ETEC_zipNm};
+
+.os "C:\Program Files (x86)\7-Zip\7z.exe" a -tgzip ${ETEC_zipNm} ${ETEC_outputFile}
+
+;
+
+.IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;
+
+---------------------------------------------------------------------
+--SFTP
+---------------------------------------------------------------------
+
+.os ECHO cd ../iga/dev/todla> D:\JobServer\DATA\HIST_BACKUP\TEST\SftpDLA_TDOLDATA.txt
+;
+
+.os ECHO mput ${ETEC_zipNm}>> D:\JobServer\DATA\HIST_BACKUP\TEST\SftpDLA_TDOLDATA.txt
+;
+
+.os ECHO bye>> D:\JobServer\DATA\HIST_BACKUP\TEST\SftpDLA_TDOLDATA.txt
+;
+
+.os echo y | D:\JobServer\BIN\psftp.exe tfmngdpdwdatalakeprem.iga@10.202.81.158 -pw oAruQWnYmgoUGiKEj1CFHzUIEFU5D9mE -b D:\JobServer\DATA\HIST_BACKUP\TEST\SftpDLA_TDOLDATA.txt
+
+.IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;
+
+
+---------------------------------------------------------------------
+--SFTP coldlake
+---------------------------------------------------------------------
+
+
+.os ECHO cd basic_mfact_detail_ord1> D:\JobServer\DATA\HIST_BACKUP\TEST\SftpDLA_BASIC_MFACT_DETAIL_ORD1_${TXDATE1}.txt
+;
+
+.os ECHO mkdir ${TX4YM}>> D:\JobServer\DATA\HIST_BACKUP\TEST\SftpDLA_BASIC_MFACT_DETAIL_ORD1_${TXDATE1}.txt
+;
+
+.os ECHO bye>> D:\JobServer\DATA\HIST_BACKUP\TEST\SftpDLA_BASIC_MFACT_DETAIL_ORD1_${TXDATE1}.txt
+;
+
+.os echo y | D:\JobServer\BIN\psftp.exe tfmngdpdwdatalake.td-hist.iga@10.202.81.156 -pw ICqsoSd3aNNgCTUDNBOajxlPVL0w6HGo -be -b D:\JobServer\DATA\HIST_BACKUP\TEST\SftpDLA_BASIC_MFACT_DETAIL_ORD1_${TXDATE1}.txt
+
+.IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;
+----------------------------
+
+.os ECHO cd basic_mfact_detail_ord1/${TX4YM}> D:\JobServer\DATA\HIST_BACKUP\TEST\SftpDLA_BASIC_MFACT_DETAIL_ORD1_${TXDATE1}.txt
+;
+
+;
+.os ECHO mput D:\JobServer\DATA\HIST_BACKUP\TEST\BASIC_MFACT_DETAIL_ORD1_${TXDATE1}.gz>> D:\JobServer\DATA\HIST_BACKUP\TEST\SftpDLA_BASIC_MFACT_DETAIL_ORD1_${TXDATE1}.txt
+;
+
+.os ECHO bye>> D:\JobServer\DATA\HIST_BACKUP\TEST\SftpDLA_BASIC_MFACT_DETAIL_ORD1_${TXDATE1}.txt
+;
+
+.os echo y | D:\JobServer\BIN\psftp.exe tfmngdpdwdatalake.td-hist.iga@10.202.81.156 -pw ICqsoSd3aNNgCTUDNBOajxlPVL0w6HGo -b D:\JobServer\DATA\HIST_BACKUP\TEST\SftpDLA_BASIC_MFACT_DETAIL_ORD1_${TXDATE1}.txt
+
+.IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;
+
+-----------------------
+
+.os del D:\JobServer\DATA\HIST_BACKUP\TEST\BASIC_MFACT_DETAIL_ORD1_${TXDATE1}.gz;
+.OS DEL D:\JobServer\DATA\HIST_BACKUP\TEST\BASIC_MFACT_DETAIL_ORD1_${TXDATE1}.csv;
+
+.IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;
+
+.LOGOFF;
+.QUIT 0;

@@ -2,6 +2,7 @@ package etec.src.assignment.project.sd.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import etec.common.model.sql.CreateIndexModel;
@@ -73,7 +74,7 @@ public class CreateSDMService {
 				if(!"".equals(col.getSetting().getFormat())) {
 					other +=  " FORMAT '" + col.getSetting().getFormat()+ "' ";
 				}
-				FileTool.addFile(sdDetailFileName,
+				FileTool.addFile(sdDetailFileName,Charset.forName("BIG5"),
 						  "\""+dbNm
 						+ "\",\""+tableNm
 						+ "\",\""+colNm
@@ -86,7 +87,7 @@ public class CreateSDMService {
 						+ "\",\""+other
 						+ "\"");
 			}
-			FileTool.addFile(sdMainFileName,
+			FileTool.addFile(sdMainFileName,Charset.forName("BIG5"),
 					  "\""   +fileName
 				    + "\",\""+dbNm
 					+ "\",\""+tableNm

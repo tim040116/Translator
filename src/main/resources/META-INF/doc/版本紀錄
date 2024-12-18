@@ -1,3 +1,19 @@
+6.0.2.4 2024/12/18	Tim	全家專案	HistExportBtqMaker
+	- SD
+		- 將編碼改成big5以解決excel開啟時的亂碼問題
+	- Hist Export
+		- 將專案Export改名為Hist Export
+		- 加上where條件無資料時的防呆機制
+		- 增加冷資料及刪除原檔的語法
+	- test
+		- Main4
+			- Hist Export改用模板置換的方式
+		- UIXMLMain
+			- 應 Jason 要求，產生xml檔的相關文件
+6.0.2.3 2024/12/12	Tim	全家專案	Project Scan
+	- Project Scan
+		- file list
+		- export
 6.0.2.2	2024/12/10	Tim	全家專案	Project Scan
 	- Project Scan
 		- call sp

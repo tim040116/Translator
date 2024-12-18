@@ -1,5 +1,6 @@
 package test;
 
+import etec.framework.file.params.service.ResourceTool;
 import test.az.fm.TestBitFunctionService;
 
 /**
@@ -11,14 +12,8 @@ import test.az.fm.TestBitFunctionService;
 public class Main {
 
 	public static void main(String[] args) {
-		try {
-
-//			TestGPTranslater.run();//GP
-//			TestConvertSafely.run();//Convert Safely
-			TestBitFunctionService.run();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		TestBitFunctionService.run();
 
 	}
 
