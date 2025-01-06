@@ -1,3 +1,9 @@
+6.0.3.0	2024/12/25	Tim	全家專案	His tpt
+	- his tpt
+		- 依照excel內容產出tpt檔以及執行tpt的btq檔
+		- 正式使用模板置換的方式產檔
+		- UI優化
+		- Controller介面增加參數功能
 6.0.2.4 2024/12/18	Tim	全家專案	HistExportBtqMaker
 	- SD
 		- 將編碼改成big5以解決excel開啟時的亂碼問題

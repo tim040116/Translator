@@ -95,4 +95,10 @@ public class FamilyMartController2 implements Controller {
 		Log.info(content);
 		txtLog.append(sfabs.format(new Date()) + " [" + level.toUpperCase() + "] " + content + "\r\n");
 	}
+
+	@Override
+	public Map<String, Object> getArgs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

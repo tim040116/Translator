@@ -20,4 +20,10 @@ public class UncompressController implements Controller{
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public Map<String, Object> getArgs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

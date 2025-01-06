@@ -114,4 +114,9 @@ public class SearchDDLToSDIController implements Controller{
 	    matcher.appendTail(sb);
 	    return sb.toString().replace("'", "").trim();
 	}
+	@Override
+	public Map<String, Object> getArgs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

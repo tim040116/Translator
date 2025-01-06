@@ -34,4 +34,10 @@ public class DDIMWriteFileController implements Controller {
 		WriteFileElement.tsLog.setLog("INFO","產生完成");
 		WriteFileElement.lblStatus.setStatus(RunStatusEnum.SUCCESS);
 	}
+
+	@Override
+	public Map<String, Object> getArgs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

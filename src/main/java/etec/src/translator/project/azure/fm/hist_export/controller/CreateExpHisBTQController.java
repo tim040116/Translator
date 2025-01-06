@@ -21,15 +21,17 @@ import etec.framework.file.excel_maker.util.POIUtil;
 import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;
 import etec.src.translator.project.azure.fm.hist_export.model.TableModel;
-import etec.src.translator.project.azure.fm.hist_export.service.CreateExportHisBTQService;
+import etec.src.translator.project.azure.fm.hist_export.service.CreateExpHisBTQService;
 
 /**
- * 對應新版UI
- *
+ * 應皓鈞要求，
+ * 讀取excel參數檔
+ * 產生對應的btq排程檔已匯出歷史資料
+ *	
  * @author Tim
  * @since 6.0.1.0
  **/
-public class CreateExportHisBTQController implements Controller {
+public class CreateExpHisBTQController implements Controller {
 
 	private static SimpleDateFormat sfabs = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
 
@@ -135,7 +137,7 @@ public class CreateExportHisBTQController implements Controller {
 				String btqFile = outputPath + tbl.getTblNm() + "_" + yyyymm + ".btq";
 //				String btqFile = outputPath + tbl.getTblNm() + "_4YM.btq";
 //				where = where.replaceAll("(?i)\\s*(\\S+)\\s+BETWEEN\\s+[\\S\\s]+", "$1") + " BETWEEN ${TX4YMB} AND ${TX4YME}";
-				String content = CreateExportHisBTQService.buildContent(dataFile,tbl.getDbNm(),tbl.getTblNm(),tbl.getLstColumn(), where);
+				String content = CreateExpHisBTQService.buildContent(dataFile,tbl.getDbNm(),tbl.getTblNm(),tbl.getLstColumn(), where);
 				addLog("資訊", "產生檔案："+btqFile);
 				FileTool.createFile(btqFile, content);
 				plusProgress();
@@ -168,5 +170,11 @@ public class CreateExportHisBTQController implements Controller {
 	public void addLog(String level, String content) {
 		Log.info(content);
 		txtLog.append(sfabs.format(new Date()) + " [" + level.toUpperCase() + "] " + content + "\r\n");
+	}
+
+	@Override
+	public Map<String, Object> getArgs() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

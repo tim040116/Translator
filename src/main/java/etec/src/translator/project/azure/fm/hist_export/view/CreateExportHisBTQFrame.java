@@ -1,6 +1,7 @@
 package etec.src.translator.project.azure.fm.hist_export.view;
 
 import java.awt.Button;
+import java.awt.Choice;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -32,7 +33,7 @@ import etec.common.factory.Params;
 import etec.common.model.VersionModel;
 import etec.framework.code.interfaces.Controller;
 import etec.framework.file.readfile.service.FileTool;
-import etec.src.translator.project.azure.fm.hist_export.controller.CreateExportHisBTQController;
+import etec.src.translator.project.azure.fm.hist_export.controller.HisExportController;
 
 public class CreateExportHisBTQFrame extends JFrame {
 
@@ -41,6 +42,7 @@ public class CreateExportHisBTQFrame extends JFrame {
 	private JTextField txtInput;
 	private JTextField txtOutput;
 	private JProgressBar progressBar;
+	private Choice slpFileType = new Choice();
 	private boolean isLock = false;
 	/**
 	 * Launch the application.
@@ -49,7 +51,7 @@ public class CreateExportHisBTQFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CreateExportHisBTQFrame frame = new CreateExportHisBTQFrame(new CreateExportHisBTQController());
+					CreateExportHisBTQFrame frame = new CreateExportHisBTQFrame(new HisExportController());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -64,21 +66,25 @@ public class CreateExportHisBTQFrame extends JFrame {
 	public CreateExportHisBTQFrame(Controller controller) {
 		setTitle("匯出檔產生器  " + VersionModel.VERSION);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 383);
+		setBounds(100, 100, 700, 533);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JPanel panel = new JPanel();
-		panel.setBounds(6, 6, 670, 334);
-		contentPane.add(panel);
-		panel.setLayout(null);
-
+		JPanel pnlForm = new JPanel();
+		pnlForm.setBounds(6, 6, 670, 188);
+		contentPane.add(pnlForm);
+		pnlForm.setLayout(null);
+		
+		JPanel pnlPrint = new JPanel();
+		pnlPrint.setBounds(6, 206, 674, 284);
+		contentPane.add(pnlPrint);
+		
 		JPanel pnlInput = new JPanel();
 		pnlInput.setBounds(10, 10, 484, 50);
-		panel.add(pnlInput);
+		pnlForm.add(pnlInput);
 		pnlInput.setLayout(null);
 
 		JLabel lblInput = new JLabel("       參數檔：");
@@ -98,7 +104,7 @@ public class CreateExportHisBTQFrame extends JFrame {
 
 		JPanel pnlOutput = new JPanel();
 		pnlOutput.setBounds(10, 65, 484, 50);
-		panel.add(pnlOutput);
+		pnlForm.add(pnlOutput);
 		pnlOutput.setLayout(null);
 
 		JLabel lblOutput = new JLabel("    產檔路徑：");
@@ -115,34 +121,49 @@ public class CreateExportHisBTQFrame extends JFrame {
 		btnOutput.setBounds(442, 10, 42, 30);
 		pnlOutput.add(btnOutput);
 
+		progressBar = new JProgressBar();
+		progressBar.setBounds(44, 6, 624, 30);
+		pnlPrint.add(progressBar);
+		progressBar.setString("0 %");
+		progressBar.setStringPainted(true);
+		pnlPrint.setLayout(null);
+
+		JPanel pnlStatusColor = new JPanel();
+		pnlStatusColor.setBackground(new Color(0, 0, 0));
+		pnlStatusColor.setBounds(8, 6, 30, 30);
+		pnlPrint.add(pnlStatusColor);
+		
+		Button btnRun = new Button("GO");
+		btnRun.setBounds(510, 30, 150, 58);
+		pnlForm.add(btnRun);
+		btnRun.setFont(new Font("Dialog", Font.BOLD, 14));
+		btnRun.setActionCommand("");
+		
+		JPanel pnlUnitSelect = new JPanel();
+		pnlUnitSelect.setLayout(null);
+		pnlUnitSelect.setBounds(10, 127, 484, 55);
+		pnlForm.add(pnlUnitSelect);
+		
+		JLabel lblOutput_1 = new JLabel("    產檔類型：");
+		lblOutput_1.setBounds(6, 10, 80, 30);
+		pnlUnitSelect.add(lblOutput_1);
+		
+		
+		slpFileType.setBounds(92, 19, 392, 21);
+		pnlUnitSelect.add(slpFileType);
+		for(String fileType: (String[])controller.getArgs().get("arrFileType")) {
+			slpFileType.add(fileType);
+		}
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 155, 663, 173);
-		panel.add(scrollPane);
+		scrollPane.setBounds(5, 41, 663, 245);
+		pnlPrint.add(scrollPane);
 		
 		JTextArea txtLog = new JTextArea();
+		scrollPane.setViewportView(txtLog);
 		txtLog.setEditable(false);
 		txtLog.setLineWrap(false);
 		txtLog.setWrapStyleWord(false);
 		((DefaultCaret)txtLog.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		txtLog.setBounds(10, 155, 484, 173);
-		scrollPane.setViewportView(txtLog);
-
-		progressBar = new JProgressBar();
-		progressBar.setBounds(45, 121, 624, 30);
-		panel.add(progressBar);
-		progressBar.setString("0 %");
-		progressBar.setStringPainted(true);
-
-		JPanel pnlStatusColor = new JPanel();
-		pnlStatusColor.setBackground(new Color(0, 0, 0));
-		pnlStatusColor.setBounds(10, 121, 30, 30);
-		panel.add(pnlStatusColor);
-		
-		Button btnRun = new Button("GO");
-		btnRun.setBounds(510, 30, 150, 58);
-		panel.add(btnRun);
-		btnRun.setFont(new Font("Dialog", Font.BOLD, 14));
-		btnRun.setActionCommand("");
 
 //		Checkbox ckbCaseInsensitive = new Checkbox("Case Insensitive ");
 //		ckbCaseInsensitive.setBounds(516, 89, 160, 36);
@@ -169,6 +190,7 @@ public class CreateExportHisBTQFrame extends JFrame {
 							args.put("progressBar", progressBar);
 							args.put("txtLog", txtLog);
 							args.put("pnlStatusColor", pnlStatusColor);
+							args.put("fileType",slpFileType.getSelectedItem());
 							controller.run(args);
 						} catch (Exception e1) {
 							txtLog.append(e1.getMessage());
@@ -255,5 +277,4 @@ public class CreateExportHisBTQFrame extends JFrame {
 		}
 
 	}
-
 }

@@ -156,4 +156,10 @@ public class SearchDDLController implements Controller{
 		Log.info("完成，共 "+i+" 個檔案");
 	}
 
+	@Override
+	public Map<String, Object> getArgs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

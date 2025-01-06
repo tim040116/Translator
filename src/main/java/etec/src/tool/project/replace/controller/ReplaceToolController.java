@@ -89,6 +89,11 @@ public class ReplaceToolController implements Controller {
 	public void addLog(String level,String content) {
 		txtLog.append(sfabs.format(new Date())+ " ["+level.toUpperCase()+"] " + content + "\r\n");
 	}
+	@Override
+	public Map<String, Object> getArgs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

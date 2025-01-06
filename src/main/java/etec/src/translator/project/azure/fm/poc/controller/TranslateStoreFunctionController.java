@@ -111,4 +111,9 @@ public class TranslateStoreFunctionController implements Controller {
 		SearchFunctionPnl.tsLog.setLog("資訊", "產檔完成，共 "+SearchFunctionPnl.progressBar.getProgress()+" 個檔案");
 		Log.info("轉換完成");
 	}
+	@Override
+	public Map<String, Object> getArgs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

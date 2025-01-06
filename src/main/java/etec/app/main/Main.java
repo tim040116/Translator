@@ -4,6 +4,7 @@ import etec.common.factory.Params;
 import etec.framework.code.interfaces.Application;
 import etec.framework.security.log.service.Log;
 import etec.src.tool.project.replace.application.ReplaceAllApplication;
+import etec.src.translator.project.azure.fm.hist_export.application.HisExportApplication;
 import etec.src.translator.view.application.AssessmentApplication;
 import etec.src.translator.view.application.AzureFileApplication;
 import etec.src.translator.view.application.FamilyMartApplication;
@@ -66,6 +67,9 @@ public class Main {
 				break;
 			case "REPLACE_ALL"://5.2
 				app = new ReplaceAllApplication();
+				break;
+			case "HIST_EXPORT"://6.0.2.4 歷史資料匯出檔產生器
+				app = new HisExportApplication();
 				break;
 			default:
 				break;

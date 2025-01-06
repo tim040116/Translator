@@ -343,5 +343,11 @@ public class AssessmentController implements Controller{
 		}
 	}
 
+	@Override
+	public Map<String, Object> getArgs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

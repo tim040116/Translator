@@ -1,17 +1,37 @@
 package etec.src.translator.project.azure.fm.hist_export.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class CreateExportHisBTQService {
+public class CreateExpHisBTQService {
 	
 	public static String buildContent(String outputFile,String dbName,String tableName,List<String> lst,String where) {
-		String zipNm = outputFile.replaceAll("\\.\\w+$", ".gz");
-		String sftpNm = outputFile.replaceAll("[^\\\\]+\\.txt$", "SftpDLA_$1.txt");
+		String zipNm  = outputFile.replaceAll("\\.\\w+$", ".gz");
+		String sftpNm = outputFile.replaceAll("([^\\\\]+)\\.\\w+$", "SftpDLA_$1.txt");
+		Map<String,String> mapargs = new HashMap<String,String>();
+		mapargs.put("", zipNm);
 		String res = "\r\n"
 				+ ".LOGON ${USERID},${PASSWD}\r\n"
+				+ ".SET SESSION CHARSET 'UTF8'\r\n"
 				+ "\r\n"
 				+ ".OS DEL FILE = " + outputFile + "\r\n"
 				+ ".EXPORT REPORT FILE = " + outputFile + "\r\n"
+				+ "\r\n"
+				+ ".SET RECORDMODE OFF;\r\n"
+				+ ".SET FORMAT OFF ;\r\n"
+				+ ".SET TITLEDASHES OFF;\r\n"
+				+ ".SET SEPARATOR ',';\r\n"
+				+ ".SET WIDTH 65531\r\n"
+				+ "\r\n"
+				+ "select a\r\n"
+				+ "(TITLE '')\r\n"
+				+ "from (select '"+String.join(",", lst)+"' as a) a\r\n"
+				+ ";\r\n"
+				+ "\r\n"
+				+ ".IF ERRORCODE <> 0 THEN .QUIT 1;\r\n"
+				+ "\r\n"
+				+ ".EXPORT REPORT FILE = "+outputFile+"\r\n"
 				+ "\r\n"
 				+ ".SET RECORDMODE OFF;\r\n"
 				+ ".SET FORMAT OFF ;\r\n"
@@ -24,7 +44,8 @@ public class CreateExportHisBTQService {
 				+ String.join("),'')\r\n	|| '\",\"' || COALESCE(TRIM(",lst)
 				+ "),'')\r\n"
 				+ "\t|| \t'\"'\r\n"
-				+ "(TITLE '" + String.join(",", lst) + " ".repeat(100) + "')\r\n"
+				+ "(TITLE '')\r\n"
+//				+ "(TITLE '" + String.join(",", lst) + " ".repeat(100) + "')\r\n"
 //				+ "(TITLE '')\r\n"/**20241030 Tim 依照浩鈞要求，title要放空字串，且必須保留**/
 				+ "FROM " + dbName + "." + tableName + "\r\n"
 				+ "WHERE " + where + "\r\n"
@@ -48,7 +69,7 @@ public class CreateExportHisBTQService {
 				+ ".IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;\r\n"
 				+ "\r\n"
 				+ "---------------------------------------------------------------------\r\n"
-				+ "--SFTP\r\n"
+				+ "--SFTP hotlake\r\n"
 				+ "---------------------------------------------------------------------\r\n"
 				+ "\r\n"
 				+ ".os ECHO cd ../iga/dev/todla> "+sftpNm+"\r\n"
@@ -69,8 +90,10 @@ public class CreateExportHisBTQService {
 				+ "--SFTP coldlake\r\n"
 				+ "---------------------------------------------------------------------\r\n"
 				+ "\r\n"
+				+ ".os ECHO mkdir "+tableName+"> "+sftpNm+"\r\n"
+				+ ";\r\n"
 				+ "\r\n"
-				+ ".os ECHO cd "+tableName+"> "+sftpNm+"\r\n"
+				+ ".os ECHO cd "+tableName+">> "+sftpNm+"\r\n"
 				+ ";\r\n"
 				+ "\r\n"
 				+ ".os ECHO mkdir ${TX4YM}>> "+sftpNm+"\r\n"

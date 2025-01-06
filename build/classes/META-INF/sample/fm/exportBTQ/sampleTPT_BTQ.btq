@@ -1,0 +1,84 @@
+
+.LOGON ${USERID},${PASSWD}
+.SET SESSION CHARSET 'UTF8'
+
+.os tbuild -f "D:\JobServer\JOB\TEST\${ETEC_azTbNm}.tpt" -u "TX4YM='${TX4YM}'"
+
+.IF ERRORCODE <> 0 THEN .QUIT 1;
+
+---------------------------------------------------------------------
+--ZIP
+---------------------------------------------------------------------
+
+.os del ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.gz
+;
+
+.os "C:\Program Files (x86)\7-Zip\7z.exe" a -tgzip ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.gz ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.csv
+;
+
+.IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;
+
+---------------------------------------------------------------------
+--SFTP hotlake
+---------------------------------------------------------------------
+
+.os ECHO cd ../iga/dev/todla> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+;
+
+.os ECHO mput ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.gz>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+;
+
+.os ECHO bye>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+;
+
+.os echo y | D:\JobServer\BIN\psftp.exe tfmngdpdwdatalakeprem.iga@10.202.81.158 -pw oAruQWnYmgoUGiKEj1CFHzUIEFU5D9mE -b ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+;
+
+.IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;
+
+
+---------------------------------------------------------------------
+--SFTP coldlake
+---------------------------------------------------------------------
+
+.os ECHO mkdir ${ETEC_azTbNm}> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+;
+
+.os ECHO cd ${ETEC_azTbNm}>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+;
+
+.os ECHO mkdir ${TX4YM}>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+;
+
+.os ECHO bye>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+;
+
+.os echo y | D:\JobServer\BIN\psftp.exe tfmngdpdwdatalake.td-hist.iga@10.202.81.156 -pw ICqsoSd3aNNgCTUDNBOajxlPVL0w6HGo -be -b ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+
+.IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;
+----------------------------
+
+.os ECHO cd ${ETEC_azTbNm}/${TX4YM}> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+;
+
+.os ECHO mput ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.gz>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+;
+
+.os ECHO bye>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+;
+
+.os echo y | D:\JobServer\BIN\psftp.exe tfmngdpdwdatalake.td-hist.iga@10.202.81.156 -pw ICqsoSd3aNNgCTUDNBOajxlPVL0w6HGo -b ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+
+.IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;
+
+-----------------------
+
+--.os del ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.gz
+--;
+--.OS DEL ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.csv
+--;
+
+.IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;
+
+.LOGOFF;
+.QUIT 0;

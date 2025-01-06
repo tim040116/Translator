@@ -37,4 +37,10 @@ public class FastTransduceController implements Controller {
 		FastTransduceFrame.pnl.txtNewScript.setText(result);
 		FastTransduceFrame.pnl.statusBar.setStatus(RunStatusEnum.SUCCESS);
 	}
+
+	@Override
+	public Map<String, Object> getArgs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

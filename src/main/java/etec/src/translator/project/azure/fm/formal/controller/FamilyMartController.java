@@ -45,4 +45,10 @@ public class FamilyMartController implements Controller {
 		SearchFunctionPnl.lblStatus.setStatus(RunStatusEnum.SUCCESS);
 	}
 
+	@Override
+	public Map<String, Object> getArgs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

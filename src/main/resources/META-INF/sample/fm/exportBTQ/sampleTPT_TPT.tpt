@@ -1,0 +1,50 @@
+SET FILENAME = '${ETEC_azTbNm}_'||@TX4YM||'.csv';
+USING CHARACTER SET UTF8
+DEFINE JOB EXPORT_DELIMITED_FILE
+DESCRIPTION 'Export rows from a Teradata table to a unformatted file'  
+(  
+DEFINE SCHEMA FILE_SCHEMA  
+(
+  COL VARCHAR(3000)
+
+);  
+DEFINE OPERATOR SQL_SELECTOR 
+TYPE SELECTOR  SCHEMA FILE_SCHEMA ATTRIBUTES  
+(
+  INTEGER MaxSessions = 25,
+  VARCHAR PrivateLogName = 'selector_log',  
+  VARCHAR TdpId = '126.1.102.94', 
+  VARCHAR UserName = 'sysdba',
+  VARCHAR UserPassword = 'sysdba', 
+  VARCHAR SelectStmt = '
+SELECT * FROM 
+(
+SELECT CAST(TRIM(COL) AS VARCHAR(1000)) AS COL 
+FROM (SELECT ''${ETEC_header}'' AS COL)A 
+UNION 
+SELECT 
+(''"'' || COALESCE(TRIM(${ETEC_select}),'''') || ''"''
+	)AS COL 
+FROM ${ETEC_tdTable} 
+WHERE 1=1 
+${ETEC_where} 
+)A 
+ORDER BY COL DESC ' 
+);  
+DEFINE OPERATOR FILE_WRITER TYPE DATACONNECTOR CONSUMER SCHEMA *  
+ATTRIBUTES  
+(  
+  VARCHAR PrivateLogName = 'dataconnector_log', 
+  VARCHAR DirectoryPath = 'D:\JobServer\DATA\HIST_BACKUP\TEST',  
+  VARCHAR FileName = @FILENAME,  
+  VARCHAR Format = 'DELIMITED',  
+  VARCHAR OpenMode = 'Write',
+  VARCHAR QuotedData = 'NO',
+  VARCHAR TextDelimiter=',',
+  VARCHAR OpenQuoteMark = '"',
+  VARCHAR CloseQuoteMark = '"',
+  INTEGER MaxSessions = 25
+);  
+APPLY TO OPERATOR (FILE_WRITER)
+SELECT * FROM OPERATOR (SQL_SELECTOR);  
+);
