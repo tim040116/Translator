@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import javax.swing.JPanel;
@@ -21,6 +22,7 @@ import etec.framework.file.params.service.ResourceTool;
 import etec.framework.file.readfile.service.FileTool;
 import etec.framework.security.log.service.Log;
 import etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTModel;
+import etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTTableModel;
 /**
  * <h1></h1>
  * <p></p>
@@ -65,7 +67,8 @@ public class CreateExpTPTService {
 	//讀取excel檔
 	public Map<String,CreateExpTPTModel> readExcel(String path) throws IOException {
 		addLog("資訊","開始解析資料表設定");
-		Map<String,CreateExpTPTModel> map = new TreeMap<String,CreateExpTPTModel>();
+		Map<String,CreateExpTPTTableModel> mapTable = new TreeMap<String,CreateExpTPTTableModel>();
+		Map<String,CreateExpTPTModel> mapres = new TreeMap<String,CreateExpTPTModel>();
 		addLog("資訊","正在開啟檔案，請稍後...");
 		Workbook wb = POIUtil.read(path);
 		addLog("資訊","開始解析Table參數");
@@ -84,7 +87,12 @@ public class CreateExpTPTService {
 			model.setTdTable(POIUtil.getStringValue(row.getCell(1)).trim().toLowerCase());
 			model.setWhere(POIUtil.getStringValue(row.getCell(2)).trim());
 			model.setDir(POIUtil.getStringValue(row.getCell(3)).trim());
-			map.put(model.getTdSchema()+"."+model.getTdTable(),model);
+			String fn = POIUtil.getStringValue(row.getCell(4)).trim();
+			if("".equals(fn)||fn==null) {
+				fn = model.getTdTable()+"_${TX4YM}";
+			}
+			model.setFileName(fn);
+			mapres.put(model.getFileName(),model);
 			plusProgress();
 		}
 		addLog("資訊","解析完成，共 " + (pgbTotal - 1) + " 筆資料");
@@ -113,7 +121,11 @@ public class CreateExpTPTService {
 				plusProgress();
 				continue;
 			}
-			CreateExpTPTModel model = map.get(tddb+"."+tdtb);
+			CreateExpTPTTableModel model = mapTable.get(tddb+"."+tdtb);
+			if(model == null) {
+				model = new CreateExpTPTTableModel();	
+			}
+			
 			model.setAzSchema(azdb);
 			model.setAzTable(aztb);
 			model.getAzCol().add(azcl);
@@ -125,10 +137,17 @@ public class CreateExpTPTService {
 			}
 			model.getLstSelect().add(tdcl);
 			model.getLstHeader().add(tdcl.replaceAll("(?i)TO_CHAR\\(\\s*(\\w+)\\s*\\)", "$1"));
+			mapTable.put((tddb+"."+tdtb).toUpperCase(), model);
 			plusProgress();
 		}
+		
+		//mapping
+		for(Entry<String, CreateExpTPTModel> en : mapres.entrySet()) {
+			String key = en.getValue().getTdSchema()+"."+en.getValue().getTdTable();
+			en.getValue().setTable(mapTable.get(key.toUpperCase()));
+		}
 		addLog("資訊","解析完成，共 " + (pgbTotal - 1) + " 筆資料");
-		return map;
+		return mapres;
 	}
 	
 	//產tpt檔
@@ -136,12 +155,15 @@ public class CreateExpTPTService {
 		addLog("資訊", "開始產生TPT語法...");
 		String tamplate = "sample/fm/exportBTQ/sampleTPT_TPT.tpt";
 		Map<String,String> param = new HashMap<String,String>();
-		param.put("ETEC_azTbNm",m.getAzTable());
-		param.put("ETEC_header",String.join(",",m.getLstHeader()));
-		param.put("ETEC_select",String.join("),'''') || ''\",\"'' || \r\n  COALESCE(TRIM(", m.getLstSelect()));
+		param.put("ETEC_azTbNm",m.getTable().getAzTable());
+		param.put("ETEC_header",String.join(",",m.getTable().getLstHeader()));
+		param.put("ETEC_select",String.join("),'''') || ''\",\"'' || \r\n  COALESCE(TRIM(", m.getTable().getLstSelect()));
 		param.put("ETEC_tdTable",m.getTdSchema()+"."+m.getTdTable());
-		param.put("ETEC_where",m.getWhere());
+		String where = m.getWhere().replaceAll("(?i)^\\s*(?:WHERE\\s+|AND\\s+)?", " and ");
+		param.put("ETEC_where",where);
 		param.put("ETEC_hisDir",m.getDir());
+		String csvFileName = m.getFileName().replaceAll("\\$\\{(\\w+)\\}", "'||@$1||'");
+		param.put("ETEC_csvFileName",csvFileName);
 		ResourceTool rt = new ResourceTool();
 		String content = rt.readFile(tamplate,param);
 		return content;
@@ -152,17 +174,24 @@ public class CreateExpTPTService {
 		addLog("資訊", "開始產生BTQ語法...");
 		String tamplate = "sample/fm/exportBTQ/sampleTPT_BTQ.btq";
 		Map<String,String> param = new HashMap<String,String>();
+		
 		param.put("ETEC_hisDir",m.getDir());
-		param.put("ETEC_azTbNm",m.getAzTable());
+		param.put("ETEC_azTbNm",m.getTable().getAzTable());
+		String txType = m.getFileName().replaceAll(".*\\$\\{(\\w+)\\}.*", "$1");
+		param.put("ETEC_txType",txType);
+		param.put("ETEC_fileName", m.getFileName());
 		ResourceTool rt = new ResourceTool();
+		System.out.println(param.get("ETEC_fileName"));
 		String content = rt.readFile(tamplate,param);
 		return content;
 	}
 	
 
-	public void writeFile(String dir,String azTbNm,String strtpt,String strbtq) throws IOException {
-		String tpt = dir+azTbNm+".tpt";
-		String btq = dir+azTbNm+"_TX4YM.btq";
+	public void writeFile(String dir,String fileNm,String strtpt,String strbtq) throws IOException {
+		
+		String tpt = dir+fileNm+".tpt";
+		String btq = dir+fileNm+".btq";
+		
 		addLog("資訊", "開始產生檔案："+tpt);
 		FileTool.createFile(tpt, strtpt);
 		addLog("資訊", "開始產生檔案："+btq);

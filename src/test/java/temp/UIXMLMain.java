@@ -16,9 +16,9 @@ import etec.src.translator.sql.gp.translater.GreenPlumTranslater;
 
 public class UIXMLMain {
 	
-	public static String path = "C:\\Users\\user\\Desktop\\Trans\\T0\\IGA.xml";
+	public static String path = "C:\\Users\\user\\Desktop\\Trans\\T0\\xml_to_xlsx\\WebWDWH.xml";
 	
-	public static String outputPath = "C:\\Users\\user\\Desktop\\Trans\\Assessment_Result\\IGA.xlsx";
+	public static String outputPath = "C:\\Users\\user\\Desktop\\Trans\\Assessment_Result\\WebWDWH.xlsx";
 	
 	public static void main(String[] args) {
 		try (
@@ -73,5 +73,6 @@ public class UIXMLMain {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("finish");
 	}
 }

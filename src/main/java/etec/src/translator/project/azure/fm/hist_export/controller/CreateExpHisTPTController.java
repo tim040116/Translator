@@ -77,7 +77,7 @@ public class CreateExpHisTPTController implements Controller {
 				CreateExpTPTModel m = en.getValue();
 				String strtpt = cetts.buildTPTContent(m);
 				String strbtq = cetts.buildBTQContent(m);
-				cetts.writeFile(outputPath,m.getAzTable(),strtpt,strbtq);
+				cetts.writeFile(outputPath,en.getKey(),strtpt,strbtq);
 				plusProgress();
 			}
 			addLog("資訊", "產檔成功，共 " + pgbTotal + " 筆資料");

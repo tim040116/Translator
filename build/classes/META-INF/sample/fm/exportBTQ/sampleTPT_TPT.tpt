@@ -1,4 +1,4 @@
-SET FILENAME = '${ETEC_azTbNm}_'||@TX4YM||'.csv';
+SET FILENAME = '${ETEC_csvFileName}.csv';
 USING CHARACTER SET UTF8
 DEFINE JOB EXPORT_DELIMITED_FILE
 DESCRIPTION 'Export rows from a Teradata table to a unformatted file'  

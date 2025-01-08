@@ -1,8 +1,8 @@
-
+!
 .LOGON ${USERID},${PASSWD}
 .SET SESSION CHARSET 'UTF8'
 
-.os tbuild -f "D:\JobServer\JOB\TEST\${ETEC_azTbNm}.tpt" -u "TX4YM='${TX4YM}'"
+.os tbuild -f "D:\JobServer\JOB\TEST\${ETEC_fileName}.tpt" -u "${ETEC_txType}='${${ETEC_txType}}'"
 
 .IF ERRORCODE <> 0 THEN .QUIT 1;
 
@@ -10,10 +10,10 @@
 --ZIP
 ---------------------------------------------------------------------
 
-.os del ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.gz
+.os del ${ETEC_hisDir}${ETEC_fileName}.gz
 ;
 
-.os "C:\Program Files (x86)\7-Zip\7z.exe" a -tgzip ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.gz ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.csv
+.os "C:\Program Files (x86)\7-Zip\7z.exe" a -tgzip ${ETEC_hisDir}${ETEC_fileName}.gz ${ETEC_hisDir}${ETEC_fileName}.csv
 ;
 
 .IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;
@@ -25,7 +25,7 @@
 .os ECHO cd ../iga/dev/todla> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
 ;
 
-.os ECHO mput ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.gz>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+.os ECHO mput ${ETEC_hisDir}${ETEC_fileName}.gz>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
 ;
 
 .os ECHO bye>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
@@ -47,7 +47,7 @@
 .os ECHO cd ${ETEC_azTbNm}>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
 ;
 
-.os ECHO mkdir ${TX4YM}>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+.os ECHO mkdir ${${ETEC_txType}}>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
 ;
 
 .os ECHO bye>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
@@ -58,10 +58,10 @@
 .IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;
 ----------------------------
 
-.os ECHO cd ${ETEC_azTbNm}/${TX4YM}> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+.os ECHO cd ${ETEC_azTbNm}/${${ETEC_txType}}> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
 ;
 
-.os ECHO mput ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.gz>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
+.os ECHO mput ${ETEC_hisDir}${ETEC_fileName}.gz>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
 ;
 
 .os ECHO bye>> ${ETEC_hisDir}SftpDLA_${ETEC_azTbNm}.txt
@@ -73,9 +73,9 @@
 
 -----------------------
 
---.os del ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.gz
+--.os del ${ETEC_hisDir}${ETEC_fileName}.gz
 --;
---.OS DEL ${ETEC_hisDir}${ETEC_azTbNm}_${TX4YM}.csv
+--.OS DEL ${ETEC_hisDir}${ETEC_fileName}.csv
 --;
 
 .IF SYSTEMRETURNCODE != 0 THEN .QUIT 1;
