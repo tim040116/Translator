@@ -1,0 +1,118 @@
+2025-01-07 14:09:05 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2025-01-07 14:09:06 [INFO] : 開始產檔
+2025-01-07 14:09:06 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業.xlsx
+2025-01-07 14:09:06 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140906\src\
+2025-01-07 14:09:06 [INFO] : 正在開啟檔案，請稍後...
+2025-01-07 14:09:07 [INFO] : 開始解析資料表設定
+2025-01-07 14:09:07 [INFO] : 解析Table參數
+2025-01-07 14:09:07 [INFO] : 解析完成，共 5 筆資料
+2025-01-07 14:09:07 [INFO] : 解析Column參數
+2025-01-07 14:09:07 [INFO] : 解析完成，共 587 筆資料
+2025-01-07 14:09:07 [INFO] : 開始產檔
+2025-01-07 14:09:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140906\src\basic_stfact_TX4YMB.btq
+2025-01-07 14:09:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140906\src\basic_stfact_TX4YMB.btq
+2025-01-07 14:09:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140906\src\basic_stfact_00000001.btq
+2025-01-07 14:09:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140906\src\basic_stfact_00000001.btq
+2025-01-07 14:09:08 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140906\src\basic_stfact_00000002.btq
+2025-01-07 14:09:08 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140906\src\basic_stfact_00000002.btq
+2025-01-07 14:09:08 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140906\src\basic_stfact_00000003.btq
+2025-01-07 14:09:08 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140906\src\basic_stfact_00000003.btq
+2025-01-07 14:09:08 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140906\src\basic_stfact_00000004.btq
+2025-01-07 14:09:08 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140906\src\basic_stfact_00000004.btq
+2025-01-07 14:09:08 [INFO] : 產檔成功，共 5 筆資料
+2025-01-07 14:09:12 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2025-01-07 14:09:14 [INFO] : 開始執行，產生檔案 TPT
+2025-01-07 14:09:14 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業.xlsx
+2025-01-07 14:09:14 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\
+2025-01-07 14:09:14 [INFO] : 開始解析資料表設定
+2025-01-07 14:09:14 [INFO] : 正在開啟檔案，請稍後...
+2025-01-07 14:09:15 [INFO] : 開始解析Table參數
+2025-01-07 14:09:15 [INFO] : 解析完成，共 5 筆資料
+2025-01-07 14:09:15 [INFO] : 開始解析Column參數
+2025-01-07 14:09:15 [INFO] : 解析完成，共 587 筆資料
+2025-01-07 14:09:15 [INFO] : 開始轉換語法
+2025-01-07 14:09:15 [INFO] : 開始產生TPT語法...
+2025-01-07 14:09:54 [INFO] : 開始產生BTQ語法...
+2025-01-07 14:10:26 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4YM}.tpt
+2025-01-07 14:10:26 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4YM}.tpt
+2025-01-07 14:10:26 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4YM}.btq
+2025-01-07 14:10:26 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4YM}.btq
+2025-01-07 14:10:26 [INFO] : 產檔完成
+2025-01-07 14:10:26 [INFO] : 開始產生TPT語法...
+2025-01-07 14:10:26 [INFO] : 開始產生BTQ語法...
+2025-01-07 14:10:29 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4YM}01.tpt
+2025-01-07 14:10:29 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4YM}01.tpt
+2025-01-07 14:10:29 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4YM}01.btq
+2025-01-07 14:10:29 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4YM}01.btq
+2025-01-07 14:10:29 [INFO] : 產檔完成
+2025-01-07 14:10:29 [INFO] : 開始產生TPT語法...
+2025-01-07 14:10:29 [INFO] : 開始產生BTQ語法...
+2025-01-07 14:10:29 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4Y}.tpt
+2025-01-07 14:10:29 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4Y}.tpt
+2025-01-07 14:10:29 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4Y}.btq
+2025-01-07 14:10:29 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4Y}.btq
+2025-01-07 14:10:29 [INFO] : 產檔完成
+2025-01-07 14:10:29 [INFO] : 開始產生TPT語法...
+2025-01-07 14:10:29 [INFO] : 開始產生BTQ語法...
+2025-01-07 14:10:29 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4Y}21.tpt
+2025-01-07 14:10:29 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4Y}21.tpt
+2025-01-07 14:10:29 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4Y}21.btq
+2025-01-07 14:10:29 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4Y}21.btq
+2025-01-07 14:10:29 [INFO] : 產檔完成
+2025-01-07 14:10:29 [INFO] : 開始產生TPT語法...
+2025-01-07 14:10:29 [INFO] : 開始產生BTQ語法...
+2025-01-07 14:10:29 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4Y}46.tpt
+2025-01-07 14:10:29 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4Y}46.tpt
+2025-01-07 14:10:29 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4Y}46.btq
+2025-01-07 14:10:29 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_140914\src\BASIC_STFACT_${TX4Y}46.btq
+2025-01-07 14:10:29 [INFO] : 產檔完成
+2025-01-07 14:10:29 [INFO] : 產檔成功，共 5 筆資料
+2025-01-07 14:19:03 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2025-01-07 14:19:05 [INFO] : 開始執行，產生檔案 TPT
+2025-01-07 14:19:05 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業.xlsx
+2025-01-07 14:19:05 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\
+2025-01-07 14:19:05 [INFO] : 開始解析資料表設定
+2025-01-07 14:19:05 [INFO] : 正在開啟檔案，請稍後...
+2025-01-07 14:19:06 [INFO] : 開始解析Table參數
+2025-01-07 14:19:06 [INFO] : 解析完成，共 5 筆資料
+2025-01-07 14:19:06 [INFO] : 開始解析Column參數
+2025-01-07 14:19:06 [INFO] : 解析完成，共 587 筆資料
+2025-01-07 14:19:06 [INFO] : 開始轉換語法
+2025-01-07 14:19:06 [INFO] : 開始產生TPT語法...
+2025-01-07 14:19:06 [INFO] : 開始產生BTQ語法...
+2025-01-07 14:19:06 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4YM}.tpt
+2025-01-07 14:19:06 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4YM}.tpt
+2025-01-07 14:19:06 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4YM}.btq
+2025-01-07 14:19:06 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4YM}.btq
+2025-01-07 14:19:06 [INFO] : 產檔完成
+2025-01-07 14:19:06 [INFO] : 開始產生TPT語法...
+2025-01-07 14:19:06 [INFO] : 開始產生BTQ語法...
+2025-01-07 14:19:06 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4YM}01.tpt
+2025-01-07 14:19:06 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4YM}01.tpt
+2025-01-07 14:19:06 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4YM}01.btq
+2025-01-07 14:19:06 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4YM}01.btq
+2025-01-07 14:19:06 [INFO] : 產檔完成
+2025-01-07 14:19:06 [INFO] : 開始產生TPT語法...
+2025-01-07 14:19:06 [INFO] : 開始產生BTQ語法...
+2025-01-07 14:19:06 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4Y}.tpt
+2025-01-07 14:19:06 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4Y}.tpt
+2025-01-07 14:19:06 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4Y}.btq
+2025-01-07 14:19:06 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4Y}.btq
+2025-01-07 14:19:06 [INFO] : 產檔完成
+2025-01-07 14:19:06 [INFO] : 開始產生TPT語法...
+2025-01-07 14:19:06 [INFO] : 開始產生BTQ語法...
+2025-01-07 14:19:06 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4Y}21.tpt
+2025-01-07 14:19:06 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4Y}21.tpt
+2025-01-07 14:19:06 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4Y}21.btq
+2025-01-07 14:19:06 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4Y}21.btq
+2025-01-07 14:19:06 [INFO] : 產檔完成
+2025-01-07 14:19:06 [INFO] : 開始產生TPT語法...
+2025-01-07 14:19:06 [INFO] : 開始產生BTQ語法...
+2025-01-07 14:19:06 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4Y}46.tpt
+2025-01-07 14:19:06 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4Y}46.tpt
+2025-01-07 14:19:06 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4Y}46.btq
+2025-01-07 14:19:06 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250107_141905\src\BASIC_STFACT_${TX4Y}46.btq
+2025-01-07 14:19:06 [INFO] : 產檔完成
+2025-01-07 14:19:06 [INFO] : 產檔成功，共 5 筆資料
+2025-01-07 14:27:25 [INFO] : 新增資料到檔案：sec.txt
+2025-01-07 14:27:38 [INFO] : 新增資料到檔案：sec.txt

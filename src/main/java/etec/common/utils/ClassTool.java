@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import etec.framework.code.annotation.Application;
+import etec.framework.code.annotation.UIAppId;
 
 /**
  * <h1>做程式的映射處理</h1>
@@ -81,7 +81,7 @@ public class ClassTool {
 					Thread.currentThread()
 						.getContextClassLoader()
 						.loadClass(packageName+"."+className)
-						.getDeclaredAnnotationsByType(Application.class);
+						.getDeclaredAnnotationsByType(UIAppId.class);
 					clazzs.add(Thread.currentThread().getContextClassLoader().loadClass(packageName+"."+className));
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();

@@ -74,6 +74,7 @@ public class CreateExpHisTPTController implements Controller {
 			pgbLen = 0;
 			pgbTotal = mapData.size();
 			for(Entry<String,CreateExpTPTModel> en : mapData.entrySet()) {
+				addLog("資訊", en.getKey());
 				CreateExpTPTModel m = en.getValue();
 				String strtpt = cetts.buildTPTContent(m);
 				String strbtq = cetts.buildBTQContent(m);

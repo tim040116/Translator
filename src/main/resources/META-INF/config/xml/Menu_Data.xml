@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projects>
+	<project code="OLD_TRANSLATOR">
+		<code>DDIM_TRANSLATOR</code>
+		<name>鼎鼎SQL轉換工具(舊版)</name>
+		<description>
+			鼎鼎專案最原始的程式碼
+			有UI，應該也能支援CMD語法
+			讀取批量btq及pl檔
+			從TD轉到Azure Synapse
+			除了對照文件之外還加了大量客製化邏輯
+			分成fastload,transform,export等類型
+			不確定還能不能用
+		</description>
+		<active>Y</active>
+		<version>1.0</version>
+		<auth>Tim</auth>
+		<upd_date>2023/03/07</upd_date>
+		<remark></remark>
+	</project>
+	
+	<project code="DDIM_TRANSLATOR">
+		<code>DDIM_TRANSLATOR</code>
+		<name>鼎鼎SQL轉換工具(新版)</name>
+		<description>
+			未完成品
+			測試新UI
+			應該不能用
+		</description>
+		<active>Y</active>
+		<version>1.0</version>
+		<auth>Tim</auth>
+		<upd_date>2023/03/17</upd_date>
+		<remark></remark>
+	</project>
+
+	<project code="FM">
+		<code>FM</code>
+		<name>全家SQL轉換工具</name>
+		<description>
+			全家的SQL語法轉換
+			有UI，應該也能支援CMD語法
+			從TD轉到Azure Synapse
+			讀取批量btq及pl檔
+			除了對照文件之外還加了大量客製化邏輯
+		</description>
+		<active>Y</active>
+		<version>6.0.1.12</version>
+		<auth>Tim</auth>
+		<upd_date>2024/11/07</upd_date>
+		<remark></remark>
+	</project>
+	
+	<project code="ASSESSMENT">
+		<code>ASSESSMENT</code>
+		<name>全家程式分析工具</name>
+		<description>
+			全家的SQL語法分析
+			讀取批量程式碼
+			整理出使用到的Table,function等資訊
+			並產生報表
+		</description>
+		<active>Y</active>
+		<version>3.2.1.1</version>
+		<auth>Tim</auth>
+		<upd_date>2023/10/25</upd_date>
+		<remark></remark>
+	</project>
+	
+	<project code="SD_MAKER">
+		<code>SD_MAKER</code>
+		<name>SDI工具</name>
+		<description>
+			將全家提供的DDL整理成SDI文件
+			能碰資料庫的話直接撈設定表比較快
+			但當初他們只肯給語法所以才使用這個程式
+		</description>
+		<active>Y</active>
+		<version>3.2.1.1</version>
+		<auth>Tim</auth>
+		<upd_date>2023/10/25</upd_date>
+		<remark></remark>
+	</project>
+	
+	<project code="SF_SP">
+		<code>SF_SP</code>
+		<name>SP轉換工具</name>
+		<description>
+			全家專案程式碼轉換
+			支援SP 跟SF 的轉換
+			從TD轉到Azure Synapse
+			除了對照文件之外還加了大量客製化邏輯
+		</description>
+		<active>Y</active>
+		<version>6.0.1.11</version>
+		<auth>Tim</auth>
+		<upd_date>2023/10/25</upd_date>
+		<remark></remark>
+	</project>
+	
+	<project code="FAST_TRANSDUCE">
+		<code>FAST_TRANSDUCE</code>
+		<name>SP轉換工具</name>
+		<description>
+			SQL語法轉換，
+			但不是讀檔，而是直接輸入對話框
+		</description>
+		<active>Y</active>
+		<version>3.4.0.0</version>
+		<auth>Tim</auth>
+		<upd_date>2023/10/25</upd_date>
+		<remark></remark>
+	</project>
+	
+	<project code="PG">
+		<code>PG</code>
+		<name>postgreSql轉換工具</name>
+		<description>
+			全家專案程式碼轉換
+			從TD轉到postgreSql
+			除了對照文件之外還加了大量客製化邏輯
+		</description>
+		<active>Y</active>
+		<version>4.1.0.0</version>
+		<auth>Tim</auth>
+		<upd_date>2024/06/10</upd_date>
+		<remark></remark>
+	</project>
+	
+	<project code="AZ">
+		<code>AZ</code>
+		<name>azuare轉換工具</name>
+		<description>
+			全家專案程式碼轉換
+			從TD轉到AZure synapse
+			除了對照文件之外還加了大量客製化邏輯
+			不確定還能不能用
+		</description>
+		<active>Y</active>
+		<version>4.1.0.0</version>
+		<auth>Tim</auth>
+		<upd_date>2024/07/23</upd_date>
+		<remark></remark>
+	</project>
+		
+	<project code="UNCOMPRESS">
+		<code>UNCOMPRESS</code>
+		<name>azuare轉換工具</name>
+		<description>
+			解壓縮
+		</description>
+		<active></active>
+		<version>4.1.0.0</version>
+		<auth>Tim</auth>
+		<upd_date>2024/07/23</upd_date>
+		<remark>配合加密功能進行解碼</remark>
+	</project>
+	
+	<project code="REPLACE_ALL">
+		<code>REPLACE_ALL</code>
+		<name>大量取代工具</name>
+		<description>
+			讀取excel裡的取代條件
+			將資料夾中的檔案全部取代
+		</description>
+		<active></active>
+		<version>6.0.1.13</version>
+		<auth>Tim</auth>
+		<upd_date>2024/11/15</upd_date>
+		<remark></remark>
+	</project>
+	
+	<project code="HIST_EXPORT">
+		<code>HIST_EXPORT</code>
+		<name>歷史資料匯入</name>
+		<description>
+			提供全家進行歷史資料匯入作業
+			以excel提供的資訊
+			產生TD匯出及上傳到datalake的排程檔
+			支援btq及tpt兩種類型
+		</description>
+		<active></active>
+		<version>6.0.3.1</version>
+		<auth>Tim</auth>
+		<upd_date>2025/01/07</upd_date>
+		<remark></remark>
+	</project>
+	
+	
+	
+	
+</projects>

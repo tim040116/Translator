@@ -31,5 +31,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/CommonFramework/src/main"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CommonFramework"/>
+	<classpathentry kind="lib" path="/CommonFramework/bin/reflections-0.10.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

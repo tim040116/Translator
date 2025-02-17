@@ -1,0 +1,552 @@
+2025-01-23 17:38:34 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2025-01-23 17:38:38 [INFO] : 開始執行，產生檔案 TPT
+2025-01-23 17:38:38 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業_20250121.xlsx
+2025-01-23 17:38:38 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\
+2025-01-23 17:38:38 [INFO] : 開始解析資料表設定
+2025-01-23 17:38:38 [INFO] : 正在開啟檔案，請稍後...
+2025-01-23 17:38:39 [INFO] : 開始解析Table參數
+2025-01-23 17:38:39 [INFO] : 解析完成，共 12 筆資料
+2025-01-23 17:38:39 [INFO] : 開始解析Column參數
+2025-01-23 17:38:39 [INFO] : 解析完成，共 178 筆資料
+2025-01-23 17:38:39 [INFO] : 開始轉換語法
+2025-01-23 17:38:39 [INFO] : 開始產生TPT語法...
+2025-01-23 17:38:40 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_91ORDACC_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_91ORDACC_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_91ORDACC_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_91ORDACC_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產檔完成
+2025-01-23 17:38:40 [INFO] : 開始產生TPT語法...
+2025-01-23 17:38:40 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_91ORDDLV_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_91ORDDLV_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_91ORDDLV_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_91ORDDLV_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產檔完成
+2025-01-23 17:38:40 [INFO] : 開始產生TPT語法...
+2025-01-23 17:38:40 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_91ORDSAL_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_91ORDSAL_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_91ORDSAL_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_91ORDSAL_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產檔完成
+2025-01-23 17:38:40 [INFO] : 開始產生TPT語法...
+2025-01-23 17:38:40 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECGOT_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECGOT_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECGOT_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECGOT_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產檔完成
+2025-01-23 17:38:40 [INFO] : 開始產生TPT語法...
+2025-01-23 17:38:40 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECINP_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECINP_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECINP_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECINP_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產檔完成
+2025-01-23 17:38:40 [INFO] : 開始產生TPT語法...
+2025-01-23 17:38:40 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECORD_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECORD_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECORD_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECORD_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產檔完成
+2025-01-23 17:38:40 [INFO] : 開始產生TPT語法...
+2025-01-23 17:38:40 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECPID_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECPID_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECPID_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECPID_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產檔完成
+2025-01-23 17:38:40 [INFO] : 開始產生TPT語法...
+2025-01-23 17:38:40 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECRC_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECRC_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECRC_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECRC_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產檔完成
+2025-01-23 17:38:40 [INFO] : 開始產生TPT語法...
+2025-01-23 17:38:40 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECRTN_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECRTN_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECRTN_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECRTN_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產檔完成
+2025-01-23 17:38:40 [INFO] : 開始產生TPT語法...
+2025-01-23 17:38:40 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECSND_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECSND_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECSND_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECSND_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產檔完成
+2025-01-23 17:38:40 [INFO] : 開始產生TPT語法...
+2025-01-23 17:38:40 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECTKE_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECTKE_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECTKE_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\BLGS_ECTKE_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產檔完成
+2025-01-23 17:38:40 [INFO] : 開始產生TPT語法...
+2025-01-23 17:38:40 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\COMM_NOP_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\COMM_NOP_${TXDATE1}.tpt
+2025-01-23 17:38:40 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\COMM_NOP_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_173838\src\COMM_NOP_${TXDATE1}.btq
+2025-01-23 17:38:40 [INFO] : 產檔完成
+2025-01-23 17:38:40 [INFO] : 產檔成功，共 12 筆資料
+2025-01-23 17:40:29 [INFO] : 開始執行，產生檔案 TPT
+2025-01-23 17:40:29 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業_20250121.xlsx
+2025-01-23 17:40:29 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\
+2025-01-23 17:40:29 [INFO] : 開始解析資料表設定
+2025-01-23 17:40:29 [INFO] : 正在開啟檔案，請稍後...
+2025-01-23 17:40:29 [INFO] : 開始解析Table參數
+2025-01-23 17:40:29 [INFO] : 解析完成，共 12 筆資料
+2025-01-23 17:40:29 [INFO] : 開始解析Column參數
+2025-01-23 17:40:29 [INFO] : 解析完成，共 178 筆資料
+2025-01-23 17:40:29 [INFO] : 開始轉換語法
+2025-01-23 17:40:29 [INFO] : 開始產生TPT語法...
+2025-01-23 17:41:46 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:41:46 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_91ORDACC_${TXDATE1}.tpt
+2025-01-23 17:41:46 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_91ORDACC_${TXDATE1}.tpt
+2025-01-23 17:41:46 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_91ORDACC_${TXDATE1}.btq
+2025-01-23 17:41:46 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_91ORDACC_${TXDATE1}.btq
+2025-01-23 17:41:46 [INFO] : 產檔完成
+2025-01-23 17:41:46 [INFO] : 開始產生TPT語法...
+2025-01-23 17:41:46 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:41:46 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_91ORDDLV_${TXDATE1}.tpt
+2025-01-23 17:41:46 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_91ORDDLV_${TXDATE1}.tpt
+2025-01-23 17:41:46 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_91ORDDLV_${TXDATE1}.btq
+2025-01-23 17:41:46 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_91ORDDLV_${TXDATE1}.btq
+2025-01-23 17:41:46 [INFO] : 產檔完成
+2025-01-23 17:41:46 [INFO] : 開始產生TPT語法...
+2025-01-23 17:41:49 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_91ORDSAL_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_91ORDSAL_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_91ORDSAL_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_91ORDSAL_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產檔完成
+2025-01-23 17:41:49 [INFO] : 開始產生TPT語法...
+2025-01-23 17:41:49 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECGOT_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECGOT_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECGOT_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECGOT_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產檔完成
+2025-01-23 17:41:49 [INFO] : 開始產生TPT語法...
+2025-01-23 17:41:49 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECINP_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECINP_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECINP_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECINP_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產檔完成
+2025-01-23 17:41:49 [INFO] : 開始產生TPT語法...
+2025-01-23 17:41:49 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECORD_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECORD_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECORD_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECORD_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產檔完成
+2025-01-23 17:41:49 [INFO] : 開始產生TPT語法...
+2025-01-23 17:41:49 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECPID_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECPID_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECPID_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECPID_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產檔完成
+2025-01-23 17:41:49 [INFO] : 開始產生TPT語法...
+2025-01-23 17:41:49 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECRC_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECRC_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECRC_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECRC_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產檔完成
+2025-01-23 17:41:49 [INFO] : 開始產生TPT語法...
+2025-01-23 17:41:49 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECRTN_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECRTN_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECRTN_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECRTN_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產檔完成
+2025-01-23 17:41:49 [INFO] : 開始產生TPT語法...
+2025-01-23 17:41:49 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECSND_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECSND_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECSND_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECSND_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產檔完成
+2025-01-23 17:41:49 [INFO] : 開始產生TPT語法...
+2025-01-23 17:41:49 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECTKE_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECTKE_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECTKE_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\BLGS_ECTKE_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產檔完成
+2025-01-23 17:41:49 [INFO] : 開始產生TPT語法...
+2025-01-23 17:41:49 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\COMM_NOP_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\COMM_NOP_${TXDATE1}.tpt
+2025-01-23 17:41:49 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\COMM_NOP_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174029\src\COMM_NOP_${TXDATE1}.btq
+2025-01-23 17:41:49 [INFO] : 產檔完成
+2025-01-23 17:41:49 [INFO] : 產檔成功，共 12 筆資料
+2025-01-23 17:41:51 [INFO] : 開始執行，產生檔案 TPT
+2025-01-23 17:41:51 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業_20250121.xlsx
+2025-01-23 17:41:51 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\
+2025-01-23 17:41:51 [INFO] : 開始解析資料表設定
+2025-01-23 17:41:51 [INFO] : 正在開啟檔案，請稍後...
+2025-01-23 17:41:51 [INFO] : 開始解析Table參數
+2025-01-23 17:41:51 [INFO] : 解析完成，共 12 筆資料
+2025-01-23 17:41:51 [INFO] : 開始解析Column參數
+2025-01-23 17:43:45 [INFO] : 解析完成，共 178 筆資料
+2025-01-23 17:43:45 [INFO] : 開始轉換語法
+2025-01-23 17:43:45 [INFO] : 開始產生TPT語法...
+2025-01-23 17:43:47 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:43:47 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_91ORDACC_${TXDATE1}.tpt
+2025-01-23 17:43:47 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_91ORDACC_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_91ORDACC_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_91ORDACC_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產檔完成
+2025-01-23 17:43:48 [INFO] : 開始產生TPT語法...
+2025-01-23 17:43:48 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_91ORDDLV_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_91ORDDLV_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_91ORDDLV_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_91ORDDLV_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產檔完成
+2025-01-23 17:43:48 [INFO] : 開始產生TPT語法...
+2025-01-23 17:43:48 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_91ORDSAL_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_91ORDSAL_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_91ORDSAL_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_91ORDSAL_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產檔完成
+2025-01-23 17:43:48 [INFO] : 開始產生TPT語法...
+2025-01-23 17:43:48 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECGOT_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECGOT_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECGOT_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECGOT_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產檔完成
+2025-01-23 17:43:48 [INFO] : 開始產生TPT語法...
+2025-01-23 17:43:48 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECINP_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECINP_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECINP_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECINP_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產檔完成
+2025-01-23 17:43:48 [INFO] : 開始產生TPT語法...
+2025-01-23 17:43:48 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECORD_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECORD_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECORD_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECORD_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產檔完成
+2025-01-23 17:43:48 [INFO] : 開始產生TPT語法...
+2025-01-23 17:43:48 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECPID_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECPID_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECPID_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECPID_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產檔完成
+2025-01-23 17:43:48 [INFO] : 開始產生TPT語法...
+2025-01-23 17:43:48 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECRC_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECRC_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECRC_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECRC_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產檔完成
+2025-01-23 17:43:48 [INFO] : 開始產生TPT語法...
+2025-01-23 17:43:48 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECRTN_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECRTN_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECRTN_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECRTN_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產檔完成
+2025-01-23 17:43:48 [INFO] : 開始產生TPT語法...
+2025-01-23 17:43:48 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECSND_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECSND_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECSND_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECSND_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產檔完成
+2025-01-23 17:43:48 [INFO] : 開始產生TPT語法...
+2025-01-23 17:43:48 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECTKE_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECTKE_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECTKE_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\BLGS_ECTKE_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產檔完成
+2025-01-23 17:43:48 [INFO] : 開始產生TPT語法...
+2025-01-23 17:43:48 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\COMM_NOP_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\COMM_NOP_${TXDATE1}.tpt
+2025-01-23 17:43:48 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\COMM_NOP_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174151\src\COMM_NOP_${TXDATE1}.btq
+2025-01-23 17:43:48 [INFO] : 產檔完成
+2025-01-23 17:43:48 [INFO] : 產檔成功，共 12 筆資料
+2025-01-23 17:43:59 [INFO] : 開始執行，產生檔案 TPT
+2025-01-23 17:43:59 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業_20250121.xlsx
+2025-01-23 17:43:59 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174359\src\
+2025-01-23 17:43:59 [INFO] : 開始解析資料表設定
+2025-01-23 17:43:59 [INFO] : 正在開啟檔案，請稍後...
+2025-01-23 17:43:59 [INFO] : 開始解析Table參數
+2025-01-23 17:43:59 [INFO] : 解析完成，共 12 筆資料
+2025-01-23 17:43:59 [INFO] : 開始解析Column參數
+2025-01-23 17:45:30 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2025-01-23 17:45:33 [INFO] : 開始執行，產生檔案 TPT
+2025-01-23 17:45:33 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業_20250121.xlsx
+2025-01-23 17:45:33 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\
+2025-01-23 17:45:33 [INFO] : 開始解析資料表設定
+2025-01-23 17:45:33 [INFO] : 正在開啟檔案，請稍後...
+2025-01-23 17:45:34 [INFO] : 開始解析Table參數
+2025-01-23 17:45:34 [INFO] : 解析完成，共 12 筆資料
+2025-01-23 17:45:34 [INFO] : 開始解析Column參數
+2025-01-23 17:48:50 [INFO] : 解析完成，共 178 筆資料
+2025-01-23 17:48:50 [INFO] : 開始轉換語法
+2025-01-23 17:48:50 [INFO] : 開始產生TPT語法...
+2025-01-23 17:48:50 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_91ORDACC_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_91ORDACC_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_91ORDACC_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_91ORDACC_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產檔完成
+2025-01-23 17:48:50 [INFO] : 開始產生TPT語法...
+2025-01-23 17:48:50 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_91ORDDLV_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_91ORDDLV_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_91ORDDLV_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_91ORDDLV_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產檔完成
+2025-01-23 17:48:50 [INFO] : 開始產生TPT語法...
+2025-01-23 17:48:50 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_91ORDSAL_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_91ORDSAL_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_91ORDSAL_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_91ORDSAL_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產檔完成
+2025-01-23 17:48:50 [INFO] : 開始產生TPT語法...
+2025-01-23 17:48:50 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECGOT_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECGOT_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECGOT_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECGOT_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產檔完成
+2025-01-23 17:48:50 [INFO] : 開始產生TPT語法...
+2025-01-23 17:48:50 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECINP_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECINP_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECINP_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECINP_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產檔完成
+2025-01-23 17:48:50 [INFO] : 開始產生TPT語法...
+2025-01-23 17:48:50 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECORD_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECORD_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECORD_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECORD_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產檔完成
+2025-01-23 17:48:50 [INFO] : 開始產生TPT語法...
+2025-01-23 17:48:50 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECPID_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECPID_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECPID_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECPID_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產檔完成
+2025-01-23 17:48:50 [INFO] : 開始產生TPT語法...
+2025-01-23 17:48:50 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECRC_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECRC_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECRC_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECRC_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產檔完成
+2025-01-23 17:48:50 [INFO] : 開始產生TPT語法...
+2025-01-23 17:48:50 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECRTN_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECRTN_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECRTN_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECRTN_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產檔完成
+2025-01-23 17:48:50 [INFO] : 開始產生TPT語法...
+2025-01-23 17:48:50 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECSND_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECSND_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECSND_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECSND_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產檔完成
+2025-01-23 17:48:50 [INFO] : 開始產生TPT語法...
+2025-01-23 17:48:50 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECTKE_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECTKE_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECTKE_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\BLGS_ECTKE_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產檔完成
+2025-01-23 17:48:50 [INFO] : 開始產生TPT語法...
+2025-01-23 17:48:50 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\COMM_NOP_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\COMM_NOP_${TXDATE1}.tpt
+2025-01-23 17:48:50 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\COMM_NOP_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174533\src\COMM_NOP_${TXDATE1}.btq
+2025-01-23 17:48:50 [INFO] : 產檔完成
+2025-01-23 17:48:50 [INFO] : 產檔成功，共 12 筆資料
+2025-01-23 17:48:55 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2025-01-23 17:48:58 [INFO] : 開始執行，產生檔案 TPT
+2025-01-23 17:48:58 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業_20250121.xlsx
+2025-01-23 17:48:58 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_174858\src\
+2025-01-23 17:48:58 [INFO] : 開始解析資料表設定
+2025-01-23 17:48:58 [INFO] : 正在開啟檔案，請稍後...
+2025-01-23 17:48:59 [INFO] : 開始解析Table參數
+2025-01-23 17:48:59 [INFO] : 解析完成，共 12 筆資料
+2025-01-23 17:48:59 [INFO] : 開始解析Column參數
+2025-01-23 17:48:59 [INFO] : 解析完成，共 178 筆資料
+2025-01-23 17:48:59 [INFO] : 開始轉換語法
+2025-01-23 17:48:59 [INFO] : 開始產生TPT語法...
+2025-01-23 17:48:59 [INFO] : 錯誤：Cannot invoke "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTTableModel.getAzTable()" because the return value of "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTModel.getTable()" is null
+2025-01-23 17:48:59 [ERROR] : Cannot invoke "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTTableModel.getAzTable()" because the return value of "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTModel.getTable()" is null
+2025-01-23 17:52:29 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2025-01-23 17:52:32 [INFO] : 開始執行，產生檔案 TPT
+2025-01-23 17:52:32 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業_20250121.xlsx
+2025-01-23 17:52:32 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175232\src\
+2025-01-23 17:52:32 [INFO] : 開始解析資料表設定
+2025-01-23 17:52:32 [INFO] : 正在開啟檔案，請稍後...
+2025-01-23 17:52:33 [INFO] : 開始解析Table參數
+2025-01-23 17:52:33 [INFO] : 解析完成，共 12 筆資料
+2025-01-23 17:52:33 [INFO] : 開始解析Column參數
+2025-01-23 17:52:33 [INFO] : 錯誤：Cannot invoke "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTTableModel.setAzSchema(String)" because "model" is null
+2025-01-23 17:52:33 [ERROR] : Cannot invoke "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTTableModel.setAzSchema(String)" because "model" is null
+2025-01-23 17:54:50 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2025-01-23 17:54:53 [INFO] : 開始執行，產生檔案 TPT
+2025-01-23 17:54:53 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業_20250121.xlsx
+2025-01-23 17:54:53 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175453\src\
+2025-01-23 17:54:53 [INFO] : 開始解析資料表設定
+2025-01-23 17:54:53 [INFO] : 正在開啟檔案，請稍後...
+2025-01-23 17:54:54 [INFO] : 開始解析Table參數
+2025-01-23 17:54:54 [INFO] : 解析完成，共 12 筆資料
+2025-01-23 17:54:54 [INFO] : 開始解析Column參數
+2025-01-23 17:54:54 [INFO] : 錯誤：Cannot invoke "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTTableModel.setAzSchema(String)" because the return value of "java.util.Map.get(Object)" is null
+2025-01-23 17:54:54 [ERROR] : Cannot invoke "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTTableModel.setAzSchema(String)" because the return value of "java.util.Map.get(Object)" is null
+2025-01-23 17:55:29 [INFO] : 開始執行，產生檔案 TPT
+2025-01-23 17:55:30 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業_20250121.xlsx
+2025-01-23 17:55:30 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175529\src\
+2025-01-23 17:55:30 [INFO] : 開始解析資料表設定
+2025-01-23 17:55:30 [INFO] : 正在開啟檔案，請稍後...
+2025-01-23 17:55:30 [INFO] : 開始解析Table參數
+2025-01-23 17:55:30 [INFO] : 解析完成，共 12 筆資料
+2025-01-23 17:55:30 [INFO] : 開始解析Column參數
+2025-01-23 17:55:30 [INFO] : 錯誤：Cannot invoke "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTTableModel.setAzSchema(String)" because the return value of "java.util.Map.get(Object)" is null
+2025-01-23 17:55:30 [ERROR] : Cannot invoke "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTTableModel.setAzSchema(String)" because the return value of "java.util.Map.get(Object)" is null
+2025-01-23 17:55:35 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2025-01-23 17:55:39 [INFO] : 開始執行，產生檔案 TPT
+2025-01-23 17:55:39 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業_20250121.xlsx
+2025-01-23 17:55:39 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175539\src\
+2025-01-23 17:55:39 [INFO] : 開始解析資料表設定
+2025-01-23 17:55:39 [INFO] : 正在開啟檔案，請稍後...
+2025-01-23 17:55:40 [INFO] : 開始解析Table參數
+2025-01-23 17:55:40 [INFO] : 解析完成，共 12 筆資料
+2025-01-23 17:55:40 [INFO] : 開始解析Column參數
+2025-01-23 17:55:40 [INFO] : 錯誤：Cannot invoke "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTTableModel.setAzSchema(String)" because the return value of "java.util.Map.get(Object)" is null
+2025-01-23 17:55:40 [ERROR] : Cannot invoke "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTTableModel.setAzSchema(String)" because the return value of "java.util.Map.get(Object)" is null
+2025-01-23 17:55:47 [INFO] : 開始執行，產生檔案 TPT
+2025-01-23 17:55:47 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業_20250121.xlsx
+2025-01-23 17:55:47 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175547\src\
+2025-01-23 17:55:47 [INFO] : 開始解析資料表設定
+2025-01-23 17:55:47 [INFO] : 正在開啟檔案，請稍後...
+2025-01-23 17:55:47 [INFO] : 開始解析Table參數
+2025-01-23 17:55:47 [INFO] : 解析完成，共 12 筆資料
+2025-01-23 17:55:47 [INFO] : 開始解析Column參數
+2025-01-23 17:56:56 [INFO] : 錯誤：Cannot invoke "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTTableModel.setAzSchema(String)" because the return value of "java.util.Map.get(Object)" is null
+2025-01-23 17:56:56 [ERROR] : Cannot invoke "etec.src.translator.project.azure.fm.hist_export.model.CreateExpTPTTableModel.setAzSchema(String)" because the return value of "java.util.Map.get(Object)" is null
+2025-01-23 17:56:58 [INFO] : 開始執行，產生檔案 TPT
+2025-01-23 17:56:58 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業_20250121.xlsx
+2025-01-23 17:56:58 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\
+2025-01-23 17:56:58 [INFO] : 開始解析資料表設定
+2025-01-23 17:56:58 [INFO] : 正在開啟檔案，請稍後...
+2025-01-23 17:56:58 [INFO] : 開始解析Table參數
+2025-01-23 17:56:58 [INFO] : 解析完成，共 12 筆資料
+2025-01-23 17:56:58 [INFO] : 開始解析Column參數
+2025-01-23 17:57:07 [INFO] : 解析完成，共 178 筆資料
+2025-01-23 17:57:07 [INFO] : 開始轉換語法
+2025-01-23 17:57:07 [INFO] : 開始產生TPT語法...
+2025-01-23 17:57:07 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_91ORDACC_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_91ORDACC_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_91ORDACC_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_91ORDACC_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產檔完成
+2025-01-23 17:57:07 [INFO] : 開始產生TPT語法...
+2025-01-23 17:57:07 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_91ORDDLV_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_91ORDDLV_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_91ORDDLV_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_91ORDDLV_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產檔完成
+2025-01-23 17:57:07 [INFO] : 開始產生TPT語法...
+2025-01-23 17:57:07 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_91ORDSAL_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_91ORDSAL_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_91ORDSAL_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_91ORDSAL_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產檔完成
+2025-01-23 17:57:07 [INFO] : 開始產生TPT語法...
+2025-01-23 17:57:07 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECGOT_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECGOT_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECGOT_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECGOT_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產檔完成
+2025-01-23 17:57:07 [INFO] : 開始產生TPT語法...
+2025-01-23 17:57:07 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECINP_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECINP_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECINP_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECINP_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產檔完成
+2025-01-23 17:57:07 [INFO] : 開始產生TPT語法...
+2025-01-23 17:57:07 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECORD_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECORD_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECORD_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECORD_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產檔完成
+2025-01-23 17:57:07 [INFO] : 開始產生TPT語法...
+2025-01-23 17:57:07 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECPID_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECPID_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECPID_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECPID_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產檔完成
+2025-01-23 17:57:07 [INFO] : 開始產生TPT語法...
+2025-01-23 17:57:07 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECRC_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECRC_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECRC_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECRC_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產檔完成
+2025-01-23 17:57:07 [INFO] : 開始產生TPT語法...
+2025-01-23 17:57:07 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECRTN_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECRTN_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECRTN_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECRTN_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產檔完成
+2025-01-23 17:57:07 [INFO] : 開始產生TPT語法...
+2025-01-23 17:57:07 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECSND_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECSND_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECSND_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECSND_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產檔完成
+2025-01-23 17:57:07 [INFO] : 開始產生TPT語法...
+2025-01-23 17:57:07 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECTKE_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECTKE_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECTKE_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\BLGS_ECTKE_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產檔完成
+2025-01-23 17:57:07 [INFO] : 開始產生TPT語法...
+2025-01-23 17:57:07 [INFO] : 開始產生BTQ語法...
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\COMM_NOP_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\COMM_NOP_${TXDATE1}.tpt
+2025-01-23 17:57:07 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\COMM_NOP_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250123_175658\src\COMM_NOP_${TXDATE1}.btq
+2025-01-23 17:57:07 [INFO] : 產檔完成
+2025-01-23 17:57:07 [INFO] : 產檔成功，共 12 筆資料

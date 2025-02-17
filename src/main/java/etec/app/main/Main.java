@@ -1,33 +1,33 @@
 package etec.app.main;
 
+import etec.app.application.AssessmentApplication;
+import etec.app.application.AzureFileApplication;
+import etec.app.application.FamilyMartApplication;
+import etec.app.application.FastTransduceApplication;
+import etec.app.application.GreenPlumFileApplication;
+import etec.app.application.HisExportApplication;
+import etec.app.application.NewDDIMApplication;
+import etec.app.application.OldApplication;
+import etec.app.application.ReplaceAllApplication;
+import etec.app.application.SearchDDLApplication;
+import etec.app.application.TranslateStoreFunctionApplication;
+import etec.app.application.UncompressApplication;
 import etec.common.factory.Params;
-import etec.framework.code.interfaces.Application;
+import etec.framework.code.interfaces.UIApplication;
 import etec.framework.security.log.service.Log;
-import etec.src.tool.project.replace.application.ReplaceAllApplication;
-import etec.src.translator.project.azure.fm.hist_export.application.HisExportApplication;
-import etec.src.translator.view.application.AssessmentApplication;
-import etec.src.translator.view.application.AzureFileApplication;
-import etec.src.translator.view.application.FamilyMartApplication;
-import etec.src.translator.view.application.FastTransduceApplication;
-import etec.src.translator.view.application.GreenPlumFileApplication;
-import etec.src.translator.view.application.OldApplication;
-import etec.src.translator.view.application.SearchDDLApplication;
-import etec.src.translator.view.application.TranslateStoreFunctionApplication;
-import etec.src.translator.view.application.UIApplication;
-import etec.src.translator.view.application.UncompressApplication;
 
 public class Main {
 
 
 	public static void main(String[] args) {
 		Log.info("執行項目：" + Params.config.APPLICATION_TYPE);
-		Application app = null;
+		UIApplication app = null;
 		switch (Params.config.APPLICATION_TYPE) {
 			case "OLD_TRANSLATOR":// 鼎鼎舊版
 				app = new OldApplication();
 				break;
 			case "DDIM_TRANSLATOR":// 鼎鼎新板
-				app = new UIApplication();
+				app = new NewDDIMApplication();
 				break;
 			case "FM":// 全家
 				app = new FamilyMartApplication();

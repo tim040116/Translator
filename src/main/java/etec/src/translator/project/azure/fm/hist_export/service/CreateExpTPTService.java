@@ -121,23 +121,25 @@ public class CreateExpTPTService {
 				plusProgress();
 				continue;
 			}
-			CreateExpTPTTableModel model = mapTable.get(tddb+"."+tdtb);
-			if(model == null) {
-				model = new CreateExpTPTTableModel();	
+			String key = (tddb+"."+tdtb).toUpperCase();
+//			CreateExpTPTTableModel model;
+			if(mapTable.get(key) == null) {
+//				model = new CreateExpTPTTableModel();	
+				mapTable.put((key).toUpperCase(), new CreateExpTPTTableModel());
 			}
-			
-			model.setAzSchema(azdb);
-			model.setAzTable(aztb);
-			model.getAzCol().add(azcl);
+//			model = mapTable.get(tddb+"."+tdtb);
+			mapTable.get(key).setAzSchema(azdb);
+			mapTable.get(key).setAzTable(aztb);
+			mapTable.get(key).getAzCol().add(azcl);
 			
 			if("".equals(tdcl)) {
-				model.getLstSelect().add("''''");
+				mapTable.get(key).getLstSelect().add("''''");
 				plusProgress();
 				continue;
 			}
-			model.getLstSelect().add(tdcl);
-			model.getLstHeader().add(tdcl.replaceAll("(?i)TO_CHAR\\(\\s*(\\w+)\\s*\\)", "$1"));
-			mapTable.put((tddb+"."+tdtb).toUpperCase(), model);
+			mapTable.get(key).getLstSelect().add(tdcl);
+			mapTable.get(key).getLstHeader().add(tdcl.replaceAll("(?i)TO_CHAR\\(\\s*(\\w+)\\s*\\)", "$1"));
+			
 			plusProgress();
 		}
 		
@@ -159,7 +161,7 @@ public class CreateExpTPTService {
 		param.put("ETEC_header",String.join(",",m.getTable().getLstHeader()));
 		param.put("ETEC_select",String.join("),'''') || ''\",\"'' || \r\n  COALESCE(TRIM(", m.getTable().getLstSelect()));
 		param.put("ETEC_tdTable",m.getTdSchema()+"."+m.getTdTable());
-		String where = m.getWhere().replaceAll("(?i)^\\s*(?:WHERE\\s+|AND\\s+)?", " and ");
+		String where = m.getWhere()/*.replaceAll("(?i)^\\s*(?:WHERE\\s+|AND\\s+)?", " and ")*/;
 		param.put("ETEC_where",where);
 		param.put("ETEC_hisDir",m.getDir());
 		String csvFileName = m.getFileName().replaceAll("\\$\\{(\\w+)\\}", "'||@$1||'");
@@ -181,7 +183,6 @@ public class CreateExpTPTService {
 		param.put("ETEC_txType",txType);
 		param.put("ETEC_fileName", m.getFileName());
 		ResourceTool rt = new ResourceTool();
-		System.out.println(param.get("ETEC_fileName"));
 		String content = rt.readFile(tamplate,param);
 		return content;
 	}

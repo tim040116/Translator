@@ -1,3 +1,18 @@
+7.0.4.1-dev 2025/02/17	Tim	全家專案	replace
+	- 大量取代
+		- 增加產檔位置欄位
+7.0.4.0-dev 2025/01/08	Tim	全家專案	UI_XML
+	- 首頁
+		- 增加 Menu_Data.xml 紀錄各專案資訊及詳細記錄
+		- 將 @Application 作為 mapping 的依據
+		- 建立 Menu 的 UI 選擇功能後進行導向
+	- DOSAPP
+		- 可藉由DOS直接執行的程式也應該統一管理
+7.0.3.0 2025/01/08	Tim	全家專案	首頁
+	- 首頁
+		- 增加 Menu_Data.xml 紀錄各專案資訊及詳細記錄
+		- 將 @Application 作為 mapping 的依據
+		- 建立 Menu 的 UI 選擇功能後進行導向
 6.0.3.1	2025/01/07	Tim	全家專案	His tpt
 	- his tpt
 		- 配合淑雯的需求優化程式

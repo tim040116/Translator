@@ -1,0 +1,115 @@
+2025-01-10 17:13:57 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2025-01-10 17:16:35 [INFO] : 開始執行，產生檔案 TPT
+2025-01-10 17:16:35 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業.xlsx
+2025-01-10 17:16:35 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\
+2025-01-10 17:16:35 [INFO] : 開始解析資料表設定
+2025-01-10 17:16:35 [INFO] : 正在開啟檔案，請稍後...
+2025-01-10 17:16:37 [INFO] : 開始解析Table參數
+2025-01-10 17:16:37 [INFO] : 解析完成，共 5 筆資料
+2025-01-10 17:16:37 [INFO] : 開始解析Column參數
+2025-01-10 17:16:37 [INFO] : 解析完成，共 614 筆資料
+2025-01-10 17:16:37 [INFO] : 開始轉換語法
+2025-01-10 17:16:37 [INFO] : 開始產生TPT語法...
+2025-01-10 17:16:37 [INFO] : 開始產生BTQ語法...
+2025-01-10 17:16:37 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}21.csv.tpt
+2025-01-10 17:16:37 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}21.csv.tpt
+2025-01-10 17:16:37 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}21.csv.btq
+2025-01-10 17:16:37 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}21.csv.btq
+2025-01-10 17:16:37 [INFO] : 產檔完成
+2025-01-10 17:16:37 [INFO] : 開始產生TPT語法...
+2025-01-10 17:16:37 [INFO] : 開始產生BTQ語法...
+2025-01-10 17:16:37 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}31.csv.tpt
+2025-01-10 17:16:37 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}31.csv.tpt
+2025-01-10 17:16:37 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}31.csv.btq
+2025-01-10 17:16:37 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}31.csv.btq
+2025-01-10 17:16:37 [INFO] : 產檔完成
+2025-01-10 17:16:37 [INFO] : 開始產生TPT語法...
+2025-01-10 17:16:37 [INFO] : 開始產生BTQ語法...
+2025-01-10 17:16:37 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}41.csv.tpt
+2025-01-10 17:16:37 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}41.csv.tpt
+2025-01-10 17:16:37 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}41.csv.btq
+2025-01-10 17:16:37 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}41.csv.btq
+2025-01-10 17:16:37 [INFO] : 產檔完成
+2025-01-10 17:16:37 [INFO] : 開始產生TPT語法...
+2025-01-10 17:16:37 [INFO] : 開始產生BTQ語法...
+2025-01-10 17:16:37 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}51.csv.tpt
+2025-01-10 17:16:37 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}51.csv.tpt
+2025-01-10 17:16:37 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}51.csv.btq
+2025-01-10 17:16:37 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}51.csv.btq
+2025-01-10 17:16:37 [INFO] : 產檔完成
+2025-01-10 17:16:37 [INFO] : 開始產生TPT語法...
+2025-01-10 17:16:37 [INFO] : 開始產生BTQ語法...
+2025-01-10 17:16:37 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}61.csv.tpt
+2025-01-10 17:16:37 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}61.csv.tpt
+2025-01-10 17:16:37 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}61.csv.btq
+2025-01-10 17:16:37 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171635\src\GENERAL_SHOP_${TX4Y}61.csv.btq
+2025-01-10 17:16:37 [INFO] : 產檔完成
+2025-01-10 17:16:37 [INFO] : 產檔成功，共 5 筆資料
+2025-01-10 17:18:15 [INFO] : 讀取檔案：.\config\Temp\fm\exp.tmp
+2025-01-10 17:18:16 [INFO] : 開始產檔
+2025-01-10 17:18:16 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業.xlsx
+2025-01-10 17:18:16 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171816\src\
+2025-01-10 17:18:17 [INFO] : 正在開啟檔案，請稍後...
+2025-01-10 17:18:18 [INFO] : 開始解析資料表設定
+2025-01-10 17:18:18 [INFO] : 解析Table參數
+2025-01-10 17:18:18 [INFO] : 解析完成，共 5 筆資料
+2025-01-10 17:18:18 [INFO] : 解析Column參數
+2025-01-10 17:18:18 [INFO] : 解析完成，共 614 筆資料
+2025-01-10 17:18:18 [INFO] : 開始產檔
+2025-01-10 17:18:18 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171816\src\general_shop_00000001.btq
+2025-01-10 17:18:18 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171816\src\general_shop_00000001.btq
+2025-01-10 17:18:18 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171816\src\general_shop_00000002.btq
+2025-01-10 17:18:18 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171816\src\general_shop_00000002.btq
+2025-01-10 17:18:18 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171816\src\general_shop_00000003.btq
+2025-01-10 17:18:18 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171816\src\general_shop_00000003.btq
+2025-01-10 17:18:18 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171816\src\general_shop_00000004.btq
+2025-01-10 17:18:18 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171816\src\general_shop_00000004.btq
+2025-01-10 17:18:18 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171816\src\general_shop_00000005.btq
+2025-01-10 17:18:18 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171816\src\general_shop_00000005.btq
+2025-01-10 17:18:18 [INFO] : 產檔成功，共 5 筆資料
+2025-01-10 17:18:23 [INFO] : 開始執行，產生檔案 TPT
+2025-01-10 17:18:23 [INFO] : 取得資料目錄 : C:\Users\user\Desktop\Trans\T0\hist export\TPT轉換作業.xlsx
+2025-01-10 17:18:23 [INFO] : 取得產檔目錄 : C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\
+2025-01-10 17:18:23 [INFO] : 開始解析資料表設定
+2025-01-10 17:18:23 [INFO] : 正在開啟檔案，請稍後...
+2025-01-10 17:18:23 [INFO] : 開始解析Table參數
+2025-01-10 17:18:23 [INFO] : 解析完成，共 5 筆資料
+2025-01-10 17:18:23 [INFO] : 開始解析Column參數
+2025-01-10 17:18:23 [INFO] : 解析完成，共 614 筆資料
+2025-01-10 17:18:23 [INFO] : 開始轉換語法
+2025-01-10 17:18:23 [INFO] : 開始產生TPT語法...
+2025-01-10 17:18:23 [INFO] : 開始產生BTQ語法...
+2025-01-10 17:18:23 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}21.tpt
+2025-01-10 17:18:23 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}21.tpt
+2025-01-10 17:18:23 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}21.btq
+2025-01-10 17:18:23 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}21.btq
+2025-01-10 17:18:23 [INFO] : 產檔完成
+2025-01-10 17:18:23 [INFO] : 開始產生TPT語法...
+2025-01-10 17:18:23 [INFO] : 開始產生BTQ語法...
+2025-01-10 17:18:23 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}31.tpt
+2025-01-10 17:18:23 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}31.tpt
+2025-01-10 17:18:23 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}31.btq
+2025-01-10 17:18:23 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}31.btq
+2025-01-10 17:18:23 [INFO] : 產檔完成
+2025-01-10 17:18:23 [INFO] : 開始產生TPT語法...
+2025-01-10 17:18:23 [INFO] : 開始產生BTQ語法...
+2025-01-10 17:18:23 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}41.tpt
+2025-01-10 17:18:23 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}41.tpt
+2025-01-10 17:18:23 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}41.btq
+2025-01-10 17:18:23 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}41.btq
+2025-01-10 17:18:23 [INFO] : 產檔完成
+2025-01-10 17:18:23 [INFO] : 開始產生TPT語法...
+2025-01-10 17:18:23 [INFO] : 開始產生BTQ語法...
+2025-01-10 17:18:23 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}51.tpt
+2025-01-10 17:18:23 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}51.tpt
+2025-01-10 17:18:23 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}51.btq
+2025-01-10 17:18:23 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}51.btq
+2025-01-10 17:18:23 [INFO] : 產檔完成
+2025-01-10 17:18:23 [INFO] : 開始產生TPT語法...
+2025-01-10 17:18:23 [INFO] : 開始產生BTQ語法...
+2025-01-10 17:18:23 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}61.tpt
+2025-01-10 17:18:23 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}61.tpt
+2025-01-10 17:18:23 [INFO] : 開始產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}61.btq
+2025-01-10 17:18:23 [INFO] : 產生檔案：C:\Users\User\Desktop\Trans\Assessment_Result\\20250110_171823\src\GENERAL_SHOP_${TX4Y}61.btq
+2025-01-10 17:18:23 [INFO] : 產檔完成
+2025-01-10 17:18:23 [INFO] : 產檔成功，共 5 筆資料

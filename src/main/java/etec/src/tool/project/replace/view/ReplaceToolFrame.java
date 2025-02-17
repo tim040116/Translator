@@ -40,6 +40,7 @@ public class ReplaceToolFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtInput;
 	private JTextField txtMapping;
+	private JTextField txtResult;
 	private JProgressBar progressBar;
 	private boolean isLock = false;
 	/**
@@ -64,7 +65,7 @@ public class ReplaceToolFrame extends JFrame {
 	public ReplaceToolFrame(Controller controller) {
 		setTitle("大量取代  " + VersionModel.VERSION);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 383);
+		setBounds(100, 100, 700, 525);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -72,7 +73,7 @@ public class ReplaceToolFrame extends JFrame {
 		contentPane.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(6, 6, 500, 334);
+		panel.setBounds(6, 6, 500, 476);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
@@ -115,27 +116,45 @@ public class ReplaceToolFrame extends JFrame {
 		pnlMapping.add(btnMapping);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 155, 488, 173);
+		scrollPane.setBounds(6, 231, 488, 239);
 		panel.add(scrollPane);
 		
 		JTextArea txtLog = new JTextArea();
+		scrollPane.setViewportView(txtLog);
 		txtLog.setEditable(false);
 		txtLog.setLineWrap(false);
 		txtLog.setWrapStyleWord(false);
 		((DefaultCaret)txtLog.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		txtLog.setBounds(10, 155, 484, 173);
-		scrollPane.setViewportView(txtLog);
 
 		progressBar = new JProgressBar();
-		progressBar.setBounds(45, 121, 449, 30);
+		progressBar.setBounds(45, 189, 449, 30);
 		panel.add(progressBar);
 		progressBar.setString("0 %");
 		progressBar.setStringPainted(true);
 
 		JPanel pnlStatusColor = new JPanel();
 		pnlStatusColor.setBackground(new Color(0, 0, 0));
-		pnlStatusColor.setBounds(10, 121, 30, 30);
+		pnlStatusColor.setBounds(10, 189, 30, 30);
 		panel.add(pnlStatusColor);
+		
+		JPanel pnlMapping_1 = new JPanel();
+		pnlMapping_1.setLayout(null);
+		pnlMapping_1.setBounds(10, 115, 484, 50);
+		panel.add(pnlMapping_1);
+		
+		JLabel lblResult = new JLabel("    產檔路徑：");
+		lblResult.setBounds(6, 10, 80, 30);
+		pnlMapping_1.add(lblResult);
+		
+		txtResult = new JTextField();
+		txtResult.setText(Params.config.INIT_OUTPUT_PATH);
+		txtResult.setColumns(10);
+		txtResult.setBounds(86, 10, 350, 30);
+		pnlMapping_1.add(txtResult);
+		
+		Button btnResult = new Button("...");
+		btnResult.setBounds(442, 10, 42, 30);
+		pnlMapping_1.add(btnResult);
 		
 		Button btnRun = new Button("GO");
 		btnRun.setBounds(519, 43, 157, 40);
@@ -164,7 +183,7 @@ public class ReplaceToolFrame extends JFrame {
 							Map<String, Object> args = new HashMap<String, Object>();
 							args.put("caseInsensitive", ckbCaseInsensitive.getState());
 							args.put("inputPath", txtInput.getText());
-							args.put("outputPath", Params.config.INIT_OUTPUT_PATH);
+							args.put("outputPath", txtResult.getText());
 							args.put("mappingPath", txtMapping.getText());
 							args.put("progressBar", progressBar);
 							args.put("txtLog", txtLog);
@@ -208,6 +227,21 @@ public class ReplaceToolFrame extends JFrame {
 				}
 			}
 		});
+
+		// 產檔路徑
+		btnResult.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser;
+				chooser = new JFileChooser(new File(txtResult.getText()));
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int option = chooser.showOpenDialog(null);
+				if (option == JFileChooser.APPROVE_OPTION) {
+					File file = chooser.getSelectedFile();
+					txtResult.setText(file.getPath());
+				}
+			}
+		});
+		
 	}
 	
 	private void readTempFile() {
@@ -226,6 +260,9 @@ public class ReplaceToolFrame extends JFrame {
 					case "LAST_MAPPING_PATH":
 						txtMapping.setText(arrl[1]);
 						break;
+					case "LAST_RESULT_PATH":
+						txtResult.setText(arrl[1]);
+						break;	
 					default:
 						break;
 					}
@@ -246,12 +283,13 @@ public class ReplaceToolFrame extends JFrame {
 		try (BufferedWriter bw = Files.newBufferedWriter(Paths.get(path), Charset.forName("UTF-8"), StandardOpenOption.TRUNCATE_EXISTING)) {
 			bw.write(
 				"LAST_INPUT_PATH=" + txtInput.getText() + "\r\n" + 
-				"LAST_MAPPING_PATH=" + txtMapping.getText() + "\r\n"
+				"LAST_MAPPING_PATH=" + txtMapping.getText() + "\r\n" + 
+				"LAST_RESULT_PATH=" + txtResult.getText() + "\r\n"
+
 			);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
-
 }
