@@ -9,9 +9,9 @@ public class BitFunctionService {
 	 * 只需要加上dev.就好了
 	 * @since	2024/09/06
 	 * */
-	public static String replaceBitAnd(String script) {
-		return script.replaceAll("(?i)(?<!dev\\.)\\bbit_(?:and|or|extract)\\s*\\(","dev.$0");
-	}
+//	public static String replaceBitAnd(String script) {
+//		return script.replaceAll("(?i)(?<!dev\\.)\\bbit_(?:and|or|extract)\\s*\\(","dev.$0");
+//	}
 
 	/**
 	 * bit_gen_aggt跟bit_or_aggt

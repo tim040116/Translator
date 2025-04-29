@@ -243,7 +243,7 @@ public class POCTransduserService {
 					.replaceAll("\\s", "").trim();
 			column += indexCol;
 		}
-		String hash = "\r\n\tDISTRIBUTION = " + ("".equals(column) ? "REPLICATE" : "HASH(" + column + ")");
+		String hash = "\r\n\tDISTRIBUTION = " + ("".equals(column) ? "ROUND_ROBIN" : "HASH(" + column + ")");
 		result += hash + "\r\n)\r\n;";
 		return result;
 	}

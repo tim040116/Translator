@@ -1,4 +1,17 @@
-7.0.4.1-dev 2025/02/17	Tim	全家專案	replace
+7.0.6.0-dev 2025/04/25 bit比對
+	- bit比對
+		- 比對兩個字串是否一致
+	
+7.0.5.1-dev	2025/02/20 txdate
+	- txdate
+		- 開發解析txdate類變數的轉換功能
+	- 優化
+		- 優化fdp_upt邏輯
+		- 修復table強制轉成dev.的問題
+		- 修復 >= <= 中間會有空格的問題
+		- 把REPLICATE改成ROUND_ROBIN
+		- TEMP TABLE 的 CCI 改成 HEAP
+7.0.5.0 2025/02/17	Tim	全家專案	replace
 	- 大量取代
 		- 增加產檔位置欄位
 7.0.4.0-dev 2025/01/08	Tim	全家專案	UI_XML

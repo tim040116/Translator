@@ -151,7 +151,7 @@ public class FmSqlService {
 			lstSP.add(ms.group(1).trim());
 		}
 		//Source table
-		ms = Pattern.compile("(?i)(PDATA|PMART|\\$\\{DATA\\}|\\$\\{MART\\}|dev|tfm|tfmds)\\.\\w+").matcher(content);
+		ms = Pattern.compile("(?i)(PDATA|PMART|\\$\\{DATA\\}|\\$\\{MART\\}|dev|tfm|tfmds|dmt|rdt)\\.\\w+").matcher(content);
 		while(ms.find()) {
 			String str = ms.group().toLowerCase();
 			if(str.matches("(?i)dev\\.stg_\\w+")){
@@ -220,12 +220,12 @@ public class FmSqlService {
 	public static String addSP(String content) {
 		String res = content;
 		String txdate = "@tx_date";
-		String txdate1 = "@v_tx_date";
+		String txdate1 = "@i_tx_date";
 		res = "CREATE PROCEDURE dev.sp__ldtf\r\n\t"
 			+ txdate + " varchar(10)"
 			+ "\r\nAS BEGIN"
-			+ "\r\n\r\n\tDECLARE " + txdate1 + " int;"
-			+ "\r\n\tSET " + txdate1 + " = cast(convert(varchar(8),cast(" + txdate + " as date),112) as int);\r\n"
+			+ "\r\n\r\n\tDECLARE " + txdate1 + " int = cast(convert(varchar(8),cast(" + txdate + " as date),112) as int);\r\n"
+			+ "\tDECLARE @fdp_upt DATETIME = DATEADD(HOUR,8,GETDATE());\r\n"
 			+ "\r\n\t" + res.trim().replaceAll("\n", "\n\t")
 			+ "\r\n\r\nEND";
 		//TXDATE處理
@@ -253,7 +253,7 @@ public class FmSqlService {
 			String tblNm = m.group(2);
 			tmpId = tmpId == null ? "" : "_" + tmpId;
 			tblNm = tblNm.toLowerCase();
-			String rpm = "dev.stg_" + tblNm + tmpId;
+			String rpm = "dmt.stg_" + tblNm + tmpId;
 			m.appendReplacement(sb, Matcher.quoteReplacement(rpm));
 		}
 		m.appendTail(sb);
@@ -400,6 +400,7 @@ public class FmSqlService {
 			//整理
 			t = t
 				.replaceAll("\\s*,(\\s*<[^<>]+>\\s*)\r?\n\\s*"," $1 \r\n\t,")
+				.replaceAll("(?<=[<>])\\s+(?==)", "")
 				.replaceAll("(?!\\s|^);\\s*","\r\n;\r\n\r\n\t")
 				.replaceAll("(?i)\\s*?([\\t ]+)(UNION(?:\\s*ALL)?)\\s*","\r\n$1\r\n$1$2\r\n$1")
 				.replaceAll("(?i)\\s*(OUTER|INNER|LEFT|RIGHT|CROSS)\\s+JOIN","\r\n$1 JOIN")

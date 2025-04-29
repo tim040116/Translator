@@ -204,7 +204,7 @@ public class DDLTranslater {
 					.replaceAll("(?i)\\bVOLATILE\\b", "")// VOLATILE
 					.replaceAll("(?i)\\b(?:MULTI)?SET\\b", "")// MULTISET SET TABLE
 					.replaceAll("(?i)RANGE_N" + "\\s*\\([^\\)]+\\)", " ")// RANGE_N BY
-					.replaceAll("(?i)PARTITION\\s+BY\\s*(\\s*\\([^\\)]*\\))?", " ")// PARTITION BY
+				//	.replaceAll("(?i)PARTITION\\s+BY\\s*(\\s*\\([^\\)]*\\))?", " ")// PARTITION BY
 			;
 			return result;
 		}
@@ -301,7 +301,7 @@ public class DDLTranslater {
 		String distribution = "\r\nWITH ("
 				+ "\r\n\tCLUSTERED COLUMNSTORE INDEX,"
 				+ "\r\n\tDISTRIBUTION = "
-				+ (lst.isEmpty()?"REPLICATE":"HASH( " + String.join(",", lst) + " )")
+				+ (lst.isEmpty()?"ROUND_ROBIN":"HASH( " + String.join(",", lst) + " )")
 				+ "\r\n)\r\n;"
 				;
 //		sb.append(distribution);
@@ -367,7 +367,7 @@ public class DDLTranslater {
 		res = "CREATE TABLE " + tableNm + "\r\n"
 				+ "WITH ( \r\n"
 				+ "\tCLUSTERED COLUMNSTORE INDEX,\r\n"
-				+ "\tDISTRIBUTION = REPLICATE\r\n"
+				+ "\tDISTRIBUTION = ROUND_ROBIN\r\n"
 				+ ")\r\nAS\r\n"+selectSrc
 				;
 		return res;

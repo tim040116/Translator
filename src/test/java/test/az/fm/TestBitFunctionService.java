@@ -16,8 +16,8 @@ public class TestBitFunctionService {
 			+ "  SUM(CASE WHEN C.TIME_ID BETWEEN F.P14DT_ORD AND F.P1DT_ORD THEN BIT_EXTRACT(BIT_OR(C.STNUM_STORE_NUM,D.MASK)) ELSE 0 END) AS P14_WORK_DAYS -->稼動店數\r\n"
 			+ "FROM  ${MART}.BASIC_MAST_FACT C \r\n"
 		;
-		String test = BitFunctionService.replaceBitAnd(str);
-		System.out.println(test);
+//		String test = BitFunctionService.replaceBitAnd(str);
+//		System.out.println(test);
 	}
 
 	public static void testReplaceBitGenAggt() {
