@@ -30,6 +30,7 @@ public class CompareToolFrame extends JFrame {
 			public void run() {
 				try {
 					CompareToolFrame frame = new CompareToolFrame();
+					frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,7 +44,7 @@ public class CompareToolFrame extends JFrame {
 	 */
 	public CompareToolFrame() {
 		setTitle("字元比對工具");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1051, 543);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

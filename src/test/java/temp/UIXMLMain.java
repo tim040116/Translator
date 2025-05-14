@@ -16,9 +16,9 @@ import etec.src.translator.sql.gp.translater.GreenPlumTranslater;
 
 public class UIXMLMain {
 	
-	public static String path = "C:\\Users\\user\\Desktop\\Trans\\T0\\xml_to_xlsx\\WebWDWH.xml";
+	public static String path = "C:\\Users\\user\\Desktop\\Trans\\T0\\WebGIF.xml";
 	
-	public static String outputPath = "C:\\Users\\user\\Desktop\\Trans\\Assessment_Result\\WebWDWH.xlsx";
+	public static String outputPath = "C:\\Users\\user\\Desktop\\Trans\\Assessment_Result\\WebGIF.xlsx";
 	
 	public static void main(String[] args) {
 		try (
@@ -26,7 +26,8 @@ public class UIXMLMain {
 				SXSSFWorkbook wb = new SXSSFWorkbook();
 			){
 			String content = FileTool.readFile(path);
-			content = content.replaceAll("</?tag>", "");
+			content = content.replaceAll("</?tag>", "")
+					.replaceAll("<!--[\\S\\s]*?-->","");
 			SXSSFSheet sht = wb.createSheet("IGA");
 			//header
 			String[] columns = {

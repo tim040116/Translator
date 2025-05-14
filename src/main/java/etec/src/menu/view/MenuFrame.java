@@ -1,7 +1,8 @@
 package etec.src.menu.view;
 
 import java.awt.EventQueue;
-import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
@@ -18,6 +19,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import etec.app.application.CompareToolApplication;
+import etec.app.application.GreenPlumFileApplication;
+import etec.app.application.HisExportApplication;
+import etec.app.application.ReplaceToolApplication;
 import etec.common.model.VersionModel;
 import etec.framework.code.interfaces.Controller;
 import etec.framework.code.interfaces.UIApplication;
@@ -27,7 +32,9 @@ public class MenuFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Label lblDescription;
+	private JLabel lblDescription;
+	
+	private UIApplication targetApp;//選擇到的功能
 	
 	JList<AppListModel> list;
 	/**
@@ -64,7 +71,14 @@ public class MenuFrame extends JFrame {
 		mnNewMenu.add(mntmNewMenuItem);
 		getContentPane().setLayout(null);
 		
-		JButton btnNewButton = new JButton("New button");
+		JButton btnNewButton = new JButton("啟動");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(targetApp!=null) {
+					targetApp.run();
+				}
+			}
+		});
 		btnNewButton.setBounds(726, 368, 169, 110);
 		getContentPane().add(btnNewButton);
 		
@@ -76,7 +90,7 @@ public class MenuFrame extends JFrame {
 		scrollPane.setBounds(248, 6, 647, 350);
 		getContentPane().add(scrollPane);
 		
-		lblDescription = new Label("New label");
+		lblDescription = new JLabel("");
 		scrollPane.setViewportView(lblDescription);
 		
 		DefaultListModel<AppListModel> lstmdl = new DefaultListModel<AppListModel>();
@@ -85,7 +99,8 @@ public class MenuFrame extends JFrame {
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				lblDescription.setText("Choose : "+list.getSelectedValue());
+				lblDescription.setText(list.getSelectedValue().getDescription());
+				targetApp = list.getSelectedValue().getApp();
 				
 		}});
 		scpList.setViewportView(list);
@@ -93,9 +108,11 @@ public class MenuFrame extends JFrame {
 		JLabel lblAlert = new JLabel("");
 		lblAlert.setBounds(248, 368, 466, 110);
 		getContentPane().add(lblAlert);
-		lstmdl.addElement(new AppListModel("a1","aaa"));
-		lstmdl.addElement(new AppListModel("b1","bbb"));
-		lstmdl.addElement(new AppListModel("c1","ccc"));
+		lstmdl.addElement(new AppListModel("PostgreSQL語法轉換","將Teradata語法轉換成PostgreSQL語法",new GreenPlumFileApplication()));
+		lstmdl.addElement(new AppListModel("批量取代工具","對清單檔中所有項目進行取代",new ReplaceToolApplication()));
+		lstmdl.addElement(new AppListModel("歷史資料匯出檔產生器","產出歷史資料匯出排程語法",new HisExportApplication()));
+		lstmdl.addElement(new AppListModel("比對工具","找出兩個字串不一致的字元位置",new CompareToolApplication()));
+		
 	}
 	
 	private static void p_getModel() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
@@ -124,10 +141,11 @@ public class MenuFrame extends JFrame {
 		
 		private String remark;
 		
-		public AppListModel(String name, String value) {
+		public AppListModel(String name, String desc,UIApplication app) {
 			super();
 			this.name = name;
-			this.value = value;
+			this.setDescription(desc);
+			this.setApp(app);
 		}
 
 		
@@ -153,6 +171,22 @@ public class MenuFrame extends JFrame {
 		@Override
 		public String toString() {
 			return name;
+		}
+
+		public UIApplication getApp() {
+			return app;
+		}
+
+		public void setApp(UIApplication app) {
+			this.app = app;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
 		}
 		
 		

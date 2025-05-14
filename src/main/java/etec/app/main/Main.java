@@ -8,7 +8,7 @@ import etec.app.application.GreenPlumFileApplication;
 import etec.app.application.HisExportApplication;
 import etec.app.application.NewDDIMApplication;
 import etec.app.application.OldApplication;
-import etec.app.application.ReplaceAllApplication;
+import etec.app.application.ReplaceToolApplication;
 import etec.app.application.SearchDDLApplication;
 import etec.app.application.TranslateStoreFunctionApplication;
 import etec.app.application.UncompressApplication;
@@ -66,7 +66,7 @@ public class Main {
 				app = new UncompressApplication();
 				break;
 			case "REPLACE_ALL"://5.2
-				app = new ReplaceAllApplication();
+				app = new ReplaceToolApplication();
 				break;
 			case "HIST_EXPORT"://6.0.2.4 歷史資料匯出檔產生器
 				app = new HisExportApplication();

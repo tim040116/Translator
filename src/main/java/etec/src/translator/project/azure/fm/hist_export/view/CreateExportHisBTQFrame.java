@@ -52,6 +52,7 @@ public class CreateExportHisBTQFrame extends JFrame {
 			public void run() {
 				try {
 					CreateExportHisBTQFrame frame = new CreateExportHisBTQFrame(new HisExportController());
+					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -65,7 +66,7 @@ public class CreateExportHisBTQFrame extends JFrame {
 	 */
 	public CreateExportHisBTQFrame(Controller controller) {
 		setTitle("匯出檔產生器  " + VersionModel.VERSION);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 700, 533);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
