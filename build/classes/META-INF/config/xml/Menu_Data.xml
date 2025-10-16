@@ -186,6 +186,18 @@
 		<remark></remark>
 	</project>
 	
+	<project code="COMPARE_TOOL">
+		<code>COMPARE_TOOL</code>
+		<name>比對工具</name>
+		<description>
+			找出兩個字串不一致的字元位置
+		</description>
+		<active></active>
+		<version>7.0.6.0</version>
+		<auth>Tim</auth>
+		<upd_date>2025/04/25</upd_date>
+		<remark></remark>
+	</project>
 	
 	
 	

@@ -1,6 +1,6 @@
 package test;
 
-import etec.framework.file.params.service.ResourceTool;
+import etec.framework.file.readfile.service.ResourceTool;
 import test.az.fm.TestBitFunctionService;
 
 /**

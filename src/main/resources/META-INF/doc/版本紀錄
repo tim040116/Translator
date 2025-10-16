@@ -1,6 +1,8 @@
 7.0.6.0 2025/04/25 bit比對
 	- bit比對
 		- 比對兩個字串是否一致
+	- debug
+		- 修正 .IF ERRORCODE <> 0 THEN .QUIET 1 因沒加分號導致程式遺失的狀況
 7.0.5.1-dev	2025/02/20 txdate
 	- txdate
 		- 開發解析txdate類變數的轉換功能

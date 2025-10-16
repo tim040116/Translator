@@ -180,9 +180,9 @@ public class POCTransduserService {
 		 * .replaceAll(RegexTool.getReg("\\.IF ACTIVITY")+"[^\\r\\n]*\\r\\n", "")
 		 */
 
-		String res = fc.replaceAll("\\.[Ss][Ee][Tt] [^\\r\\n]*\\r\\n", "")
-				.replaceAll("\\.[Qq][Uu][Ii][Tt] *[0-9]*;", "")
-				.replaceAll("(?i)\\.IF\\s+ERRORCODE\\s+<>\\s+0\\s+THEN[^\\r\\n]*\\r\\n", "")
+		String res = fc.replaceAll("(?i)\\.SET [^\\r\\n]*\\r\\n", "")
+				.replaceAll("(?i)\\.QUIET *[0-9]*;", "")
+				.replaceAll("(?i)\\.IF\\s+ERRORCODE\\s+<>\\s+0\\s+THEN[^\\r\\n]*\\r?\\n", "")
 				.replaceAll("(?i)\\.SET\\s+ERROROUT\\s+STDOUT[^\\r\\n]*\\r\\n", "")
 				.replaceAll("(?i)\\.GOTO\\s+ERRORSFOUND[^\\r\\n]*\\r\\n", "")
 				.replaceAll("(?i)\\.LABEL\\s+ERRORSFOUND[^\\r\\n]*\\r\\n", "")

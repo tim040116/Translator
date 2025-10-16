@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import etec.framework.file.params.service.ResourceTool;
+import etec.framework.file.readfile.service.ResourceTool;
 
 /**
  * 從版本紀錄取得版本資訊

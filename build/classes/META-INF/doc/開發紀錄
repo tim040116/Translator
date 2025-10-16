@@ -1,8 +1,4 @@
 2024/05/29 Tim:
-
-
-ADD_MONTH修好了
-
-TO_CHAR還沒
-
-UPDATE SET跟WHERE相反的時候會出問題
+	1. 新 UI 開發
+	2. TXDATE 轉換功能
+	

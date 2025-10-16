@@ -99,7 +99,7 @@ public class MenuFrame extends JFrame {
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				lblDescription.setText(list.getSelectedValue().getDescription());
+				lblDescription.setText("<html>"+list.getSelectedValue().getDescription()+"</html>");
 				targetApp = list.getSelectedValue().getApp();
 				
 		}});
@@ -110,16 +110,34 @@ public class MenuFrame extends JFrame {
 		getContentPane().add(lblAlert);
 		lstmdl.addElement(new AppListModel("PostgreSQL語法轉換","將Teradata語法轉換成PostgreSQL語法",new GreenPlumFileApplication()));
 		lstmdl.addElement(new AppListModel("批量取代工具","對清單檔中所有項目進行取代",new ReplaceToolApplication()));
-		lstmdl.addElement(new AppListModel("歷史資料匯出檔產生器","產出歷史資料匯出排程語法",new HisExportApplication()));
-		lstmdl.addElement(new AppListModel("比對工具","找出兩個字串不一致的字元位置",new CompareToolApplication()));
+		lstmdl.addElement(new AppListModel("歷史資料匯出檔產生器","產出歷史資料匯出排程語法，"
+				+ "讀取excel檔，產出tpt跟btq檔"
+				+ "<br>excel要有兩個sheet"
+				+ "<ol>"
+				+ "<li>Table</li>"
+				+ "需要匯出的表及相關設定"
+				+ "<ol>"
+				+ "<li>Database		: schema name</li>"
+				+ "<li>Table name	: table name</li>"
+				+ "<li>Where 條件		: 匯出資料的範圍條件</li>"
+				+ "<li>路徑			: 產出檔案的路徑</li>"
+				+ "<li>檔名			: </li>"
+				+ "</ol>"
+				+ "<li>column</li>"
+				+ "表裡所包含的欄位資訊"
+				+ "<ol>"
+				+ "<li>Database		: schema name</li>"
+				+ "<li>Table name	: table name</li>"
+				+ "<li>Column		: column name</li>"
+				+ "</ol>"
+				+ "</ol>",new HisExportApplication()));
+		lstmdl.addElement(new AppListModel("比對工具","找出兩個字串不一致的字元位置",new CompareToolApplication()));	
 		
 	}
 	
 	private static void p_getModel() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		Map<String,UIApplication> map = UIApplication.ApplicationScanner("etec.app.application");
 	}
-	
-	
 	
 	class AppListModel{
 		

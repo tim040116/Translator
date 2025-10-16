@@ -1,6 +1,6 @@
 package temp;
 
-import etec.framework.file.params.service.ResourceTool;
+import etec.framework.file.readfile.service.ResourceTool;
 
 public class Main4 {
 

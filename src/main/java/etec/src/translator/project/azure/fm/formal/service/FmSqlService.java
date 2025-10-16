@@ -313,6 +313,7 @@ public class FmSqlService {
 		res = res
 			.replaceAll("(?i)\\.IF\\s+ERRORCODE\\b[^;]+;", "")
 			.replaceAll("(?i)\\.IF\\s+ERRORCODE\\s*<>\\s*0\\s+THEN\\s*\\.QUIT\\s+1\\s*;","")
+			.replaceAll("(?i)\\.IF\\s+ERRORCODE\\s*<>\\s*0.*","")
 			.replaceAll("(?i)\\.SET\\s+ERROROUT\\s+STDOUT\\s*;?", "")
 			.replaceAll("(?i)\\.SET\\s+SESSION\\b[^;]+;", "")
 			.replaceAll("(?i)\\.LOGON\\s+[^,]+,\\s*\\S+\\s*", "")
